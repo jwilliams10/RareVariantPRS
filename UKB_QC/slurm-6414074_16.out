@@ -1,0 +1,3 @@
+mesg: ttyname failed: Inappropriate ioctl for device
+[+] Loading samtools 1.17  ... 
+Lines   total/split/realigned/skipped:	16844/1677/0/0
