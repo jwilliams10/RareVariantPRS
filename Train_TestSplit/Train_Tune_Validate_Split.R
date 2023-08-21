@@ -21,6 +21,6 @@ train <- sampleids_all[train,]
 tune <- sampleids_all[tune,]
 validation <- sampleids_all[validation,]
 
-write.table(train,"/data/williamsjacr/UKB_WES_lipids/Data/train.txt",row.names = FALSE)
-write.table(tune,"/data/williamsjacr/UKB_WES_lipids/Data/tune.txt",row.names = FALSE)
-write.table(validation,"/data/williamsjacr/UKB_WES_lipids/Data/validation.txt",row.names = FALSE)
+write.table(train,"/data/williamsjacr/UKB_WES_lipids/Data/train.txt",row.names = FALSE,col.names = FALSE)
+write.table(tune,"/data/williamsjacr/UKB_WES_lipids/Data/tune.txt",row.names = FALSE,col.names = FALSE)
+write.table(validation,"/data/williamsjacr/UKB_WES_lipids/Data/validation.txt",row.names = FALSE,col.names = FALSE)

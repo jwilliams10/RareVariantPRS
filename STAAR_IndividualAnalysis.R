@@ -14,8 +14,11 @@ geno_missing_imputation <- "mean"
 
 ## output path
 output_path <- "/data/williamsjacr/UKB_WES_lipids/STAAR/Individual_Analysis/LDL/Results/"
+# ## output file name
+# output_file_name <- "UKBB_WES_200k_individual_analysis_LDL"
+
 ## output file name
-output_file_name <- "UKBB_WES_200k_individual_analysis_LDL"
+output_file_name <- "UKBB_WES_200k_individual_analysis_LDL_Jake"
 
 
 ############## load source code
@@ -30,9 +33,14 @@ library(STAARpipeline)
 #### Main Code
 chr <- 1
 
+# ### gds file
+# gds.dir <- "/data/BB_Bioinformatics/ProjectData/UKB_WES_lipids/GDS/"
+# gds.path <- paste0(gds.dir,"ukbb_wes_200k_chr",chr,".gds")
+# genofile <- seqOpen(gds.path)
+
 ### gds file
-gds.dir <- "/data/BB_Bioinformatics/ProjectData/UKB_WES_lipids/GDS/"
-gds.path <- paste0(gds.dir,"ukbb_wes_200k_chr",chr,".gds")
+gds.dir <- "/data/williamsjacr/UKB_WES_lipids/Data/gds/"
+gds.path <- paste0(gds.dir,"all_chr",chr,".gds")
 genofile <- seqOpen(gds.path)
 
 position <- as.numeric(seqGetData(genofile, "position"))
