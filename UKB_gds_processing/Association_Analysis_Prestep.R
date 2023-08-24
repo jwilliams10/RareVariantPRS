@@ -15,7 +15,7 @@ dir.geno <- "/data/williamsjacr/UKB_WES_lipids/Data/gds/"
 agds_file_name_1 <- "all_chr"
 agds_file_name_2 <- ".gds"
 ## channel name of the QC label in the GDS/aGDS file
-QC_label <- "annotation/filter"
+QC_label <- "annotation/info/QC_label"
 ## file directory for the output files
 output_path <- "/data/williamsjacr/UKB_WES_lipids/Data/agds/" 
 ## annotation name. The first eight names are used to define masks in gene-centric analysis, do not change them!! 
