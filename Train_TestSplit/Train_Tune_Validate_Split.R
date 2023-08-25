@@ -39,7 +39,23 @@ phenotype_train <- phenotype[phenotype$userId %in% train,]
 phenotype_tune <- phenotype[phenotype$userId %in% tune,]
 phenotype_validation <- phenotype[phenotype$userId %in% validation,]
 
+phenotype_train$FID <- 0
+phenotype_tune$FID <- 0
+phenotype_validation$FID <- 0
+
+phenotype_train <- phenotype_train[,c("userId","FID","LDLadj.norm","age","age2","sex","PC1","PC2","PC3","PC4","PC5","PC6","PC7","PC8","PC9","PC10")]
+phenotype_tune <- phenotype_tune[,c("userId","FID","LDLadj.norm","age","age2","sex","PC1","PC2","PC3","PC4","PC5","PC6","PC7","PC8","PC9","PC10")]
+phenotype_validation <- phenotype_validation[,c("userId","FID","LDLadj.norm","age","age2","sex","PC1","PC2","PC3","PC4","PC5","PC6","PC7","PC8","PC9","PC10")]
+
+colnames(phenotype_train) <- c("IID",colnames(phenotype_train)[-1])
+colnames(phenotype_tune) <- c("IID",colnames(phenotype_tune)[-1])
+colnames(phenotype_validation) <- c("IID",colnames(phenotype_validation)[-1])
+
 save(phenotype_train,file = "/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Train.RData")
 save(phenotype_tune,file = "/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Tune.RData")
 save(phenotype_validation,file = "/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Validation.RData")
+
+write.table(phenotype_train,file = "/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Train.txt",sep = '\t',row.names = FALSE,quote = FALSE)
+write.table(phenotype_tune,file = "/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Tune.txt",sep = '\t',row.names = FALSE,quote = FALSE)
+write.table(phenotype_validation,file = "/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Validation.txt",sep = '\t',row.names = FALSE,quote = FALSE)
 
