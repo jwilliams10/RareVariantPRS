@@ -35,6 +35,10 @@ write.table(train,"/data/williamsjacr/UKB_WES_lipids/Data/train.txt",row.names =
 write.table(tune,"/data/williamsjacr/UKB_WES_lipids/Data/tune.txt",row.names = FALSE,col.names = FALSE)
 write.table(validation,"/data/williamsjacr/UKB_WES_lipids/Data/validation.txt",row.names = FALSE,col.names = FALSE)
 
+reference <- train[sample(1:length(train),3000,replace = FALSE)]
+
+write.table(reference,"/data/williamsjacr/UKB_WES_lipids/Data/reference.txt",row.names = FALSE,col.names = FALSE)
+
 phenotype_train <- phenotype[phenotype$userId %in% train,]
 phenotype_tune <- phenotype[phenotype$userId %in% tune,]
 phenotype_validation <- phenotype[phenotype$userId %in% validation,]
@@ -50,6 +54,10 @@ phenotype_validation <- phenotype_validation[,c("userId","FID","LDLadj.norm","ag
 colnames(phenotype_train) <- c("IID",colnames(phenotype_train)[-1])
 colnames(phenotype_tune) <- c("IID",colnames(phenotype_tune)[-1])
 colnames(phenotype_validation) <- c("IID",colnames(phenotype_validation)[-1])
+
+phenotype_train[,c(4:5,7:16)] <- scale(phenotype_train[,c(4:5,7:16)]) 
+phenotype_tune[,c(4:5,7:16)] <- scale(phenotype_tune[,c(4:5,7:16)]) 
+phenotype_validation[,c(4:5,7:16)] <- scale(phenotype_validation[,c(4:5,7:16)]) 
 
 save(phenotype_train,file = "/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Train.RData")
 save(phenotype_tune,file = "/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Tune.RData")

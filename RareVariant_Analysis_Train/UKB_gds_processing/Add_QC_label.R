@@ -19,7 +19,7 @@ for(chr in c(1:22)){
 	print(chr)
 	### gds file
 	gds.dir <- "/data/williamsjacr/UKB_WES_lipids/Data/gds/"
-	gds.path <- paste0(gds.dir,"all_chr",chr,".gds")
+	gds.path <- paste0(gds.dir,"train_chr",chr,".gds")
 
 	genofile <- seqOpen(gds.path, readonly = FALSE)
 

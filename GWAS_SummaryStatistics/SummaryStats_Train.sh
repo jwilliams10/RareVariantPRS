@@ -11,6 +11,5 @@
                                    --linear \
                                    --covar /data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Train.txt \
                                    --covar-name age, age2, sex, PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9, PC10 \
-                                   --covar-variance-standardize \
                                    --vif 999 \
                                    --out /data/williamsjacr/UKB_WES_lipids/Data/GWAS_Summary_Statistics/LDL/LDL_adj_norm__chr${SLURM_ARRAY_TASK_ID}_train

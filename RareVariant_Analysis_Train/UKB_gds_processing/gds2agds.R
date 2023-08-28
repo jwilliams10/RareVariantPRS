@@ -7,11 +7,11 @@ gc()
 
 ### gds file
 dir_geno <- "/data/williamsjacr/UKB_WES_lipids/Data/gds/"
-gds_file_name_1 <- "all_chr"
+gds_file_name_1 <- "train_chr"
 gds_file_name_2 <- ".gds"
 ### annotation file
 dir_anno <- "/data/williamsjacr/UKB_WES_lipids/Data/agds/"
-anno_file_name_1 <- "Anno_chr"
+anno_file_name_1 <- "Anno_chr_train"
 anno_file_name_2 <- "_STAARpipeline.csv"
 
 chr <- as.numeric(commandArgs(TRUE)[1])

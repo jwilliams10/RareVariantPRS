@@ -6,10 +6,10 @@ gc()
 ##########################################################################
 
 ### DB split information 
-file_DBsplit <- "/data/BB_Bioinformatics/ProjectData/UKB_WES_lipids/aGDS_v0/v1/FAVORdatabase_chrsplit.csv"
+file_DBsplit <- "/data/BB_Bioinformatics/FAVOR_Annotations/n/holystore01/LABS/xlin/Lab/xihao_zilin/FAVORDB/FAVORdatabase_chrsplit.csv"
 ### Targeted GDS
 dir_geno <- "/data/williamsjacr/UKB_WES_lipids/Data/gds/"
-gds_file_name_1 <- "all_chr"
+gds_file_name_1 <- "train_chr"
 gds_file_name_2 <- ".gds"
 ### output
 output_path <- "/data/williamsjacr/UKB_WES_lipids/Data/agds/"
@@ -54,6 +54,6 @@ for(kk in 1:dim(DB_info)[1])
   VarInfo <- VarInfo_genome[(position>=DB_info$Start_Pos[kk])&(position<=DB_info$End_Pos[kk])]
   VarInfo <- data.frame(VarInfo)
   
-  write.csv(VarInfo,paste0(output_path,"chr",chr,"/VarInfo_chr",chr,"_",kk,".csv"),quote=FALSE,row.names = FALSE)
+  write.csv(VarInfo,paste0(output_path,"chr",chr,"/VarInfo_train_chr",chr,"_",kk,".csv"),quote=FALSE,row.names = FALSE)
 }
 
