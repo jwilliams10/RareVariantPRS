@@ -40,6 +40,7 @@ dim(FunctionalAnnotation)
 ## rename colnames
 colnames(FunctionalAnnotation)[2] <- "apc_conservation"
 colnames(FunctionalAnnotation)[7] <- "apc_local_nucleotide_diversity"
+colnames(FunctionalAnnotation)[9] <- "pc_protein_function"
 
 ## open GDS
 gds.path <- paste0(dir_geno,gds_file_name_1,chr,gds_file_name_2)

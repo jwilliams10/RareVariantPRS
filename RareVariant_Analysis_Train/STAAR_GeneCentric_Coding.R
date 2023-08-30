@@ -17,15 +17,11 @@ library(STAARpipeline)
 ###########################################################
 #           User Input
 ###########################################################
-# ## job nums
-# jobs_num <- get(load("/data/BB_Bioinformatics/ProjectData/UKB_WES_lipids/jobs_num.Rdata"))
-# ## agds dir
-# agds_dir <- get(load("/data/BB_Bioinformatics/ProjectData/UKB_WES_lipids/agds_dir.Rdata"))
 
 ## job nums
-jobs_num <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/jobs_num.Rdata"))
+jobs_num <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_jobs_num.Rdata"))
 ## agds dir
-agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/agds_dir.Rdata"))
+agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_agds_dir.Rdata"))
 
 ## Null Model
 obj_nullmodel <- get(load("/data/BB_Bioinformatics/ProjectData/UKB_WES_lipids/obj.STAAR.UKB.LDL.20211014.Rdata"))
@@ -39,10 +35,8 @@ geno_missing_imputation <- "mean"
 
 ## Annotation_dir
 Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
-# ## Annotation channel
-# Annotation_name_catalog <- get(load("/data/BB_Bioinformatics/ProjectData/UKB_WES_lipids/Annotation_name_catalog.Rdata"))
 ## Annotation channel
-Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/Annotation_name_catalog.Rdata"))
+Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_Annotation_name_catalog.Rdata"))
 ## Use_annotation_weights
 Use_annotation_weights <- FALSE
 ## Annotation name
@@ -50,13 +44,11 @@ Annotation_name <- c("CADD","LINSIGHT","FATHMM.XF","aPC.EpigeneticActive","aPC.E
                      "aPC.Conservation","aPC.LocalDiversity","aPC.Mappability","aPC.TF","aPC.Protein")
 
 ## output path
-output_path <- "/data/williamsjacr/UKB_WES_lipids/STAAR/Gene-Centric-Coding/LDL/Results/"
-# ## output file name
-# output_file_name <- "UKBB_WES_LDL_Coding"
+output_path <- "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/"
 ## output file name
-output_file_name <- "UKBB_WES_LDL_Coding_Jake"
+output_file_name <- "UKBB_WES_LDL_Coding_Train"
 ## input array id from batch file (Harvard FAS cluster)
-arrayid <- 1
+arrayid <- as.numeric(commandArgs(TRUE)[1])
 
 ###########################################################
 #           Main Function 

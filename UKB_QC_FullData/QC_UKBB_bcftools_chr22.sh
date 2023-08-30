@@ -31,5 +31,12 @@ rm ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_5.vcf.gz
 ## step7: remove variants with missing>50%
 bcftools filter -e 'F_MISSING>0.5' -Oz ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_6.vcf.gz -o ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_7.vcf.gz 
 rm ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_6.vcf.gz
-## step8: remove FORMAT
-bcftools annotate -x FORMAT/DP,FORMAT/AD,FORMAT/GQ,FORMAT/PL,FORMAT/RNC -Oz ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_7.vcf.gz -o ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_8.vcf.gz 
+## step8: only keep biallelic variants
+bcftools view -m2 -M2 -v snps -Oz ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_7.vcf.gz -o ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_8.vcf.gz
+rm ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_7.vcf.gz
+## step9: only keep biallelic variants
+bcftools norm -Oz --remove-duplicates $INPUT_PATH/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_8.vcf.gz -o ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_9.vcf.gz
+rm ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_8.vcf.gz
+## step10: remove FORMAT
+bcftools annotate -x FORMAT/DP,FORMAT/AD,FORMAT/GQ,FORMAT/PL,FORMAT/RNC -Oz ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_9.vcf.gz -o ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_10.vcf.gz 
+rm ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_9.vcf.gz
