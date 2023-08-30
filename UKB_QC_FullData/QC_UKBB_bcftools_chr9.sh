@@ -33,3 +33,4 @@ bcftools filter -e 'F_MISSING>0.5' -Oz ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_
 rm ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_6.vcf.gz
 ## step8: remove FORMAT
 bcftools annotate -x FORMAT/DP,FORMAT/AD,FORMAT/GQ,FORMAT/PL,FORMAT/RNC -Oz ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_7.vcf.gz -o ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_8.vcf.gz 
+rm ${OUTPUT_PATH}/ukb23156_c${CHR}_b${SLURM_ARRAY_TASK_ID}_v1_7.vcf.gz

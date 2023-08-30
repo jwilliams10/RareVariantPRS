@@ -7,4 +7,4 @@
 # module purge
 module load R/4.3.0
 
-Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Train_Tune_Validation_Split/Merge_BED_Train.R
+Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Train_Tune_Validation_Split/Merge_BED.R
