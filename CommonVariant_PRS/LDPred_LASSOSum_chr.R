@@ -7,12 +7,18 @@ library(bigsparser)
 library(readr)
 
 chr <- as.numeric(commandArgs(TRUE)[1])
+# chr <- 19
 ldr <- 3/1000
 ncores <- 1
 
 dat <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/GWAS_Summary_Statistics/LDL/all_chr_assoc.LDLadj.norm.glm.linear", header=FALSE, comment.char="#")
 colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","N","BETA","SE","T_STAT","PVAL","ERRCODE")
 dat <- dat[dat$TEST == "ADD",]
+
+if(file.exists(paste0("/data/williamsjacr/UKB_WES_lipids/Data/rdsfiles_LDPred/reference_chr",chr,".rds"))){
+  file.remove(paste0("/data/williamsjacr/UKB_WES_lipids/Data/rdsfiles_LDPred/reference_chr",chr,".bk"))
+  file.remove(paste0("/data/williamsjacr/UKB_WES_lipids/Data/rdsfiles_LDPred/reference_chr",chr,".rds"))
+}
 
 #### read in reference data, this should match as this is what the reference data was in CT
 if(!file.exists(paste0("/data/williamsjacr/UKB_WES_lipids/Data/rdsfiles_LDPred/reference_chr",chr,".rds"))){
@@ -32,13 +38,64 @@ sumstats <- dat[dat$CHR == chr,c('CHR', 'SNP_ID', 'POS', 'REF', 'ALT', 'BETA', '
 set.seed(2020)
 names(sumstats) <- c("chr", "rsid", "pos", "a0", "a1", "beta", "beta_se", "p", "n_eff")
 sumstats <- sumstats[sumstats$rsid %in% map$rsid,]
+
 info_snp <- snp_match(sumstats, map, strand_flip = T, join_by_pos = F) # important: for real data, strand_flip = T
 rownames(info_snp) = info_snp$rsid
+
 ind.chr <- which(info_snp$chr == chr)
 df_beta <- info_snp[ind.chr, c("beta", "beta_se", "n_eff")]
 ind.chr2 <- info_snp$`_NUM_ID_`[ind.chr]
 
 corr0 <- snp_cor(G, ind.col = ind.chr2,infos.pos = POS2[ind.chr2], size =  ldr)
+
+# b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)  
+# b_list <- NULL
+# for(i in 1:nrow(b)){
+#   b_list <- c(b_list,b[,i])
+# }
+# b <- unique(b_list)
+# rm(b_list)
+# 
+# a <- G[1:3000,ind.chr2[b]]
+# sum(a[,1] *a[,2],na.rm = TRUE)
+
+if(anyNA(corr0@x)){
+  b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)  
+  b_list <- NULL
+  for(i in 1:nrow(b)){
+    b_list <- c(b_list,b[,i])
+  }
+  b <- unique(b_list)
+  rm(b_list)
+  
+  b <- ind.chr2[b]
+    
+  file.remove(paste0("/data/williamsjacr/UKB_WES_lipids/Data/rdsfiles_LDPred/reference_chr",chr,".bk"))
+  file.remove(paste0("/data/williamsjacr/UKB_WES_lipids/Data/rdsfiles_LDPred/reference_chr",chr,".rds"))
+  bigsnpr::snp_subset(obj.bigSNP,ind.row = 1:3000,ind.col = -b,backingfile = paste0("/data/williamsjacr/UKB_WES_lipids/Data/rdsfiles_LDPred/reference_chr",chr))
+  
+  sumstats <- dat[dat$CHR == chr,c('CHR', 'SNP_ID', 'POS', 'REF', 'ALT', 'BETA', 'SE', 'PVAL', 'N')]
+  set.seed(2020)
+  names(sumstats) <- c("chr", "rsid", "pos", "a0", "a1", "beta", "beta_se", "p", "n_eff")
+  sumstats <- sumstats[sumstats$rsid %in% map$rsid,]
+  
+  sumstats <- sumstats[!(sumstats$pos %in% POS[b]),]
+  
+  info_snp <- snp_match(sumstats, map, strand_flip = T, join_by_pos = F) # important: for real data, strand_flip = T
+  rownames(info_snp) = info_snp$rsid
+  
+  ind.chr <- which(info_snp$chr == chr)
+  df_beta <- info_snp[ind.chr, c("beta", "beta_se", "n_eff")]
+  ind.chr2 <- info_snp$`_NUM_ID_`[ind.chr]
+  
+  corr0 <- snp_cor(G, ind.col = ind.chr2,infos.pos = POS2[ind.chr2], size =  ldr)
+}
+
+
+# Imputing fixes the problem
+# G2 = snp_fastImputeSimple(G)
+# corr0 <- snp_cor(G2, ind.col = ind.chr2,infos.pos = POS2[ind.chr2], size =  ldr)
+
 corr <- as_SFBM(as(corr0, "generalMatrix"))
 
 # Automatic model
