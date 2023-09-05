@@ -75,7 +75,7 @@ for(k in 1:length(pthres)){
 prs_mat_train <- as.data.frame(cbind(prs_temp[,1:2],bind_cols(prs_list)))
 colnames(prs_mat_train)[2] <- "id"
 
-write.table(prs_mat_train,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/prs_all_train.txt",row.names = F,col.names = F,quote=F)
+write.table(prs_mat_train,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/prs_all_train.txt",row.names = F)
 rm(prs_mat_train)
 
 prs_list <- list()
@@ -93,6 +93,8 @@ for(k in 1:length(pthres)){
 prs_mat_tune <- as.data.frame(cbind(prs_temp[,1:2],bind_cols(prs_list)))
 colnames(prs_mat_tune)[2] <- "id"
 
+write.table(prs_mat_tune,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/prs_all_tune.txt",row.names = F)
+
 ### Merge all the outputted files from the previous command into one large data file
 prs_list <- list()
 temp <- 1
@@ -108,6 +110,8 @@ for(k in 1:length(pthres)){
 }
 prs_mat_validation <- as.data.frame(cbind(prs_temp[,1:2],bind_cols(prs_list)))
 colnames(prs_mat_validation)[2] <- "id"
+
+write.table(prs_mat_validation,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/prs_all_validation.txt",row.names = F)
 
 
 ## Pull in Phenotypes/Covariates 
@@ -161,4 +165,4 @@ r2.result <- data.frame(method = "CT",
 
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 ct.result <- list(r2.result,r2_tun_vec)
-save(ct.result, file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/CT.result")
+save(ct.result, file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/CT_result.RData")
