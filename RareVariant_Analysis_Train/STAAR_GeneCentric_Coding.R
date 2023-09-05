@@ -24,7 +24,7 @@ jobs_num <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_jobs_num
 agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_agds_dir.Rdata"))
 
 ## Null Model
-obj_nullmodel <- get(load("/data/BB_Bioinformatics/ProjectData/UKB_WES_lipids/obj.STAAR.UKB.LDL.20211014.Rdata"))
+obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData"))
 
 ## QC_label
 QC_label <- "annotation/info/QC_label"
@@ -97,7 +97,7 @@ if(arrayid==113){
 
 ### gds file
 gds.dir <- "/data/williamsjacr/UKB_WES_lipids/Data/gds/"
-gds.path <- paste0(gds.dir,"all_chr",chr,".gds")
+gds.path <- paste0(gds.dir,"train_chr",chr,".gds")
 genofile <- seqOpen(gds.path)
 
 genes <- genes_info

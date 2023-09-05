@@ -114,9 +114,9 @@ prs_best_validation <- data.frame(IID = pheno_validation$IID,prs = prs_best_vali
 prs_best_train <- data.frame(IID = pheno_train$IID,prs = predict(sl, prs_train_all, onlySL = TRUE)[[1]])
 prs_best_tune <- data.frame(IID = pheno_tune$IID,prs = predict(sl, prs_tune_all, onlySL = TRUE)[[1]])
 
-write.table(prs_best_train,file="/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Train.txt",sep = "\t")
-write.table(prs_best_tune,file="/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Tune.txt",sep = "\t")
-write.table(prs_best_validation,file="/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Validation.txt",sep = "\t")
+write.table(prs_best_train,file="/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Train.txt",sep = "\t",row.names = FALSE)
+write.table(prs_best_tune,file="/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Tune.txt",sep = "\t",row.names = FALSE)
+write.table(prs_best_validation,file="/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Validation.txt",sep = "\t",row.names = FALSE)
 
 ## bootstrap the R2 to provide an approximate distribution 
 data <- data.frame(y = y_validation, x = prs_best_validation$prs)
