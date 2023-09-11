@@ -6,8 +6,8 @@ dat <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/GWAS_Summary_Statistic
 colnames(dat) <- c("CHROM","POS","ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","OBS_CT","BETA","SE","T_STAT","P","ERRCODE")
 dat <- dat[dat$TEST == "ADD",]
 
-dat <- dat[,c("CHROM","ID","POS","A1","BETA","P")]
-colnames(dat) <- c("CHR","SNP","BP","A1","BETA","P")
+dat <- dat[,c("CHROM","ID","REF","POS","A1","BETA","P")]
+colnames(dat) <- c("CHR","SNP","REF","BP","A1","BETA","P")
 
 write.table(dat,file = "/data/williamsjacr/UKB_WES_lipids/Data/GWAS_Summary_Statistics/LDL/all_chr_assoc.txt",col.names = T,row.names = F,quote=F)
 
@@ -76,7 +76,6 @@ prs_mat_train <- as.data.frame(cbind(prs_temp[,1:2],bind_cols(prs_list)))
 colnames(prs_mat_train)[2] <- "id"
 
 write.table(prs_mat_train,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/prs_all_train.txt",row.names = F)
-rm(prs_mat_train)
 
 prs_list <- list()
 temp <- 1
@@ -115,9 +114,12 @@ write.table(prs_mat_validation,file = "/data/williamsjacr/UKB_WES_lipids/Data/Re
 
 
 ## Pull in Phenotypes/Covariates 
+pheno_train <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Train.txt")
+colnames(pheno_train) <- c("id","FID","LDLadj.norm","age","age2","sex","PC1","PC2","PC3","PC4","PC5","PC6","PC7","PC8","PC9","PC10")
+pheno_train <- left_join(pheno_train,prs_mat_train,by = "id")
+
 pheno_tuning <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Tune.txt")
 colnames(pheno_tuning) <- c("id","FID","LDLadj.norm","age","age2","sex","PC1","PC2","PC3","PC4","PC5","PC6","PC7","PC8","PC9","PC10")
-## Merge covariates and y for tuning with the prs_mat
 pheno_tuning <- left_join(pheno_tuning,prs_mat_tune,by = "id")
 
 pheno_vad <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Validation.txt")
@@ -136,8 +138,17 @@ for(k in 1:length(pthres)){
 #find best p-value threshold
 idx <- which.max(r2_tun_vec)
 #write down best prs in the prs folder/ save it and store it
-prs_max <- fread(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/prs_tune.p_value_",idx,".sscore"))
-write.table(prs_max, file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/best_prs.sscore",row.names = F,col.names = T,quote = F)
+prs_train_max <- pheno_train[,c("id","FID",paste0("p_value_",idx))]
+colnames(prs_train_max) <- c("IID","FID","prs")
+write.table(prs_train_max, file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/prs_train_best.txt",row.names = F)
+
+prs_tune_max <- pheno_tuning[,c("id","FID",paste0("p_value_",idx))]
+colnames(prs_tune_max) <- c("IID","FID","prs")
+write.table(prs_tune_max, file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/prs_tune_best.txt",row.names = F)
+
+prs_vad_max <- pheno_vad[,c("id","FID",paste0("p_value_",idx))]
+colnames(prs_vad_max) <- c("IID","FID","prs")
+write.table(prs_vad_max, file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/CT/prs_validation_best.txt",row.names = F)
 
 #evaluate the best threshold based on the tuning on the validation dataset
 model.vad.null  <-  lm(LDLadj.norm~age+age2+sex+PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10,data=pheno_vad)

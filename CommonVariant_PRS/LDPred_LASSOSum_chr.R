@@ -7,7 +7,7 @@ library(bigsparser)
 library(readr)
 
 chr <- as.numeric(commandArgs(TRUE)[1])
-# chr <- 19
+# chr <- 1
 ldr <- 3/1000
 ncores <- 1
 
@@ -27,6 +27,9 @@ if(!file.exists(paste0("/data/williamsjacr/UKB_WES_lipids/Data/rdsfiles_LDPred/r
 obj.bigSNP <- snp_attach(paste0("/data/williamsjacr/UKB_WES_lipids/Data/rdsfiles_LDPred/reference_chr",chr,".rds"))
 map <- obj.bigSNP$map[-c(3)]
 names(map) <- c("chr", "rsid", "pos", "a0", "a1") # a1 - alt # c("chr", "pos", "a0", "a1")
+
+# map <- dat[,c("CHR","SNP_ID","POS","REF","ALT")]
+# colnames(map) <- c("chr", "rsid", "pos", "a0", "a1")
 
 G   <- obj.bigSNP$genotypes
 CHR <- obj.bigSNP$map$chromosome
@@ -139,17 +142,17 @@ print(paste0('Complete'))
 # -------- PRS:
 
 ## LDpred2 
-prs.file <- data.frame(SNP = beta_grid$rsid, ALT = beta_grid$a0, BETA = beta_grid[,1:(ncol(beta_grid)-3)])
+prs.file <- data.frame(SNP = beta_grid$rsid, ALT = beta_grid$a0, REF = beta_grid$a1, BETA = beta_grid[,1:(ncol(beta_grid)-3)])
 write.table(prs.file,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/ldpred2-chr",chr,".txt"),col.names = T,row.names = F,quote=F)
 
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/ldpred2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 3-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_train --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/prs_train_chr",chr))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/ldpred2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 3-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_tune --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/prs_tune_chr",chr))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/ldpred2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 3-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_validation --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/prs_validation_chr",chr))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/ldpred2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_train --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/prs_train_chr",chr))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/ldpred2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_tune --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/prs_tune_chr",chr))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/ldpred2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_validation --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LDPred2/prs_validation_chr",chr))
 
 ## LASSOsum2
-prs.file <- data.frame(SNP = beta_lassosum2$rsid, ALT = beta_lassosum2$a0, BETA = beta_lassosum2[,1:(ncol(beta_lassosum2)-3)])
+prs.file <- data.frame(SNP = beta_lassosum2$rsid, ALT = beta_lassosum2$a0, REF = beta_lassosum2$a1, BETA = beta_lassosum2[,1:(ncol(beta_lassosum2)-3)])
 write.table(prs.file,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/lassosum2-chr",chr,".txt"),col.names = T,row.names = F,quote=F)
 
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/lassosum2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 3-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_train --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/prs_train_chr",chr))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/lassosum2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 3-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_tune --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/prs_tune_chr",chr))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/lassosum2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 3-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_validation --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/prs_validation_chr",chr))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/lassosum2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_train --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/prs_train_chr",chr))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/lassosum2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_tune --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/prs_tune_chr",chr))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/lassosum2-chr",chr,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_lipids/Data/split_bed/all_chr_validation --threads 1 --out /data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/LASSOSUM2/prs_validation_chr",chr))

@@ -49,6 +49,7 @@ output_path <- "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCo
 output_file_name <- "UKBB_WES_LDL_Coding_Train"
 ## input array id from batch file (Harvard FAS cluster)
 arrayid <- as.numeric(commandArgs(TRUE)[1])
+# arrayid <- 1
 
 ###########################################################
 #           Main Function 
