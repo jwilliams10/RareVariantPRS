@@ -22,7 +22,7 @@ jobs_num <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_jobs_num
 ## aGDS directory
 agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_agds_dir.Rdata"))
 ## Null model
-obj_nullmodel <- get(load("/data/BB_Bioinformatics/ProjectData/UKB_WES_lipids/obj.STAAR.UKB.LDL.20211014.Rdata"))
+obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData"))
 
 ## QC_label
 QC_label <- "annotation/info/QC_label"
@@ -49,6 +49,7 @@ output_path <- "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow
 output_file_name <- "UKBB_WES_LDL_Sliding_Train"
 ## input array id from batch file (Harvard FAS RC cluster)
 arrayid <- as.numeric(commandArgs(TRUE)[1])
+# arrayid <- 1
 
 ###########################################################
 #           Main Function 

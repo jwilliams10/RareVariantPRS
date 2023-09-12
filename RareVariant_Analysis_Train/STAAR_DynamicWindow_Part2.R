@@ -47,7 +47,7 @@ output_path <- "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Dynamic_Windo
 ## output file name
 output_file_name <- "UKBB_WES_LDL_Dynamic_Train"
 ## input array id from batch file (Harvard FAS RC cluster)
-arrayid <- as.numeric(commandArgs(TRUE)[1])
+arrayid <- as.numeric(commandArgs(TRUE)[1]) + 900
 # arrayid <- 1
 
 ###########################################################
