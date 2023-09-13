@@ -43,7 +43,7 @@ Annotation_name <- c("CADD","LINSIGHT","FATHMM.XF","aPC.EpigeneticActive","aPC.E
                      "aPC.Conservation","aPC.LocalDiversity","aPC.Mappability","aPC.TF","aPC.Protein")
 
 ## output path
-output_path <- "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Dynamic_Window/"
+output_path <- "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/DynamicWindow/"
 ## output file name
 output_file_name <- "UKBB_WES_LDL_Dynamic_Train"
 ## input array id from batch file (Harvard FAS RC cluster)
