@@ -43,7 +43,7 @@ variant_type <- "SNV"
 ## method_cond
 method_cond <- "optimal"
 ## alpha level
-alpha <- 5E-07
+alpha <- 1
 
 ## Annotation_dir
 Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"

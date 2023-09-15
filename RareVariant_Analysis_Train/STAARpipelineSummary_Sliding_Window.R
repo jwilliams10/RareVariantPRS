@@ -49,8 +49,6 @@ alpha <- 0.05
 Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
 ## Annotation channel
 Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_Annotation_name_catalog.Rdata"))
-# Or equivalently
-# Annotation_name_catalog <- read.csv("/path_to_the_file/Annotation_name_catalog.csv")
 ## Use_annotation_weights
 Use_annotation_weights <- TRUE
 ## Annotation name

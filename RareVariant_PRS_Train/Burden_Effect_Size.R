@@ -1,9 +1,9 @@
 Burden_Effect_Size <- function(genotype,obj_nullmodel,
                   rare_maf_cutoff=0.01,rv_num_cutoff=2){
 
-  if(class(genotype) != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
-    stop("genotype is not a matrix!")
-  }
+  # if(class(genotype) != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
+  #   stop("genotype is not a matrix!")
+  # }
 
   if(dim(genotype)[2] == 1){
     stop(paste0("Number of rare variant in the set is less than 2!"))

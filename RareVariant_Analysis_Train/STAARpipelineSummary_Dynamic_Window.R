@@ -29,7 +29,7 @@ obj_nullmodel_SCANG_STAAR <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nu
 known_loci <- NULL
 
 ## results path
-input_path <- "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Dynamic_Window/"
+input_path <- "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/DynamicWindow/"
 output_path <- input_path
 ## results name
 dynamic_window_results_name <- "UKBB_WES_LDL_Dynamic_Train"

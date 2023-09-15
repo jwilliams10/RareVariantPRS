@@ -47,16 +47,12 @@ Sliding_Window_Burden_Effect_Size <- function(chr,genofile,obj_nullmodel,start_l
 	Geno <- Geno[id.genotype.match,,drop=FALSE]
 
 	## impute missing
-	if(!is.null(dim(Geno)))
-	{
-		if(dim(Geno)[2]>0)
-		{
-			if(geno_missing_imputation=="mean")
-			{
+	if(!is.null(dim(Geno))){
+		if(dim(Geno)[2]>0){
+			if(geno_missing_imputation=="mean"){
 				Geno <- matrix_flip_mean(Geno)$Geno
 			}
-			if(geno_missing_imputation=="minor")
-			{
+			if(geno_missing_imputation=="minor"){
 				Geno <- matrix_flip_minor(Geno)$Geno
 			}
 		}
@@ -66,16 +62,14 @@ Sliding_Window_Burden_Effect_Size <- function(chr,genofile,obj_nullmodel,start_l
 	try(burden_eff <- Burden_Effect_Size(genotype=Geno,obj_nullmodel=obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 
 	results <- c()
-	if(class(burden_eff)=="list")
-	{
+	if(class(burden_eff)=="list"){
 		results_temp <- c(chr,start_loc,end_loc,burden_eff$num_variant)
 		results_temp <- c(results_temp,burden_eff$cMAC,burden_eff$Burden_Score_Stat,burden_eff$Burden_SE_Score,burden_eff$Burden_pvalue,burden_eff$Burden_Est,burden_eff$Burden_SE_Est)
 
 		results <- rbind(results,results_temp)
 	}
 
-	if(!is.null(results))
-	{
+	if(!is.null(results)){
 		colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
 		colnames(results) <- c("Chr","Start Loc","End Loc","#SNV",
 								"cMAC","Burden_Score_Stat","Burden_SE_Score",

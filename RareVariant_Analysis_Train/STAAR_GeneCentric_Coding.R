@@ -38,7 +38,7 @@ Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
 ## Annotation channel
 Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_Annotation_name_catalog.Rdata"))
 ## Use_annotation_weights
-Use_annotation_weights <- FALSE
+Use_annotation_weights <- TRUE
 ## Annotation name
 Annotation_name <- c("CADD","LINSIGHT","FATHMM.XF","aPC.EpigeneticActive","aPC.EpigeneticRepressed","aPC.EpigeneticTranscription",
                      "aPC.Conservation","aPC.LocalDiversity","aPC.Mappability","aPC.TF","aPC.Protein")
