@@ -46,10 +46,13 @@ Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
 ## Annotation channel
 Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_Annotation_name_catalog.Rdata"))
 
+arrayid <- as.numeric(commandArgs(TRUE)[1])
+
+coding_sig <- coding_sig[coding_sig$Chr == arrayid,]
+
 effect_sizes <- NULL
 # effect_sizes_Jake <- NULL
 for(i in 1:nrow(coding_sig)){
-  print(i)
   ## Chr
   chr <- coding_sig$Chr[i]
   ## Gene name
@@ -75,4 +78,4 @@ effect_sizes <- effect_sizes[,-c(1)]
 
 coding_sig <- inner_join(coding_sig,effect_sizes)
 
-write.csv(coding_sig,row.names = FALSE,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/coding_sig.csv")
+write.csv(coding_sig,row.names = FALSE,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/coding_sig_chr",arrayid,".csv"))

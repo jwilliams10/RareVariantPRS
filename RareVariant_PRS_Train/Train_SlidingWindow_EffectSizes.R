@@ -44,6 +44,10 @@ variant_type <- "SNV"
 
 ###########################################################
 
+arrayid <- as.numeric(commandArgs(TRUE)[1])
+
+sliding_window_sig <- sliding_window_sig[sliding_window_sig$Chr == arrayid,]
+
 effect_sizes <- NULL
 for(i in 1:nrow(sliding_window_sig)){
   ## Chr
@@ -70,7 +74,7 @@ effect_sizes <- effect_sizes[,-c(1)]
 
 sliding_window_sig <- inner_join(sliding_window_sig,effect_sizes)
 
-write.csv(sliding_window_sig,row.names = FALSE,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/sliding_window_sig.csv")
+write.csv(sliding_window_sig,row.names = FALSE,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/sliding_window_sig_chr",arrayid,".csv"))
 
 
 		

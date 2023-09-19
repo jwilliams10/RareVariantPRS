@@ -71,8 +71,7 @@ start_loc <- (groupid-1)*5e6 + jobs_num$start_loc[chr]
 end_loc <- start_loc + (sliding_window_length/2)*20 - 1
 
 results_sliding_window <- c()
-for(kk in 1:(5e6/((sliding_window_length/2)*20)))
-{
+for(kk in 1:(5e6/((sliding_window_length/2)*20))){
   print(kk)
   start_loc_sub <- start_loc + (sliding_window_length/2)*20*(kk-1)
   end_loc_sub <- end_loc + (sliding_window_length/2)*20*(kk-1) + (sliding_window_length/2)
@@ -80,8 +79,7 @@ for(kk in 1:(5e6/((sliding_window_length/2)*20)))
   end_loc_sub <- min(end_loc_sub,jobs_num$end_loc[chr])
   
   results <- c()
-  if(start_loc_sub < end_loc_sub)
-  {
+  if(start_loc_sub < end_loc_sub){
     results <- try(Sliding_Window(chr=chr,start_loc=start_loc_sub,end_loc=end_loc_sub,
                                   sliding_window_length=sliding_window_length,type="multiple",
                                   genofile=genofile,obj_nullmodel=obj_nullmodel,

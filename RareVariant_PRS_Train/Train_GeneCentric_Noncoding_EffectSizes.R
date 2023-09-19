@@ -49,6 +49,10 @@ Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds
 
 ###########################################################
 
+arrayid <- as.numeric(commandArgs(TRUE)[1])
+
+noncoding_sig <- noncoding_sig[noncoding_sig$Chr == arrayid,]
+
 effect_sizes <- NULL
 for(i in 1:nrow(noncoding_sig)){
   ## Chr
@@ -76,5 +80,5 @@ effect_sizes <- effect_sizes[,-c(1)]
 
 noncoding_sig <- inner_join(noncoding_sig,effect_sizes)
 
-write.csv(noncoding_sig,row.names = FALSE,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/noncoding_sig.csv")
+write.csv(noncoding_sig,row.names = FALSE,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/noncoding_sig_chr",arrayid,".csv"))
 

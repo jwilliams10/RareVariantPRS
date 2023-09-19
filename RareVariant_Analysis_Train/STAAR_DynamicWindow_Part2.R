@@ -75,7 +75,7 @@ end_loc <- min(start_loc + 1.5e6 - 1, jobs_num$end_loc[chr])
 results_scang <- Dynamic_Window_SCANG(chr=chr,start_loc=start_loc,end_loc=end_loc,genofile=genofile,obj_nullmodel=obj_nullmodel_SCANG_STAAR,
                                       QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
                                       Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
-                                      Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+                                      Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,alpha = 1,p_filter = 1)
 
 save(results_scang,file=paste0(output_path,output_file_name,"_",arrayid,".Rdata"))
 
