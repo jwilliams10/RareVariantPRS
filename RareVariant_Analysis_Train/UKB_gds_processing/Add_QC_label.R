@@ -14,6 +14,8 @@ library(SeqVarTools)
 library(STAAR)
 library(STAARpipeline)
 
+QC_label <- list()
+
 for(chr in c(1:22)){
 
 	print(chr)
@@ -24,12 +26,12 @@ for(chr in c(1:22)){
 	genofile <- seqOpen(gds.path, readonly = FALSE)
 
 	F_Missing <- seqGetData(genofile, "annotation/info/F_MISSING")
-	QC_label <- ifelse(F_Missing<0.1,"PASS","FAIL") 
+	QC_label[[chr]] <- ifelse(F_Missing<0.1,"PASS","FAIL") 
 
-	sum(QC_label=="FAIL")
+	sum(QC_label[[chr]]=="FAIL")
 
 	Anno.folder <- index.gdsn(genofile, "annotation/info")
-	add.gdsn(Anno.folder, "QC_label", val=QC_label, compress="LZMA_ra", closezip=TRUE)
+	add.gdsn(Anno.folder, "QC_label", val=QC_label[[chr]], compress="LZMA_ra", closezip=TRUE)
 
 	seqClose(genofile)
 }
@@ -63,7 +65,7 @@ for(chr in c(1:22)){
   # sum(QC_label=="FAIL")
   
   Anno.folder <- index.gdsn(genofile, "annotation/info")
-  add.gdsn(Anno.folder, "QC_label", val=QC_label, compress="LZMA_ra", closezip=TRUE)
+  add.gdsn(Anno.folder, "QC_label", val=QC_label[[chr]], compress="LZMA_ra", closezip=TRUE)
   
   seqClose(genofile)
 }
@@ -99,7 +101,7 @@ for(chr in c(1:22)){
   # sum(QC_label=="FAIL")
   
   Anno.folder <- index.gdsn(genofile, "annotation/info")
-  add.gdsn(Anno.folder, "QC_label", val=QC_label, compress="LZMA_ra", closezip=TRUE)
+  add.gdsn(Anno.folder, "QC_label", val=QC_label[[chr]], compress="LZMA_ra", closezip=TRUE)
   
   seqClose(genofile)
 }

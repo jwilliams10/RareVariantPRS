@@ -1,6 +1,5 @@
 print(commandArgs(TRUE))
 chr <- as.numeric(commandArgs(TRUE)[1])
-print(chr)
 
 library(SeqArray)
 
