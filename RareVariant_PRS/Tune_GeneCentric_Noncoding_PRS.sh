@@ -1,9 +1,9 @@
 #!/bin/bash --login
 #SBATCH -n 1
 #SBATCH -N 1
-#SBATCH --time=144:00:00
+#SBATCH --time=72:00:00
 #SBATCH --array=1-660
-#SBATCH --mem-per-cpu=100G
+#SBATCH --mem-per-cpu=50G
 
 # module purge
 module load R/4.3.0

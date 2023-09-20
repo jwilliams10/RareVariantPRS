@@ -30,10 +30,10 @@ source("~/RareVariantPRS/RareVariant_PRS/Gene_Centric_Noncoding_Burden_PRS.R")
 Train_Effect_Sizes_All <- read.csv("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Train_Effect_Sizes_All.csv")
 
 ## agds dir
-agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_agds_dir.Rdata"))
+agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/validation_agds_dir.Rdata"))
 
 ## Null Model
-obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData"))
+obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Validation_Null_Model_LDL.RData"))
 
 ## Parameter
 QC_label <- "annotation/info/QC_label"
@@ -43,7 +43,7 @@ variant_type <- "SNV"
 ## Annotation_dir
 Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
 ## Annotation channel
-Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_Annotation_name_catalog.Rdata"))
+Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/validation_Annotation_name_catalog.Rdata"))
 thresholds <- c(1e-07,5e-07,1e-06,5e-06,1e-05,5e-05,1e-04,5e-04,1e-03,5e-03,1e-02,5e-02,1e-01,5e-01,1.0)
 
 PRS <- NULL
@@ -133,4 +133,4 @@ if(nrow(Train_Effect_Sizes_All) == 0){
   } 
 }
 
-write.csv(PRS,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Train_PRS_Array_",arrayid,".csv"),row.names = FALSE)
+write.csv(PRS,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Validation_PRS_Array_",arrayid,".csv"),row.names = FALSE)
