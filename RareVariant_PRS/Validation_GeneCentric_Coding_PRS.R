@@ -49,7 +49,7 @@ thresholds <- c(1e-07,5e-07,1e-06,5e-06,1e-05,5e-05,1e-04,5e-04,1e-03,5e-03,1e-0
 
 PRS <- NULL
 
-arrayid <- 564
+arrayid <- as.numeric(commandArgs(TRUE)[1])
 arrayid_original <- arrayid
 
 
