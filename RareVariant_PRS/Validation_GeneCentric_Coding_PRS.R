@@ -49,7 +49,8 @@ thresholds <- c(1e-07,5e-07,1e-06,5e-06,1e-05,5e-05,1e-04,5e-04,1e-03,5e-03,1e-0
 
 PRS <- NULL
 
-arrayid <- as.numeric(commandArgs(TRUE)[1])
+arrayid <- 564
+arrayid_original <- arrayid
 
 
 if(arrayid>330){
@@ -102,6 +103,8 @@ if(Burden == 0){
   Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$Burden_1_1 <= thresholds[threshold],]
 }
 
+Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$Burden_Est != 0,]
+
 if(nrow(Train_Effect_Sizes_All) == 0){
   PRS <- data.frame(ID = 1:length(obj_nullmodel$id_include),PRS = 0)
 }else{
@@ -136,4 +139,4 @@ if(nrow(Train_Effect_Sizes_All) == 0){
   } 
 }
 
-write.csv(PRS,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Validation_PRS_Array_",arrayid,".csv"),row.names = FALSE)
+write.csv(PRS,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Validation_PRS_Array_",arrayid_original,".csv"),row.names = FALSE)

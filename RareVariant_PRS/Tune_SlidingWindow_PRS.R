@@ -19,7 +19,7 @@ library(readr)
 library(dplyr)
 
 source("/spin1/home/linux/williamsjacr/RareVariantPRS/RareVariant_PRS/Burden_PRS.R")
-source("~/RareVariantPRS/RareVariant_PRS/Gene_Centric_Noncoding_Burden_PRS.R")
+source("~/RareVariantPRS/RareVariant_PRS/Sliding_Window_Burden_PRS.R")
 
 
 ###########################################################
@@ -49,7 +49,7 @@ thresholds <- c(1e-07,5e-07,1e-06,5e-06,1e-05,5e-05,1e-04,5e-04,1e-03,5e-03,1e-0
 PRS <- NULL
 
 arrayid <- as.numeric(commandArgs(TRUE)[1])
-
+arrayid_original <- arrayid
 
 if(arrayid>330){
   Burden <- 1
@@ -101,16 +101,18 @@ if(Burden == 0){
   Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$Burden_1_1 <= thresholds[threshold],]
 }
 
+Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$Burden_Est != 0,]
+
 if(nrow(Train_Effect_Sizes_All) == 0){
   PRS <- data.frame(ID = 1:length(obj_nullmodel$id_include),PRS = 0)
 }else{
   for(i in 1:nrow(Train_Effect_Sizes_All)){
     ## Chr
     chr <- Train_Effect_Sizes_All$Chr[i]
-    ## Gene name
-    gene_name <- Train_Effect_Sizes_All$Gene[i]
-    ## Coding mask
-    category <- Train_Effect_Sizes_All$Category[i]
+    ## Start
+    start_loc <- Train_Effect_Sizes_All$Start[i]
+    ## End
+    end_loc <- Train_Effect_Sizes_All$End[i]
     ## Beta
     BETA <- Train_Effect_Sizes_All$Burden_Est[i]
     
@@ -133,4 +135,4 @@ if(nrow(Train_Effect_Sizes_All) == 0){
   } 
 }
 
-write.csv(PRS,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Tune_PRS_Array_",arrayid,".csv"),row.names = FALSE)
+write.csv(PRS,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Tune_PRS_Array_",arrayid_original,".csv"),row.names = FALSE)
