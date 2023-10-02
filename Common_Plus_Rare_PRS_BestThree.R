@@ -15,7 +15,7 @@ if(arrayid == 1){
   
   common_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Tune_All.txt")
   
-  rarevariant_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/Best_All_STAARO_Tune_All.txt")
+  rarevariant_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/BestThree_STAARO_Tune_All.txt")
   
   pheno_tune <- left_join(pheno_tune,common_prs,by = "IID")
   colnames(pheno_tune) <- c(colnames(pheno_tune)[1:16],"CV_PRS")
@@ -35,7 +35,7 @@ if(arrayid == 1){
   
   common_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Validation_All.txt")
   
-  rarevariant_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/Best_All_STAARO_Validation_All.txt")
+  rarevariant_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/BestThree_STAARO_Validation_All.txt")
   
   pheno_vad <- left_join(pheno_vad,common_prs,by = "IID")
   colnames(pheno_vad) <- c(colnames(pheno_vad)[1:16],"CV_PRS")
@@ -54,7 +54,7 @@ if(arrayid == 1){
   
   effects <- summary(model.best)$coefficients[-1,1]
   
-  save(effects,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/Coefficients_All_STAARO.RData")
+  save(effects,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/Coefficients_BestThree_STAARO.RData")
   
   data <- data.frame(y = PRSs_Validation$Residuals, x = predicted_prs)
   R2Boot <- function(data,indices){
@@ -72,7 +72,7 @@ if(arrayid == 1){
                           r2_high = ci_result$bca[5]
   )
   
-  save(SL.result,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/STAARO_All_Result.RData") 
+  save(SL.result,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/STAARO_BestThree_Result.RData") 
 }else{
   ## Burden
   
@@ -81,7 +81,7 @@ if(arrayid == 1){
   
   common_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Tune_All.txt")
   
-  rarevariant_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/Best_All_Burden_Tune_All.txt")
+  rarevariant_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/BestThree_Burden_Tune_All.txt")
   
   pheno_tune <- left_join(pheno_tune,common_prs,by = "IID")
   colnames(pheno_tune) <- c(colnames(pheno_tune)[1:16],"CV_PRS")
@@ -101,7 +101,7 @@ if(arrayid == 1){
   
   common_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Validation_All.txt")
   
-  rarevariant_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/Best_All_Burden_Validation_All.txt")
+  rarevariant_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/BestThree_Burden_Validation_All.txt")
   
   pheno_vad <- left_join(pheno_vad,common_prs,by = "IID")
   colnames(pheno_vad) <- c(colnames(pheno_vad)[1:16],"CV_PRS")
@@ -120,7 +120,7 @@ if(arrayid == 1){
   
   effects <- summary(model.best)$coefficients[-1,1]
   
-  save(effects,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/Coefficients_All_Burden.RData")
+  save(effects,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/Coefficients_BestThree_Burden.RData")
   
   data <- data.frame(y = PRSs_Validation$Residuals, x = predicted_prs)
   R2Boot <- function(data,indices){
@@ -138,5 +138,5 @@ if(arrayid == 1){
                           r2_high = ci_result$bca[5]
   )
   
-  save(SL.result,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/Burden_All_Result.RData")  
+  save(SL.result,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/Burden_BestThree_Result.RData")  
 }

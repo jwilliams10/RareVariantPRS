@@ -109,6 +109,10 @@ beta_final <- betas %*% final_coefs
 
 beta_final <- data.frame(CHR = betas_all$CHR,SNP = betas_all$SNP,BP = betas_all$BP,REF = betas_all$REF, A1 = betas_all$A1,BETA = beta_final)
 
+load("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/Coefficients_STAARO.RData")
+
+beta_final$BETA <- beta_final$BETA*effects[1]
+
 write.table(beta_final,file="/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_All_Beta.txt",sep = "\t",row.names = FALSE)
 
 rm(list=setdiff(ls(), c("beta_final")))

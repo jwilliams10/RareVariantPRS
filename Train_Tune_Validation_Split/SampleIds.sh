@@ -6,4 +6,4 @@
 
 module load samtools
 
-bcftools query -l /data/williamsjacr/UKB_WES_lipids/Data/pVCF/chr21/ukbb_wes_200k_chr21_test.vcf.bgz > /data/williamsjacr/UKB_WES_lipids/Data/attempt_21_tune.txt
+bcftools query -l /data/williamsjacr/UKB_WES_lipids/Data/pVCF/chr1/ukbb_wes_200k_chr1.vcf.bgz > /data/williamsjacr/UKB_WES_lipids/Data/sampleids.txt

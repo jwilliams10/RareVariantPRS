@@ -13,7 +13,7 @@ save(phenotype,file = "/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_All
 sampleids_all <- sampleids_all[sampleids_all[,1] %in% phenotype$userId,,drop = FALSE]
 sampleids_all <- sampleids_all[sampleids_all[,1] %in% unrels_nRandomSNPs_0$V1,,drop = FALSE]
 
-set.seed(1330)
+set.seed(1335)
 
 i <- 1:nrow(sampleids_all)
 
