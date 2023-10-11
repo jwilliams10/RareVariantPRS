@@ -99,13 +99,13 @@ R2Boot <- function(data,indices){
   result <- summary(model)$r.square
   return(c(result))
 }
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 100000)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
-ci_result <- boot.ci(boot_r2, type = "bca")
+ci_result <- boot.ci(boot_r2, type = "perc")
 r2.result <- data.frame(method = "LDPred2",
                         r2 = r2,
-                        r2_low = ci_result$bca[4],
-                        r2_high = ci_result$bca[5]
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
 )
 
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector

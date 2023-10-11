@@ -63,13 +63,13 @@ if(arrayid == 1){
     result <- summary(model)$r.square
     return(c(result))
   }
-  boot_r2 <- boot(data = data, statistic = R2Boot, R = 100000)
+  boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
   
-  ci_result <- boot.ci(boot_r2, type = "bca")
+  ci_result <- boot.ci(boot_r2, type = "perc")
   SL.result <- data.frame(method = "CV_plus_RV_STAARO",
                           r2 = r2,
-                          r2_low = ci_result$bca[4],
-                          r2_high = ci_result$bca[5]
+                          r2_low = ci_result$percent[4],
+                          r2_high = ci_result$percent[5]
   )
   
   save(SL.result,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/STAARO_All_Result.RData") 
@@ -129,13 +129,13 @@ if(arrayid == 1){
     result <- summary(model)$r.square
     return(c(result))
   }
-  boot_r2 <- boot(data = data, statistic = R2Boot, R = 100000)
+  boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
   
-  ci_result <- boot.ci(boot_r2, type = "bca")
+  ci_result <- boot.ci(boot_r2, type = "perc")
   SL.result <- data.frame(method = "CV_plus_RV_Burden",
                           r2 = r2,
-                          r2_low = ci_result$bca[4],
-                          r2_high = ci_result$bca[5]
+                          r2_low = ci_result$percent[4],
+                          r2_high = ci_result$percent[5]
   )
   
   save(SL.result,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/Burden_All_Result.RData")  

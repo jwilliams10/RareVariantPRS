@@ -46,19 +46,28 @@ BestAll_RareVariant_Burden$method <- "SL_All_Burden"
 
 load("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/sl_result_BestThree_STAARO.RData")
 BestThree_RareVariant_STAARO <- SL.result
-BestThree_RareVariant_STAARO$method <- "SL_BestThree_STAARO"
+BestThree_RareVariant_STAARO$method <- "SL_BestThree_Rare_STAARO"
 
 load("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/sl_result_BestThree_Burden.RData")
 BestThree_RareVariant_Burden <- SL.result
 BestThree_RareVariant_Burden$method <- "SL_BestThree_Burden"
 
 
+load("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/STAARO_BestThree_Result.RData")
+BestThree_STAARO <- SL.result
+BestThree_STAARO$method <- "CV_RV_STAARO_BestThree"
 
-BestThree_Burden <- data.frame(method = "CV_RV_Burden_BestThree", r2 = 0.1702937,r2_low = NA, r2_high = NA)
-BestThree_STAARO <- data.frame(method = "CV_RV_STAARO_BestThree", r2 = 0.1705838,r2_low = NA, r2_high = NA)
+load("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/Burden_BestThree_Result.RData")
+BestThree_Burden <- SL.result
+BestThree_Burden$method <- "CV_RV_Burden_BestThree"
 
-BestAll_Burden <- data.frame(method = "CV_RV_Burden_All", r2 = 0.1704095,r2_low = NA, r2_high = NA)
-BestAll_STAARO <- data.frame(method = "CV_RV_STAARO_All", r2 = 0.1702076,r2_low = NA, r2_high = NA)
+load("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/STAARO_All_Result.RData")
+BestAll_STAARO <- SL.result
+BestAll_STAARO$method <- "CV_RV_STAARO_All"
+
+load("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Common_plus_RareVariants/Burden_All_Result.RData")
+BestAll_Burden <- SL.result
+BestAll_Burden$method <- "CV_RV_Burden_All"
 
 
 results <- rbind(sl_all,sl_bestthree,ct,lassosum2,ldpred2,

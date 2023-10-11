@@ -10,4 +10,5 @@ RareVariants_TrainTuneValidation.sh takes the full data (common and rare) and bu
 CommonVariants_TrainTuneValidation.sh first creates a full common variant .pgen file using MAF 0.01 filter with plink2. The creates the respective subsets as .pgen files.
 
 Order:
-SampleIds.sh -> Train_Tune_Validate_Split.R -> RareVariants_TrainTuneValidation.sh -> CommonVariants_TrainTuneValidation.sh -> Merge_Bed
+SampleIds.sh -> Train_Tune_Validate_Split.R -> RareVariants_TrainTuneValidation.sh
+                                            -> CommonVariants_TrainTuneValidation.sh -> Merge_Bed

@@ -78,14 +78,24 @@ prs_validation_all = prs_validation_all %>%
   select(-all_of(drop))
 
 
+## SL
+
 SL.library <- c(
   "SL.glmnet",
-  "SL.ridge"
+  "SL.ridge",
+  "SL.glm",
+  "SL.mean"
 )
 sl <- SuperLearner(Y = y_tune, X = prs_tune_all, family = gaussian(),
-                  # For a real analysis we would use V = 10.
-                  # V = 3,
-                  SL.library = SL.library)
+                   # For a real analysis we would use V = 10.
+                   # V = 3,
+                   SL.library = SL.library)
+cvsl <- CV.SuperLearner(Y = y_tune, X = prs_tune_all, family = gaussian(),
+                        # For a real analysis we would use V = 10.
+                        # V = 3,
+                        SL.library = SL.library)
+
+best_algorithm <- summary(cvsl)$Table$Algorithm[which.min(summary(cvsl)$Table$Ave)]
 
 ### Extract Coefficients
 #algorithm weight
@@ -96,8 +106,24 @@ best_lambda <- glmnet_obj$lambda[which.min(glmnet_obj$cvm)]
 glmnet_coefs <- coef(glmnet_obj, s = best_lambda)
 #ridge
 ridge_coefs <- sl$fitLibrary$SL.ridge_All$bestCoef
-#final
-final_coefs <- alg_weights[1] * glmnet_coefs + alg_weights[2] * ridge_coefs
+#glm 
+glm_coefs <- sl$fitLibrary$SL.glm_All$object$coefficients
+#mean 
+mean_coefs <- sl$fitLibrary$SL.mean_All$object
+
+if(best_algorithm == "SL.glmnet_All"){
+  #final
+  final_coefs <- glmnet_coefs
+}else if(best_algorithm == "SL.ridge_All"){
+  #final
+  final_coefs <- ridge_coefs
+}else if(best_algorithm == "SL.glm_All"){
+  #final
+  final_coefs <- glm_coefs
+}else{
+  #final
+  final_coefs <- alg_weights[1] * glmnet_coefs + alg_weights[2] * ridge_coefs + alg_weights[3] * glm_coefs + alg_weights[4] * mean_coefs 
+}
 
 #remove the intercept
 final_coefs = final_coefs[2:nrow(final_coefs),]
@@ -106,14 +132,77 @@ final_coefs = final_coefs[final_coefs!=0]
 
 save(final_coefs,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/final_coefs_All.RData")
 
-prs_best_validation <- predict(sl, prs_validation_all, onlySL = TRUE)[[1]]
+a <- predict(sl, prs_validation_all, onlySL = FALSE)
 
-model <- lm(y_validation~prs_best_validation)
+prs_best_validation_sl <- a$pred
+prs_best_validation_glmnet <- a$library.predict[,1]
+prs_best_validation_ridge <- a$library.predict[,2]
+prs_best_validation_glm <- a$library.predict[,3]
+
+if(best_algorithm == "SL.glmnet_All"){
+  #final
+  prs_best_validation <- prs_best_validation_glmnet
+}else if(best_algorithm == "SL.ridge_All"){
+  #final
+  prs_best_validation <- prs_best_validation_ridge
+}else if(best_algorithm == "SL.glm_All"){
+  #final
+  prs_best_validation <- prs_best_validation_glm
+}else{
+  #final
+  prs_best_validation <- prs_best_validation_sl
+}
+
+model <- lm(y_vad_Burden~prs_best_validation)
 r2 <- summary(model)$r.square
 
 prs_best_validation <- data.frame(IID = pheno_validation$IID,prs = prs_best_validation)
-prs_best_train <- data.frame(IID = pheno_train$IID,prs = predict(sl, prs_train_all, onlySL = TRUE)[[1]])
-prs_best_tune <- data.frame(IID = pheno_tune$IID,prs = predict(sl, prs_tune_all, onlySL = TRUE)[[1]])
+
+
+a <- predict(sl, prs_train_all, onlySL = FALSE)
+
+prs_best_train_sl <- a$pred
+prs_best_train_glmnet <- a$library.predict[,1]
+prs_best_train_ridge <- a$library.predict[,2]
+prs_best_train_glm <- a$library.predict[,3]
+
+if(best_algorithm == "SL.glmnet_All"){
+  #final
+  prs_best_train <- prs_best_train_glmnet
+}else if(best_algorithm == "SL.ridge_All"){
+  #final
+  prs_best_train <- prs_best_train_ridge
+}else if(best_algorithm == "SL.glm_All"){
+  #final
+  prs_best_train <- prs_best_train_glm
+}else{
+  #final
+  prs_best_train <- prs_best_train_sl
+}
+prs_best_train <- data.frame(IID = pheno_train$IID,prs = prs_best_train)
+
+
+a <- predict(sl, prs_tune_all, onlySL = FALSE)
+
+prs_best_tune_sl <- a$pred
+prs_best_tune_glmnet <- a$library.predict[,1]
+prs_best_tune_ridge <- a$library.predict[,2]
+prs_best_tune_glm <- a$library.predict[,3]
+
+if(best_algorithm == "SL.glmnet_All"){
+  #final
+  prs_best_tune <- prs_best_tune_glmnet
+}else if(best_algorithm == "SL.ridge_All"){
+  #final
+  prs_best_tune <- prs_best_tune_ridge
+}else if(best_algorithm == "SL.glm_All"){
+  #final
+  prs_best_tune <- prs_best_tune_glm
+}else{
+  #final
+  prs_best_tune <- prs_best_tune_sl
+}
+prs_best_tune <- data.frame(IID = pheno_tune$IID,prs = prs_best_tune)
 
 write.table(prs_best_train,file="/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Train_All.txt",sep = "\t",row.names = FALSE)
 write.table(prs_best_tune,file="/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Tune_All.txt",sep = "\t",row.names = FALSE)
@@ -127,14 +216,13 @@ R2Boot <- function(data,indices){
   result <- summary(model)$r.square
   return(c(result))
 }
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 100000)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
-ci_result <- boot.ci(boot_r2, type = "bca")
+ci_result <- boot.ci(boot_r2, type = "perc")
 SL.result <- data.frame(method = "SL_Combined",
                         r2 = r2,
-                        r2_low = ci_result$bca[4],
-                        r2_high = ci_result$bca[5]
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
 )
 
 save(SL.result,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/sl_result_All.RData")
-

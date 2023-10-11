@@ -21,9 +21,9 @@ obj.STAAR.UKB.LDL <- fit_nullmodel(LDLadj.norm~age+age2+sex+PC1+PC2+PC3+PC4+PC5+
 
 save(obj.STAAR.UKB.LDL,file = "/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData")
 
-obj_nullmodel_SCANG_STAAR <- staar2scang_nullmodel(obj.STAAR.UKB.LDL)
-
-save(obj_nullmodel_SCANG_STAAR,file="/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_SCANG_LDL.RData")
+# obj_nullmodel_SCANG_STAAR <- staar2scang_nullmodel(obj.STAAR.UKB.LDL)
+# 
+# save(obj_nullmodel_SCANG_STAAR,file="/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_SCANG_LDL.RData")
 
 rm(list = ls())
 
@@ -38,9 +38,9 @@ obj.STAAR.UKB.LDL <- fit_nullmodel(LDLadj.norm~age+age2+sex+PC1+PC2+PC3+PC4+PC5+
 
 save(obj.STAAR.UKB.LDL,file = "/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Tune_Null_Model_LDL.RData")
 
-obj_nullmodel_SCANG_STAAR <- staar2scang_nullmodel(obj.STAAR.UKB.LDL)
-
-save(obj_nullmodel_SCANG_STAAR,file="/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Tune_Null_Model_SCANG_LDL.RData")
+# obj_nullmodel_SCANG_STAAR <- staar2scang_nullmodel(obj.STAAR.UKB.LDL)
+# 
+# save(obj_nullmodel_SCANG_STAAR,file="/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Tune_Null_Model_SCANG_LDL.RData")
 
 rm(list = ls())
 
@@ -55,6 +55,6 @@ obj.STAAR.UKB.LDL <- fit_nullmodel(LDLadj.norm~age+age2+sex+PC1+PC2+PC3+PC4+PC5+
 
 save(obj.STAAR.UKB.LDL,file = "/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Validation_Null_Model_LDL.RData")
 
-obj_nullmodel_SCANG_STAAR <- staar2scang_nullmodel(obj.STAAR.UKB.LDL)
-
-save(obj_nullmodel_SCANG_STAAR,file="/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Validation_Null_Model_SCANG_LDL.RData")
+# obj_nullmodel_SCANG_STAAR <- staar2scang_nullmodel(obj.STAAR.UKB.LDL)
+# 
+# save(obj_nullmodel_SCANG_STAAR,file="/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Validation_Null_Model_SCANG_LDL.RData")

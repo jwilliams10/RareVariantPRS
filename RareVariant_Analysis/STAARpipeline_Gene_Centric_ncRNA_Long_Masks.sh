@@ -7,4 +7,4 @@
 # module purge
 module load R/4.3.0
 
-Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/RareVariant_Analysis_Train/STAARpipeline_Gene_Centric_ncRNA_Long_Masks.R > out.Rout
+Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/RareVariant_Analysis/STAARpipeline_Gene_Centric_ncRNA_Long_Masks.R > out.Rout

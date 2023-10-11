@@ -63,79 +63,61 @@ for(burden in c(0,1)){
       if(burden == 0){
         for(a in arrayid){
           if(a == arrayid[1]){
-            STAARO_GeneCentric_Coding_Train_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Train_PRS_Array_",a,".csv"))
             STAARO_GeneCentric_Coding_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Tune_PRS_Array_",a,".csv"))
             STAARO_GeneCentric_Coding_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Validation_PRS_Array_",a,".csv"))
             
-            STAARO_GeneCentric_Noncoding_Train_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Train_PRS_Array_",a,".csv"))
             STAARO_GeneCentric_Noncoding_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Tune_PRS_Array_",a,".csv"))
             STAARO_GeneCentric_Noncoding_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Validation_PRS_Array_",a,".csv"))
             
-            STAARO_SlidingWindow_Train_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Train_PRS_Array_",a,".csv"))
             STAARO_SlidingWindow_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Tune_PRS_Array_",a,".csv"))
             STAARO_SlidingWindow_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Validation_PRS_Array_",a,".csv"))
           }else{
-            STAARO_GeneCentric_Coding_Train_PRS[,2] <- STAARO_GeneCentric_Coding_Train_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Train_PRS_Array_",a,".csv"))[,2]
             STAARO_GeneCentric_Coding_Tune_PRS[,2] <- STAARO_GeneCentric_Coding_Tune_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Tune_PRS_Array_",a,".csv"))[,2]
             STAARO_GeneCentric_Coding_Validation_PRS[,2] <- STAARO_GeneCentric_Coding_Validation_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Validation_PRS_Array_",a,".csv"))[,2]
             
-            STAARO_GeneCentric_Noncoding_Train_PRS[,2] <- STAARO_GeneCentric_Noncoding_Train_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Train_PRS_Array_",a,".csv"))[,2]
             STAARO_GeneCentric_Noncoding_Tune_PRS[,2] <- STAARO_GeneCentric_Noncoding_Tune_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Tune_PRS_Array_",a,".csv"))[,2]
             STAARO_GeneCentric_Noncoding_Validation_PRS[,2] <- STAARO_GeneCentric_Noncoding_Validation_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Validation_PRS_Array_",a,".csv"))[,2]
             
-            STAARO_SlidingWindow_Train_PRS[,2] <- STAARO_SlidingWindow_Train_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Train_PRS_Array_",a,".csv"))[,2]
             STAARO_SlidingWindow_Tune_PRS[,2] <- STAARO_SlidingWindow_Tune_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Tune_PRS_Array_",a,".csv"))[,2]
             STAARO_SlidingWindow_Validation_PRS[,2] <- STAARO_SlidingWindow_Validation_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Validation_PRS_Array_",a,".csv"))[,2]
           }
         }
-        colnames(STAARO_GeneCentric_Coding_Train_PRS) <- c("IID","PRS_Threshold_1")
         colnames(STAARO_GeneCentric_Coding_Tune_PRS) <- c("IID","PRS_Threshold_1")
         colnames(STAARO_GeneCentric_Coding_Validation_PRS) <- c("IID","PRS_Threshold_1")
         
-        colnames(STAARO_GeneCentric_Noncoding_Train_PRS) <- c("IID","PRS_Threshold_1")
         colnames(STAARO_GeneCentric_Noncoding_Tune_PRS) <- c("IID","PRS_Threshold_1")
         colnames(STAARO_GeneCentric_Noncoding_Validation_PRS) <- c("IID","PRS_Threshold_1")
         
-        colnames(STAARO_SlidingWindow_Train_PRS) <- c("IID","PRS_Threshold_1")
         colnames(STAARO_SlidingWindow_Tune_PRS) <- c("IID","PRS_Threshold_1")
         colnames(STAARO_SlidingWindow_Validation_PRS) <- c("IID","PRS_Threshold_1")
       }else{
         for(a in arrayid){
           if(a == arrayid[1]){
-            Burden_GeneCentric_Coding_Train_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Train_PRS_Array_",a,".csv"))
             Burden_GeneCentric_Coding_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Tune_PRS_Array_",a,".csv"))
             Burden_GeneCentric_Coding_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Validation_PRS_Array_",a,".csv"))
             
-            Burden_GeneCentric_Noncoding_Train_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Train_PRS_Array_",a,".csv"))
             Burden_GeneCentric_Noncoding_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Tune_PRS_Array_",a,".csv"))
             Burden_GeneCentric_Noncoding_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Validation_PRS_Array_",a,".csv"))
             
-            Burden_SlidingWindow_Train_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Train_PRS_Array_",a,".csv"))
-            Burden_SlidingWindow_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Tune_PRS_Array_",a,".csv"))
+           Burden_SlidingWindow_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Tune_PRS_Array_",a,".csv"))
             Burden_SlidingWindow_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Validation_PRS_Array_",a,".csv"))
           }else{
-            Burden_GeneCentric_Coding_Train_PRS[,2] <- Burden_GeneCentric_Coding_Train_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Train_PRS_Array_",a,".csv"))[,2]
             Burden_GeneCentric_Coding_Tune_PRS[,2] <- Burden_GeneCentric_Coding_Tune_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Tune_PRS_Array_",a,".csv"))[,2]
             Burden_GeneCentric_Coding_Validation_PRS[,2] <- Burden_GeneCentric_Coding_Validation_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Validation_PRS_Array_",a,".csv"))[,2]
             
-            Burden_GeneCentric_Noncoding_Train_PRS[,2] <- Burden_GeneCentric_Noncoding_Train_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Train_PRS_Array_",a,".csv"))[,2]
-            Burden_GeneCentric_Noncoding_Tune_PRS[,2] <- Burden_GeneCentric_Noncoding_Tune_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Tune_PRS_Array_",a,".csv"))[,2]
+             Burden_GeneCentric_Noncoding_Tune_PRS[,2] <- Burden_GeneCentric_Noncoding_Tune_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Tune_PRS_Array_",a,".csv"))[,2]
             Burden_GeneCentric_Noncoding_Validation_PRS[,2] <- Burden_GeneCentric_Noncoding_Validation_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Validation_PRS_Array_",a,".csv"))[,2]
             
-            Burden_SlidingWindow_Train_PRS[,2] <- Burden_SlidingWindow_Train_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Train_PRS_Array_",a,".csv"))[,2]
             Burden_SlidingWindow_Tune_PRS[,2] <- Burden_SlidingWindow_Tune_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Tune_PRS_Array_",a,".csv"))[,2]
             Burden_SlidingWindow_Validation_PRS[,2] <- Burden_SlidingWindow_Validation_PRS[,2] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Validation_PRS_Array_",a,".csv"))[,2]
           }
         }
-        colnames(Burden_GeneCentric_Coding_Train_PRS) <- c("IID","PRS_Threshold_1")
         colnames(Burden_GeneCentric_Coding_Tune_PRS) <- c("IID","PRS_Threshold_1")
         colnames(Burden_GeneCentric_Coding_Validation_PRS) <- c("IID","PRS_Threshold_1")
         
-        colnames(Burden_GeneCentric_Noncoding_Train_PRS) <- c("IID","PRS_Threshold_1")
         colnames(Burden_GeneCentric_Noncoding_Tune_PRS) <- c("IID","PRS_Threshold_1")
         colnames(Burden_GeneCentric_Noncoding_Validation_PRS) <- c("IID","PRS_Threshold_1")
         
-        colnames(Burden_SlidingWindow_Train_PRS) <- c("IID","PRS_Threshold_1")
         colnames(Burden_SlidingWindow_Tune_PRS) <- c("IID","PRS_Threshold_1")
         colnames(Burden_SlidingWindow_Validation_PRS) <- c("IID","PRS_Threshold_1")
       }
@@ -143,79 +125,61 @@ for(burden in c(0,1)){
       if(burden == 0){
         for(a in arrayid){
           if(a == arrayid[1]){
-            STAARO_GeneCentric_Coding_Train_PRS <- cbind(STAARO_GeneCentric_Coding_Train_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Train_PRS_Array_",a,".csv"))[,2])
             STAARO_GeneCentric_Coding_Tune_PRS <- cbind(STAARO_GeneCentric_Coding_Tune_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Tune_PRS_Array_",a,".csv"))[,2])
             STAARO_GeneCentric_Coding_Validation_PRS <- cbind(STAARO_GeneCentric_Coding_Validation_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Validation_PRS_Array_",a,".csv"))[,2])
             
-            STAARO_GeneCentric_Noncoding_Train_PRS <- cbind(STAARO_GeneCentric_Noncoding_Train_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Train_PRS_Array_",a,".csv"))[,2])
             STAARO_GeneCentric_Noncoding_Tune_PRS <- cbind(STAARO_GeneCentric_Noncoding_Tune_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Tune_PRS_Array_",a,".csv"))[,2])
             STAARO_GeneCentric_Noncoding_Validation_PRS <- cbind(STAARO_GeneCentric_Noncoding_Validation_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Validation_PRS_Array_",a,".csv"))[,2])
-            
-            STAARO_SlidingWindow_Train_PRS <- cbind(STAARO_SlidingWindow_Train_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Train_PRS_Array_",a,".csv"))[,2])
+   
             STAARO_SlidingWindow_Tune_PRS <- cbind(STAARO_SlidingWindow_Tune_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Tune_PRS_Array_",a,".csv"))[,2])
             STAARO_SlidingWindow_Validation_PRS <- cbind(STAARO_SlidingWindow_Validation_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Validation_PRS_Array_",a,".csv"))[,2])
           }else{
-            STAARO_GeneCentric_Coding_Train_PRS[,threshold + 1] <- STAARO_GeneCentric_Coding_Train_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Train_PRS_Array_",a,".csv"))[,2]
             STAARO_GeneCentric_Coding_Tune_PRS[,threshold + 1] <- STAARO_GeneCentric_Coding_Tune_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Tune_PRS_Array_",a,".csv"))[,2]
             STAARO_GeneCentric_Coding_Validation_PRS[,threshold + 1] <- STAARO_GeneCentric_Coding_Validation_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Validation_PRS_Array_",a,".csv"))[,2]
             
-            STAARO_GeneCentric_Noncoding_Train_PRS[,threshold + 1] <- STAARO_GeneCentric_Noncoding_Train_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Train_PRS_Array_",a,".csv"))[,2]
             STAARO_GeneCentric_Noncoding_Tune_PRS[,threshold + 1] <- STAARO_GeneCentric_Noncoding_Tune_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Tune_PRS_Array_",a,".csv"))[,2]
             STAARO_GeneCentric_Noncoding_Validation_PRS[,threshold + 1] <- STAARO_GeneCentric_Noncoding_Validation_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Validation_PRS_Array_",a,".csv"))[,2]
             
-            STAARO_SlidingWindow_Train_PRS[,threshold + 1] <- STAARO_SlidingWindow_Train_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Train_PRS_Array_",a,".csv"))[,2]
             STAARO_SlidingWindow_Tune_PRS[,threshold + 1] <- STAARO_SlidingWindow_Tune_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Tune_PRS_Array_",a,".csv"))[,2]
             STAARO_SlidingWindow_Validation_PRS[,threshold + 1] <- STAARO_SlidingWindow_Validation_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Validation_PRS_Array_",a,".csv"))[,2]
           }
         }
-        colnames(STAARO_GeneCentric_Coding_Train_PRS) <- c(colnames(STAARO_GeneCentric_Coding_Train_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(STAARO_GeneCentric_Coding_Tune_PRS) <- c(colnames(STAARO_GeneCentric_Coding_Tune_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(STAARO_GeneCentric_Coding_Validation_PRS) <- c(colnames(STAARO_GeneCentric_Coding_Validation_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         
-        colnames(STAARO_GeneCentric_Noncoding_Train_PRS) <- c(colnames(STAARO_GeneCentric_Noncoding_Train_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(STAARO_GeneCentric_Noncoding_Tune_PRS) <- c(colnames(STAARO_GeneCentric_Noncoding_Tune_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(STAARO_GeneCentric_Noncoding_Validation_PRS) <- c(colnames(STAARO_GeneCentric_Noncoding_Validation_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         
-        colnames(STAARO_SlidingWindow_Train_PRS) <- c(colnames(STAARO_SlidingWindow_Train_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(STAARO_SlidingWindow_Tune_PRS) <- c(colnames(STAARO_SlidingWindow_Tune_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(STAARO_SlidingWindow_Validation_PRS) <- c(colnames(STAARO_SlidingWindow_Validation_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
       }else{
         for(a in arrayid){
           if(a == arrayid[1]){
-            Burden_GeneCentric_Coding_Train_PRS <- cbind(Burden_GeneCentric_Coding_Train_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Train_PRS_Array_",a,".csv"))[,2])
             Burden_GeneCentric_Coding_Tune_PRS <- cbind(Burden_GeneCentric_Coding_Tune_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Tune_PRS_Array_",a,".csv"))[,2])
             Burden_GeneCentric_Coding_Validation_PRS <- cbind(Burden_GeneCentric_Coding_Validation_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Validation_PRS_Array_",a,".csv"))[,2])
             
-            Burden_GeneCentric_Noncoding_Train_PRS <- cbind(Burden_GeneCentric_Noncoding_Train_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Train_PRS_Array_",a,".csv"))[,2])
             Burden_GeneCentric_Noncoding_Tune_PRS <- cbind(Burden_GeneCentric_Noncoding_Tune_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Tune_PRS_Array_",a,".csv"))[,2])
             Burden_GeneCentric_Noncoding_Validation_PRS <- cbind(Burden_GeneCentric_Noncoding_Validation_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Validation_PRS_Array_",a,".csv"))[,2])
             
-            Burden_SlidingWindow_Train_PRS <- cbind(Burden_SlidingWindow_Train_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Train_PRS_Array_",a,".csv"))[,2])
             Burden_SlidingWindow_Tune_PRS <- cbind(Burden_SlidingWindow_Tune_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Tune_PRS_Array_",a,".csv"))[,2])
             Burden_SlidingWindow_Validation_PRS <- cbind(Burden_SlidingWindow_Validation_PRS,read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Validation_PRS_Array_",a,".csv"))[,2])
           }else{
-            Burden_GeneCentric_Coding_Train_PRS[,threshold + 1] <- Burden_GeneCentric_Coding_Train_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Train_PRS_Array_",a,".csv"))[,2]
             Burden_GeneCentric_Coding_Tune_PRS[,threshold + 1] <- Burden_GeneCentric_Coding_Tune_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Tune_PRS_Array_",a,".csv"))[,2]
             Burden_GeneCentric_Coding_Validation_PRS[,threshold + 1] <- Burden_GeneCentric_Coding_Validation_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Validation_PRS_Array_",a,".csv"))[,2]
             
-            Burden_GeneCentric_Noncoding_Train_PRS[,threshold + 1] <- Burden_GeneCentric_Noncoding_Train_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Train_PRS_Array_",a,".csv"))[,2]
             Burden_GeneCentric_Noncoding_Tune_PRS[,threshold + 1] <- Burden_GeneCentric_Noncoding_Tune_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Tune_PRS_Array_",a,".csv"))[,2]
             Burden_GeneCentric_Noncoding_Validation_PRS[,threshold + 1] <- Burden_GeneCentric_Noncoding_Validation_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Validation_PRS_Array_",a,".csv"))[,2]
             
-            Burden_SlidingWindow_Train_PRS[,threshold + 1] <- Burden_SlidingWindow_Train_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Train_PRS_Array_",a,".csv"))[,2]
             Burden_SlidingWindow_Tune_PRS[,threshold + 1] <- Burden_SlidingWindow_Tune_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Tune_PRS_Array_",a,".csv"))[,2]
             Burden_SlidingWindow_Validation_PRS[,threshold + 1] <- Burden_SlidingWindow_Validation_PRS[,threshold + 1] + read.csv(paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Validation_PRS_Array_",a,".csv"))[,2]
           }
         } 
-        colnames(Burden_GeneCentric_Coding_Train_PRS) <- c(colnames(Burden_GeneCentric_Coding_Train_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(Burden_GeneCentric_Coding_Tune_PRS) <- c(colnames(Burden_GeneCentric_Coding_Tune_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(Burden_GeneCentric_Coding_Validation_PRS) <- c(colnames(Burden_GeneCentric_Coding_Validation_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         
-        colnames(Burden_GeneCentric_Noncoding_Train_PRS) <- c(colnames(Burden_GeneCentric_Noncoding_Train_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(Burden_GeneCentric_Noncoding_Tune_PRS) <- c(colnames(Burden_GeneCentric_Noncoding_Tune_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(Burden_GeneCentric_Noncoding_Validation_PRS) <- c(colnames(Burden_GeneCentric_Noncoding_Validation_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         
-        colnames(Burden_SlidingWindow_Train_PRS) <- c(colnames(Burden_SlidingWindow_Train_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(Burden_SlidingWindow_Tune_PRS) <- c(colnames(Burden_SlidingWindow_Tune_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
         colnames(Burden_SlidingWindow_Validation_PRS) <- c(colnames(Burden_SlidingWindow_Validation_PRS)[1:threshold],paste0("PRS_Threshold_",threshold))
       }
@@ -223,40 +187,33 @@ for(burden in c(0,1)){
   }
 }
 
-rm(list = setdiff(ls(),c("STAARO_GeneCentric_Coding_Train_PRS","STAARO_GeneCentric_Coding_Tune_PRS","STAARO_GeneCentric_Coding_Validation_PRS",
-                         "STAARO_GeneCentric_Noncoding_Train_PRS","STAARO_GeneCentric_Noncoding_Tune_PRS","STAARO_GeneCentric_Noncoding_Validation_PRS",
-                         "STAARO_SlidingWindow_Train_PRS","STAARO_SlidingWindow_Tune_PRS","STAARO_SlidingWindow_Validation_PRS",
-                         "Burden_GeneCentric_Coding_Train_PRS","Burden_GeneCentric_Coding_Tune_PRS","Burden_GeneCentric_Coding_Validation_PRS",
-                         "Burden_GeneCentric_Noncoding_Train_PRS","Burden_GeneCentric_Noncoding_Tune_PRS","Burden_GeneCentric_Noncoding_Validation_PRS",
-                         "Burden_SlidingWindow_Train_PRS","Burden_SlidingWindow_Tune_PRS","Burden_SlidingWindow_Validation_PRS")))
+rm(list = setdiff(ls(),c("STAARO_GeneCentric_Coding_Tune_PRS","STAARO_GeneCentric_Coding_Validation_PRS",
+                         "STAARO_GeneCentric_Noncoding_Tune_PRS","STAARO_GeneCentric_Noncoding_Validation_PRS",
+                         "STAARO_SlidingWindow_Tune_PRS","STAARO_SlidingWindow_Validation_PRS",
+                         "Burden_GeneCentric_Coding_Tune_PRS","Burden_GeneCentric_Coding_Validation_PRS",
+                         "Burden_GeneCentric_Noncoding_Tune_PRS","Burden_GeneCentric_Noncoding_Validation_PRS",
+                         "Burden_SlidingWindow_Tune_PRS","Burden_SlidingWindow_Validation_PRS")))
 
 
-write.csv(STAARO_GeneCentric_Coding_Train_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/STAARO_GeneCentric_Coding_Train_PRS.csv",row.names = FALSE)
 write.csv(STAARO_GeneCentric_Coding_Tune_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/STAARO_GeneCentric_Coding_Tune_PRS.csv",row.names = FALSE)
 write.csv(STAARO_GeneCentric_Coding_Validation_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/STAARO_GeneCentric_Coding_Validation_PRS.csv",row.names = FALSE)
 
-write.csv(STAARO_GeneCentric_Noncoding_Train_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/STAARO_GeneCentric_Noncoding_Train_PRS.csv",row.names = FALSE)
 write.csv(STAARO_GeneCentric_Noncoding_Tune_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/STAARO_GeneCentric_Noncoding_Tune_PRS.csv",row.names = FALSE)
 write.csv(STAARO_GeneCentric_Noncoding_Validation_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/STAARO_GeneCentric_Noncoding_Validation_PRS.csv",row.names = FALSE)
 
-write.csv(STAARO_SlidingWindow_Train_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/STAARO_SlidingWindow_Train_PRS.csv",row.names = FALSE)
 write.csv(STAARO_SlidingWindow_Tune_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/STAARO_SlidingWindow_Tune_PRS.csv",row.names = FALSE)
 write.csv(STAARO_SlidingWindow_Validation_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/STAARO_SlidingWindow_Validation_PRS.csv",row.names = FALSE)
 
 
-write.csv(Burden_GeneCentric_Coding_Train_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Burden_GeneCentric_Coding_Train_PRS.csv",row.names = FALSE)
 write.csv(Burden_GeneCentric_Coding_Tune_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Burden_GeneCentric_Coding_Tune_PRS.csv",row.names = FALSE)
 write.csv(Burden_GeneCentric_Coding_Validation_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/Burden_GeneCentric_Coding_Validation_PRS.csv",row.names = FALSE)
 
-Burden_GeneCentric_Noncoding_Train_PRS$IID <- STAARO_GeneCentric_Noncoding_Train_PRS$IID
 Burden_GeneCentric_Noncoding_Tune_PRS$IID <- STAARO_GeneCentric_Noncoding_Tune_PRS$IID
 Burden_GeneCentric_Noncoding_Validation_PRS$IID <- STAARO_GeneCentric_Noncoding_Validation_PRS$IID
 
-write.csv(Burden_GeneCentric_Noncoding_Train_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Burden_GeneCentric_Noncoding_Train_PRS.csv",row.names = FALSE)
 write.csv(Burden_GeneCentric_Noncoding_Tune_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Burden_GeneCentric_Noncoding_Tune_PRS.csv",row.names = FALSE)
 write.csv(Burden_GeneCentric_Noncoding_Validation_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Burden_GeneCentric_Noncoding_Validation_PRS.csv",row.names = FALSE)
 
-write.csv(Burden_SlidingWindow_Train_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Burden_SlidingWindow_Train_PRS.csv",row.names = FALSE)
 write.csv(Burden_SlidingWindow_Tune_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Burden_SlidingWindow_Tune_PRS.csv",row.names = FALSE)
 write.csv(Burden_SlidingWindow_Validation_PRS,file = "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/Burden_SlidingWindow_Validation_PRS.csv",row.names = FALSE)
 

@@ -19,8 +19,8 @@ library(readr)
 library(dplyr)
 
 ## source code
-source("~/RareVariantPRS/RareVariant_PRS_Train/Burden_Effect_Size.R")
-source("~/RareVariantPRS/RareVariant_PRS_Train/Gene_Centric_Coding_Burden_Effect_Size_Jake.R")
+source("~/RareVariantPRS/RareVariant_PRS/Burden_Effect_Size.R")
+source("~/RareVariantPRS/RareVariant_PRS/Gene_Centric_Coding_Burden_Effect_Size_Jake.R")
 
 ###########################################################
 #           User Input

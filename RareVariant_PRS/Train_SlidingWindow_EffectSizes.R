@@ -20,8 +20,8 @@ library(readr)
 library(dplyr)
 
 ## source code
-source("~/RareVariantPRS/RareVariant_PRS_Train/Burden_Effect_Size.R")
-source("~/RareVariantPRS/RareVariant_PRS_Train/Sliding_Window_Burden_Effect_Size.R")
+source("~/RareVariantPRS/RareVariant_PRS/Burden_Effect_Size.R")
+source("~/RareVariantPRS/RareVariant_PRS/Sliding_Window_Burden_Effect_Size.R")
 
 ###########################################################
 #           User Input
