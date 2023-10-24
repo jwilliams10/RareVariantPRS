@@ -153,7 +153,7 @@ if(best_algorithm == "SL.glmnet_All"){
   prs_best_validation <- prs_best_validation_sl
 }
 
-model <- lm(y_vad_Burden~prs_best_validation)
+model <- lm(y_validation~prs_best_validation)
 r2 <- summary(model)$r.square
 
 prs_best_validation <- data.frame(IID = pheno_validation$IID,prs = prs_best_validation)

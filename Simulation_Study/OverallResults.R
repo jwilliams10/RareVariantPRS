@@ -46,7 +46,7 @@ BestAll_RareVariant_Burden$method <- "SL_All_Burden"
 
 load("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/sl_result_BestThree_STAARO.RData")
 BestThree_RareVariant_STAARO <- SL.result
-BestThree_RareVariant_STAARO$method <- "SL_BestThree_Rare_STAARO"
+BestThree_RareVariant_STAARO$method <- "SL_BestThree_STAARO"
 
 load("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_RareVariants_PRS/sl_result_BestThree_Burden.RData")
 BestThree_RareVariant_Burden <- SL.result

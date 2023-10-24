@@ -1,0 +1,1 @@
+CommonVariants_SampleIDs -> RareVariants.sh -> gds_processing -> NullModel.R
