@@ -2,10 +2,10 @@
 #SBATCH -n 1
 #SBATCH -N 1
 #SBATCH --time=144:00:00
-#SBATCH --array=1-22
-#SBATCH --mem-per-cpu=100G
+#SBATCH --array=1-10
+#SBATCH --mem-per-cpu=10G
 
 # module purge
 module load R/4.3.0
 
-Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/RareVariant_PRS/Train_GeneCentric_Coding_EffectSizes.R ${SLURM_ARRAY_TASK_ID} > out"${SLURM_ARRAY_TASK_ID}".Rout
+Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study/RareVariant_PRS/Train_GeneCentric_Coding_EffectSizes.R ${SLURM_ARRAY_TASK_ID} > Train_GeneCentric_Coding_EffectSizes"${SLURM_ARRAY_TASK_ID}".Rout

@@ -20,61 +20,56 @@ library(readr)
 library(dplyr)
 
 ## source code
-source("~/RareVariantPRS/RareVariant_PRS/Burden_Effect_Size.R")
-source("~/RareVariantPRS/RareVariant_PRS/Sliding_Window_Burden_Effect_Size.R")
+source("~/RareVariantPRS/Simulation_Study/RareVariant_PRS/Burden_Effect_Size.R")
+source("~/RareVariantPRS/Simulation_Study/RareVariant_PRS/Sliding_Window_Burden_Effect_Size.R")
 
 ###########################################################
 #           User Input
 ###########################################################
+
+i <- as.numeric(commandArgs(TRUE)[1])
+
 ### Significant Results 
-sliding_window_sig <- read_csv("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/sliding_window_sig.csv")
-sliding_window_sig <- sliding_window_sig[,c(1,2,3,4,5,6,48,62,91)]
-colnames(sliding_window_sig) <- c("IDK","Chr","Start","End","Number_SNV","SKAT_1_25","Burden_1_1","ACAT_V_1_25","STAAR_O")
+load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/slidingwindow_sig",i,".Rdata"))
+colnames(slidingwindow_sig) <- c("Chr","Start","End","Burden_1_1","STAAR_O")
 
 ## agds dir
-agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_agds_dir.Rdata"))
-
+agds_dir <- get(load("/data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/gds/full_gds22_agds_dir.Rdata"))
 ## Null Model
-obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData"))
+obj_nullmodel <- get(load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/nullmodels_staar/Train_Null_Model",i,".RData")))
 
 ## Parameter
 QC_label <- "annotation/info/QC_label"
 geno_missing_imputation <- "mean"
 variant_type <- "SNV"	
 
-###########################################################
+## Annotation_dir
+Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
+## Annotation channel
+Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/gds/full_gds22_Annotation_name_catalog.Rdata"))
 
-arrayid <- as.numeric(commandArgs(TRUE)[1])
-
-sliding_window_sig <- sliding_window_sig[sliding_window_sig$Chr == arrayid,]
+genofile <- seqOpen("/data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/gds/full_gds22.gds")
 
 effect_sizes <- NULL
-for(i in 1:nrow(sliding_window_sig)){
+for(j in 1:nrow(slidingwindow_sig)){
   ## Chr
-  chr <- sliding_window_sig$Chr[i]
+  chr <- slidingwindow_sig$Chr[j]
   ## Start
-  start_loc <- sliding_window_sig$Start[i]
+  start_loc <- slidingwindow_sig$Start[j]
   ## End
-  end_loc <- sliding_window_sig$End[i]
-  
-  ### gds file
-  gds.path <- agds_dir[chr]
-  genofile <- seqOpen(gds.path)
+  end_loc <- slidingwindow_sig$End[j]
   
   a <- Sliding_Window_Burden_Effect_Size(chr=chr,genofile=genofile,obj_nullmodel=obj_nullmodel,start_loc=start_loc,end_loc=end_loc,
                                          rare_maf_cutoff=0.01,rv_num_cutoff=2,
                                          QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation)
-  a <- data.frame(IDK = row.names(a),Chr = chr,Start = start_loc,End = end_loc,Number_SNV = a[[4]],cMAC = a[[5]],Burden_Score_Stat = a[[6]],Burden_SE_Score = a[[7]],Burden_pvalue = a[[8]],Burden_Est = a[[9]], Burden_SE_Est = a[[10]])
+  a <- data.frame(Chr = chr,Start = start_loc,End = end_loc,Number_SNV = a[[4]],cMAC = a[[5]],Burden_Score_Stat = a[[6]],Burden_SE_Score = a[[7]],Burden_pvalue = a[[8]],Burden_Est = a[[9]], Burden_SE_Est = a[[10]])
   effect_sizes <- rbind(effect_sizes,a)
-  seqClose(genofile) 
 }
+seqClose(genofile) 
 
-sliding_window_sig <- sliding_window_sig[,-c(1)]
-effect_sizes <- effect_sizes[,-c(1)]
+slidingwindow_sig <- inner_join(slidingwindow_sig,effect_sizes)
 
-sliding_window_sig <- inner_join(sliding_window_sig,effect_sizes)
-
-write.csv(sliding_window_sig,row.names = FALSE,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/sliding_window_sig_chr",arrayid,".csv"))
+write.csv(slidingwindow_sig,row.names = FALSE,file = paste0(output_path <- "/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/Train_EffectSizes",i,".csv"))
 
 
 		

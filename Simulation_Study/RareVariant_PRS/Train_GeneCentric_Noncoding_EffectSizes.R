@@ -20,22 +20,23 @@ library(readr)
 library(dplyr)
 
 ## source code
-source("~/RareVariantPRS/RareVariant_PRS/Burden_Effect_Size.R")
-source("~/RareVariantPRS/RareVariant_PRS/Gene_Centric_Noncoding_Burden_Effect_Size_Jake.R")
+source("~/RareVariantPRS/Simulation_Study/RareVariant_PRS/Burden_Effect_Size.R")
+source("~/RareVariantPRS/Simulation_Study/RareVariant_PRS/Gene_Centric_Noncoding_Burden_Effect_Size_Jake.R")
 
 ###########################################################
 #           User Input
 ###########################################################
+
+i <- as.numeric(commandArgs(TRUE)[1])
+
 ### Significant Results 
-noncoding_sig <- read_csv("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/noncoding_sig.csv")
-noncoding_sig <- noncoding_sig[,c(1,2,3,4,5,6,48,62,91)]
-colnames(noncoding_sig) <- c("IDK","Gene","Chr","Category","Number_SNV","SKAT_1_25","Burden_1_1","ACAT_V_1_25","STAAR_O")
+load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/noncoding_sig",i,".Rdata"))
+colnames(noncoding_sig) <- c("Gene","Chr","Category","Burden_1_1","STAAR_O")
 
 ## agds dir
-agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_agds_dir.Rdata"))
-
+agds_dir <- get(load("/data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/gds/full_gds22_agds_dir.Rdata"))
 ## Null Model
-obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData"))
+obj_nullmodel <- get(load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/nullmodels_staar/Train_Null_Model",i,".RData")))
 
 ## Parameter
 QC_label <- "annotation/info/QC_label"
@@ -45,40 +46,29 @@ variant_type <- "SNV"
 ## Annotation_dir
 Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
 ## Annotation channel
-Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_Annotation_name_catalog.Rdata"))
+Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/gds/full_gds22_Annotation_name_catalog.Rdata"))
 
-###########################################################
-
-arrayid <- as.numeric(commandArgs(TRUE)[1])
-
-noncoding_sig <- noncoding_sig[noncoding_sig$Chr == arrayid,]
+genofile <- seqOpen("/data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/gds/full_gds22.gds")
 
 effect_sizes <- NULL
-for(i in 1:nrow(noncoding_sig)){
+for(j in 1:nrow(noncoding_sig)){
   ## Chr
-  chr <- noncoding_sig$Chr[i]
+  chr <- noncoding_sig$Chr[j]
   ## Gene name
-  gene_name <- noncoding_sig$Gene[i]
+  gene_name <- noncoding_sig$Gene[j]
   ## Coding mask
-  category <- noncoding_sig$Category[i]
-  
-  ### gds file
-  gds.path <- agds_dir[chr]
-  genofile <- seqOpen(gds.path)
+  category <- noncoding_sig$Category[j]
   
   a <- Gene_Centric_Noncoding_Burden_Effect_Size_Jake(chr=chr,gene_name=gene_name,category=category ,
                                                  genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
                                                  QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
                                                  Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,silent=FALSE)
-  a <- data.frame(IDK = row.names(a),Gene = gene_name,Chr = chr,Category = category,Number_SNV = a[[4]],cMAC = a[[5]],Burden_Score_Stat = a[[6]],Burden_SE_Score = a[[7]],Burden_pvalue = a[[8]],Burden_Est = a[[9]], Burden_SE_Est = a[[10]])
+  a <- data.frame(Gene = gene_name,Chr = chr,Category = category,Number_SNV = a[[4]],cMAC = a[[5]],Burden_Score_Stat = a[[6]],Burden_SE_Score = a[[7]],Burden_pvalue = a[[8]],Burden_Est = a[[9]], Burden_SE_Est = a[[10]])
   effect_sizes <- rbind(effect_sizes,a)
-  seqClose(genofile) 
 }
 
-noncoding_sig <- noncoding_sig[,-c(1)]
-effect_sizes <- effect_sizes[,-c(1)]
+seqClose(genofile) 
 
 noncoding_sig <- inner_join(noncoding_sig,effect_sizes)
 
-write.csv(noncoding_sig,row.names = FALSE,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/noncoding_sig_chr",arrayid,".csv"))
-
+write.csv(noncoding_sig,row.names = FALSE,file = paste0(output_path <- "/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/Train_EffectSizes",i,".csv"))
