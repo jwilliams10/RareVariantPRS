@@ -66,4 +66,34 @@ for(i in 1:length(Y_tune)){
   rm(list=setdiff(ls(), c("results_tmp","results","i"))) 
 }
 
-aggregate(.~method,data = results,mean)
+results <- aggregate(.~method,data = results,mean)
+
+rarevariant_results <- results[results$method %in% c("GeneCentric_Coding_Burden","GeneCentric_Coding_STAARO","GeneCentric_Noncoding_Burden","GeneCentric_Noncoding_STAARO",
+                                                     "SlidingWindow_Burden","SlidingWindow_STAARO","SL_All_STAARO","SL_All_Burden"),]
+
+cv_results <- results[results$method %in% c("CT","LASSOSUM2","LDPred2","SL_All"),]
+
+overall_results <- results[results$method %in% c("CT","LASSOSUM2","LDPred2","CV_RV_STAARO_All","CV_RV_Burden_All"),]
+
+
+
+library(ggplot2)
+
+# Most basic error bar
+ggplot(rarevariant_results) +
+  geom_bar( aes(x=method, y=r2), stat="identity", fill="skyblue", alpha=0.7) +
+  geom_errorbar( aes(x=method, ymin=r2_low, ymax=r2_high), width=0.4, colour="orange", alpha=0.9)
+
+ggplot(cv_results) +
+  geom_bar( aes(x=method, y=r2), stat="identity", fill="skyblue", alpha=0.7) +
+  geom_errorbar( aes(x=method, ymin=r2_low, ymax=r2_high), width=0.4, colour="orange", alpha=0.9)
+
+ggplot(overall_results) +
+  geom_bar( aes(x=method, y=r2), stat="identity", fill="skyblue", alpha=0.7) +
+  geom_errorbar( aes(x=method, ymin=r2_low, ymax=r2_high), width=0.4, colour="orange", alpha=0.9)
+
+
+
+
+
+

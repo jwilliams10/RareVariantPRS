@@ -50,5 +50,3 @@ for(i in 1:length(Y_validation)){
   }
   save(prs_mat,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/validation_prs_mat",i,".RData"))
 }
-
-

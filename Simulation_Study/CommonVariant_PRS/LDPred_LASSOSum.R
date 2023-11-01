@@ -18,17 +18,6 @@ dat <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/GWAS
 colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","N","BETA","SE","T_STAT","PVAL","ERRCODE")
 dat <- dat[dat$TEST == "ADD",]
 
-if(file.exists("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.rds")){
-  file.remove("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.rds")
-  file.remove("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.bk")
-}
-
-#### read in reference data, this should match as this is what the reference data was in CT
-if(i == 1){
-  system("/data/williamsjacr/software/plink2 --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/reference_CT.txt --make-bed --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/reference")
-}
-snp_readBed("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.bed",backingfile = "/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference")
-
 obj.bigSNP <- snp_attach("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.rds")
 map <- obj.bigSNP$map[-c(3)]
 names(map) <- c("chr", "rsid", "pos", "a0", "a1") # a1 - alt # c("chr", "pos", "a0", "a1")
@@ -53,20 +42,24 @@ corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
 
 if(anyNA(corr0@x)){
   b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)  
-  b_list <- NULL
-  for(j in 1:nrow(b)){
-    b_list <- c(b_list,b[j,])
-  }
-  b <- unique(b_list)
-  rm(b_list)
+  # b_list <- NULL
+  # for(j in 1:nrow(b)){
+  #   b_list <- c(b_list,b[j,])
+  # }
+  # b <- unique(b_list)
+  # rm(b_list)
+  b <- as.numeric(names(table(b))[table(b) > 2])
   
   b <- info_snp$`_NUM_ID_`[b]
   
-  file.remove("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.rds")
-  file.remove("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.bk")
-  bigsnpr::snp_subset(obj.bigSNP,ind.row = 1:3000,ind.col = -b,backingfile = "/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference")
+  if(file.exists(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i,".rds"))){
+    file.remove(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i,".rds"))
+    file.remove(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i,".bk"))
+  }
   
-  obj.bigSNP <- snp_attach("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.rds")
+  bigsnpr::snp_subset(obj.bigSNP,ind.row = 1:3000,ind.col = -b,backingfile = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i))
+  
+  obj.bigSNP <- snp_attach(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i,".rds"))
   map <- obj.bigSNP$map[-c(3)]
   names(map) <- c("chr", "rsid", "pos", "a0", "a1") # a1 - alt # c("chr", "pos", "a0", "a1")
   
@@ -138,19 +131,19 @@ print(paste0('Complete'))
 
 ## LDpred2 
 prs.file <- data.frame(SNP = beta_grid$rsid, ALT = beta_grid$a0, REF = beta_grid$a1, BETA = beta_grid[,1:(ncol(beta_grid)-3)])
-write.table(prs.file,file = "/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/ldpred2.txt",col.names = T,row.names = F,quote=F)
+write.table(prs.file,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/ldpred2",i,".txt"),col.names = T,row.names = F,quote=F)
 
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/ldpred2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/train.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/prs_train",i))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/ldpred2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/tune.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/prs_tune",i))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/ldpred2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/validation.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/prs_validation",i))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/ldpred2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/train.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/prs_train",i))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/ldpred2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/tune.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/prs_tune",i))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/ldpred2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/validation.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LDPred2/prs_validation",i))
 
 ## LASSOsum2
 prs.file <- data.frame(SNP = beta_lassosum2$rsid, ALT = beta_lassosum2$a0, REF = beta_lassosum2$a1, BETA = beta_lassosum2[,1:(ncol(beta_lassosum2)-3)])
-write.table(prs.file,file = "/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/lassosum2.txt",col.names = T,row.names = F,quote=F)
+write.table(prs.file,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/lassosum2",i,".txt"),col.names = T,row.names = F,quote=F)
 
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/lassosum2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/train.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/prs_train",i))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/lassosum2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/tune.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/prs_tune",i))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/lassosum2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/validation.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/prs_validation",i))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/lassosum2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/train.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/prs_train",i))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/lassosum2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/tune.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/prs_tune",i))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/lassosum2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/validation.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/prs_validation",i))
 
 ################
 
