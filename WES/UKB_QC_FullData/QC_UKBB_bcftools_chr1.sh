@@ -8,7 +8,7 @@
 module load samtools
 
 INPUT_PATH=/data/BB_Bioinformatics/ProjectData/UKB/exome_seq/OQFE_VCF
-OUTPUT_PATH=/data/williamsjacr/UKB_WES_lipids/Data/pVCF/chr1
+OUTPUT_PATH=/data/williamsjacr/UKB_WES_Full_Processed_Data/pVCF/chr1
 CHR=1
 
 ## step1: multiallelic caller
