@@ -73,16 +73,64 @@ Burden_SlidingWindow_Tune_PRS <- left_join(pheno_tuning,Burden_SlidingWindow_Tun
 load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/phenotypes/Y_Validation.RData")
 pheno_vad <- Y_validation[[i]]
 colnames(pheno_vad) <- c("IID","Y")
+
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
+
 STAARO_GeneCentric_Coding_Validation_PRS <- left_join(pheno_vad,STAARO_GeneCentric_Coding_Validation_PRS,by = "IID")
+STAARO_GeneCentric_Coding_Validation_PRS_EUR <- STAARO_GeneCentric_Coding_Validation_PRS[STAARO_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+STAARO_GeneCentric_Coding_Validation_PRS_NonEur <- STAARO_GeneCentric_Coding_Validation_PRS[STAARO_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+STAARO_GeneCentric_Coding_Validation_PRS_UNK <- STAARO_GeneCentric_Coding_Validation_PRS[STAARO_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+STAARO_GeneCentric_Coding_Validation_PRS_SAS <- STAARO_GeneCentric_Coding_Validation_PRS[STAARO_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+STAARO_GeneCentric_Coding_Validation_PRS_MIX <- STAARO_GeneCentric_Coding_Validation_PRS[STAARO_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+STAARO_GeneCentric_Coding_Validation_PRS_AFR <- STAARO_GeneCentric_Coding_Validation_PRS[STAARO_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+STAARO_GeneCentric_Coding_Validation_PRS_EAS <- STAARO_GeneCentric_Coding_Validation_PRS[STAARO_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+
 STAARO_GeneCentric_Noncoding_Validation_PRS <- left_join(pheno_vad,STAARO_GeneCentric_Noncoding_Validation_PRS,by = "IID")
+STAARO_GeneCentric_Noncoding_Validation_PRS_EUR <- STAARO_GeneCentric_Noncoding_Validation_PRS[STAARO_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+STAARO_GeneCentric_Noncoding_Validation_PRS_NonEur <- STAARO_GeneCentric_Noncoding_Validation_PRS[STAARO_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+STAARO_GeneCentric_Noncoding_Validation_PRS_UNK <- STAARO_GeneCentric_Noncoding_Validation_PRS[STAARO_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+STAARO_GeneCentric_Noncoding_Validation_PRS_SAS <- STAARO_GeneCentric_Noncoding_Validation_PRS[STAARO_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+STAARO_GeneCentric_Noncoding_Validation_PRS_MIX <- STAARO_GeneCentric_Noncoding_Validation_PRS[STAARO_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+STAARO_GeneCentric_Noncoding_Validation_PRS_AFR <- STAARO_GeneCentric_Noncoding_Validation_PRS[STAARO_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+STAARO_GeneCentric_Noncoding_Validation_PRS_EAS <- STAARO_GeneCentric_Noncoding_Validation_PRS[STAARO_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+
 STAARO_SlidingWindow_Validation_PRS <- left_join(pheno_vad,STAARO_SlidingWindow_Validation_PRS,by = "IID")
+STAARO_SlidingWindow_Validation_PRS_EUR <- STAARO_SlidingWindow_Validation_PRS[STAARO_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+STAARO_SlidingWindow_Validation_PRS_NonEur <- STAARO_SlidingWindow_Validation_PRS[STAARO_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+STAARO_SlidingWindow_Validation_PRS_UNK <- STAARO_SlidingWindow_Validation_PRS[STAARO_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+STAARO_SlidingWindow_Validation_PRS_SAS <- STAARO_SlidingWindow_Validation_PRS[STAARO_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+STAARO_SlidingWindow_Validation_PRS_MIX <- STAARO_SlidingWindow_Validation_PRS[STAARO_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+STAARO_SlidingWindow_Validation_PRS_AFR <- STAARO_SlidingWindow_Validation_PRS[STAARO_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+STAARO_SlidingWindow_Validation_PRS_EAS <- STAARO_SlidingWindow_Validation_PRS[STAARO_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 Burden_GeneCentric_Coding_Validation_PRS <- left_join(pheno_vad,Burden_GeneCentric_Coding_Validation_PRS,by = "IID")
+Burden_GeneCentric_Coding_Validation_PRS_EUR <- Burden_GeneCentric_Coding_Validation_PRS[Burden_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+Burden_GeneCentric_Coding_Validation_PRS_NonEur <- Burden_GeneCentric_Coding_Validation_PRS[Burden_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+Burden_GeneCentric_Coding_Validation_PRS_UNK <- Burden_GeneCentric_Coding_Validation_PRS[Burden_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+Burden_GeneCentric_Coding_Validation_PRS_SAS <- Burden_GeneCentric_Coding_Validation_PRS[Burden_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+Burden_GeneCentric_Coding_Validation_PRS_MIX <- Burden_GeneCentric_Coding_Validation_PRS[Burden_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+Burden_GeneCentric_Coding_Validation_PRS_AFR <- Burden_GeneCentric_Coding_Validation_PRS[Burden_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+Burden_GeneCentric_Coding_Validation_PRS_EAS <- Burden_GeneCentric_Coding_Validation_PRS[Burden_GeneCentric_Coding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+
 Burden_GeneCentric_Noncoding_Validation_PRS <- left_join(pheno_vad,Burden_GeneCentric_Noncoding_Validation_PRS,by = "IID")
+Burden_GeneCentric_Noncoding_Validation_PRS_EUR <- Burden_GeneCentric_Noncoding_Validation_PRS[Burden_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+Burden_GeneCentric_Noncoding_Validation_PRS_NonEur <- Burden_GeneCentric_Noncoding_Validation_PRS[Burden_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+Burden_GeneCentric_Noncoding_Validation_PRS_UNK <- Burden_GeneCentric_Noncoding_Validation_PRS[Burden_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+Burden_GeneCentric_Noncoding_Validation_PRS_SAS <- Burden_GeneCentric_Noncoding_Validation_PRS[Burden_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+Burden_GeneCentric_Noncoding_Validation_PRS_MIX <- Burden_GeneCentric_Noncoding_Validation_PRS[Burden_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+Burden_GeneCentric_Noncoding_Validation_PRS_AFR <- Burden_GeneCentric_Noncoding_Validation_PRS[Burden_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+Burden_GeneCentric_Noncoding_Validation_PRS_EAS <- Burden_GeneCentric_Noncoding_Validation_PRS[Burden_GeneCentric_Noncoding_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+
 Burden_SlidingWindow_Validation_PRS <- left_join(pheno_vad,Burden_SlidingWindow_Validation_PRS,by = "IID")
+Burden_SlidingWindow_Validation_PRS_EUR <- Burden_SlidingWindow_Validation_PRS[Burden_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+Burden_SlidingWindow_Validation_PRS_NonEur <- Burden_SlidingWindow_Validation_PRS[Burden_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+Burden_SlidingWindow_Validation_PRS_UNK <- Burden_SlidingWindow_Validation_PRS[Burden_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+Burden_SlidingWindow_Validation_PRS_SAS <- Burden_SlidingWindow_Validation_PRS[Burden_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+Burden_SlidingWindow_Validation_PRS_MIX <- Burden_SlidingWindow_Validation_PRS[Burden_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+Burden_SlidingWindow_Validation_PRS_AFR <- Burden_SlidingWindow_Validation_PRS[Burden_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+Burden_SlidingWindow_Validation_PRS_EAS <- Burden_SlidingWindow_Validation_PRS[Burden_SlidingWindow_Validation_PRS$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 ############### R2's
-
 
 ##### Gene Centric Coding: STAARO
 r2_tun_GeneCentric_Coding_STAARO  <- rep(0,15)
@@ -93,8 +141,10 @@ for(k in 1:15){
   r2_tun_GeneCentric_Coding_STAARO[k] <- summary(model.prs)$r.square
 }
 
-model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Coding_Validation_PRS)
-prs <- STAARO_GeneCentric_Coding_Validation_PRS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_STAARO))]
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Coding_Validation_PRS_EUR)
+prs <- STAARO_GeneCentric_Coding_Validation_PRS_EUR[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_STAARO))]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2_GeneCentric_Coding_STAARO <- summary(model.vad.prs)$r.square
 
@@ -109,13 +159,163 @@ library(boot)
 boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
 ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO",
+r2.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_EUR",
                                                   r2 = r2_GeneCentric_Coding_STAARO,
                                                   r2_low = ci_result$percent[4],
                                                   r2_high = ci_result$percent[5]
 )
 
-save(r2.result_GeneCentric_Coding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_STAARO_result",i,".RData"))
+save(r2.result_GeneCentric_Coding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_STAARO_result_EUR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Coding_Validation_PRS_NonEur)
+prs <- STAARO_GeneCentric_Coding_Validation_PRS_NonEur[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_NonEUR",
+                                                  r2 = r2_GeneCentric_Coding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_STAARO_result_NonEUR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Coding_Validation_PRS_UNK)
+prs <- STAARO_GeneCentric_Coding_Validation_PRS_UNK[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_UNK",
+                                                  r2 = r2_GeneCentric_Coding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_STAARO_result_UNK",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Coding_Validation_PRS_AFR)
+prs <- STAARO_GeneCentric_Coding_Validation_PRS_AFR[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_AFR",
+                                                  r2 = r2_GeneCentric_Coding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_STAARO_result_AFR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Coding_Validation_PRS_SAS)
+prs <- STAARO_GeneCentric_Coding_Validation_PRS_SAS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_SAS",
+                                                  r2 = r2_GeneCentric_Coding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_STAARO_result_SAS",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Coding_Validation_PRS_MIX)
+prs <- STAARO_GeneCentric_Coding_Validation_PRS_MIX[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_MIX",
+                                                  r2 = r2_GeneCentric_Coding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_STAARO_result_MIX",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Coding_Validation_PRS_EAS)
+prs <- STAARO_GeneCentric_Coding_Validation_PRS_EAS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_EAS",
+                                                  r2 = r2_GeneCentric_Coding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_STAARO_result_EAS",i,".RData"))
 
 ##### Gene Centric Coding: Burden
 r2_tun_GeneCentric_Coding_Burden <- rep(0,15)
@@ -126,8 +326,9 @@ for(k in 1:15){
   r2_tun_GeneCentric_Coding_Burden[k] <- summary(model.prs)$r.square
 }
 
-model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Coding_Validation_PRS)
-prs <- Burden_GeneCentric_Coding_Validation_PRS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_Burden))]
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Coding_Validation_PRS_EUR)
+prs <- Burden_GeneCentric_Coding_Validation_PRS_EUR[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_Burden))]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2_GeneCentric_Coding_Burden <- summary(model.vad.prs)$r.square
 
@@ -142,12 +343,163 @@ library(boot)
 boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
 ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden",
+r2.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_EUR",
                                                   r2 = r2_GeneCentric_Coding_Burden,
                                                   r2_low = ci_result$percent[4],
                                                   r2_high = ci_result$percent[5]
 )
-save(r2.result_GeneCentric_Coding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_Burden_result",i,".RData"))
+
+save(r2.result_GeneCentric_Coding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_Burden_result_EUR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Coding_Validation_PRS_NonEur)
+prs <- Burden_GeneCentric_Coding_Validation_PRS_NonEur[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_NonEUR",
+                                                  r2 = r2_GeneCentric_Coding_Burden,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_Burden_result_NonEUR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Coding_Validation_PRS_UNK)
+prs <- Burden_GeneCentric_Coding_Validation_PRS_UNK[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_UNK",
+                                                  r2 = r2_GeneCentric_Coding_Burden,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_Burden_result_UNK",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Coding_Validation_PRS_AFR)
+prs <- Burden_GeneCentric_Coding_Validation_PRS_AFR[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_AFR",
+                                                  r2 = r2_GeneCentric_Coding_Burden,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_Burden_result_AFR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Coding_Validation_PRS_SAS)
+prs <- Burden_GeneCentric_Coding_Validation_PRS_SAS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_SAS",
+                                                  r2 = r2_GeneCentric_Coding_Burden,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_Burden_result_SAS",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Coding_Validation_PRS_MIX)
+prs <- Burden_GeneCentric_Coding_Validation_PRS_MIX[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_MIX",
+                                                  r2 = r2_GeneCentric_Coding_Burden,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_Burden_result_MIX",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Coding_Validation_PRS_EAS)
+prs <- Burden_GeneCentric_Coding_Validation_PRS_EAS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Coding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Coding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_EAS",
+                                                  r2 = r2_GeneCentric_Coding_Burden,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Coding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_Burden_result_EAS",i,".RData"))
 
 
 ##### Gene Centric Noncoding: STAARO
@@ -159,8 +511,9 @@ for(k in 1:15){
   r2_tun_GeneCentric_Noncoding_STAARO[k] <- summary(model.prs)$r.square
 }
 
-model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Noncoding_Validation_PRS)
-prs <- STAARO_GeneCentric_Noncoding_Validation_PRS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_STAARO))]
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Noncoding_Validation_PRS_EUR)
+prs <- STAARO_GeneCentric_Noncoding_Validation_PRS_EUR[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_STAARO))]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2_GeneCentric_Noncoding_STAARO <- summary(model.vad.prs)$r.square
 
@@ -175,13 +528,163 @@ library(boot)
 boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
 ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO",
-                                                     r2 = r2_GeneCentric_Noncoding_STAARO,
-                                                     r2_low = ci_result$percent[4],
-                                                     r2_high = ci_result$percent[5]
+r2.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_EUR",
+                                                  r2 = r2_GeneCentric_Noncoding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
 )
 
-save(r2.result_GeneCentric_Noncoding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_STAARO_result",i,".RData"))
+save(r2.result_GeneCentric_Noncoding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_STAARO_result_EUR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Noncoding_Validation_PRS_NonEur)
+prs <- STAARO_GeneCentric_Noncoding_Validation_PRS_NonEur[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_NonEUR",
+                                                  r2 = r2_GeneCentric_Noncoding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_STAARO_result_NonEUR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Noncoding_Validation_PRS_UNK)
+prs <- STAARO_GeneCentric_Noncoding_Validation_PRS_UNK[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_UNK",
+                                                  r2 = r2_GeneCentric_Noncoding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_STAARO_result_UNK",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Noncoding_Validation_PRS_AFR)
+prs <- STAARO_GeneCentric_Noncoding_Validation_PRS_AFR[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_AFR",
+                                                  r2 = r2_GeneCentric_Noncoding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_STAARO_result_AFR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Noncoding_Validation_PRS_SAS)
+prs <- STAARO_GeneCentric_Noncoding_Validation_PRS_SAS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_SAS",
+                                                  r2 = r2_GeneCentric_Noncoding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_STAARO_result_SAS",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Noncoding_Validation_PRS_MIX)
+prs <- STAARO_GeneCentric_Noncoding_Validation_PRS_MIX[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_MIX",
+                                                  r2 = r2_GeneCentric_Noncoding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_STAARO_result_MIX",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_GeneCentric_Noncoding_Validation_PRS_EAS)
+prs <- STAARO_GeneCentric_Noncoding_Validation_PRS_EAS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_EAS",
+                                                  r2 = r2_GeneCentric_Noncoding_STAARO,
+                                                  r2_low = ci_result$percent[4],
+                                                  r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_STAARO_result_EAS",i,".RData"))
 
 ##### Gene Centric Noncoding: Burden
 r2_tun_GeneCentric_Noncoding_Burden <- rep(0,15)
@@ -192,8 +695,9 @@ for(k in 1:15){
   r2_tun_GeneCentric_Noncoding_Burden[k] <- summary(model.prs)$r.square
 }
 
-model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Noncoding_Validation_PRS)
-prs <- Burden_GeneCentric_Noncoding_Validation_PRS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_Burden))]
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Noncoding_Validation_PRS_EUR)
+prs <- Burden_GeneCentric_Noncoding_Validation_PRS_EUR[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_Burden))]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2_GeneCentric_Noncoding_Burden <- summary(model.vad.prs)$r.square
 
@@ -208,13 +712,163 @@ library(boot)
 boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
 ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden",
+r2.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_EUR",
                                                      r2 = r2_GeneCentric_Noncoding_Burden,
                                                      r2_low = ci_result$percent[4],
                                                      r2_high = ci_result$percent[5]
 )
 
-save(r2.result_GeneCentric_Noncoding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_Burden_result",i,".RData"))
+save(r2.result_GeneCentric_Noncoding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_Burden_result_EUR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Noncoding_Validation_PRS_NonEur)
+prs <- Burden_GeneCentric_Noncoding_Validation_PRS_NonEur[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_NonEUR",
+                                                     r2 = r2_GeneCentric_Noncoding_Burden,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_Burden_result_NonEUR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Noncoding_Validation_PRS_UNK)
+prs <- Burden_GeneCentric_Noncoding_Validation_PRS_UNK[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_UNK",
+                                                     r2 = r2_GeneCentric_Noncoding_Burden,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_Burden_result_UNK",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Noncoding_Validation_PRS_AFR)
+prs <- Burden_GeneCentric_Noncoding_Validation_PRS_AFR[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_AFR",
+                                                     r2 = r2_GeneCentric_Noncoding_Burden,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_Burden_result_AFR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Noncoding_Validation_PRS_SAS)
+prs <- Burden_GeneCentric_Noncoding_Validation_PRS_SAS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_SAS",
+                                                     r2 = r2_GeneCentric_Noncoding_Burden,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_Burden_result_SAS",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Noncoding_Validation_PRS_MIX)
+prs <- Burden_GeneCentric_Noncoding_Validation_PRS_MIX[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_MIX",
+                                                     r2 = r2_GeneCentric_Noncoding_Burden,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_Burden_result_MIX",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_GeneCentric_Noncoding_Validation_PRS_EAS)
+prs <- Burden_GeneCentric_Noncoding_Validation_PRS_EAS[,paste0("PRS_Threshold_",which.max(r2_tun_GeneCentric_Noncoding_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_GeneCentric_Noncoding_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_EAS",
+                                                     r2 = r2_GeneCentric_Noncoding_Burden,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_GeneCentric_Noncoding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricNoncoding/GeneCentric_Noncoding_Burden_result_EAS",i,".RData"))
 
 ##### Gene Centric Sliding Window: STAARO
 r2_tun_SlidingWindow_STAARO  <- rep(0,15)
@@ -225,8 +879,9 @@ for(k in 1:15){
   r2_tun_SlidingWindow_STAARO[k] <- summary(model.prs)$r.square
 }
 
-model.vad.null  <-  lm(Y~1,data=STAARO_SlidingWindow_Validation_PRS)
-prs <- STAARO_SlidingWindow_Validation_PRS[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_STAARO))]
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_SlidingWindow_Validation_PRS_EUR)
+prs <- STAARO_SlidingWindow_Validation_PRS_EUR[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_STAARO))]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2_SlidingWindow_STAARO <- summary(model.vad.prs)$r.square
 
@@ -241,13 +896,163 @@ library(boot)
 boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
 ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO",
-                                             r2 = r2_SlidingWindow_STAARO,
-                                             r2_low = ci_result$percent[4],
-                                             r2_high = ci_result$percent[5]
+r2.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_EUR",
+                                                     r2 = r2_SlidingWindow_STAARO,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
 )
 
-save(r2.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result",i,".RData"))
+save(r2.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_EUR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_SlidingWindow_Validation_PRS_NonEur)
+prs <- STAARO_SlidingWindow_Validation_PRS_NonEur[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_NonEUR",
+                                                     r2 = r2_SlidingWindow_STAARO,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_NonEUR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_SlidingWindow_Validation_PRS_UNK)
+prs <- STAARO_SlidingWindow_Validation_PRS_UNK[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_UNK",
+                                                     r2 = r2_SlidingWindow_STAARO,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_UNK",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_SlidingWindow_Validation_PRS_AFR)
+prs <- STAARO_SlidingWindow_Validation_PRS_AFR[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_AFR",
+                                                     r2 = r2_SlidingWindow_STAARO,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_AFR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_SlidingWindow_Validation_PRS_SAS)
+prs <- STAARO_SlidingWindow_Validation_PRS_SAS[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_SAS",
+                                                     r2 = r2_SlidingWindow_STAARO,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_SAS",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_SlidingWindow_Validation_PRS_MIX)
+prs <- STAARO_SlidingWindow_Validation_PRS_MIX[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_MIX",
+                                                     r2 = r2_SlidingWindow_STAARO,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_MIX",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=STAARO_SlidingWindow_Validation_PRS_EAS)
+prs <- STAARO_SlidingWindow_Validation_PRS_EAS[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_STAARO))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_STAARO <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_EAS",
+                                                     r2 = r2_SlidingWindow_STAARO,
+                                                     r2_low = ci_result$percent[4],
+                                                     r2_high = ci_result$percent[5]
+)
+
+save(r2.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_EAS",i,".RData"))
 
 ##### Gene Centric Sliding Window: Burden
 r2_tun_SlidingWindow_Burden <- rep(0,15)
@@ -258,8 +1063,9 @@ for(k in 1:15){
   r2_tun_SlidingWindow_Burden[k] <- summary(model.prs)$r.square
 }
 
-model.vad.null  <-  lm(Y~1,data=Burden_SlidingWindow_Validation_PRS)
-prs <- Burden_SlidingWindow_Validation_PRS[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_Burden))]
+####
+model.vad.null  <-  lm(Y~1,data=Burden_SlidingWindow_Validation_PRS_EUR)
+prs <- Burden_SlidingWindow_Validation_PRS_EUR[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_Burden))]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2_SlidingWindow_Burden <- summary(model.vad.prs)$r.square
 
@@ -274,18 +1080,161 @@ library(boot)
 boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
 ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden",
+r2.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_EUR",
                                              r2 = r2_SlidingWindow_Burden,
                                              r2_low = ci_result$percent[4],
                                              r2_high = ci_result$percent[5]
 )
 
-save(r2.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result",i,".RData"))
+save(r2.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_EUR",i,".RData"))
 
+####
+model.vad.null  <-  lm(Y~1,data=Burden_SlidingWindow_Validation_PRS_NonEur)
+prs <- Burden_SlidingWindow_Validation_PRS_NonEur[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_Burden <- summary(model.vad.prs)$r.square
 
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_NonEUR",
+                                             r2 = r2_SlidingWindow_Burden,
+                                             r2_low = ci_result$percent[4],
+                                             r2_high = ci_result$percent[5]
+)
 
+save(r2.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_NonEUR",i,".RData"))
 
+####
+model.vad.null  <-  lm(Y~1,data=Burden_SlidingWindow_Validation_PRS_UNK)
+prs <- Burden_SlidingWindow_Validation_PRS_UNK[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_Burden <- summary(model.vad.prs)$r.square
 
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_UNK",
+                                             r2 = r2_SlidingWindow_Burden,
+                                             r2_low = ci_result$percent[4],
+                                             r2_high = ci_result$percent[5]
+)
+
+save(r2.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_UNK",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_SlidingWindow_Validation_PRS_AFR)
+prs <- Burden_SlidingWindow_Validation_PRS_AFR[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_AFR",
+                                             r2 = r2_SlidingWindow_Burden,
+                                             r2_low = ci_result$percent[4],
+                                             r2_high = ci_result$percent[5]
+)
+
+save(r2.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_AFR",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_SlidingWindow_Validation_PRS_SAS)
+prs <- Burden_SlidingWindow_Validation_PRS_SAS[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_SAS",
+                                             r2 = r2_SlidingWindow_Burden,
+                                             r2_low = ci_result$percent[4],
+                                             r2_high = ci_result$percent[5]
+)
+
+save(r2.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_SAS",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_SlidingWindow_Validation_PRS_MIX)
+prs <- Burden_SlidingWindow_Validation_PRS_MIX[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_MIX",
+                                             r2 = r2_SlidingWindow_Burden,
+                                             r2_low = ci_result$percent[4],
+                                             r2_high = ci_result$percent[5]
+)
+
+save(r2.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_MIX",i,".RData"))
+
+####
+model.vad.null  <-  lm(Y~1,data=Burden_SlidingWindow_Validation_PRS_EAS)
+prs <- Burden_SlidingWindow_Validation_PRS_EAS[,paste0("PRS_Threshold_",which.max(r2_tun_SlidingWindow_Burden))]
+model.vad.prs <- lm(model.vad.null$residual~prs)
+r2_SlidingWindow_Burden <- summary(model.vad.prs)$r.square
+
+data <- data.frame(y = model.vad.null$residual, x = prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+library(boot)
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+r2.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_EAS",
+                                             r2 = r2_SlidingWindow_Burden,
+                                             r2_low = ci_result$percent[4],
+                                             r2_high = ci_result$percent[5]
+)
+
+save(r2.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_EAS",i,".RData"))
 

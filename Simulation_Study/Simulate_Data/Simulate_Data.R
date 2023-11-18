@@ -38,10 +38,20 @@ seqClose(genofile)
 
 number_genes <- dim(G_star_gene_centric_coding)[2]
 
-causalprop_vec <- c(0.05,0.01,0.001)
+causalprop_vec <- c(0.2,0.05,0.01,0.001,0.0005)
 scale <- c(0,1)
 
 Y <- list()
+
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
+
+h2_EUR <- vector()
+h2_NonEur <- vector()
+h2_EAS <- vector()
+h2_SAS <- vector()
+h2_UNK <- vector()
+h2_MIX <- vector()
+h2_AFR <- vector()
 
 count <- 1
 
@@ -77,7 +87,8 @@ for(j in 1:length(causalprop_vec)){
         Y_hat_1 <- data.frame(IDs = fam_file[,2],Y_hat_Common = g_snps%*%matrix(beta_snps/sqrt(as.numeric(v)),ncol = 1))
         
       }else{
-        Y_hat_1 <- data.frame(IDs = fam_file[,2],Y_hat_Common = scaled_causal_snps%*%matrix(beta_snps,ncol = 1)) 
+        v <- var(scaled_causal_snps%*%matrix(beta_snps,ncol = 1))/h2_common
+        Y_hat_1 <- data.frame(IDs = fam_file[,2],Y_hat_Common = scaled_causal_snps%*%matrix(beta_snps/sqrt(as.numeric(v)),ncol = 1)) 
       }
       
       if(scale[q] == 0){
@@ -85,7 +96,8 @@ for(j in 1:length(causalprop_vec)){
         v <- var(G_star_gene_centric_coding[,causal_genes,drop = FALSE]%*%matrix(beta_genes,ncol = 1))/h2_rare
         Y_hat_2 <- data.frame(IDs = as.numeric(phenotype.id.merge[,1]),Y_hat_Rare = G_star_gene_centric_coding[,causal_genes,drop = FALSE]%*%matrix(beta_genes/sqrt(as.numeric(v)),ncol = 1))
       }else{
-        Y_hat_2 <- data.frame(IDs = as.numeric(phenotype.id.merge[,1]),Y_hat_Rare = scaled_causal_genes%*%matrix(beta_genes,ncol = 1)) 
+        v <- var(scaled_causal_genes%*%matrix(beta_genes,ncol = 1))/h2_rare
+        Y_hat_2 <- data.frame(IDs = as.numeric(phenotype.id.merge[,1]),Y_hat_Rare = scaled_causal_genes%*%matrix(beta_genes/sqrt(as.numeric(v)),ncol = 1)) 
       }
     
       ### Combine
@@ -94,7 +106,17 @@ for(j in 1:length(causalprop_vec)){
       
       epsilon <- rnorm(nrow(Y_hat),mean = 0,sd = sqrt(1 - h2_common - h2_rare))
       
-      Y_tmp <- Y_hat$Y_hat_Common + Y_hat$Y_hat_Rare + epsilon
+      Y_raw <- Y_hat$Y_hat_Common + Y_hat$Y_hat_Rare
+      
+      Y_tmp <- Y_raw + epsilon
+      
+      h2_EUR[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]])
+      h2_NonEur[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]])
+      h2_SAS[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]])
+      h2_AFR[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]])
+      h2_MIX[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]])
+      h2_EAS[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]])
+      h2_UNK[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]])
       
       Y[[count]] <- data.frame(IDs = Y_hat$IDs,Y=Y_tmp)
       
@@ -106,6 +128,7 @@ for(j in 1:length(causalprop_vec)){
 }
 
 lapply(Y,function(x){var(x$Y)})
+summary(unlist(lapply(Y,function(x){var(x$Y)})))
 
 var(Y[[1]]$Y)
 var(Y[[i]]$Y)

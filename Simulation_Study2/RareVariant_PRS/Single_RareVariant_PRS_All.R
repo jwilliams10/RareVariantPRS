@@ -190,9 +190,6 @@ if(best_algorithm == "SL.glmnet_All"){
   prs_best_validation <- prs_best_validation_sl
 }
 
-model <- lm(y_vad_STAARO~prs_best_validation)
-r2 <- summary(model)$r.square
-
 prs_best_validation <- data.frame(IID = pheno_vad_STAARO$IID,prs = prs_best_validation)
 
 a <- predict(sl, STAARO_Combined_Tune, onlySL = FALSE)
@@ -220,7 +217,30 @@ prs_best_tune <- data.frame(IID = pheno_tuning_STAARO$IID,prs = prs_best_tune)
 write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/Best_All_STAARO_Tune_All",i,".txt"),sep = "\t",row.names = FALSE)
 write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/Best_All_STAARO_Validation_All",i,".txt"),sep = "\t",row.names = FALSE)
 
-data <- data.frame(y = y_vad_STAARO, x = prs_best_validation$prs)
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
+
+y_vad_STAARO_EUR <- y_vad_STAARO[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]]
+y_vad_STAARO_NonEUR <- y_vad_STAARO[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]]
+y_vad_STAARO_UNK <- y_vad_STAARO[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]]
+y_vad_STAARO_SAS <- y_vad_STAARO[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]]
+y_vad_STAARO_MIX <- y_vad_STAARO[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]]
+y_vad_STAARO_AFR <- y_vad_STAARO[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]]
+y_vad_STAARO_EAS <- y_vad_STAARO[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]]
+
+prs_best_validation_EUR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+prs_best_validation_NonEur <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+prs_best_validation_UNK <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+prs_best_validation_SAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+prs_best_validation_MIX <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+prs_best_validation_AFR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+prs_best_validation_EAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+
+
+## 
+model <- lm(y_vad_STAARO_EUR~prs_best_validation_EUR$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_STAARO_EUR, x = prs_best_validation_EUR$prs)
 R2Boot <- function(data,indices){
   boot_data <- data[indices, ]
   model <- lm(y ~ x, data = boot_data)
@@ -230,13 +250,172 @@ R2Boot <- function(data,indices){
 boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
 ci_result <- boot.ci(boot_r2, type = "perc")
-SL.result <- data.frame(method = "SL_STAARO",
+SL.result <- data.frame(method = "SL_STAARO_EUR",
                         r2 = r2,
                         r2_low = ci_result$percent[4],
                         r2_high = ci_result$percent[5]
 )
 
-save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_STAARO",i,".RData"))
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_STAARO_EUR",i,".RData"))
+
+## 
+model <- lm(y_vad_STAARO_NonEUR~prs_best_validation_NonEur$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_STAARO_NonEUR, x = prs_best_validation_NonEur$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_STAARO_NonEUR",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_STAARO_NonEUR",i,".RData"))
+
+## 
+model <- lm(y_vad_STAARO_UNK~prs_best_validation_UNK$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_STAARO_UNK, x = prs_best_validation_UNK$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_STAARO_UNK",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_STAARO_UNK",i,".RData"))
+
+## 
+model <- lm(y_vad_STAARO_UNK~prs_best_validation_UNK$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_STAARO_UNK, x = prs_best_validation_UNK$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_STAARO_UNK",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_STAARO_UNK",i,".RData"))
+
+## 
+model <- lm(y_vad_STAARO_AFR~prs_best_validation_AFR$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_STAARO_AFR, x = prs_best_validation_AFR$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_STAARO_AFR",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_STAARO_AFR",i,".RData"))
+
+## 
+model <- lm(y_vad_STAARO_EAS~prs_best_validation_EAS$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_STAARO_EAS, x = prs_best_validation_EAS$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_STAARO_EAS",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_STAARO_EAS",i,".RData"))
+
+## 
+model <- lm(y_vad_STAARO_SAS~prs_best_validation_SAS$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_STAARO_SAS, x = prs_best_validation_SAS$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_STAARO_SAS",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_STAARO_SAS",i,".RData"))
+
+## 
+model <- lm(y_vad_STAARO_MIX~prs_best_validation_MIX$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_STAARO_MIX, x = prs_best_validation_MIX$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_STAARO_MIX",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_STAARO_MIX",i,".RData"))
+
+
+
+
+
 
 ##### SL 
 
@@ -278,9 +457,6 @@ if(best_algorithm == "SL.glmnet_All"){
   prs_best_validation <- prs_best_validation_sl
 }
 
-model <- lm(y_vad_Burden~prs_best_validation)
-r2 <- summary(model)$r.square
-
 prs_best_validation <- data.frame(IID = pheno_vad_Burden$IID,prs = prs_best_validation)
 
 a <- predict(sl, Burden_Combined_Tune, onlySL = FALSE)
@@ -308,7 +484,29 @@ prs_best_tune <- data.frame(IID = pheno_tuning_Burden$IID,prs = prs_best_tune)
 write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/Best_All_Burden_Tune_All",i,".txt"),sep = "\t",row.names = FALSE)
 write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/Best_All_Burden_Validation_All",i,".txt"),sep = "\t",row.names = FALSE)
 
-data <- data.frame(y = y_vad_Burden, x = prs_best_validation$prs)
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
+
+y_vad_Burden_EUR <- y_vad_Burden[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]]
+y_vad_Burden_NonEUR <- y_vad_Burden[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]]
+y_vad_Burden_UNK <- y_vad_Burden[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]]
+y_vad_Burden_SAS <- y_vad_Burden[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]]
+y_vad_Burden_MIX <- y_vad_Burden[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]]
+y_vad_Burden_AFR <- y_vad_Burden[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]]
+y_vad_Burden_EAS <- y_vad_Burden[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]]
+
+prs_best_validation_EUR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+prs_best_validation_NonEur <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+prs_best_validation_UNK <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+prs_best_validation_SAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+prs_best_validation_MIX <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+prs_best_validation_AFR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+prs_best_validation_EAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+
+## 
+model <- lm(y_vad_Burden_EUR~prs_best_validation_EUR$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_Burden_EUR, x = prs_best_validation_EUR$prs)
 R2Boot <- function(data,indices){
   boot_data <- data[indices, ]
   model <- lm(y ~ x, data = boot_data)
@@ -318,11 +516,165 @@ R2Boot <- function(data,indices){
 boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
 ci_result <- boot.ci(boot_r2, type = "perc")
-SL.result <- data.frame(method = "SL_Burden",
+SL.result <- data.frame(method = "SL_Burden_EUR",
                         r2 = r2,
                         r2_low = ci_result$percent[4],
                         r2_high = ci_result$percent[5]
 )
 
-save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_Burden",i,".RData"))
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_Burden_EUR",i,".RData"))
+
+## 
+model <- lm(y_vad_Burden_NonEUR~prs_best_validation_NonEur$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_Burden_NonEUR, x = prs_best_validation_NonEur$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Burden_NonEUR",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_Burden_NonEUR",i,".RData"))
+
+## 
+model <- lm(y_vad_Burden_UNK~prs_best_validation_UNK$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_Burden_UNK, x = prs_best_validation_UNK$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Burden_UNK",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_Burden_UNK",i,".RData"))
+
+## 
+model <- lm(y_vad_Burden_UNK~prs_best_validation_UNK$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_Burden_UNK, x = prs_best_validation_UNK$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Burden_UNK",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_Burden_UNK",i,".RData"))
+
+## 
+model <- lm(y_vad_Burden_AFR~prs_best_validation_AFR$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_Burden_AFR, x = prs_best_validation_AFR$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Burden_AFR",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_Burden_AFR",i,".RData"))
+
+## 
+model <- lm(y_vad_Burden_EAS~prs_best_validation_EAS$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_Burden_EAS, x = prs_best_validation_EAS$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Burden_EAS",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_Burden_EAS",i,".RData"))
+
+## 
+model <- lm(y_vad_Burden_SAS~prs_best_validation_SAS$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_Burden_SAS, x = prs_best_validation_SAS$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Burden_SAS",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_Burden_SAS",i,".RData"))
+
+## 
+model <- lm(y_vad_Burden_MIX~prs_best_validation_MIX$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_vad_Burden_MIX, x = prs_best_validation_MIX$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Burden_MIX",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/sl_result_All_Burden_MIX",i,".RData"))
   

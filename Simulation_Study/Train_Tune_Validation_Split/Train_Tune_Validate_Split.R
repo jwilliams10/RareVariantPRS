@@ -1,22 +1,28 @@
 rm(list = ls())
 
-load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/Y_n_140524_h2_common_0.05_h2_rare_0.0125.RData")
+load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/Y_n_140488_h2_common_0.05_h2_rare_0.0125.RData")
 
 set.seed(1335)
 
 sampleids_all <- Y[[1]]$IDs
 
-i <- 1:length(sampleids_all)
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
-train_number <- round(max(i)*0.7) + 1
-tune_val_number <- round(max(i)*0.15)
+ukb_pheno <- ukb_pheno[ukb_pheno$IID %in% sampleids_all,]
+
+# sum(ukb_pheno$IID == sampleids_all) == nrow(ukb_pheno); TRUE
+
+i <- (1:length(sampleids_all))[ukb_pheno$ancestry == "EUR"]
+
+train_number <- round(length(i)*0.7) + 1
+tune_val_number <- round(length(i)*0.15)
 
 train <- sample(i, train_number)
 
 i <- i[!(i %in% train)]
 
 tune <- sample(i, tune_val_number)
-validation <- i[!(i %in% tune)]
+validation <- c(i[!(i %in% tune)],(1:length(sampleids_all))[ukb_pheno$ancestry != "EUR"])
 
 train <- sampleids_all[train]
 tune <- sampleids_all[tune]
@@ -63,23 +69,29 @@ snp_readBed("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.bed",ba
 
 rm(list = ls())
 
-load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/Y_n_140524_h2_common_0.05_h2_rare_0.0125.RData")
+load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/Y_n_140488_h2_common_0.05_h2_rare_0.0125.RData")
 
 set.seed(1335)
 
 sampleids_all <- Y[[1]]$IDs
 
-i <- 1:length(sampleids_all)
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
-train_number <- round(max(i)*0.35) + 1
-tune_val_number <- round(max(i)*0.325)
+ukb_pheno <- ukb_pheno[ukb_pheno$IID %in% sampleids_all,]
+
+# sum(ukb_pheno$IID == sampleids_all) == nrow(ukb_pheno); TRUE
+
+i <- (1:length(sampleids_all))[ukb_pheno$ancestry == "EUR"]
+
+train_number <- round(length(i)*0.35) + 1
+tune_val_number <- round(length(i)*0.325)
 
 train <- sample(i, train_number)
 
 i <- i[!(i %in% train)]
 
 tune <- sample(i, tune_val_number)
-validation <- i[!(i %in% tune)]
+validation <- c(i[!(i %in% tune)],(1:length(sampleids_all))[ukb_pheno$ancestry != "EUR"])
 
 train <- sampleids_all[train]
 tune <- sampleids_all[tune]

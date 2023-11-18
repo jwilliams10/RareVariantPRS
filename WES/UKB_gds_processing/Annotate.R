@@ -31,11 +31,10 @@ chr <- as.numeric(commandArgs(TRUE)[1])
 DB_info <- read.csv(file_DBsplit,header=TRUE)
 chr_splitnum <- sum(DB_info$Chr==chr)
 
-for(kk in 1:chr_splitnum)
-{
+for(kk in 1:chr_splitnum){
   print(kk)
   
-  system(paste0(xsv," join --left VarInfo ",output_path,"chr",chr,"/VarInfo__chr",chr,"_",kk,".csv variant_vcf ",DB_path,"/chr",chr,"_",kk,".csv > ",output_path,"chr",chr,"/Anno_chr",chr,"_",kk,".csv"))
+  system(paste0(xsv," join --left VarInfo ",output_path,"chr",chr,"/VarInfo_chr",chr,"_",kk,".csv variant_vcf ",DB_path,"/chr",chr,"_",kk,".csv > ",output_path,"chr",chr,"/Anno_chr",chr,"_",kk,".csv"))
 }
 
 ## merge info

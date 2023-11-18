@@ -7,6 +7,8 @@
 rm(list=ls())
 gc()
 
+trait <- "Height"
+
 ## load required package
 library(gdsfmt)
 library(SeqArray)
@@ -19,12 +21,12 @@ library(STAARpipeline)
 ###########################################################
 
 ## job nums
-jobs_num <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_jobs_num.Rdata"))
+jobs_num <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/jobs_num.Rdata"))
 ## agds dir
-agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_agds_dir.Rdata"))
+agds_dir <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/agds_dir.Rdata"))
 
 ## Null Model
-obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData"))
+obj_nullmodel <- get(load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/nullmodels_staar/",trait,"_Train_Null_Model.RData")))
 
 ## QC_label
 QC_label <- "annotation/info/QC_label"
@@ -36,7 +38,7 @@ geno_missing_imputation <- "mean"
 ## Annotation_dir
 Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
 ## Annotation channel
-Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_Annotation_name_catalog.Rdata"))
+Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/Annotation_name_catalog.Rdata"))
 ## Use_annotation_weights
 Use_annotation_weights <- TRUE
 ## Annotation name
@@ -44,9 +46,9 @@ Annotation_name <- c("CADD","LINSIGHT","FATHMM.XF","aPC.EpigeneticActive","aPC.E
                      "aPC.Conservation","aPC.LocalDiversity","aPC.Mappability","aPC.TF","aPC.Protein")
 
 ## output path
-output_path <- "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/"
+output_path <- "/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/GeneCentricCoding/"
 ## output file name
-output_file_name <- "UKBB_WES_LDL_Coding_Train"
+output_file_name <- paste0(trait,"_UKBB_WES_Coding_Train")
 ## input array id from batch file (Harvard FAS cluster)
 arrayid <- as.numeric(commandArgs(TRUE)[1])
 # arrayid <- 1
@@ -90,15 +92,9 @@ if(arrayid==113){
   sub_seq_id <- setdiff(sub_seq_id,c(575,576,577,578,579,580))
 }
 
-
-# ### gds file
-# gds.dir <- "/data/BB_Bioinformatics/ProjectData/UKB_WES_lipids/GDS/"
-# gds.path <- paste0(gds.dir,"ukbb_wes_200k_chr",chr,".gds")
-# genofile <- seqOpen(gds.path)
-
 ### gds file
-gds.dir <- "/data/williamsjacr/UKB_WES_lipids/Data/gds/"
-gds.path <- paste0(gds.dir,"train_chr",chr,".gds")
+gds.dir <- "/data/williamsjacr/UKB_WES_Full_Processed_Data/gds/"
+gds.path <- paste0(gds.dir,"chr",chr,".gds")
 genofile <- seqOpen(gds.path)
 
 genes <- genes_info

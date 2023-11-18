@@ -30,8 +30,8 @@ snp_subset <- function(x, ind.row = bigstatsr::rows_along(x$genotypes), ind.col 
   if (is.null(backingfile)) 
     backingfile <- bigstatsr:::getNewFile(x, "sub")
   G2 <- bigstatsr:::FBM.code256(nrow = length(ind.row), ncol = length(ind.col), 
-                    code = G$code256, init = NULL, backingfile = backingfile, 
-                    create_bk = TRUE)
+                                code = G$code256, init = NULL, backingfile = backingfile, 
+                                create_bk = TRUE)
   bigsnpr:::replaceSNP(G2, G, rowInd = ind.row, colInd = ind.col)
   snp.list <- structure(list(genotypes = G2, fam = new_fam, 
                              map = new_map), class = "bigSNP")
@@ -40,30 +40,66 @@ snp_subset <- function(x, ind.row = bigstatsr::rows_along(x$genotypes), ind.col 
   rds
 }
 
-load("/data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/phenotypes/Y_Tune.RData")
+trait <- as.numeric(commandArgs(TRUE)[1])
 
-i <- as.numeric(commandArgs(TRUE)[1])
+if(trait == 1){
+  trait <- "BMI"
+}else if(trait == 2){
+  trait <- "TC"
+}else if(trait == 3){
+  trait <- "HDL"
+}else if(trait == 4){
+  trait <- "LDL"
+}else if(trait == 5){
+  trait <- "logTG"
+}else{
+  trait <- "Height"
+}
+
+map <- NULL
 
 ldr <- 3/1000
 ncores <- 1
 
-dat <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/GWAS_Summary_Statistics/Y_Train",i,".Y.glm.linear"), header=FALSE, comment.char="#")
+dat <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/",trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")
 colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","N","BETA","SE","T_STAT","PVAL","ERRCODE")
 dat <- dat[dat$TEST == "ADD",]
-
-obj.bigSNP <- snp_attach("/data/williamsjacr/UKB_WES_Simulation/Simulation2/reference.rds")
-map <- obj.bigSNP$map[-c(3)]
-names(map) <- c("chr", "rsid", "pos", "a0", "a1") # a1 - alt # c("chr", "pos", "a0", "a1")
-
-G   <- obj.bigSNP$genotypes
-CHR <- obj.bigSNP$map$chromosome
-POS <- obj.bigSNP$map$physical.pos
-POS2 <- snp_asGeneticPos(CHR, POS, dir ="/data/williamsjacr/UKB_WES_Simulation/Simulation2/LDPred2_Genetic_Mappings/", ncores = ncores)
-NCORES <-  1
 
 sumstats <- dat[,c('CHR', 'SNP_ID', 'POS', 'REF', 'ALT', 'BETA', 'SE', 'PVAL', 'N')]
 set.seed(2020)
 names(sumstats) <- c("chr", "rsid", "pos", "a0", "a1", "beta", "beta_se", "p", "n_eff")
+
+obj.bigSNP <- snp_attach("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/all_chr_reference.rds")
+NCORES <-  1
+
+for(i in 1:22){
+  if(!file.exists(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".rds")) & !file.exists(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".bk"))){
+    file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".rds"))
+    file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".bk"))
+    snp_subset(obj.bigSNP,ind.row = 1:3000,ind.col = which(sumstats$chr == i),backingfile = paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i)) 
+  }
+  
+  obj.bigSNP_new <- snp_attach(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".rds"))
+  
+  map_new <- obj.bigSNP_new$map[-c(3)]
+  names(map_new) <- c("chr", "rsid", "pos", "a0", "a1") # a1 - alt # c("chr", "pos", "a0", "a1")
+  map <- rbind(map,map_new)
+  
+  
+  G   <- obj.bigSNP_new$genotypes
+  CHR <- obj.bigSNP_new$map$chromosome
+  POS <- obj.bigSNP_new$map$physical.pos
+  POS2 <- snp_asGeneticPos(CHR, POS, dir ="/data/williamsjacr/UKB_WES_Phenotypes/Continuous/LDPred2_Genetic_Mappings/", ncores = ncores)
+  
+  if(i == 1){
+    corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
+    corr <- as_SFBM(corr0, tempfile(), compact = TRUE)
+  }else{
+    corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
+    corr$add_columns(corr0, nrow(corr))
+  }
+}
+
 sumstats <- sumstats[sumstats$rsid %in% map$rsid,]
 
 info_snp <- snp_match(sumstats, map, strand_flip = T, join_by_pos = F) # important: for real data, strand_flip = T
@@ -71,59 +107,62 @@ rownames(info_snp) = info_snp$rsid
 
 df_beta <- info_snp[, c("beta", "beta_se", "n_eff")]
 
-corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
+corr <- corr[info_snp$`_NUM_ID_`,info_snp$`_NUM_ID_`]
+corr <- as_SFBM(as(corr, "generalMatrix"))
 
-if(anyNA(corr0@x)){
-  b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)  
-  # b_list <- NULL
-  # for(j in 1:nrow(b)){
-  #   b_list <- c(b_list,b[j,])
-  # }
-  # b <- unique(b_list)
-  # rm(b_list)
-  b <- as.numeric(names(table(b))[table(b) > 2])
-  
-  b <- info_snp$`_NUM_ID_`[b]
-  
-  if(file.exists(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/reference",i,".rds"))){
-    file.remove(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/reference",i,".rds"))
-    file.remove(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/reference",i,".bk"))
-  }
-  
-  snp_subset(obj.bigSNP,ind.row = 1:3000,ind.col = -b,backingfile = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/reference",i))
-  
-  obj.bigSNP <- snp_attach(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/reference",i,".rds"))
-  map <- obj.bigSNP$map[-c(3)]
-  names(map) <- c("chr", "rsid", "pos", "a0", "a1") # a1 - alt # c("chr", "pos", "a0", "a1")
-  
-  G   <- obj.bigSNP$genotypes
-  CHR <- obj.bigSNP$map$chromosome
-  POS <- obj.bigSNP$map$physical.pos
-  POS2 <- snp_asGeneticPos(CHR, POS, dir ="/data/williamsjacr/UKB_WES_Simulation/Simulation2/LDPred2_Genetic_Mappings/", ncores = ncores)
-  NCORES <-  1
-  
-  sumstats <- dat[,c('CHR', 'SNP_ID', 'POS', 'REF', 'ALT', 'BETA', 'SE', 'PVAL', 'N')]
-  set.seed(2020)
-  names(sumstats) <- c("chr", "rsid", "pos", "a0", "a1", "beta", "beta_se", "p", "n_eff")
-  sumstats <- sumstats[sumstats$rsid %in% map$rsid,]
-  
-  info_snp <- snp_match(sumstats, map, strand_flip = T, join_by_pos = F) # important: for real data, strand_flip = T
-  rownames(info_snp) = info_snp$rsid
-  
-  df_beta <- info_snp[, c("beta", "beta_se", "n_eff")]
-  
-  corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
-}
+
+
+# if(anyNA(corr0@x)){
+#   b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)  
+#   # b_list <- NULL
+#   # for(j in 1:nrow(b)){
+#   #   b_list <- c(b_list,b[j,])
+#   # }
+#   # b <- unique(b_list)
+#   # rm(b_list)
+#   b <- as.numeric(names(table(b))[table(b) > 2])
+#   
+#   b <- info_snp$`_NUM_ID_`[b]
+#   
+#   if(file.exists(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.rds"))){
+#     file.remove(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.rds"))
+#     file.remove(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.bk"))
+#   }
+#   
+#   snp_subset(obj.bigSNP,ind.row = 1:3000,ind.col = -b,backingfile = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i))
+#   
+#   obj.bigSNP <- snp_attach(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.rds"))
+#   map <- obj.bigSNP$map[-c(3)]
+#   names(map) <- c("chr", "rsid", "pos", "a0", "a1") # a1 - alt # c("chr", "pos", "a0", "a1")
+#   
+#   G   <- obj.bigSNP$genotypes
+#   CHR <- obj.bigSNP$map$chromosome
+#   POS <- obj.bigSNP$map$physical.pos
+#   POS2 <- snp_asGeneticPos(CHR, POS, dir ="/data/williamsjacr/UKB_WES_Simulation/Simulation1/LDPred2_Genetic_Mappings/", ncores = ncores)
+#   NCORES <-  1
+#   
+#   sumstats <- dat[,c('CHR', 'SNP_ID', 'POS', 'REF', 'ALT', 'BETA', 'SE', 'PVAL', 'N')]
+#   set.seed(2020)
+#   names(sumstats) <- c("chr", "rsid", "pos", "a0", "a1", "beta", "beta_se", "p", "n_eff")
+#   sumstats <- sumstats[sumstats$rsid %in% map$rsid,]
+#   
+#   info_snp <- snp_match(sumstats, map, strand_flip = T, join_by_pos = F) # important: for real data, strand_flip = T
+#   rownames(info_snp) = info_snp$rsid
+#   
+#   df_beta <- info_snp[, c("beta", "beta_se", "n_eff")]
+#   
+#   corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
+# }
 
 
 # Imputing fixes the problem
 # G2 = snp_fastImputeSimple(G)
 # corr0 <- snp_cor(G2, ind.col = ind.chr2,infos.pos = POS2[ind.chr2], size =  ldr)
 
-corr <- as_SFBM(as(corr0, "generalMatrix"))
+# corr <- as_SFBM(as(corr, "generalMatrix"))
 
 # Automatic model
-ldsc <- snp_ldsc2(corr0, df_beta)
+ldsc <- snp_ldsc2(corr, df_beta)
 h2_est <- ldsc[["h2"]]
 print(paste0('Complete data preparation'))
 
@@ -164,40 +203,35 @@ print(paste0('Complete'))
 
 ## LDpred2 
 prs.file <- data.frame(SNP = beta_grid$rsid, ALT = beta_grid$a0, REF = beta_grid$a1, BETA = beta_grid[,1:(ncol(beta_grid)-3)])
-write.table(prs.file,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2",i,".txt"),col.names = T,row.names = F,quote=F)
+write.table(prs.file,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2.txt"),col.names = T,row.names = F,quote=F)
 
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/train.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/prs_train",i))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/tune.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/prs_tune",i))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/validation.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/prs_validation",i))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/train.txt --threads 1 --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_prs_train"))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/tune.txt --threads 1 --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_prs_tune"))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --threads 1 --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_prs_validation"))
 
 ## LASSOsum2
 prs.file <- data.frame(SNP = beta_lassosum2$rsid, ALT = beta_lassosum2$a0, REF = beta_lassosum2$a1, BETA = beta_lassosum2[,1:(ncol(beta_lassosum2)-3)])
-write.table(prs.file,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/lassosum2",i,".txt"),col.names = T,row.names = F,quote=F)
+write.table(prs.file,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_lassosum2.txt"),col.names = T,row.names = F,quote=F)
 
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/lassosum2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/train.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/prs_train",i))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/lassosum2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/tune.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/prs_tune",i))
-system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/lassosum2",i,".txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/validation.txt --threads 1 --out /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/prs_validation",i))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_lassosum2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/train.txt --threads 1 --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_prs_train"))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_lassosum2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/tune.txt --threads 1 --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_prs_tune"))
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_lassosum2.txt cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 4-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --threads 1 --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_prs_validation"))
 
 ################
 
-prs_mat_train <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/prs_train",i,".sscore"))
-prs_mat_tune <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/prs_tune",i,".sscore"))
-prs_mat_validation <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/prs_validation",i,".sscore"))
+prs_mat_train <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_prs_train.sscore"))
+prs_mat_tune <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_prs_tune.sscore"))
+prs_mat_validation <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_prs_validation.sscore"))
 
 sets <- expand.grid(p = p_seq, h2 = h2_seq, sparse = c(FALSE))
 
-load("/data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/phenotypes/Y_Train.RData")
-pheno_train <- Y_train[[i]]
-colnames(pheno_train) <- c("IID","Y")
+pheno_train <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Train.txt")
 pheno_train <- left_join(pheno_train,prs_mat_train,by = "IID")
 
-pheno_tuning <- Y_tune[[i]]
-colnames(pheno_tuning) <- c("IID","Y")
+pheno_tuning <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Tune.txt")
 pheno_tuning <- left_join(pheno_tuning,prs_mat_tune,by = "IID")
 
-load("/data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/phenotypes/Y_Validation.RData")
-pheno_vad <- Y_validation[[i]]
-colnames(pheno_vad) <- c("IID","Y")
+pheno_vad <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
 pheno_vad <- left_join(pheno_vad,prs_mat_validation,by = "IID")
 
 load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
@@ -213,9 +247,9 @@ pheno_vad_EAS <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry =
 #calculate R2 for each of the tuning dataset
 # This is done by regressing the residuals of the model with all covariates against the prs
 r2_tun_vec <- rep(0,nrow(sets))
-model.null <- lm(Y~1,data=pheno_tuning)
+model.null <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_tuning)
 for(k in 1:nrow(sets)){
-  prs <- pheno_tuning[,paste0("SCORE",k,"_SUM")]
+  prs <- pheno_tuning[!is.na(pheno_tuning[,trait]),paste0("SCORE",k,"_SUM")]
   model.prs <- lm(model.null$residual~prs,data=pheno_tuning)
   r2_tun_vec[k] <- summary(model.prs)$r.square
 }
@@ -226,13 +260,13 @@ best_prs_train <- pheno_train[,c("IID",paste0("SCORE",idx,"_SUM"))]
 best_prs_tune <- pheno_tuning[,c("IID",paste0("SCORE",idx,"_SUM"))]
 best_prs_validation <- pheno_vad[,c("IID",paste0("SCORE",idx,"_SUM"))]
 
-write.table(best_prs_train,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2_train_prs_best",i,".txt"),sep = "\t",row.names = FALSE)
-write.table(best_prs_tune,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2_tune_prs_best",i,".txt"),sep = "\t",row.names = FALSE)
-write.table(best_prs_validation,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2_validation_prs_best",i,".txt"),sep = "\t",row.names = FALSE)
+write.table(best_prs_train,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2_train_prs_best.txt"),sep = "\t",row.names = FALSE)
+write.table(best_prs_tune,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2_tune_prs_best.txt"),sep = "\t",row.names = FALSE)
+write.table(best_prs_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2_validation_prs_best.txt"),sep = "\t",row.names = FALSE)
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_EUR)
-prs <- pheno_vad_EUR[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_EUR)
+prs <- pheno_vad_EUR[!is.na(pheno_vad_EUR[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -255,11 +289,11 @@ r2.result <- data.frame(method = "LDPred2_EUR",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 ldpred2.result <- list(r2.result,r2_tun_vec)
 
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2_result_EUR",i,".RData"))
+save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2_result_EUR.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_NonEur)
-prs <- pheno_vad_NonEur[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_NonEur)
+prs <- pheno_vad_NonEur[!is.na(pheno_vad_NonEur[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -282,11 +316,11 @@ r2.result <- data.frame(method = "LDPred2_NonEur",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 ldpred2.result <- list(r2.result,r2_tun_vec)
 
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2_result_NonEur",i,".RData"))
+save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2_result_NonEur.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_UNK)
-prs <- pheno_vad_UNK[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_UNK)
+prs <- pheno_vad_UNK[!is.na(pheno_vad_UNK[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -309,11 +343,11 @@ r2.result <- data.frame(method = "LDPred2_UNK",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 ldpred2.result <- list(r2.result,r2_tun_vec)
 
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2_result_UNK",i,".RData"))
+save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2_result_UNK.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_AFR)
-prs <- pheno_vad_AFR[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_AFR)
+prs <- pheno_vad_AFR[!is.na(pheno_vad_AFR[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -336,11 +370,11 @@ r2.result <- data.frame(method = "LDPred2_AFR",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 ldpred2.result <- list(r2.result,r2_tun_vec)
 
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2_result_AFR",i,".RData"))
+save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2_result_AFR.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_SAS)
-prs <- pheno_vad_SAS[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_SAS)
+prs <- pheno_vad_SAS[!is.na(pheno_vad_SAS[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -363,11 +397,11 @@ r2.result <- data.frame(method = "LDPred2_SAS",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 ldpred2.result <- list(r2.result,r2_tun_vec)
 
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2_result_SAS",i,".RData"))
+save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2_result_SAS.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_EAS)
-prs <- pheno_vad_EAS[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_EAS)
+prs <- pheno_vad_EAS[!is.na(pheno_vad_EAS[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -390,11 +424,11 @@ r2.result <- data.frame(method = "LDPred2_EAS",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 ldpred2.result <- list(r2.result,r2_tun_vec)
 
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2_result_EAS",i,".RData"))
+save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2_result_EAS.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_MIX)
-prs <- pheno_vad_MIX[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_MIX)
+prs <- pheno_vad_MIX[!is.na(pheno_vad_MIX[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -417,29 +451,24 @@ r2.result <- data.frame(method = "LDPred2_MIX",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 ldpred2.result <- list(r2.result,r2_tun_vec)
 
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/ldpred2_result_MIX",i,".RData"))
+save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2_result_MIX.RData"))
 
 
 
 
 
-prs_mat_train <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/prs_train",i,".sscore"))
-prs_mat_tune <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/prs_tune",i,".sscore"))
-prs_mat_validation <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/prs_validation",i,".sscore"))
+prs_mat_train <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_prs_train.sscore"))
+prs_mat_tune <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_prs_tune.sscore"))
+prs_mat_validation <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_prs_validation.sscore"))
 
 ## Pull in Phenotypes/Covariates 
-load("/data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/phenotypes/Y_Train.RData")
-pheno_train <- Y_train[[i]]
-colnames(pheno_train) <- c("IID","Y")
+pheno_train <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Train.txt")
 pheno_train <- left_join(pheno_train,prs_mat_train,by = "IID")
 
-pheno_tuning <- Y_tune[[i]]
-colnames(pheno_tuning) <- c("IID","Y")
+pheno_tuning <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Tune.txt")
 pheno_tuning <- left_join(pheno_tuning,prs_mat_tune,by = "IID")
 
-load("/data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/phenotypes/Y_Validation.RData")
-pheno_vad <- Y_validation[[i]]
-colnames(pheno_vad) <- c("IID","Y")
+pheno_vad <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
 pheno_vad <- left_join(pheno_vad,prs_mat_validation,by = "IID")
 
 load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
@@ -454,7 +483,7 @@ pheno_vad_EAS <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry =
 
 r2_tun_vec <- rep(0,300)
 for(k in 1:300){
-  prs <- pheno_tuning[,paste0("SCORE",k,"_SUM")]
+  prs <- pheno_tuning[!is.na(pheno_tuning[,trait]),paste0("SCORE",k,"_SUM")]
   model.prs <- lm(model.null$residual~prs,data=pheno_tuning)
   r2_tun_vec[k] <- summary(model.prs)$r.square
 }
@@ -465,13 +494,13 @@ best_prs_train <- pheno_train[,c("IID",paste0("SCORE",idx,"_SUM"))]
 best_prs_tune <- pheno_tuning[,c("IID",paste0("SCORE",idx,"_SUM"))]
 best_prs_validation <- pheno_vad[,c("IID",paste0("SCORE",idx,"_SUM"))]
 
-write.table(best_prs_train,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/lassosum2_train_prs_best",i,".txt"),sep = "\t",row.names = FALSE)
-write.table(best_prs_tune,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/lassosum2_tune_prs_best",i,".txt"),sep = "\t",row.names = FALSE)
-write.table(best_prs_validation,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/lassosum2_validation_prs_best",i,".txt"),sep = "\t",row.names = FALSE)
+write.table(best_prs_train,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_lassosum2_train_prs_best.txt"),sep = "\t",row.names = FALSE)
+write.table(best_prs_tune,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_lassosum2_tune_prs_best.txt"),sep = "\t",row.names = FALSE)
+write.table(best_prs_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_lassosum2_validation_prs_best.txt"),sep = "\t",row.names = FALSE)
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_EUR)
-prs <- pheno_vad_EUR[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_EUR)
+prs <- pheno_vad_EUR[!is.na(pheno_vad_EUR[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -494,11 +523,11 @@ r2.result <- data.frame(method = "LASSOSUM2_EUR",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 LASSOSUM2.result <- list(r2.result,r2_tun_vec)
 
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/LASSOSUM2_result_EUR",i,".RData"))
+save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_EUR.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_NonEur)
-prs <- pheno_vad_NonEur[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_NonEur)
+prs <- pheno_vad_NonEur[!is.na(pheno_vad_NonEur[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -521,11 +550,11 @@ r2.result <- data.frame(method = "LASSOSUM2_NonEur",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 LASSOSUM2.result <- list(r2.result,r2_tun_vec)
 
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/LASSOSUM2_result_NonEur",i,".RData"))
+save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_NonEur.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_UNK)
-prs <- pheno_vad_UNK[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_UNK)
+prs <- pheno_vad_UNK[!is.na(pheno_vad_UNK[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -548,11 +577,11 @@ r2.result <- data.frame(method = "LASSOSUM2_UNK",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 LASSOSUM2.result <- list(r2.result,r2_tun_vec)
 
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/LASSOSUM2_result_UNK",i,".RData"))
+save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_UNK.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_AFR)
-prs <- pheno_vad_AFR[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_AFR)
+prs <- pheno_vad_AFR[!is.na(pheno_vad_AFR[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -575,11 +604,11 @@ r2.result <- data.frame(method = "LASSOSUM2_AFR",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 LASSOSUM2.result <- list(r2.result,r2_tun_vec)
 
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/LASSOSUM2_result_AFR",i,".RData"))
+save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_AFR.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_SAS)
-prs <- pheno_vad_SAS[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_SAS)
+prs <- pheno_vad_SAS[!is.na(pheno_vad_SAS[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -602,11 +631,11 @@ r2.result <- data.frame(method = "LASSOSUM2_SAS",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 LASSOSUM2.result <- list(r2.result,r2_tun_vec)
 
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/LASSOSUM2_result_SAS",i,".RData"))
+save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_SAS.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_EAS)
-prs <- pheno_vad_EAS[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_EAS)
+prs <- pheno_vad_EAS[!is.na(pheno_vad_EAS[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -629,11 +658,11 @@ r2.result <- data.frame(method = "LASSOSUM2_EAS",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 LASSOSUM2.result <- list(r2.result,r2_tun_vec)
 
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/LASSOSUM2_result_EAS",i,".RData"))
+save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_EAS.RData"))
 
 ## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_MIX)
-prs <- pheno_vad_MIX[,paste0("SCORE",idx,"_SUM")]
+model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_MIX)
+prs <- pheno_vad_MIX[!is.na(pheno_vad_MIX[,trait]),paste0("SCORE",idx,"_SUM")]
 model.vad.prs <- lm(model.vad.null$residual~prs)
 r2 <- summary(model.vad.prs)$r.square
 
@@ -656,4 +685,6 @@ r2.result <- data.frame(method = "LASSOSUM2_MIX",
 ## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
 LASSOSUM2.result <- list(r2.result,r2_tun_vec)
 
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/LASSOSUM2_result_MIX",i,".RData"))
+save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_MIX.RData"))
+
+  

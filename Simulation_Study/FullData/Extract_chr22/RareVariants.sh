@@ -6,4 +6,4 @@
 
 module load samtools
 
-bcftools view -S /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/sampleids_rare.txt --force-samples -o /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_rare.vcf.bgz /data/williamsjacr/UKB_WES_lipids/Data/pVCF/chr22/ukbb_wes_200k_chr22.vcf.bgz
+bcftools view -S /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/sampleids_rare.txt --force-samples -o /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_rare.vcf.bgz /data/williamsjacr/UKB_WES_Full_Processed_Data/pVCF/chr22/ukbb_wes_200k_chr22.vcf.bgz

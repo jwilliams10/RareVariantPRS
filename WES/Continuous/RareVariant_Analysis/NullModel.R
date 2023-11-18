@@ -10,51 +10,44 @@ library(Matrix)
 library(SCANG)
 library(STAARpipeline)
 
-pheno_train <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Train.txt")
-colnames(pheno_train) <- c("IID","FID","LDLadj.norm","age","age2","sex","PC1","PC2","PC3","PC4","PC5","PC6","PC7","PC8","PC9","PC10")
+trait <- "BMI"
 
-common_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Train_All.txt")
-
-pheno_train <- inner_join(pheno_train,common_prs,by = "IID")
-
-obj.STAAR.UKB.LDL <- fit_nullmodel(LDLadj.norm~age+age2+sex+PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10 + prs, data = pheno_train,id = "IID",kins = NULL,family = gaussian(link = "identity"))
-
-save(obj.STAAR.UKB.LDL,file = "/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData")
-
-# obj_nullmodel_SCANG_STAAR <- staar2scang_nullmodel(obj.STAAR.UKB.LDL)
-# 
-# save(obj_nullmodel_SCANG_STAAR,file="/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_SCANG_LDL.RData")
-
-rm(list = ls())
-
-pheno_tune <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Tune.txt")
-colnames(pheno_tune) <- c("IID","FID","LDLadj.norm","age","age2","sex","PC1","PC2","PC3","PC4","PC5","PC6","PC7","PC8","PC9","PC10")
-
-common_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Tune_All.txt")
-
-pheno_tune <- inner_join(pheno_tune,common_prs,by = "IID")
-
-obj.STAAR.UKB.LDL <- fit_nullmodel(LDLadj.norm~age+age2+sex+PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10 + prs, data = pheno_tune,id = "IID",kins = NULL,family = gaussian(link = "identity"))
-
-save(obj.STAAR.UKB.LDL,file = "/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Tune_Null_Model_LDL.RData")
-
-# obj_nullmodel_SCANG_STAAR <- staar2scang_nullmodel(obj.STAAR.UKB.LDL)
-# 
-# save(obj_nullmodel_SCANG_STAAR,file="/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Tune_Null_Model_SCANG_LDL.RData")
-
-rm(list = ls())
-
-pheno_vad <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/phenotypes/LDL_Validation.txt")
-colnames(pheno_vad) <- c("IID","FID","LDLadj.norm","age","age2","sex","PC1","PC2","PC3","PC4","PC5","PC6","PC7","PC8","PC9","PC10")
-
-common_prs <- read.delim("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/Combined_Common_PRS/Best_Validation_All.txt")
-
-pheno_vad <- inner_join(pheno_vad,common_prs,by = "IID")
-
-obj.STAAR.UKB.LDL <- fit_nullmodel(LDLadj.norm~age+age2+sex+PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10 + prs, data = pheno_vad,id = "IID",kins = NULL,family = gaussian(link = "identity"))
-
-save(obj.STAAR.UKB.LDL,file = "/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Validation_Null_Model_LDL.RData")
-
-# obj_nullmodel_SCANG_STAAR <- staar2scang_nullmodel(obj.STAAR.UKB.LDL)
-# 
-# save(obj_nullmodel_SCANG_STAAR,file="/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Validation_Null_Model_SCANG_LDL.RData")
+for(trait in c("BMI","TC","LDL","HDL","logTG","Height")){
+  pheno_train <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Train.txt")
+  
+  common_prs <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_Best_Train_All.txt"))
+  
+  pheno_train <- inner_join(pheno_train,common_prs,by = "IID")
+  
+  obj.STAAR.UKB <- fit_nullmodel(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10 + prs")), data = pheno_train,id = "IID",kins = NULL,family = gaussian(link = "identity"))
+  
+  save(obj.STAAR.UKB,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/nullmodels_staar/",trait,"_Train_Null_Model.RData"))
+  
+  
+  
+  
+  pheno_tune <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Tune.txt")
+  
+  common_prs <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_Best_Tune_All.txt"))
+  
+  pheno_tune <- inner_join(pheno_tune,common_prs,by = "IID")
+  
+  obj.STAAR.UKB <- fit_nullmodel(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10 + prs")), data = pheno_tune,id = "IID",kins = NULL,family = gaussian(link = "identity"))
+  
+  save(obj.STAAR.UKB,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/nullmodels_staar/",trait,"_Tune_Null_Model.RData"))
+  
+  
+  
+  
+  pheno_validation <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
+  
+  common_prs <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_Best_Validation_All.txt"))
+  
+  pheno_validation <- inner_join(pheno_validation,common_prs,by = "IID")
+  
+  obj.STAAR.UKB <- fit_nullmodel(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10 + prs")), data = pheno_validation,id = "IID",kins = NULL,family = gaussian(link = "identity"))
+  
+  save(obj.STAAR.UKB,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/nullmodels_staar/",trait,"_Validation_Null_Model.RData"))
+  
+  
+}

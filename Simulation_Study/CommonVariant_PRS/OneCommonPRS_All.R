@@ -133,9 +133,6 @@ if(best_algorithm == "SL.glmnet_All"){
   prs_best_validation <- prs_best_validation_sl
 }
 
-model <- lm(y_validation~prs_best_validation)
-r2 <- summary(model)$r.square
-
 prs_best_validation <- data.frame(IID = pheno_validation$IID,prs = prs_best_validation)
 
 
@@ -188,8 +185,29 @@ write.table(prs_best_train,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Si
 write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Tune_All",i,".txt"),sep = "\t",row.names = FALSE)
 write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Validation_All",i,".txt"),sep = "\t",row.names = FALSE)
 
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
+
+y_validation_EUR <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]]
+y_validation_NonEUR <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]]
+y_validation_UNK <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]]
+y_validation_SAS <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]]
+y_validation_MIX <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]]
+y_validation_AFR <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]]
+y_validation_EAS <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]]
+
+prs_best_validation_EUR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+prs_best_validation_NonEur <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+prs_best_validation_UNK <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+prs_best_validation_SAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+prs_best_validation_MIX <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+prs_best_validation_AFR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+prs_best_validation_EAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+
 ## bootstrap the R2 to provide an approximate distribution 
-data <- data.frame(y = y_validation, x = prs_best_validation$prs)
+model <- lm(y_validation_EUR~prs_best_validation_EUR$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_validation_EUR, x = prs_best_validation_EUR$prs)
 R2Boot <- function(data,indices){
   boot_data <- data[indices, ]
   model <- lm(y ~ x, data = boot_data)
@@ -199,11 +217,143 @@ R2Boot <- function(data,indices){
 boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
 ci_result <- boot.ci(boot_r2, type = "perc")
-SL.result <- data.frame(method = "SL_Combined",
+SL.result <- data.frame(method = "SL_Combined_Eur",
                         r2 = r2,
                         r2_low = ci_result$percent[4],
                         r2_high = ci_result$percent[5]
 )
 
-save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/sl_result_All",i,".RData"))
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/sl_result_All_Eur",i,".RData"))
+
+## bootstrap the R2 to provide an approximate distribution 
+model <- lm(y_validation_NonEUR~prs_best_validation_NonEur$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_validation_NonEUR, x = prs_best_validation_NonEur$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Combined_NonEur",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/sl_result_All_NonEur",i,".RData"))
+
+## bootstrap the R2 to provide an approximate distribution 
+model <- lm(y_validation_UNK~prs_best_validation_UNK$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_validation_UNK, x = prs_best_validation_UNK$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Combined_UNK",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/sl_result_All_UNK",i,".RData"))
+
+## bootstrap the R2 to provide an approximate distribution 
+model <- lm(y_validation_SAS~prs_best_validation_SAS$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_validation_SAS, x = prs_best_validation_SAS$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Combined_SAS",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/sl_result_All_SAS",i,".RData"))
+
+## bootstrap the R2 to provide an approximate distribution 
+model <- lm(y_validation_MIX~prs_best_validation_MIX$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_validation_MIX, x = prs_best_validation_MIX$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Combined_MIX",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/sl_result_All_MIX",i,".RData"))
+
+## bootstrap the R2 to provide an approximate distribution 
+model <- lm(y_validation_AFR~prs_best_validation_AFR$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_validation_AFR, x = prs_best_validation_AFR$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Combined_AFR",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/sl_result_All_AFR",i,".RData"))
+
+## bootstrap the R2 to provide an approximate distribution 
+model <- lm(y_validation_EAS~prs_best_validation_EAS$prs)
+r2 <- summary(model)$r.square
+
+data <- data.frame(y = y_validation_EAS, x = prs_best_validation_EAS$prs)
+R2Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  model <- lm(y ~ x, data = boot_data)
+  result <- summary(model)$r.square
+  return(c(result))
+}
+boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+
+ci_result <- boot.ci(boot_r2, type = "perc")
+SL.result <- data.frame(method = "SL_Combined_EAS",
+                        r2 = r2,
+                        r2_low = ci_result$percent[4],
+                        r2_high = ci_result$percent[5]
+)
+
+save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/sl_result_All_EAS",i,".RData"))
 

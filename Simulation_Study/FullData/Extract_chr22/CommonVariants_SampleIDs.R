@@ -6,11 +6,14 @@ snp_list_chr_22 <- ukb_hm3_mega_bim[ukb_hm3_mega_bim[,1] == 22,2]
 
 write.table(snp_list_chr_22,"/data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/snp_list.txt",row.names = FALSE,col.names = FALSE,quote = FALSE)
 
-sampleids <- read.table("/data/williamsjacr/UKB_WES_Full_Processed_Data//sampleids.txt", quote="\"", comment.char="")
+sampleids <- read.table("/data/williamsjacr/UKB_WES_Full_Processed_Data/sampleids.txt", quote="\"", comment.char="")
 
 unrels_nRandomSNPs_0 <- read.table("/data/BB_Bioinformatics/ProjectData/UKB/phenotypes/unrels_nRandomSNPs_0.unrels", quote="\"", comment.char="")
 
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
+
 sampleids <- sampleids[sampleids[,1] %in% unrels_nRandomSNPs_0$V1,,drop = FALSE]
+sampleids <- sampleids[sampleids[,1] %in% ukb_pheno$IID,,drop = FALSE]
 
 phenotype <- data.frame(IID = sampleids,FID = 0,Y = rnorm(nrow(sampleids)))
 
