@@ -7,6 +7,8 @@
 rm(list=ls())
 gc()
 
+trait <- "TC"
+
 ## load required packages
 library(gdsfmt)
 library(SeqArray)
@@ -17,10 +19,10 @@ library(STAARpipeline)
 ###########################################################
 #           User Input
 ###########################################################
-## aGDS directory
-agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_agds_dir.Rdata"))
-## Null model
-obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData"))
+## agds dir
+agds_dir <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/agds_dir.Rdata"))
+## Null Model
+obj_nullmodel <- get(load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/nullmodels_staar/",trait,"_Train_Null_Model.RData")))
 
 ## QC_label
 QC_label <- "annotation/info/QC_label"
@@ -32,7 +34,7 @@ geno_missing_imputation <- "mean"
 ## Annotation_dir
 Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
 ## Annotation channel
-Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_Annotation_name_catalog.Rdata"))
+Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/Annotation_name_catalog.Rdata"))
 ## Use_annotation_weights
 Use_annotation_weights <- TRUE
 ## Annotation name
@@ -40,9 +42,9 @@ Annotation_name <- c("CADD","LINSIGHT","FATHMM.XF","aPC.EpigeneticActive","aPC.E
                      "aPC.Conservation","aPC.LocalDiversity","aPC.Mappability","aPC.TF","aPC.Protein")
 
 ## output path
-output_path <- "/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/"
+output_path <- "/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/GeneCentricCoding/"
 ## output file name
-output_file_name <- "UKBB_WES_LDL_Coding_Train"
+output_file_name <- paste0(trait,"_UKBB_WES_Coding_Train")
 ## input array id from batch file (Harvard FAS RC cluster)
 arrayid_longmask <- as.numeric(commandArgs(TRUE)[1])
 
