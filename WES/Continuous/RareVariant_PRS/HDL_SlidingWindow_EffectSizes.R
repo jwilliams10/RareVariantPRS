@@ -8,6 +8,8 @@
 rm(list=ls())
 gc()
 
+trait <- "HDL"
+
 ## load required package
 library(gdsfmt)
 library(SeqArray)
@@ -20,22 +22,21 @@ library(readr)
 library(dplyr)
 
 ## source code
-source("~/RareVariantPRS/RareVariant_PRS/Burden_Effect_Size.R")
-source("~/RareVariantPRS/RareVariant_PRS/Sliding_Window_Burden_Effect_Size.R")
+source("~/RareVariantPRS/WES/Continuous/RareVariant_PRS/Burden_Effect_Size.R")
+source("~/RareVariantPRS/WES/Continuous/RareVariant_PRS/Sliding_Window_Burden_Effect_Size.R")
 
 ###########################################################
 #           User Input
 ###########################################################
 ### Significant Results 
-sliding_window_sig <- read_csv("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/sliding_window_sig.csv")
+sliding_window_sig <- read_csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/SlidingWindow/",trait,"_sliding_window_sig.csv"))
 sliding_window_sig <- sliding_window_sig[,c(1,2,3,4,5,6,48,62,91)]
 colnames(sliding_window_sig) <- c("IDK","Chr","Start","End","Number_SNV","SKAT_1_25","Burden_1_1","ACAT_V_1_25","STAAR_O")
 
-## agds dir
-agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_agds_dir.Rdata"))
-
-## Null Model
-obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData"))
+## aGDS directory
+agds_dir <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/agds_dir.Rdata"))
+## Null model
+obj_nullmodel <- get(load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/nullmodels_staar/",trait,"_Train_Null_Model.RData")))
 
 ## Parameter
 QC_label <- "annotation/info/QC_label"
@@ -74,7 +75,7 @@ effect_sizes <- effect_sizes[,-c(1)]
 
 sliding_window_sig <- inner_join(sliding_window_sig,effect_sizes)
 
-write.csv(sliding_window_sig,row.names = FALSE,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/SlidingWindow/sliding_window_sig_chr",arrayid,".csv"))
+write.csv(sliding_window_sig,row.names = FALSE,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/SlidingWindow/",trait,"_sliding_window_sig_chr",arrayid,".csv"))
 
 
 		

@@ -14,4 +14,4 @@ Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVarian
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/WES/Continuous/RareVariant_Analysis/LDL_STAAR_Gene_Centric_Noncoding_Long_Masks.R ${SLURM_ARRAY_TASK_ID} > LDL"${SLURM_ARRAY_TASK_ID}".Rout &
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/WES/Continuous/RareVariant_Analysis/logTG_STAAR_Gene_Centric_Noncoding_Long_Masks.R ${SLURM_ARRAY_TASK_ID} > logTG"${SLURM_ARRAY_TASK_ID}".Rout &
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/WES/Continuous/RareVariant_Analysis/TC_STAAR_Gene_Centric_Noncoding_Long_Masks.R ${SLURM_ARRAY_TASK_ID} > TC"${SLURM_ARRAY_TASK_ID}".Rout &
-wai
+wait

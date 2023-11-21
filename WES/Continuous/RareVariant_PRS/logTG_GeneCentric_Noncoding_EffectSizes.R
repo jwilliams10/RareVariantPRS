@@ -8,6 +8,8 @@
 rm(list=ls())
 gc()
 
+trait <- "logTG"
+
 ## load required package
 library(gdsfmt)
 library(SeqArray)
@@ -20,22 +22,21 @@ library(readr)
 library(dplyr)
 
 ## source code
-source("~/RareVariantPRS/RareVariant_PRS/Burden_Effect_Size.R")
-source("~/RareVariantPRS/RareVariant_PRS/Gene_Centric_Noncoding_Burden_Effect_Size_Jake.R")
+source("~/RareVariantPRS/WES/Continuous/RareVariant_PRS/Burden_Effect_Size.R")
+source("~/RareVariantPRS/WES/Continuous//RareVariant_PRS/Gene_Centric_Noncoding_Burden_Effect_Size_Jake.R")
 
 ###########################################################
 #           User Input
 ###########################################################
 ### Significant Results 
-noncoding_sig <- read_csv("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/noncoding_sig.csv")
+noncoding_sig <- read_csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/GeneCentricNoncoding/",trait,"_noncoding_sig.csv"))
 noncoding_sig <- noncoding_sig[,c(1,2,3,4,5,6,48,62,91)]
 colnames(noncoding_sig) <- c("IDK","Gene","Chr","Category","Number_SNV","SKAT_1_25","Burden_1_1","ACAT_V_1_25","STAAR_O")
 
 ## agds dir
-agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_agds_dir.Rdata"))
-
-## Null Model
-obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData"))
+agds_dir <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/agds_dir.Rdata"))
+## Null model
+obj_nullmodel <- get(load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/nullmodels_staar/",trait,"_Train_Null_Model.RData")))
 
 ## Parameter
 QC_label <- "annotation/info/QC_label"
@@ -45,7 +46,7 @@ variant_type <- "SNV"
 ## Annotation_dir
 Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
 ## Annotation channel
-Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_Annotation_name_catalog.Rdata"))
+Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/Annotation_name_catalog.Rdata"))
 
 ###########################################################
 
@@ -80,5 +81,5 @@ effect_sizes <- effect_sizes[,-c(1)]
 
 noncoding_sig <- inner_join(noncoding_sig,effect_sizes)
 
-write.csv(noncoding_sig,row.names = FALSE,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/noncoding_sig_chr",arrayid,".csv"))
+write.csv(noncoding_sig,row.names = FALSE,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/GeneCentricNoncoding/",trait,"_noncoding_sigchr",arrayid,".csv"))
 

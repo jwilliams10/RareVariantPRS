@@ -18,23 +18,26 @@ library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 library(readr)
 library(dplyr)
 
+
+trait <- "Height"
+
 ## source code
-source("~/RareVariantPRS/RareVariant_PRS/Burden_Effect_Size.R")
-source("~/RareVariantPRS/RareVariant_PRS/Gene_Centric_Coding_Burden_Effect_Size_Jake.R")
+source("~/RareVariantPRS/WES/Continuous/RareVariant_PRS/Burden_Effect_Size.R")
+source("~/RareVariantPRS/WES/Continuous/RareVariant_PRS/Gene_Centric_Coding_Burden_Effect_Size_Jake.R")
 
 ###########################################################
 #           User Input
 ###########################################################
 
 ### Significant Results 
-coding_sig <- read_csv("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/coding_sig.csv")
+coding_sig <- read_csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/GeneCentricCoding/",trait,"_coding_sig.csv"))
 colnames(coding_sig) <- c("IDK","Gene","Chr","Category","Number_SNV","SKAT_1_25","Burden_1_1","ACAT_V_1_25","STAAR_O")
 
 ## agds dir
-agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_agds_dir.Rdata"))
+agds_dir <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/agds_dir.Rdata"))
 
 ## Null Model
-obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Train_Null_Model_LDL.RData"))
+obj_nullmodel <- get(load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/nullmodels_staar/",trait,"_Train_Null_Model.RData")))
 
 ## Parameter
 QC_label <- "annotation/info/QC_label"
@@ -44,7 +47,7 @@ variant_type <- "SNV"
 ## Annotation_dir
 Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
 ## Annotation channel
-Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/train_Annotation_name_catalog.Rdata"))
+Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/Annotation_name_catalog.Rdata"))
 
 arrayid <- as.numeric(commandArgs(TRUE)[1])
 
@@ -78,4 +81,4 @@ effect_sizes <- effect_sizes[,-c(1)]
 
 coding_sig <- inner_join(coding_sig,effect_sizes)
 
-write.csv(coding_sig,row.names = FALSE,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricCoding/coding_sig_chr",arrayid,".csv"))
+write.csv(coding_sig,row.names = FALSE,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/GeneCentricCoding/",trait,"_coding_sig_chr",arrayid,".csv"))
