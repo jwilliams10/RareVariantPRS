@@ -7,6 +7,9 @@
 
 rm(list=ls())
 gc()
+
+trait <- "BMI"
+
 ## load required package
 library(gdsfmt)
 library(SeqArray)
@@ -18,8 +21,8 @@ library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 library(readr)
 library(dplyr)
 
-source("/spin1/home/linux/williamsjacr/RareVariantPRS/RareVariant_PRS/Burden_PRS.R")
-source("~/RareVariantPRS/RareVariant_PRS/Gene_Centric_Noncoding_Burden_PRS.R")
+source("/spin1/home/linux/williamsjacr/RareVariantPRS/WES/Continuous/RareVariant_PRS/Burden_PRS.R")
+source("~/RareVariantPRS/WES/Continuous/RareVariant_PRS/Gene_Centric_Coding_Burden_PRS.R")
 
 
 ###########################################################
@@ -27,13 +30,17 @@ source("~/RareVariantPRS/RareVariant_PRS/Gene_Centric_Noncoding_Burden_PRS.R")
 ###########################################################
 
 ### Significant Results 
-Train_Effect_Sizes_All <- read.csv("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Train_Effect_Sizes_All.csv")
+Train_Effect_Sizes_All <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/GeneCentricCoding/",trait,"_Train_Effect_Sizes_All.csv"))
 
 ## agds dir
-agds_dir <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/validation_agds_dir.Rdata"))
+agds_dir <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/agds_dir.Rdata"))
 
 ## Null Model
-obj_nullmodel <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/nullmodels_staar/Validation_Null_Model_LDL.RData"))
+obj_nullmodel_tune <- get(load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/nullmodels_staar/",trait,"_Tune_Null_Model.RData")))
+obj_nullmodel_validation <- get(load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/nullmodels_staar/",trait,"_Validation_Null_Model.RData")))
+
+obj_nullmodel <- obj_nullmodel_tune
+obj_nullmodel$id_include <- c(obj_nullmodel$id_include,obj_nullmodel_validation$id_include)
 
 ## Parameter
 QC_label <- "annotation/info/QC_label"
@@ -43,7 +50,8 @@ variant_type <- "SNV"
 ## Annotation_dir
 Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
 ## Annotation channel
-Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_lipids/Data/agds/validation_Annotation_name_catalog.Rdata"))
+Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/Annotation_name_catalog.Rdata"))
+
 thresholds <- c(1e-07,5e-07,1e-06,5e-06,1e-05,5e-05,1e-04,5e-04,1e-03,5e-03,1e-02,5e-02,1e-01,5e-01,1.0)
 
 PRS <- NULL
@@ -122,20 +130,21 @@ if(nrow(Train_Effect_Sizes_All) == 0){
     genofile <- seqOpen(gds.path)
     
     if(i == 1){
-      PRS <- Gene_Centric_Noncoding_Burden_PRS(chr=chr,gene_name=gene_name,category=category ,
-                                               genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
-                                               BETA = BETA,
-                                               QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
-                                               Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,silent=FALSE)
+      PRS <- Gene_Centric_Coding_Burden_PRS(chr=chr,gene_name=gene_name,category=category ,
+                                            genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                                            BETA = BETA,
+                                            QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+                                            Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,silent=FALSE)
     }else{
-      PRS[,2] <- PRS[,2] + Gene_Centric_Noncoding_Burden_PRS(chr=chr,gene_name=gene_name,category=category ,
-                                                             genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
-                                                             BETA = BETA,
-                                                             QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
-                                                             Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,silent=FALSE)[,2]
+      PRS[,2] <- PRS[,2] + Gene_Centric_Coding_Burden_PRS(chr=chr,gene_name=gene_name,category=category ,
+                                                          genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                                                          BETA = BETA,
+                                                          QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+                                                          Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,silent=FALSE)[,2]
     }
     seqClose(genofile) 
   } 
 }
 
-write.csv(PRS,file = paste0("/data/williamsjacr/UKB_WES_lipids/Data/Results/LDL/GeneCentricNonCoding/Validation_PRS_Array_",arrayid_original,".csv"),row.names = FALSE)
+write.csv(PRS,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/GeneCentricCoding/PRS_Array_",arrayid_original,".csv"),row.names = FALSE)
+
