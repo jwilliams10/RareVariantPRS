@@ -1,5 +1,7 @@
 rm(list = ls())
 
+trait <- "BMI"
+
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   for(i in 1:22){
     if(i == 1){

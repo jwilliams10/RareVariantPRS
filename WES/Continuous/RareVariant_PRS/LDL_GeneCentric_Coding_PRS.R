@@ -8,7 +8,7 @@
 rm(list=ls())
 gc()
 
-trait <- "BMI"
+trait <- "LDL"
 
 ## load required package
 library(gdsfmt)
