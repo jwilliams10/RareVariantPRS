@@ -8,4 +8,4 @@ for(i in 1:22){
   system(paste0("/data/williamsjacr/software/plink --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/pVCF/chr",i,"/ukbb_wes_200k_chr",i,"_common --exclude /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr-merge.missnp --make-bed --out /data/williamsjacr/UKB_WES_Full_Processed_Data/pVCF/chr",i,"/ukbb_wes_200k_chr",i,"_common"))
 }
 
-system(paste0("/data/williamsjacr/software/plink --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/pVCF/chr",2:22,"/ukbb_wes_200k_chr",1,"_common --merge-list /data/williamsjacr/UKB_WES_Full_Processed_Data/merge_list.txt --make-bed --out /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr"))
+system(paste0("/data/williamsjacr/software/plink --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/pVCF/chr",1,"/ukbb_wes_200k_chr",1,"_common --merge-list /data/williamsjacr/UKB_WES_Full_Processed_Data/merge_list.txt --make-bed --out /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr"))

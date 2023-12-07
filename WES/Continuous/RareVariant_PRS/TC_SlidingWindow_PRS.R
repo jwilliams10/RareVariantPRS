@@ -142,4 +142,4 @@ if(nrow(Train_Effect_Sizes_All) == 0){
   } 
 }
 
-write.csv(PRS,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/SlidingWindow/PRS_Array_",arrayid_original,".csv"),row.names = FALSE)
+write.csv(PRS,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/SlidingWindow/",trait,"_PRS_Array_",arrayid_original,".csv"),row.names = FALSE)
