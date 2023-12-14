@@ -104,12 +104,14 @@ for(Trait in c("Asthma","CAD","T2D","Breast","Prostate")){
 results <- a
 rm(a)
 
+results <- results[!(results$Ancestry %in% c("EAS","MIX","UNK")),]
+
 ggplot(results) +
   geom_bar(aes(x=Method, y=AUC,fill=Method), stat="identity", alpha=0.7) +
   geom_errorbar( aes(x=Method, ymin=AUC_Low, ymax=AUC_High), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Trait), vars(Ancestry)) + 
   ggtitle("Common Variants") + 
-#  ylim(0.45,1.05) + 
+  coord_cartesian(ylim=c(0.5,1)) + 
   ylab("AUC") + 
   theme_Publication() + 
   scale_fill_Publication()
