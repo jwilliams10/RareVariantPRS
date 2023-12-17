@@ -3,58 +3,58 @@ rm(list = ls())
 Burden <- vector()
 chr <- vector()
 threshold <- vector()
-for(i in 1:660){
+for(i in 1:990){
   
   arrayid <- i
   
-  if(arrayid>330){
+  if(arrayid>495){
     Burden[i] <- 1
-    arrayid <- arrayid - 330
+    arrayid <- arrayid - 495
   }else{
     Burden[i] <- 0
   }
   
-  if(arrayid <= 22){
+  if(arrayid <= 33){
     threshold[i] <- 1
-  }else if(arrayid <= 44){
-    threshold[i] <- 2
   }else if(arrayid <= 66){
+    threshold[i] <- 2
+  }else if(arrayid <= 99){
     threshold[i] <- 3
-  }else if(arrayid <= 88){
-    threshold[i] <- 4
-  }else if(arrayid <= 110){
-    threshold[i] <- 5
   }else if(arrayid <= 132){
-    threshold[i] <- 6
-  }else if(arrayid <= 154){
-    threshold[i] <- 7
-  }else if(arrayid <= 176){
-    threshold[i] <- 8
+    threshold[i] <- 4
+  }else if(arrayid <= 165){
+    threshold[i] <- 5
   }else if(arrayid <= 198){
-    threshold[i] <- 9
-  }else if(arrayid <= 220){
-    threshold[i] <- 10
-  }else if(arrayid <= 242){
-    threshold[i] <- 11
+    threshold[i] <- 6
+  }else if(arrayid <= 231){
+    threshold[i] <- 7
   }else if(arrayid <= 264){
+    threshold[i] <- 8
+  }else if(arrayid <= 297){
+    threshold[i] <- 9
+  }else if(arrayid <= 330){
+    threshold[i] <- 10
+  }else if(arrayid <= 363){
+    threshold[i] <- 11
+  }else if(arrayid <= 396){
     threshold[i] <- 12
-  }else if(arrayid <= 286){
+  }else if(arrayid <= 429){
     threshold[i] <- 13
-  }else if(arrayid <= 308){
+  }else if(arrayid <= 462){
     threshold[i] <- 14
   }else{
     threshold[i] <- 15
   }
   
-  chr[i] <- arrayid %% 22
-  if(chr[i] == 0){chr[i] <- 22}  
+  chunk <- arrayid %% 33
+  if(chunk == 0){chunk <- 33}
 }
 
-data_results <- data.frame(arrayid = 1:660,Burden = Burden, Threshold = threshold,Chr = chr)
+data_results <- data.frame(arrayid = 1:990,Burden = Burden, Threshold = threshold)
 
 rm(list = setdiff(ls(),"data_results"))
 
-trait <- "BMI"
+trait <- "Asthma"
 
 for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   obj_nullmodel_tune <- get(load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/nullmodels_staar/",trait,"_Tune_Null_Model.RData")))
