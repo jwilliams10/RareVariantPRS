@@ -15,6 +15,9 @@ ukb_pheno <- ukb_pheno[ukb_pheno$IID %in% sampleids_all[,1],]
 sampleids_all <- sampleids_all[sampleids_all[,1] %in% ukb_pheno$IID,,drop = FALSE]
 sampleids_all <- sampleids_all[sampleids_all[,1] %in% unrels_nRandomSNPs_0$V1,,drop = FALSE]
 
+sampleids_all <- sampleids_all[order(sampleids_all[,1]),,drop = FALSE]
+ukb_pheno <- ukb_pheno[order(ukb_pheno$IID),]
+
 set.seed(1335)
 
 i <- (1:nrow(sampleids_all))[ukb_pheno$ancestry == "EUR"]
@@ -27,7 +30,7 @@ train <- sample(i, train_number)
 i <- i[!(i %in% train)]
 
 tune <- sample(i, tune_val_number)
-validation <- c(i[!(i %in% tune)],(1:length(sampleids_all))[ukb_pheno$ancestry != "EUR"])
+validation <- c(i[!(i %in% tune)],(1:nrow(sampleids_all))[ukb_pheno$ancestry != "EUR"])
 
 train <- sampleids_all[train,]
 tune <- sampleids_all[tune,]

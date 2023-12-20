@@ -73,29 +73,51 @@ obj.bigSNP <- snp_attach("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/all_chr
 NCORES <-  1
 
 for(i in 1:22){
-  if(!file.exists(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".rds")) & !file.exists(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".bk"))){
-    file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".rds"))
-    file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".bk"))
-    snp_subset(obj.bigSNP,ind.row = 1:3000,ind.col = which(sumstats$chr == i),backingfile = paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i)) 
-  }
-  
+  file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".rds"))
+  file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".bk"))
+  snp_subset(obj.bigSNP,ind.row = 1:3000,ind.col = which(sumstats$chr == i),backingfile = paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i)) 
+}
+
+for(i in 1:22){
   obj.bigSNP_new <- snp_attach(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".rds"))
   
   map_new <- obj.bigSNP_new$map[-c(3)]
   names(map_new) <- c("chr", "rsid", "pos", "a0", "a1") # a1 - alt # c("chr", "pos", "a0", "a1")
-  map <- rbind(map,map_new)
-  
   
   G   <- obj.bigSNP_new$genotypes
   CHR <- obj.bigSNP_new$map$chromosome
   POS <- obj.bigSNP_new$map$physical.pos
   POS2 <- snp_asGeneticPos(CHR, POS, dir ="/data/williamsjacr/UKB_WES_Phenotypes/Continuous/LDPred2_Genetic_Mappings/", ncores = ncores)
   
-  if(i == 1){
+  corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
+  
+  if(anyNA(corr0@x)){
+    b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)
+    b <- as.numeric(names(table(b))[table(b) > 1])
+    
+    file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".rds"))
+    file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".bk"))
+    
+    snp_subset(obj.bigSNP_new,ind.row = 1:3000,ind.col = -b,backingfile = paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i))
+    
+    obj.bigSNP_new <- snp_attach(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_chr",i,".rds"))
+    
+    map_new <- obj.bigSNP_new$map[-c(3)]
+    names(map_new) <- c("chr", "rsid", "pos", "a0", "a1") # a1 - alt # c("chr", "pos", "a0", "a1")
+    
+    G   <- obj.bigSNP_new$genotypes
+    CHR <- obj.bigSNP_new$map$chromosome
+    POS <- obj.bigSNP_new$map$physical.pos
+    POS2 <- snp_asGeneticPos(CHR, POS, dir ="/data/williamsjacr/UKB_WES_Phenotypes/Continuous/LDPred2_Genetic_Mappings/", ncores = ncores)
+    
     corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
+  }
+  
+  map <- rbind(map,map_new)
+  
+  if(i == 1){
     corr <- as_SFBM(corr0, tempfile(), compact = TRUE)
   }else{
-    corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
     corr$add_columns(corr0, nrow(corr))
   }
 }
@@ -112,54 +134,6 @@ corr <- as_SFBM(as(corr, "generalMatrix"))
 
 
 
-# if(anyNA(corr0@x)){
-#   b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)  
-#   # b_list <- NULL
-#   # for(j in 1:nrow(b)){
-#   #   b_list <- c(b_list,b[j,])
-#   # }
-#   # b <- unique(b_list)
-#   # rm(b_list)
-#   b <- as.numeric(names(table(b))[table(b) > 2])
-#   
-#   b <- info_snp$`_NUM_ID_`[b]
-#   
-#   if(file.exists(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.rds"))){
-#     file.remove(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.rds"))
-#     file.remove(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.bk"))
-#   }
-#   
-#   snp_subset(obj.bigSNP,ind.row = 1:3000,ind.col = -b,backingfile = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i))
-#   
-#   obj.bigSNP <- snp_attach(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.rds"))
-#   map <- obj.bigSNP$map[-c(3)]
-#   names(map) <- c("chr", "rsid", "pos", "a0", "a1") # a1 - alt # c("chr", "pos", "a0", "a1")
-#   
-#   G   <- obj.bigSNP$genotypes
-#   CHR <- obj.bigSNP$map$chromosome
-#   POS <- obj.bigSNP$map$physical.pos
-#   POS2 <- snp_asGeneticPos(CHR, POS, dir ="/data/williamsjacr/UKB_WES_Simulation/Simulation1/LDPred2_Genetic_Mappings/", ncores = ncores)
-#   NCORES <-  1
-#   
-#   sumstats <- dat[,c('CHR', 'SNP_ID', 'POS', 'REF', 'ALT', 'BETA', 'SE', 'PVAL', 'N')]
-#   set.seed(2020)
-#   names(sumstats) <- c("chr", "rsid", "pos", "a0", "a1", "beta", "beta_se", "p", "n_eff")
-#   sumstats <- sumstats[sumstats$rsid %in% map$rsid,]
-#   
-#   info_snp <- snp_match(sumstats, map, strand_flip = T, join_by_pos = F) # important: for real data, strand_flip = T
-#   rownames(info_snp) = info_snp$rsid
-#   
-#   df_beta <- info_snp[, c("beta", "beta_se", "n_eff")]
-#   
-#   corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
-# }
-
-
-# Imputing fixes the problem
-# G2 = snp_fastImputeSimple(G)
-# corr0 <- snp_cor(G2, ind.col = ind.chr2,infos.pos = POS2[ind.chr2], size =  ldr)
-
-# corr <- as_SFBM(as(corr, "generalMatrix"))
 
 # Automatic model
 ldsc <- snp_ldsc2(corr, df_beta)
