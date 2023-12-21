@@ -58,49 +58,51 @@ PRS <- NULL
 arrayid <- as.numeric(commandArgs(TRUE)[1])
 arrayid_original <- arrayid
 
-if(arrayid>330){
+if(arrayid>495){
   Burden <- 1
-  arrayid <- arrayid - 330
+  arrayid <- arrayid - 495
 }else{
   Burden <- 0
 }
 
-if(arrayid <= 22){
+if(arrayid <= 33){
   threshold <- 1
-}else if(arrayid <= 44){
-  threshold <- 2
 }else if(arrayid <= 66){
+  threshold <- 2
+}else if(arrayid <= 99){
   threshold <- 3
-}else if(arrayid <= 88){
-  threshold <- 4
-}else if(arrayid <= 110){
-  threshold <- 5
 }else if(arrayid <= 132){
-  threshold <- 6
-}else if(arrayid <= 154){
-  threshold <- 7
-}else if(arrayid <= 176){
-  threshold <- 8
+  threshold <- 4
+}else if(arrayid <= 165){
+  threshold <- 5
 }else if(arrayid <= 198){
-  threshold <- 9
-}else if(arrayid <= 220){
-  threshold <- 10
-}else if(arrayid <= 242){
-  threshold <- 11
+  threshold <- 6
+}else if(arrayid <= 231){
+  threshold <- 7
 }else if(arrayid <= 264){
+  threshold <- 8
+}else if(arrayid <= 297){
+  threshold <- 9
+}else if(arrayid <= 330){
+  threshold <- 10
+}else if(arrayid <= 363){
+  threshold <- 11
+}else if(arrayid <= 396){
   threshold <- 12
-}else if(arrayid <= 286){
+}else if(arrayid <= 429){
   threshold <- 13
-}else if(arrayid <= 308){
+}else if(arrayid <= 462){
   threshold <- 14
 }else{
   threshold <- 15
 }
 
-chr <- arrayid %% 22
-if(chr == 0){chr <- 22}
+chunk <- arrayid %% 33
+if(chunk == 0){chunk <- 33}
 
-Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$Chr == chr,]
+chunks <- split(1:nrow(Train_Effect_Sizes_All),  cut(seq_along(1:nrow(Train_Effect_Sizes_All)), 33, labels = FALSE))
+
+Train_Effect_Sizes_All <- Train_Effect_Sizes_All[chunks[[chunk]],]
 
 if(Burden == 0){
   Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$STAAR_O <= thresholds[threshold],]

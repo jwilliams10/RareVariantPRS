@@ -49,9 +49,11 @@ Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
 ## Annotation channel
 Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/Annotation_name_catalog.Rdata"))
 
+chunks <- split(1:nrow(coding_sig),  cut(seq_along(1:nrow(coding_sig)), 200, labels = FALSE))
+
 arrayid <- as.numeric(commandArgs(TRUE)[1])
 
-coding_sig <- coding_sig[coding_sig$Chr == arrayid,]
+coding_sig <- coding_sig[chunks[[arrayid]],]
 
 effect_sizes <- NULL
 # effect_sizes_Jake <- NULL

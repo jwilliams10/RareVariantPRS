@@ -50,9 +50,11 @@ Annotation_name_catalog <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_D
 
 ###########################################################
 
+chunks <- split(1:nrow(noncoding_sig),  cut(seq_along(1:nrow(noncoding_sig)), 200, labels = FALSE))
+
 arrayid <- as.numeric(commandArgs(TRUE)[1])
 
-noncoding_sig <- noncoding_sig[noncoding_sig$Chr == arrayid,]
+noncoding_sig <- noncoding_sig[chunks[[arrayid]],]
 
 effect_sizes <- NULL
 for(i in 1:nrow(noncoding_sig)){

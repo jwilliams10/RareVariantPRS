@@ -45,9 +45,11 @@ variant_type <- "SNV"
 
 ###########################################################
 
+chunks <- split(1:nrow(sliding_window_sig),  cut(seq_along(1:nrow(sliding_window_sig)), 200, labels = FALSE))
+
 arrayid <- as.numeric(commandArgs(TRUE)[1])
 
-sliding_window_sig <- sliding_window_sig[sliding_window_sig$Chr == arrayid,]
+sliding_window_sig <- sliding_window_sig[chunks[[arrayid]],]
 
 effect_sizes <- NULL
 for(i in 1:nrow(sliding_window_sig)){

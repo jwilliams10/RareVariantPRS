@@ -3,7 +3,7 @@ rm(list = ls())
 trait <- "BMI"
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
-  for(i in 1:22){
+  for(i in 1:200){
     if(i == 1){
       sliding_window_sig <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/SlidingWindow/",trait,"_sliding_window_sig_chr",i,".csv"))
     }else{
