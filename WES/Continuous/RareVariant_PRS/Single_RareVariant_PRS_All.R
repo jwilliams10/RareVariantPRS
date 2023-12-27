@@ -222,25 +222,18 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
     }
     prs_best_tune <- data.frame(IID = pheno_tuning_STAARO$IID,prs = prs_best_tune)
     
-    write.table(prs_best_tune,file="/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/Best_All_STAARO_Tune_All.txt",sep = "\t",row.names = FALSE)
-    write.table(prs_best_validation,file="/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/Best_All_STAARO_Validation_All.txt",sep = "\t",row.names = FALSE)
-    
-    
-    
-    
-    
-    
-    
+    write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_Best_All_STAARO_Tune_All.txt"),sep = "\t",row.names = FALSE)
+    write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_Best_All_STAARO_Validation_All.txt"),sep = "\t",row.names = FALSE)
     
     load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
     
-    y_validation_EUR <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]]
-    y_validation_NonEUR <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]]
-    y_validation_UNK <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]]
-    y_validation_SAS <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]]
-    y_validation_MIX <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]]
-    y_validation_AFR <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]]
-    y_validation_EAS <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]]
+    pheno_vad_EUR <- pheno_vad_STAARO[pheno_vad_STAARO$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+    pheno_vad_NonEur <- pheno_vad_STAARO[pheno_vad_STAARO$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+    pheno_vad_UNK <- pheno_vad_STAARO[pheno_vad_STAARO$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+    pheno_vad_SAS <- pheno_vad_STAARO[pheno_vad_STAARO$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+    pheno_vad_MIX <- pheno_vad_STAARO[pheno_vad_STAARO$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+    pheno_vad_AFR <- pheno_vad_STAARO[pheno_vad_STAARO$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+    pheno_vad_EAS <- pheno_vad_STAARO[pheno_vad_STAARO$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
     
     prs_best_validation_EUR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
     prs_best_validation_NonEur <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
@@ -251,10 +244,12 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
     prs_best_validation_EAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
     
     ## bootstrap the R2 to provide an approximate distribution 
-    model <- lm(y_validation_EUR~prs_best_validation_EUR$prs)
-    r2 <- summary(model)$r.square
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_EUR)
+    prs <- prs_best_validation_EUR[!is.na(pheno_vad_EUR[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
     
-    data <- data.frame(y = y_validation_EUR, x = prs_best_validation_EUR$prs)
+    data <- data.frame(y = model.vad.null$residual, x = prs)
     R2Boot <- function(data,indices){
       boot_data <- data[indices, ]
       model <- lm(y ~ x, data = boot_data)
@@ -270,13 +265,15 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
                             r2_high = ci_result$percent[5]
     )
     
-    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_sl_result_All_Eur.RData"))
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_Eur_STAARO.RData"))
     
     ## bootstrap the R2 to provide an approximate distribution 
-    model <- lm(y_validation_NonEUR~prs_best_validation_NonEur$prs)
-    r2 <- summary(model)$r.square
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_NonEur)
+    prs <- prs_best_validation_NonEur[!is.na(pheno_vad_NonEur[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
     
-    data <- data.frame(y = y_validation_NonEUR, x = prs_best_validation_NonEur$prs)
+    data <- data.frame(y = model.vad.null$residual, x = prs)
     R2Boot <- function(data,indices){
       boot_data <- data[indices, ]
       model <- lm(y ~ x, data = boot_data)
@@ -292,13 +289,15 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
                             r2_high = ci_result$percent[5]
     )
     
-    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_sl_result_All_NonEur.RData"))
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_NonEur_STAARO.RData"))
     
     ## bootstrap the R2 to provide an approximate distribution 
-    model <- lm(y_validation_UNK~prs_best_validation_UNK$prs)
-    r2 <- summary(model)$r.square
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_UNK)
+    prs <- prs_best_validation_UNK[!is.na(pheno_vad_UNK[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
     
-    data <- data.frame(y = y_validation_UNK, x = prs_best_validation_UNK$prs)
+    data <- data.frame(y = model.vad.null$residual, x = prs)
     R2Boot <- function(data,indices){
       boot_data <- data[indices, ]
       model <- lm(y ~ x, data = boot_data)
@@ -314,13 +313,15 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
                             r2_high = ci_result$percent[5]
     )
     
-    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_sl_result_All_UNK.RData"))
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_UNK_STAARO.RData"))
     
     ## bootstrap the R2 to provide an approximate distribution 
-    model <- lm(y_validation_SAS~prs_best_validation_SAS$prs)
-    r2 <- summary(model)$r.square
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_SAS)
+    prs <- prs_best_validation_SAS[!is.na(pheno_vad_SAS[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
     
-    data <- data.frame(y = y_validation_SAS, x = prs_best_validation_SAS$prs)
+    data <- data.frame(y = model.vad.null$residual, x = prs)
     R2Boot <- function(data,indices){
       boot_data <- data[indices, ]
       model <- lm(y ~ x, data = boot_data)
@@ -336,13 +337,15 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
                             r2_high = ci_result$percent[5]
     )
     
-    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_sl_result_All_SAS.RData"))
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_SAS_STAARO.RData"))
     
     ## bootstrap the R2 to provide an approximate distribution 
-    model <- lm(y_validation_MIX~prs_best_validation_MIX$prs)
-    r2 <- summary(model)$r.square
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_MIX)
+    prs <- prs_best_validation_MIX[!is.na(pheno_vad_MIX[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
     
-    data <- data.frame(y = y_validation_MIX, x = prs_best_validation_MIX$prs)
+    data <- data.frame(y = model.vad.null$residual, x = prs)
     R2Boot <- function(data,indices){
       boot_data <- data[indices, ]
       model <- lm(y ~ x, data = boot_data)
@@ -358,13 +361,15 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
                             r2_high = ci_result$percent[5]
     )
     
-    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_sl_result_All_MIX.RData"))
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_MIX_STAARO.RData"))
     
     ## bootstrap the R2 to provide an approximate distribution 
-    model <- lm(y_validation_AFR~prs_best_validation_AFR$prs)
-    r2 <- summary(model)$r.square
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_AFR)
+    prs <- prs_best_validation_AFR[!is.na(pheno_vad_AFR[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
     
-    data <- data.frame(y = y_validation_AFR, x = prs_best_validation_AFR$prs)
+    data <- data.frame(y = model.vad.null$residual, x = prs)
     R2Boot <- function(data,indices){
       boot_data <- data[indices, ]
       model <- lm(y ~ x, data = boot_data)
@@ -380,13 +385,15 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
                             r2_high = ci_result$percent[5]
     )
     
-    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_sl_result_All_AFR.RData"))
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_AFR_STAARO.RData"))
     
     ## bootstrap the R2 to provide an approximate distribution 
-    model <- lm(y_validation_EAS~prs_best_validation_EAS$prs)
-    r2 <- summary(model)$r.square
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_EAS)
+    prs <- prs_best_validation_EAS[!is.na(pheno_vad_EAS[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
     
-    data <- data.frame(y = y_validation_EAS, x = prs_best_validation_EAS$prs)
+    data <- data.frame(y = model.vad.null$residual, x = prs)
     R2Boot <- function(data,indices){
       boot_data <- data[indices, ]
       model <- lm(y ~ x, data = boot_data)
@@ -402,34 +409,7 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
                             r2_high = ci_result$percent[5]
     )
     
-    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_sl_result_All_EAS.RData"))
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_EAS_STAARO.RData"))
     
   }else{
     ##### SL 
@@ -440,7 +420,7 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
       "SL.glm",
       "SL.mean"
     )
-    sl <- SuperLearner(Y = y_tune_Burden, X = Burden_Combined_Tune, family = gaussian(),
+    sl <- SuperLearner(Y = y_tune_STAARO, X = Burden_Combined_Tune, family = gaussian(),
                        # For a real analysis we would use V = 10.
                        # V = 3,
                        SL.library = SL.library)
@@ -484,33 +464,29 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
     #remove weight 0 coefficients
     final_coefs = final_coefs[final_coefs!=0]
     
-    save(final_coefs,file = "/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/final_coefs_All_Burden.RData")
-    
-    a <- predict(sl, Burden_Combined_Validation, onlySL = FALSE)
-    
-    prs_best_validation_sl <- a$pred
-    prs_best_validation_glmnet <- a$library.predict[,1]
-    prs_best_validation_ridge <- a$library.predict[,2]
-    prs_best_validation_glm <- a$library.predict[,3]
+    save(final_coefs,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_final_coefs_All_Burden.RData"))
     
     if(best_algorithm == "SL.glmnet_All"){
+      a <- predict(sl, Burden_Combined_Validation,onlySL = FALSE)
+      prs_best_validation_glmnet <- a$library.predict[,1]
       #final
       prs_best_validation <- prs_best_validation_glmnet
     }else if(best_algorithm == "SL.ridge_All"){
+      a <- predict(sl, Burden_Combined_Validation,onlySL = FALSE)
+      prs_best_validation_ridge <- a$library.predict[,2]
       #final
       prs_best_validation <- prs_best_validation_ridge
     }else if(best_algorithm == "SL.glm_All"){
+      a <- predict(sl, Burden_Combined_Validation,onlySL = FALSE)
+      prs_best_validation_glm <- a$library.predict[,3]
       #final
       prs_best_validation <- prs_best_validation_glm
     }else{
+      a <- predict(sl, Burden_Combined_Validation,onlySL = TRUE)
+      prs_best_validation_sl <- a$pred
       #final
       prs_best_validation <- prs_best_validation_sl
     }
-    
-    # prs_best_validation <- predict(sl, Burden_Combined_Validation, onlySL = FALSE)[[1]]
-    
-    model <- lm(y_vad_Burden~prs_best_validation)
-    r2 <- summary(model)$r.square
     
     prs_best_validation <- data.frame(IID = pheno_vad_Burden$IID,prs = prs_best_validation)
     
@@ -536,10 +512,34 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
     }
     prs_best_tune <- data.frame(IID = pheno_tuning_Burden$IID,prs = prs_best_tune)
     
-    write.table(prs_best_tune,file="/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/Best_All_Burden_Tune_All.txt",sep = "\t",row.names = FALSE)
-    write.table(prs_best_validation,file="/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/Best_All_Burden_Validation_All.txt",sep = "\t",row.names = FALSE)
+    write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_Best_All_Burden_Tune_All.txt"),sep = "\t",row.names = FALSE)
+    write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_Best_All_Burden_Validation_All.txt"),sep = "\t",row.names = FALSE)
     
-    data <- data.frame(y = y_vad_Burden, x = prs_best_validation$prs)
+    load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
+    
+    pheno_vad_EUR <- pheno_vad_Burden[pheno_vad_Burden$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+    pheno_vad_NonEur <- pheno_vad_Burden[pheno_vad_Burden$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+    pheno_vad_UNK <- pheno_vad_Burden[pheno_vad_Burden$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+    pheno_vad_SAS <- pheno_vad_Burden[pheno_vad_Burden$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+    pheno_vad_MIX <- pheno_vad_Burden[pheno_vad_Burden$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+    pheno_vad_AFR <- pheno_vad_Burden[pheno_vad_Burden$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+    pheno_vad_EAS <- pheno_vad_Burden[pheno_vad_Burden$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+    
+    prs_best_validation_EUR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+    prs_best_validation_NonEur <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+    prs_best_validation_UNK <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+    prs_best_validation_SAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+    prs_best_validation_MIX <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+    prs_best_validation_AFR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+    prs_best_validation_EAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+    
+    ## bootstrap the R2 to provide an approximate distribution 
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_EUR)
+    prs <- prs_best_validation_EUR[!is.na(pheno_vad_EUR[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
+    
+    data <- data.frame(y = model.vad.null$residual, x = prs)
     R2Boot <- function(data,indices){
       boot_data <- data[indices, ]
       model <- lm(y ~ x, data = boot_data)
@@ -549,12 +549,156 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
     boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
     
     ci_result <- boot.ci(boot_r2, type = "perc")
-    SL.result <- data.frame(method = "SL_Burden",
+    SL.result <- data.frame(method = "SL_Combined_Eur",
                             r2 = r2,
                             r2_low = ci_result$percent[4],
                             r2_high = ci_result$percent[5]
     )
     
-    save(SL.result,file = "/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/sl_result_All_Burden.RData")
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_Eur_Burden.RData"))
+    
+    ## bootstrap the R2 to provide an approximate distribution 
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_NonEur)
+    prs <- prs_best_validation_NonEur[!is.na(pheno_vad_NonEur[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
+    
+    data <- data.frame(y = model.vad.null$residual, x = prs)
+    R2Boot <- function(data,indices){
+      boot_data <- data[indices, ]
+      model <- lm(y ~ x, data = boot_data)
+      result <- summary(model)$r.square
+      return(c(result))
+    }
+    boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+    
+    ci_result <- boot.ci(boot_r2, type = "perc")
+    SL.result <- data.frame(method = "SL_Combined_NonEur",
+                            r2 = r2,
+                            r2_low = ci_result$percent[4],
+                            r2_high = ci_result$percent[5]
+    )
+    
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_NonEur_Burden.RData"))
+    
+    ## bootstrap the R2 to provide an approximate distribution 
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_UNK)
+    prs <- prs_best_validation_UNK[!is.na(pheno_vad_UNK[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
+    
+    data <- data.frame(y = model.vad.null$residual, x = prs)
+    R2Boot <- function(data,indices){
+      boot_data <- data[indices, ]
+      model <- lm(y ~ x, data = boot_data)
+      result <- summary(model)$r.square
+      return(c(result))
+    }
+    boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+    
+    ci_result <- boot.ci(boot_r2, type = "perc")
+    SL.result <- data.frame(method = "SL_Combined_UNK",
+                            r2 = r2,
+                            r2_low = ci_result$percent[4],
+                            r2_high = ci_result$percent[5]
+    )
+    
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_UNK_Burden.RData"))
+    
+    ## bootstrap the R2 to provide an approximate distribution 
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_SAS)
+    prs <- prs_best_validation_SAS[!is.na(pheno_vad_SAS[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
+    
+    data <- data.frame(y = model.vad.null$residual, x = prs)
+    R2Boot <- function(data,indices){
+      boot_data <- data[indices, ]
+      model <- lm(y ~ x, data = boot_data)
+      result <- summary(model)$r.square
+      return(c(result))
+    }
+    boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+    
+    ci_result <- boot.ci(boot_r2, type = "perc")
+    SL.result <- data.frame(method = "SL_Combined_SAS",
+                            r2 = r2,
+                            r2_low = ci_result$percent[4],
+                            r2_high = ci_result$percent[5]
+    )
+    
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_SAS_Burden.RData"))
+    
+    ## bootstrap the R2 to provide an approximate distribution 
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_MIX)
+    prs <- prs_best_validation_MIX[!is.na(pheno_vad_MIX[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
+    
+    data <- data.frame(y = model.vad.null$residual, x = prs)
+    R2Boot <- function(data,indices){
+      boot_data <- data[indices, ]
+      model <- lm(y ~ x, data = boot_data)
+      result <- summary(model)$r.square
+      return(c(result))
+    }
+    boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+    
+    ci_result <- boot.ci(boot_r2, type = "perc")
+    SL.result <- data.frame(method = "SL_Combined_MIX",
+                            r2 = r2,
+                            r2_low = ci_result$percent[4],
+                            r2_high = ci_result$percent[5]
+    )
+    
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_MIX_Burden.RData"))
+    
+    ## bootstrap the R2 to provide an approximate distribution 
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_AFR)
+    prs <- prs_best_validation_AFR[!is.na(pheno_vad_AFR[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
+    
+    data <- data.frame(y = model.vad.null$residual, x = prs)
+    R2Boot <- function(data,indices){
+      boot_data <- data[indices, ]
+      model <- lm(y ~ x, data = boot_data)
+      result <- summary(model)$r.square
+      return(c(result))
+    }
+    boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+    
+    ci_result <- boot.ci(boot_r2, type = "perc")
+    SL.result <- data.frame(method = "SL_Combined_AFR",
+                            r2 = r2,
+                            r2_low = ci_result$percent[4],
+                            r2_high = ci_result$percent[5]
+    )
+    
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_AFR_Burden.RData"))
+    
+    ## bootstrap the R2 to provide an approximate distribution 
+    model.vad.null  <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad_EAS)
+    prs <- prs_best_validation_EAS[!is.na(pheno_vad_EAS[,trait]),2]
+    model.vad.prs <- lm(model.vad.null$residual~prs)
+    r2 <- summary(model.vad.prs)$r.square
+    
+    data <- data.frame(y = model.vad.null$residual, x = prs)
+    R2Boot <- function(data,indices){
+      boot_data <- data[indices, ]
+      model <- lm(y ~ x, data = boot_data)
+      result <- summary(model)$r.square
+      return(c(result))
+    }
+    boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+    
+    ci_result <- boot.ci(boot_r2, type = "perc")
+    SL.result <- data.frame(method = "SL_Combined_EAS",
+                            r2 = r2,
+                            r2_low = ci_result$percent[4],
+                            r2_high = ci_result$percent[5]
+    )
+    
+    save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_EAS_Burden.RData"))
   }
 }

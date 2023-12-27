@@ -60,7 +60,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   obj_nullmodel_tune <- get(load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/nullmodels_staar/",trait,"_Tune_Null_Model.RData")))
   obj_nullmodel_validation <- get(load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/nullmodels_staar/",trait,"_Validation_Null_Model.RData")))
   
-  full <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricCoding/",trait,"_PRS_Array_330.csv"))
+  full <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricCoding/",trait,"_PRS_Array_495.csv"))
   
   idx_tune <- which(full$ID %in% obj_nullmodel_tune$id_include)
   idx_validation <- which(full$ID %in% obj_nullmodel_validation$id_include)
