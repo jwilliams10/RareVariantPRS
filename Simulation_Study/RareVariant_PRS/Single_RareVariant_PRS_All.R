@@ -4,6 +4,7 @@ library(ranger)
 library(SuperLearner)
 library(dplyr)
 library(boot)
+library(stringr)
 
 load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/phenotypes/Y_Tune.RData")
 
@@ -141,8 +142,12 @@ Burden_Combined_Validation <- pheno_vad_Burden[,-c(1:2)]
 model.null <- lm(Y~1,data=pheno_tuning_STAARO)
 y_tune_STAARO <- model.null$residual
 
+pheno_tuning_STAARO$y_tune <- y_tune_STAARO
+
 model.null <- lm(Y~1,data=pheno_tuning_Burden)
 y_tune_Burden <- model.null$residual
+
+pheno_tuning_Burden$y_tune <- y_tune_Burden
 
 model.null <- lm(Y~1,data=pheno_vad_STAARO)
 y_vad_STAARO <- model.null$residual
@@ -161,11 +166,11 @@ SL.library <- c(
 sl <- SuperLearner(Y = y_tune_STAARO, X = STAARO_Combined_Tune, family = gaussian(),
                    # For a real analysis we would use V = 10.
                    # V = 3,
-                   SL.library = SL.library)
+                   SL.library = SL.library,cvControl = list(V = 20))
 cvsl <- CV.SuperLearner(Y = y_tune_STAARO, X = STAARO_Combined_Tune, family = gaussian(),
                         # For a real analysis we would use V = 10.
                         # V = 3,
-                        SL.library = SL.library)
+                        SL.library = SL.library,cvControl = list(V = 20))
 
 best_algorithm <- summary(cvsl)$Table$Algorithm[which.min(summary(cvsl)$Table$Ave)]
 
@@ -213,6 +218,19 @@ if(best_algorithm == "SL.glmnet_All"){
   prs_best_tune <- prs_best_tune_sl
 }
 prs_best_tune <- data.frame(IID = pheno_tuning_STAARO$IID,prs = prs_best_tune)
+
+pheno_vad_STAARO <- left_join(pheno_vad_STAARO,prs_best_validation)
+pheno_tuning_STAARO <- left_join(pheno_tuning_STAARO,prs_best_tune)
+
+prs_columns <- c(which(str_detect(colnames(pheno_tuning_STAARO),"GeneCentric_Coding_")),which(str_detect(colnames(pheno_tuning_STAARO),"GeneCentric_Noncoding_")),which(str_detect(colnames(pheno_tuning_STAARO),"SlidingWindow_")),which(str_detect(colnames(pheno_tuning_STAARO),"prs")))
+
+r2_tune <- vector()
+for(j in 1:length(prs_columns)){
+  r2_tune[j] <- summary(lm(as.formula(paste0("y_tune ~",colnames(pheno_tuning_STAARO)[prs_columns[j]])),data = pheno_tuning_STAARO))$r.squared
+}
+prs_best_tune <- data.frame(IID = pheno_tuning_STAARO$IID,prs = pheno_tuning_STAARO[,colnames(pheno_tuning_STAARO)[prs_columns[which.max(r2_tune)]]])
+
+prs_best_validation <- data.frame(IID = pheno_vad_STAARO$IID,prs = pheno_vad_STAARO[,colnames(pheno_tuning_STAARO)[prs_columns[which.max(r2_tune)]]])
 
 write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_RareVariants_PRS/Best_All_STAARO_Tune_All",i,".txt"),sep = "\t",row.names = FALSE)
 write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_RareVariants_PRS/Best_All_STAARO_Validation_All",i,".txt"),sep = "\t",row.names = FALSE)
@@ -480,6 +498,19 @@ if(best_algorithm == "SL.glmnet_All"){
   prs_best_tune <- prs_best_tune_sl
 }
 prs_best_tune <- data.frame(IID = pheno_tuning_Burden$IID,prs = prs_best_tune)
+
+pheno_vad_Burden <- left_join(pheno_vad_Burden,prs_best_validation)
+pheno_tuning_Burden <- left_join(pheno_tuning_Burden,prs_best_tune)
+
+prs_columns <- c(which(str_detect(colnames(pheno_tuning_Burden),"GeneCentric_Coding_")),which(str_detect(colnames(pheno_tuning_Burden),"GeneCentric_Noncoding_")),which(str_detect(colnames(pheno_tuning_Burden),"SlidingWindow_")),which(str_detect(colnames(pheno_tuning_Burden),"prs")))
+
+r2_tune <- vector()
+for(j in 1:length(prs_columns)){
+  r2_tune[j] <- summary(lm(as.formula(paste0("y_tune ~",colnames(pheno_tuning_Burden)[prs_columns[j]])),data = pheno_tuning_Burden))$r.squared
+}
+prs_best_tune <- data.frame(IID = pheno_tuning_Burden$IID,prs = pheno_tuning_Burden[,colnames(pheno_tuning_Burden)[prs_columns[which.max(r2_tune)]]])
+
+prs_best_validation <- data.frame(IID = pheno_vad_Burden$IID,prs = pheno_vad_Burden[,colnames(pheno_tuning_Burden)[prs_columns[which.max(r2_tune)]]])
 
 write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_RareVariants_PRS/Best_All_Burden_Tune_All",i,".txt"),sep = "\t",row.names = FALSE)
 write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_RareVariants_PRS/Best_All_Burden_Validation_All",i,".txt"),sep = "\t",row.names = FALSE)

@@ -5,6 +5,7 @@ library(SuperLearner)
 library(dplyr)
 library(boot)
 library(RISCA)
+library(stringr)
 
 trait <- as.numeric(commandArgs(TRUE)[1])
 
@@ -103,11 +104,11 @@ SL.library <- c(
 sl <- SuperLearner(Y = pheno_tune[,trait], X = prs_tune_all, family = binomial(), method = "method.AUC",
                    # For a real analysis we would use V = 10.
                    # V = 3,
-                   SL.library = SL.library)
+                   SL.library = SL.library,cvControl = list(V = 20,stratifyCV = TRUE))
 cvsl <- CV.SuperLearner(Y = pheno_tune[,trait], X = prs_tune_all, family = binomial(), method = "method.AUC",
                         # For a real analysis we would use V = 10.
                         # V = 3,
-                        SL.library = SL.library)
+                        SL.library = SL.library,cvControl = list(V = 20,stratifyCV = TRUE))
 
 best_algorithm <- summary(cvsl)$Table$Algorithm[which.max(summary(cvsl)$Table$Ave)]
 
@@ -180,6 +181,39 @@ if(best_algorithm == "SL.glmnet_All"){
 }
 prs_best_tune <- data.frame(IID = pheno_tune$IID[!is.na(pheno_tune[,trait])],prs = prs_best_tune)
 
+pheno_train <- left_join(pheno_train,prs_best_train)
+pheno_validation <- left_join(pheno_validation,prs_best_validation)
+pheno_tune <- left_join(pheno_tune,prs_best_tune)
+
+if(trait %in% c("Breast","Prostate")){
+  confounders <- as.formula(paste0("~age+age2+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10"))
+}else{
+  confounders <- as.formula(paste0("~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10"))
+}
+
+prs_columns <- c(which(str_detect(colnames(pheno_tune),"CT_")),which(str_detect(colnames(pheno_tune),"LDPred2_")),which(str_detect(colnames(pheno_tune),"LASSOSum2_")),which(str_detect(colnames(pheno_tune),"prs")))
+
+auc_tune <- vector()
+for(i in 1:length(prs_columns)){
+  
+  auc_tune[i] <- roc.binary(status = trait,
+                            variable = colnames(pheno_tune)[prs_columns[i]],
+                            confounders = confounders,
+                            data = pheno_tune[!is.na(pheno_tune[,trait]),],
+                            precision=seq(0.05,0.95, by=0.05))$auc
+}
+prs_best_train <- data.frame(IID = pheno_train$IID,prs = pheno_train[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]])
+pheno_train <- pheno_train[,colnames(pheno_train) != "prs"]
+pheno_train <- left_join(pheno_train,prs_best_train)
+
+prs_best_tune <- data.frame(IID = pheno_tune$IID,prs = pheno_tune[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]])
+pheno_tune <- pheno_tune[,colnames(pheno_tune) != "prs"]
+pheno_tune <- left_join(pheno_tune,prs_best_tune)
+
+prs_best_validation <- data.frame(IID = pheno_validation$IID,prs = pheno_validation[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]])
+pheno_validation <- pheno_validation[,colnames(pheno_validation) != "prs"]
+pheno_validation <- left_join(pheno_validation,prs_best_validation)
+
 write.table(prs_best_train,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_Common_PRS/",trait,"_Best_Train_All.txt"),sep = "\t",row.names = FALSE)
 write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_Common_PRS/",trait,"_Best_Tune_All.txt"),sep = "\t",row.names = FALSE)
 write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_Common_PRS/",trait,"_Best_Validation_All.txt"),sep = "\t",row.names = FALSE)
@@ -193,28 +227,6 @@ pheno_vad_SAS <- pheno_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb
 pheno_vad_MIX <- pheno_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
 pheno_vad_AFR <- pheno_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 pheno_vad_EAS <- pheno_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
-
-prs_best_validation_EUR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-prs_best_validation_NonEur <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-prs_best_validation_UNK <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
-prs_best_validation_SAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-prs_best_validation_MIX <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
-prs_best_validation_AFR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
-prs_best_validation_EAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
-
-pheno_vad_EUR <- inner_join(pheno_vad_EUR,prs_best_validation_EUR)
-pheno_vad_NonEUR <- inner_join(pheno_vad_NonEUR,prs_best_validation_NonEur)
-pheno_vad_UNK <- inner_join(pheno_vad_UNK,prs_best_validation_UNK)
-pheno_vad_SAS <- inner_join(pheno_vad_SAS,prs_best_validation_SAS)
-pheno_vad_MIX <- inner_join(pheno_vad_MIX,prs_best_validation_MIX)
-pheno_vad_AFR <- inner_join(pheno_vad_AFR,prs_best_validation_AFR)
-pheno_vad_EAS <- inner_join(pheno_vad_EAS,prs_best_validation_EAS)
-
-if(trait %in% c("Breast","Prostate")){
-  confounders <- as.formula(paste0("~age+age2+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10"))
-}else{
-  confounders <- as.formula(paste0("~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10"))
-}
 
 ## bootstrap the AUC to provide an approximate distribution 
 d <- pheno_vad_EUR[!is.na(pheno_vad_EUR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","prs")]

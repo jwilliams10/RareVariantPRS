@@ -1109,38 +1109,38 @@ ggplot(overall_results_EUR[(overall_results_EUR$Scale == "Unscaled") & (overall_
   scale_fill_Publication()
 
 
-ggplot(overall_results_all[(overall_results_all$Scale == "Scaled") & (overall_results_all$Train_Size == "n = 45,767") & (overall_results_all$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
+ggplot(overall_results_all[(overall_results_all$Scale == "Scaled") & (overall_results_all$Train_Size == "n = 49,172") & (overall_results_all$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
   geom_bar( aes(x=Method, y=R2,fill=Method), stat="identity", alpha=0.7) +
   geom_errorbar( aes(x=Method, ymin=R2_Low, ymax=R2_High), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
-  ggtitle("Overall Results; Scaled G, n = 45,767") + 
+  ggtitle("Overall Results; Scaled G, n = 49,172") + 
   ylab(bquote("R"^"2")) + 
   theme_Publication() + 
   scale_fill_Publication()
 
-ggplot(overall_results_all[(overall_results_all$Scale == "Scaled") & (overall_results_all$Train_Size == "n = 91,534") & (overall_results_all$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
+ggplot(overall_results_all[(overall_results_all$Scale == "Scaled") & (overall_results_all$Train_Size == "n = 98,343") & (overall_results_all$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
   geom_bar( aes(x=Method, y=R2,fill=Method), stat="identity", alpha=0.7) +
   geom_errorbar( aes(x=Method, ymin=R2_Low, ymax=R2_High), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
-  ggtitle("Overall Results; Scaled G, n = 91,534") + 
+  ggtitle("Overall Results; Scaled G, n = 98,343") + 
   ylab(bquote("R"^"2")) + 
   theme_Publication() + 
   scale_fill_Publication()
 
-ggplot(overall_results_all[(overall_results_all$Scale == "Unscaled") & (overall_results_all$Train_Size == "n = 45,767") & (overall_results_all$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
+ggplot(overall_results_all[(overall_results_all$Scale == "Unscaled") & (overall_results_all$Train_Size == "n = 49,172") & (overall_results_all$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
   geom_bar( aes(x=Method, y=R2,fill=Method), stat="identity", alpha=0.7) +
   geom_errorbar( aes(x=Method, ymin=R2_Low, ymax=R2_High), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
-  ggtitle("Overall Results; Unscaled G, n = 45,767") + 
+  ggtitle("Overall Results; Unscaled G, n = 49,172") + 
   ylab(bquote("R"^"2")) + 
   theme_Publication() + 
   scale_fill_Publication()
 
-ggplot(overall_results_all[(overall_results_all$Scale == "Unscaled") & (overall_results_all$Train_Size == "n = 91,534") & (overall_results_all$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
+ggplot(overall_results_all[(overall_results_all$Scale == "Unscaled") & (overall_results_all$Train_Size == "n = 98,343") & (overall_results_all$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
   geom_bar( aes(x=Method, y=R2,fill=Method), stat="identity", alpha=0.7) +
   geom_errorbar( aes(x=Method, ymin=R2_Low, ymax=R2_High), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
-  ggtitle("Overall Results; Unscaled G, n = 91,534") + 
+  ggtitle("Overall Results; Unscaled G, n = 98,343") + 
   ylab(bquote("R"^"2")) + 
   theme_Publication() + 
   scale_fill_Publication()

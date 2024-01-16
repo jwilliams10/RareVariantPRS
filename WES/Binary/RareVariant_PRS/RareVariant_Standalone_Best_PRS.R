@@ -121,6 +121,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EUR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_EUR",
                                                       AUC = AUC_GeneCentric_Coding_STAARO,
                                                       AUC_low = ci_result$percent[4],
@@ -149,6 +150,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_NonEur, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_NonEur",
                                                        AUC = AUC_GeneCentric_Coding_STAARO,
                                                        AUC_low = ci_result$percent[4],
@@ -177,6 +179,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_EAS",
                                                        AUC = AUC_GeneCentric_Coding_STAARO,
                                                        AUC_low = ci_result$percent[4],
@@ -205,6 +208,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_AFR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_AFR",
                                                        AUC = AUC_GeneCentric_Coding_STAARO,
                                                        AUC_low = ci_result$percent[4],
@@ -233,6 +237,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_SAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_SAS",
                                                        AUC = AUC_GeneCentric_Coding_STAARO,
                                                        AUC_low = ci_result$percent[4],
@@ -261,6 +266,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_MIX, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_MIX",
                                                        AUC = AUC_GeneCentric_Coding_STAARO,
                                                        AUC_low = ci_result$percent[4],
@@ -289,6 +295,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_UNK, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_STAARO <- data.frame(method = "GeneCentric_Coding_STAARO_UNK",
                                                        AUC = AUC_GeneCentric_Coding_STAARO,
                                                        AUC_low = ci_result$percent[4],
@@ -333,6 +340,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EUR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_EUR",
                                                           AUC = AUC_GeneCentric_Noncoding_STAARO,
                                                           AUC_low = ci_result$percent[4],
@@ -361,6 +369,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_NonEur, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_NonEur",
                                                           AUC = AUC_GeneCentric_Noncoding_STAARO,
                                                           AUC_low = ci_result$percent[4],
@@ -389,6 +398,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_EAS",
                                                           AUC = AUC_GeneCentric_Noncoding_STAARO,
                                                           AUC_low = ci_result$percent[4],
@@ -417,6 +427,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_AFR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_AFR",
                                                           AUC = AUC_GeneCentric_Noncoding_STAARO,
                                                           AUC_low = ci_result$percent[4],
@@ -445,6 +456,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_SAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_SAS",
                                                           AUC = AUC_GeneCentric_Noncoding_STAARO,
                                                           AUC_low = ci_result$percent[4],
@@ -473,6 +485,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_MIX, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_MIX",
                                                           AUC = AUC_GeneCentric_Noncoding_STAARO,
                                                           AUC_low = ci_result$percent[4],
@@ -501,6 +514,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_UNK, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_STAARO <- data.frame(method = "GeneCentric_Noncoding_STAARO_UNK",
                                                           AUC = AUC_GeneCentric_Noncoding_STAARO,
                                                           AUC_low = ci_result$percent[4],
@@ -541,6 +555,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EUR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_EUR",
                                                   AUC = AUC_SlidingWindow_STAARO,
                                                   AUC_low = ci_result$percent[4],
@@ -569,6 +584,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_NonEur, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_NonEur",
                                                   AUC = AUC_SlidingWindow_STAARO,
                                                   AUC_low = ci_result$percent[4],
@@ -597,6 +613,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_EAS",
                                                   AUC = AUC_SlidingWindow_STAARO,
                                                   AUC_low = ci_result$percent[4],
@@ -625,6 +642,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_AFR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_AFR",
                                                   AUC = AUC_SlidingWindow_STAARO,
                                                   AUC_low = ci_result$percent[4],
@@ -653,6 +671,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_SAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_SAS",
                                                   AUC = AUC_SlidingWindow_STAARO,
                                                   AUC_low = ci_result$percent[4],
@@ -681,6 +700,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_MIX, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_MIX",
                                                   AUC = AUC_SlidingWindow_STAARO,
                                                   AUC_low = ci_result$percent[4],
@@ -709,6 +729,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_UNK, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_UNK",
                                                   AUC = AUC_SlidingWindow_STAARO,
                                                   AUC_low = ci_result$percent[4],
@@ -766,6 +787,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EUR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_EUR",
                                                        AUC = AUC_GeneCentric_Coding_Burden,
                                                        AUC_low = ci_result$percent[4],
@@ -794,6 +816,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_NonEur, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_NonEur",
                                                        AUC = AUC_GeneCentric_Coding_Burden,
                                                        AUC_low = ci_result$percent[4],
@@ -822,6 +845,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_EAS",
                                                        AUC = AUC_GeneCentric_Coding_Burden,
                                                        AUC_low = ci_result$percent[4],
@@ -850,6 +874,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_AFR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_AFR",
                                                        AUC = AUC_GeneCentric_Coding_Burden,
                                                        AUC_low = ci_result$percent[4],
@@ -878,6 +903,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_SAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_SAS",
                                                        AUC = AUC_GeneCentric_Coding_Burden,
                                                        AUC_low = ci_result$percent[4],
@@ -906,6 +932,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_MIX, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_MIX",
                                                        AUC = AUC_GeneCentric_Coding_Burden,
                                                        AUC_low = ci_result$percent[4],
@@ -934,6 +961,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_UNK, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Coding_Burden <- data.frame(method = "GeneCentric_Coding_Burden_UNK",
                                                        AUC = AUC_GeneCentric_Coding_Burden,
                                                        AUC_low = ci_result$percent[4],
@@ -978,6 +1006,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EUR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_EUR",
                                                           AUC = AUC_GeneCentric_Noncoding_Burden,
                                                           AUC_low = ci_result$percent[4],
@@ -1006,6 +1035,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_NonEur, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_NonEur",
                                                           AUC = AUC_GeneCentric_Noncoding_Burden,
                                                           AUC_low = ci_result$percent[4],
@@ -1034,6 +1064,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_EAS",
                                                           AUC = AUC_GeneCentric_Noncoding_Burden,
                                                           AUC_low = ci_result$percent[4],
@@ -1062,6 +1093,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_AFR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_AFR",
                                                           AUC = AUC_GeneCentric_Noncoding_Burden,
                                                           AUC_low = ci_result$percent[4],
@@ -1090,6 +1122,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_SAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_SAS",
                                                           AUC = AUC_GeneCentric_Noncoding_Burden,
                                                           AUC_low = ci_result$percent[4],
@@ -1118,6 +1151,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_MIX, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_MIX",
                                                           AUC = AUC_GeneCentric_Noncoding_Burden,
                                                           AUC_low = ci_result$percent[4],
@@ -1146,6 +1180,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_UNK, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_GeneCentric_Noncoding_Burden <- data.frame(method = "GeneCentric_Noncoding_Burden_UNK",
                                                           AUC = AUC_GeneCentric_Noncoding_Burden,
                                                           AUC_low = ci_result$percent[4],
@@ -1186,6 +1221,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EUR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_EUR",
                                                   AUC = AUC_SlidingWindow_Burden,
                                                   AUC_low = ci_result$percent[4],
@@ -1214,6 +1250,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_NonEur, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_NonEur",
                                                   AUC = AUC_SlidingWindow_Burden,
                                                   AUC_low = ci_result$percent[4],
@@ -1242,6 +1279,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_EAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_EAS",
                                                   AUC = AUC_SlidingWindow_Burden,
                                                   AUC_low = ci_result$percent[4],
@@ -1270,6 +1308,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_AFR, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_AFR",
                                                   AUC = AUC_SlidingWindow_Burden,
                                                   AUC_low = ci_result$percent[4],
@@ -1298,6 +1337,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_SAS, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_SAS",
                                                   AUC = AUC_SlidingWindow_Burden,
                                                   AUC_low = ci_result$percent[4],
@@ -1326,6 +1366,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_MIX, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_MIX",
                                                   AUC = AUC_SlidingWindow_Burden,
                                                   AUC_low = ci_result$percent[4],
@@ -1354,6 +1395,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = pheno_vad_UNK, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_UNK",
                                                   AUC = AUC_SlidingWindow_Burden,
                                                   AUC_low = ci_result$percent[4],

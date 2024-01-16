@@ -3,7 +3,9 @@ library(caret)
 library(ranger)
 library(SuperLearner)
 library(dplyr)
+library(RISCA)
 library(boot)
+library(stringr)
 
 trait <- "Asthma"
 
@@ -126,11 +128,11 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     sl <- SuperLearner(Y = pheno_tuning_STAARO[,trait], X = STAARO_Combined_Tune, family = binomial(), method = "method.AUC",
                        # For a real analysis we would use V = 10.
                        # V = 3,
-                       SL.library = SL.library)
+                       SL.library = SL.library,cvControl = list(V = 20,stratifyCV = TRUE))
     cvsl <- CV.SuperLearner(Y = pheno_tuning_STAARO[,trait], X = STAARO_Combined_Tune, family = binomial(), method = "method.AUC",
                             # For a real analysis we would use V = 10.
                             # V = 3,
-                            SL.library = SL.library)
+                            SL.library = SL.library,cvControl = list(V = 20,stratifyCV = TRUE))
     
     best_algorithm <- summary(cvsl)$Table$Algorithm[which.max(summary(cvsl)$Table$Ave)]
     
@@ -201,6 +203,28 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     }
     prs_best_tune <- data.frame(IID = pheno_tuning_STAARO$IID,prs = prs_best_tune)
     
+    pheno_vad_STAARO <- left_join(pheno_vad_STAARO,prs_best_validation)
+    pheno_tuning_STAARO <- left_join(pheno_tuning_STAARO,prs_best_tune)
+    
+    prs_columns <- c(which(str_detect(colnames(pheno_tuning_STAARO),"GeneCentric_Coding_")),which(str_detect(colnames(pheno_tuning_STAARO),"GeneCentric_Noncoding_")),which(str_detect(colnames(pheno_tuning_STAARO),"SlidingWindow_")),which(str_detect(colnames(pheno_tuning_STAARO),"prs")))
+    
+    auc_tune <- vector()
+    for(i in 1:length(prs_columns)){
+      
+      auc_tune[i] <- roc.binary(status = trait,
+                                variable = colnames(pheno_tuning_STAARO)[prs_columns[i]],
+                                confounders = confounders,
+                                data = pheno_tuning_STAARO[!is.na(pheno_tuning_STAARO[,trait]),],
+                                precision=seq(0.05,0.95, by=0.05))$auc
+    }
+    prs_best_tune <- data.frame(IID = pheno_tuning_STAARO$IID,prs = pheno_tuning_STAARO[,colnames(pheno_tuning_STAARO)[prs_columns[which.max(auc_tune)]]])
+    pheno_tuning_STAARO <- pheno_tuning_STAARO[,colnames(pheno_tuning_STAARO) != "prs"]
+    pheno_tuning_STAARO <- left_join(pheno_tuning_STAARO,prs_best_tune)
+    
+    prs_best_validation <- data.frame(IID = pheno_vad_STAARO$IID,prs = pheno_vad_STAARO[,colnames(pheno_tuning_STAARO)[prs_columns[which.max(auc_tune)]]])
+    pheno_vad_STAARO <- pheno_vad_STAARO[,colnames(pheno_vad_STAARO) != "prs"]
+    pheno_vad_STAARO <- left_join(pheno_vad_STAARO,prs_best_validation)
+    
     write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_Best_All_STAARO_Tune_All.txt"),sep = "\t",row.names = FALSE)
     write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_Best_All_STAARO_Validation_All.txt"),sep = "\t",row.names = FALSE)
     
@@ -213,22 +237,6 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     pheno_vad_MIX <- pheno_vad_STAARO[pheno_vad_STAARO$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
     pheno_vad_AFR <- pheno_vad_STAARO[pheno_vad_STAARO$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
     pheno_vad_EAS <- pheno_vad_STAARO[pheno_vad_STAARO$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
-    
-    prs_best_validation_EUR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-    prs_best_validation_NonEur <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-    prs_best_validation_UNK <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
-    prs_best_validation_SAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-    prs_best_validation_MIX <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
-    prs_best_validation_AFR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
-    prs_best_validation_EAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
-    
-    pheno_vad_EUR <- inner_join(pheno_vad_EUR,prs_best_validation_EUR)
-    pheno_vad_NonEUR <- inner_join(pheno_vad_NonEur,prs_best_validation_NonEur)
-    pheno_vad_UNK <- inner_join(pheno_vad_UNK,prs_best_validation_UNK)
-    pheno_vad_SAS <- inner_join(pheno_vad_SAS,prs_best_validation_SAS)
-    pheno_vad_MIX <- inner_join(pheno_vad_MIX,prs_best_validation_MIX)
-    pheno_vad_AFR <- inner_join(pheno_vad_AFR,prs_best_validation_AFR)
-    pheno_vad_EAS <- inner_join(pheno_vad_EAS,prs_best_validation_EAS)
     
     ## bootstrap the R2 to provide an approximate distribution 
     d <- pheno_vad_EUR[!is.na(pheno_vad_EUR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","prs")]
@@ -251,7 +259,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_STAARO_EUR",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_EUR",
                                                        AUC = AUC,
                                                        AUC_low = ci_result$percent[4],
                                                        AUC_high = ci_result$percent[5]
@@ -280,7 +289,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_STAARO_NonEUR",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_NonEUR",
                                                        AUC = AUC,
                                                        AUC_low = ci_result$percent[4],
                                                        AUC_high = ci_result$percent[5]
@@ -309,7 +319,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_STAARO_UNK",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_UNK",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]
@@ -338,7 +349,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_STAARO_SAS",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_SAS",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]
@@ -367,7 +379,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_STAARO_MIX",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_MIX",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]
@@ -396,7 +409,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_STAARO_AFR",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_AFR",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]
@@ -425,7 +439,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_STAARO_EAS",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_EAS",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]
@@ -441,7 +456,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
       "SL.glm",
       "SL.mean"
     )
-    sl <- SuperLearner(Y = pheno_tuning_Burden[,trait], X = Rar, family = binomial(), method = "method.AUC",
+    sl <- SuperLearner(Y = pheno_tuning_Burden[,trait], X = Burden_Combined_Tune, family = binomial(), method = "method.AUC",
                        # For a real analysis we would use V = 10.
                        # V = 3,
                        SL.library = SL.library)
@@ -519,6 +534,28 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     }
     prs_best_tune <- data.frame(IID = pheno_tuning_Burden$IID,prs = prs_best_tune)
     
+    pheno_vad_Burden <- left_join(pheno_vad_Burden,prs_best_validation)
+    pheno_tuning_Burden <- left_join(pheno_tuning_Burden,prs_best_tune)
+    
+    prs_columns <- c(which(str_detect(colnames(pheno_tuning_Burden),"GeneCentric_Coding_")),which(str_detect(colnames(pheno_tuning_Burden),"GeneCentric_Noncoding_")),which(str_detect(colnames(pheno_tuning_Burden),"SlidingWindow_")),which(str_detect(colnames(pheno_tuning_Burden),"prs")))
+    
+    auc_tune <- vector()
+    for(i in 1:length(prs_columns)){
+      
+      auc_tune[i] <- roc.binary(status = trait,
+                                variable = colnames(pheno_tuning_Burden)[prs_columns[i]],
+                                confounders = confounders,
+                                data = pheno_tuning_Burden[!is.na(pheno_tuning_Burden[,trait]),],
+                                precision=seq(0.05,0.95, by=0.05))$auc
+    }
+    prs_best_tune <- data.frame(IID = pheno_tuning_Burden$IID,prs = pheno_tuning_Burden[,colnames(pheno_tuning_Burden)[prs_columns[which.max(auc_tune)]]])
+    pheno_tuning_Burden <- pheno_tuning_Burden[,colnames(pheno_tuning_Burden) != "prs"]
+    pheno_tuning_Burden <- left_join(pheno_tuning_Burden,prs_best_tune)
+    
+    prs_best_validation <- data.frame(IID = pheno_vad_Burden$IID,prs = pheno_vad_Burden[,colnames(pheno_tuning_Burden)[prs_columns[which.max(auc_tune)]]])
+    pheno_vad_Burden <- pheno_vad_Burden[,colnames(pheno_vad_Burden) != "prs"]
+    pheno_vad_Burden <- left_join(pheno_vad_Burden,prs_best_validation)
+    
     write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_Best_All_Burden_Tune_All.txt"),sep = "\t",row.names = FALSE)
     write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_Best_All_Burden_Validation_All.txt"),sep = "\t",row.names = FALSE)
     
@@ -531,22 +568,6 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     pheno_vad_MIX <- pheno_vad_Burden[pheno_vad_Burden$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
     pheno_vad_AFR <- pheno_vad_Burden[pheno_vad_Burden$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
     pheno_vad_EAS <- pheno_vad_Burden[pheno_vad_Burden$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
-    
-    prs_best_validation_EUR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-    prs_best_validation_NonEur <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-    prs_best_validation_UNK <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
-    prs_best_validation_SAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-    prs_best_validation_MIX <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
-    prs_best_validation_AFR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
-    prs_best_validation_EAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
-    
-    pheno_vad_EUR <- inner_join(pheno_vad_EUR,prs_best_validation_EUR)
-    pheno_vad_NonEUR <- inner_join(pheno_vad_NonEur,prs_best_validation_NonEur)
-    pheno_vad_UNK <- inner_join(pheno_vad_UNK,prs_best_validation_UNK)
-    pheno_vad_SAS <- inner_join(pheno_vad_SAS,prs_best_validation_SAS)
-    pheno_vad_MIX <- inner_join(pheno_vad_MIX,prs_best_validation_MIX)
-    pheno_vad_AFR <- inner_join(pheno_vad_AFR,prs_best_validation_AFR)
-    pheno_vad_EAS <- inner_join(pheno_vad_EAS,prs_best_validation_EAS)
     
     ## bootstrap the R2 to provide an approximate distribution 
     d <- pheno_vad_EUR[!is.na(pheno_vad_EUR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","prs")]
@@ -569,7 +590,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_Burden_EUR",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_EUR",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]
@@ -598,7 +620,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_Burden_NonEUR",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_NonEUR",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]
@@ -627,7 +650,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_Burden_UNK",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_UNK",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]
@@ -656,7 +680,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_Burden_SAS",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_SAS",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]
@@ -685,7 +710,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_Burden_MIX",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_MIX",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]
@@ -714,7 +740,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_Burden_AFR",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_AFR",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]
@@ -743,7 +770,8 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
     
     ci_result <- boot.ci(boot_AUC, type = "perc")
-    SL.result <- data.frame(method = "GeneCentric_Coding_Burden_EAS",
+    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    SL.result <- data.frame(method = "SL_Combined_EAS",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
                             AUC_high = ci_result$percent[5]

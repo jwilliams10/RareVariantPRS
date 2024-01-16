@@ -1,8 +1,8 @@
 #!/bin/bash --login
 #SBATCH -n 1
 #SBATCH -N 1
-#SBATCH --time=144:00:00
-#SBATCH --array=1-200
+#SBATCH --time=48:00:00
+#SBATCH --array=79,80,162,163
 #SBATCH --mem-per-cpu=30G
 
 # module purge

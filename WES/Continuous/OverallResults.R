@@ -460,10 +460,21 @@ ggplot(rare) +
 paper <- results[results$method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"),]
 paper$method <- factor(paper$method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"))
 
-ggplot(paper) +
+ggplot(paper[!(paper$Ancestry %in% c("UNK","NonEUR")),]) +
   geom_bar(aes(x=method, y=r2,fill=method), stat="identity", alpha=0.7) +
-  geom_errorbar( aes(x=method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
+  # geom_errorbar( aes(x=method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Trait), vars(Ancestry)) + 
+  ggtitle("Paper Plot") + 
+  ylab(bquote("R"^"2")) + 
+  theme_Publication() + 
+  scale_fill_Publication()
+
+# Max 5, no error bars.
+
+ggplot(paper[paper$Ancestry == "EUR" & paper$Trait == "HDL",]) +
+  geom_bar(aes(x=method, y=r2,fill=method), stat="identity", alpha=0.7) +
+#  geom_errorbar( aes(x=method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
+#  facet_grid(vars(Trait), vars(Ancestry)) + 
   ggtitle("Paper Plot") + 
   ylab(bquote("R"^"2")) + 
   theme_Publication() + 

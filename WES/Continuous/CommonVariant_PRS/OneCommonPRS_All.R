@@ -4,6 +4,7 @@ library(ranger)
 library(SuperLearner)
 library(dplyr)
 library(boot)
+library(stringr)
 
 trait <- as.numeric(commandArgs(TRUE)[1])
 
@@ -100,6 +101,8 @@ prs_tune_all = prs_tune_all %>%
 prs_validation_all = prs_validation_all %>% 
   select(-all_of(drop))
 
+pheno_tune$y_tune <- NA
+pheno_tune$y_tune[!is.na(pheno_tune[,trait])] <- y_tune
 
 ## SL
 
@@ -112,11 +115,11 @@ SL.library <- c(
 sl <- SuperLearner(Y = y_tune, X = prs_tune_all, family = gaussian(),
                    # For a real analysis we would use V = 10.
                    # V = 3,
-                   SL.library = SL.library)
+                   SL.library = SL.library,cvControl = list(V = 20))
 cvsl <- CV.SuperLearner(Y = y_tune, X = prs_tune_all, family = gaussian(),
                         # For a real analysis we would use V = 10.
                         # V = 3,
-                        SL.library = SL.library)
+                        SL.library = SL.library,cvControl = list(V = 20))
 
 best_algorithm <- summary(cvsl)$Table$Algorithm[which.min(summary(cvsl)$Table$Ave)]
 
@@ -188,6 +191,22 @@ if(best_algorithm == "SL.glmnet_All"){
   prs_best_tune <- prs_best_tune_sl
 }
 prs_best_tune <- data.frame(IID = pheno_tune$IID[!is.na(pheno_tune[,trait])],prs = prs_best_tune)
+
+pheno_train <- left_join(pheno_train,prs_best_train)
+pheno_validation <- left_join(pheno_validation,prs_best_validation)
+pheno_tune <- left_join(pheno_tune,prs_best_tune)
+
+prs_columns <- c(which(str_detect(colnames(pheno_tune),"CT_")),which(str_detect(colnames(pheno_tune),"LDPred2_")),which(str_detect(colnames(pheno_tune),"LASSOSum2_")),which(str_detect(colnames(pheno_tune),"prs")))
+
+r2_tune <- vector()
+for(i in 1:length(prs_columns)){
+  r2_tune[i] <- summary(lm(as.formula(paste0("y_tune ~",colnames(pheno_tune)[prs_columns[i]])),data = pheno_tune))$r.squared
+}
+prs_best_train <- data.frame(IID = pheno_train$IID,prs = pheno_train[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
+
+prs_best_tune <- data.frame(IID = pheno_tune$IID,prs = pheno_tune[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
+
+prs_best_validation <- data.frame(IID = pheno_validation$IID,prs = pheno_validation[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
 
 write.table(prs_best_train,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_Best_Train_All.txt"),sep = "\t",row.names = FALSE)
 write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_Best_Tune_All.txt"),sep = "\t",row.names = FALSE)

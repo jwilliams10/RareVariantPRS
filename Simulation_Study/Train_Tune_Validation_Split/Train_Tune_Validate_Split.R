@@ -14,15 +14,25 @@ ukb_pheno <- ukb_pheno[ukb_pheno$IID %in% sampleids_all,]
 
 i <- (1:length(sampleids_all))[ukb_pheno$ancestry == "EUR"]
 
-train_number <- round(length(i)*0.7) + 1
-tune_val_number <- round(length(i)*0.15)
-
+train_number <- round(length(sampleids_all)*0.7) + 1
 train <- sample(i, train_number)
 
-i <- i[!(i %in% train)]
+i <- (1:length(sampleids_all))[!((1:length(sampleids_all)) %in% train)]
+i_EUR <- i[ukb_pheno$ancestry[i] == "EUR"]
+i_AFR <- i[ukb_pheno$ancestry[i] == "AFR"]
+i_SAS <- i[ukb_pheno$ancestry[i] == "SAS"]
+i_EAS <- i[ukb_pheno$ancestry[i] == "EAS"]
+i_MIX <- i[ukb_pheno$ancestry[i] == "MIX"]
+i_UNK <- i[ukb_pheno$ancestry[i] == "UNK"]
 
-tune <- sample(i, tune_val_number)
-validation <- c(i[!(i %in% tune)],(1:length(sampleids_all))[ukb_pheno$ancestry != "EUR"])
+tune <- c(sample(i_EUR,round(length(i_EUR)/2)),
+          sample(i_AFR,round(length(i_AFR)/2)),
+          sample(i_SAS,round(length(i_SAS)/2)),
+          sample(i_EAS,round(length(i_EAS)/2)),
+          sample(i_MIX,round(length(i_MIX)/2)),
+          sample(i_UNK,round(length(i_UNK)/2)))
+
+validation <- i[!(i %in% tune)]
 
 train <- sampleids_all[train]
 tune <- sampleids_all[tune]
@@ -83,15 +93,25 @@ ukb_pheno <- ukb_pheno[ukb_pheno$IID %in% sampleids_all,]
 
 i <- (1:length(sampleids_all))[ukb_pheno$ancestry == "EUR"]
 
-train_number <- round(length(i)*0.35) + 1
-tune_val_number <- round(length(i)*0.325)
-
+train_number <- round(length(sampleids_all)*0.35) + 1
 train <- sample(i, train_number)
 
-i <- i[!(i %in% train)]
+i <- (1:length(sampleids_all))[!((1:length(sampleids_all)) %in% train)]
+i_EUR <- i[ukb_pheno$ancestry[i] == "EUR"]
+i_AFR <- i[ukb_pheno$ancestry[i] == "AFR"]
+i_SAS <- i[ukb_pheno$ancestry[i] == "SAS"]
+i_EAS <- i[ukb_pheno$ancestry[i] == "EAS"]
+i_MIX <- i[ukb_pheno$ancestry[i] == "MIX"]
+i_UNK <- i[ukb_pheno$ancestry[i] == "UNK"]
 
-tune <- sample(i, tune_val_number)
-validation <- c(i[!(i %in% tune)],(1:length(sampleids_all))[ukb_pheno$ancestry != "EUR"])
+tune <- c(sample(i_EUR,round(length(i_EUR)/2)),
+          sample(i_AFR,round(length(i_AFR)/2)),
+          sample(i_SAS,round(length(i_SAS)/2)),
+          sample(i_EAS,round(length(i_EAS)/2)),
+          sample(i_MIX,round(length(i_MIX)/2)),
+          sample(i_UNK,round(length(i_UNK)/2)))
+
+validation <- i[!(i %in% tune)]
 
 train <- sampleids_all[train]
 tune <- sampleids_all[tune]

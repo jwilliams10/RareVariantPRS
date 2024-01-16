@@ -74,16 +74,8 @@ df_beta <- info_snp[, c("beta", "beta_se", "n_eff")]
 corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
 
 if(anyNA(corr0@x)){
-  b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)  
-  # b_list <- NULL
-  # for(j in 1:nrow(b)){
-  #   b_list <- c(b_list,b[j,])
-  # }
-  # b <- unique(b_list)
-  # rm(b_list)
+  b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)
   b <- as.numeric(names(table(b))[table(b) > 2])
-  
-  b <- info_snp$`_NUM_ID_`[b]
   
   if(file.exists(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i,".rds"))){
     file.remove(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i,".rds"))
@@ -113,6 +105,39 @@ if(anyNA(corr0@x)){
   df_beta <- info_snp[, c("beta", "beta_se", "n_eff")]
   
   corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
+  if(anyNA(corr0@x)){
+    b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)
+    b <- as.numeric(names(table(b))[table(b) > 1])
+    
+    if(file.exists(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i,".rds"))){
+      file.remove(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i,".rds"))
+      file.remove(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i,".bk"))
+    }
+    
+    snp_subset(obj.bigSNP,ind.row = 1:3000,ind.col = -b,backingfile = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i))
+    
+    obj.bigSNP <- snp_attach(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference",i,".rds"))
+    map <- obj.bigSNP$map[-c(3)]
+    names(map) <- c("chr", "rsid", "pos", "a0", "a1") # a1 - alt # c("chr", "pos", "a0", "a1")
+    
+    G   <- obj.bigSNP$genotypes
+    CHR <- obj.bigSNP$map$chromosome
+    POS <- obj.bigSNP$map$physical.pos
+    POS2 <- snp_asGeneticPos(CHR, POS, dir ="/data/williamsjacr/UKB_WES_Simulation/Simulation1/LDPred2_Genetic_Mappings/", ncores = ncores)
+    NCORES <-  1
+    
+    sumstats <- dat[,c('CHR', 'SNP_ID', 'POS', 'REF', 'ALT', 'BETA', 'SE', 'PVAL', 'N')]
+    set.seed(2020)
+    names(sumstats) <- c("chr", "rsid", "pos", "a0", "a1", "beta", "beta_se", "p", "n_eff")
+    sumstats <- sumstats[sumstats$rsid %in% map$rsid,]
+    
+    info_snp <- snp_match(sumstats, map, strand_flip = T, join_by_pos = F) # important: for real data, strand_flip = T
+    rownames(info_snp) = info_snp$rsid
+    
+    df_beta <- info_snp[, c("beta", "beta_se", "n_eff")]
+    
+    corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
+  }
 }
 
 
