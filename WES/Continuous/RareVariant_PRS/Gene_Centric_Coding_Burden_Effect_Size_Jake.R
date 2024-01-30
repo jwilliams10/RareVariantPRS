@@ -12,18 +12,15 @@ Gene_Centric_Coding_Burden_Effect_Size_Jake <- function(chr,gene_name,category=c
   phenotype.id <- as.character(obj_nullmodel$id_include)
   ## get SNV id, position, REF, ALT (whole genome)
   filter <- seqGetData(genofile, QC_label)
-  if(variant_type=="variant")
-  {
+  if(variant_type=="variant"){
     SNVlist <- filter == "PASS"
   }
   
-  if(variant_type=="SNV")
-  {
+  if(variant_type=="SNV"){
     SNVlist <- (filter == "PASS") & isSNV(genofile)
   }
   
-  if(variant_type=="Indel")
-  {
+  if(variant_type=="Indel"){
     SNVlist <- (filter == "PASS") & (!isSNV(genofile))
   }
   
