@@ -7,7 +7,7 @@ library(RISCA)
 library(boot)
 library(stringr)
 
-trait <- "Asthma"
+trait <- "CAD"
 
 for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   STAARO_GeneCentric_Coding_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricCoding/",trait,"_STAARO_GeneCentric_Coding_Tune_PRS.csv"))
@@ -16,18 +16,18 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   STAARO_GeneCentric_Noncoding_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricNoncoding/",trait,"_STAARO_GeneCentric_Noncoding_Tune_PRS.csv"))
   STAARO_GeneCentric_Noncoding_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricNoncoding/",trait,"_STAARO_GeneCentric_Noncoding_Validation_PRS.csv"))
   
-  STAARO_SlidingWindow_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_STAARO_SlidingWindow_Tune_PRS.csv"))
-  STAARO_SlidingWindow_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_STAARO_SlidingWindow_Validation_PRS.csv"))
-  
+  # STAARO_SlidingWindow_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_STAARO_SlidingWindow_Tune_PRS.csv"))
+  # STAARO_SlidingWindow_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_STAARO_SlidingWindow_Validation_PRS.csv"))
+  # 
   colnames(STAARO_GeneCentric_Coding_Tune_PRS) <- c(colnames(STAARO_GeneCentric_Coding_Tune_PRS)[1],paste0("GeneCentric_Coding_",colnames(STAARO_GeneCentric_Coding_Tune_PRS)[2:ncol(STAARO_GeneCentric_Coding_Tune_PRS)]))
   colnames(STAARO_GeneCentric_Noncoding_Tune_PRS) <- c(colnames(STAARO_GeneCentric_Noncoding_Tune_PRS)[1],paste0("GeneCentric_Noncoding_",colnames(STAARO_GeneCentric_Noncoding_Tune_PRS)[2:ncol(STAARO_GeneCentric_Noncoding_Tune_PRS)]))
-  colnames(STAARO_SlidingWindow_Tune_PRS) <- c(colnames(STAARO_SlidingWindow_Tune_PRS)[1],paste0("SlidingWindow_",colnames(STAARO_SlidingWindow_Tune_PRS)[2:ncol(STAARO_SlidingWindow_Tune_PRS)]))
-  STAARO_Combined_Tune <- cbind(STAARO_GeneCentric_Coding_Tune_PRS,STAARO_GeneCentric_Noncoding_Tune_PRS[,-1],STAARO_SlidingWindow_Tune_PRS[,-1])
+  # colnames(STAARO_SlidingWindow_Tune_PRS) <- c(colnames(STAARO_SlidingWindow_Tune_PRS)[1],paste0("SlidingWindow_",colnames(STAARO_SlidingWindow_Tune_PRS)[2:ncol(STAARO_SlidingWindow_Tune_PRS)]))
+  STAARO_Combined_Tune <- cbind(STAARO_GeneCentric_Coding_Tune_PRS,STAARO_GeneCentric_Noncoding_Tune_PRS[,-1])#,STAARO_SlidingWindow_Tune_PRS[,-1])
   
   colnames(STAARO_GeneCentric_Coding_Validation_PRS) <- c(colnames(STAARO_GeneCentric_Coding_Validation_PRS)[1],paste0("GeneCentric_Coding_",colnames(STAARO_GeneCentric_Coding_Validation_PRS)[2:ncol(STAARO_GeneCentric_Coding_Validation_PRS)]))
   colnames(STAARO_GeneCentric_Noncoding_Validation_PRS) <- c(colnames(STAARO_GeneCentric_Noncoding_Validation_PRS)[1],paste0("GeneCentric_Noncoding_",colnames(STAARO_GeneCentric_Noncoding_Validation_PRS)[2:ncol(STAARO_GeneCentric_Noncoding_Validation_PRS)]))
-  colnames(STAARO_SlidingWindow_Validation_PRS) <- c(colnames(STAARO_SlidingWindow_Validation_PRS)[1],paste0("SlidingWindow_",colnames(STAARO_SlidingWindow_Validation_PRS)[2:ncol(STAARO_SlidingWindow_Validation_PRS)]))
-  STAARO_Combined_Validation <- cbind(STAARO_GeneCentric_Coding_Validation_PRS,STAARO_GeneCentric_Noncoding_Validation_PRS[,-1],STAARO_SlidingWindow_Validation_PRS[,-1])
+  # colnames(STAARO_SlidingWindow_Validation_PRS) <- c(colnames(STAARO_SlidingWindow_Validation_PRS)[1],paste0("SlidingWindow_",colnames(STAARO_SlidingWindow_Validation_PRS)[2:ncol(STAARO_SlidingWindow_Validation_PRS)]))
+  STAARO_Combined_Validation <- cbind(STAARO_GeneCentric_Coding_Validation_PRS,STAARO_GeneCentric_Noncoding_Validation_PRS[,-1])#,STAARO_SlidingWindow_Validation_PRS[,-1])
   
   
   Burden_GeneCentric_Coding_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricCoding/",trait,"_Burden_GeneCentric_Coding_Tune_PRS.csv"))
@@ -36,18 +36,18 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   Burden_GeneCentric_Noncoding_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricNoncoding/",trait,"_Burden_GeneCentric_Noncoding_Tune_PRS.csv"))
   Burden_GeneCentric_Noncoding_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricNoncoding/",trait,"_Burden_GeneCentric_Noncoding_Validation_PRS.csv"))
   
-  Burden_SlidingWindow_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_Burden_SlidingWindow_Tune_PRS.csv"))
-  Burden_SlidingWindow_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_Burden_SlidingWindow_Validation_PRS.csv"))
+  # Burden_SlidingWindow_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_Burden_SlidingWindow_Tune_PRS.csv"))
+  # Burden_SlidingWindow_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_Burden_SlidingWindow_Validation_PRS.csv"))
   
   colnames(Burden_GeneCentric_Coding_Tune_PRS) <- c(colnames(Burden_GeneCentric_Coding_Tune_PRS)[1],paste0("GeneCentric_Coding_",colnames(Burden_GeneCentric_Coding_Tune_PRS)[2:ncol(Burden_GeneCentric_Coding_Tune_PRS)]))
   colnames(Burden_GeneCentric_Noncoding_Tune_PRS) <- c(colnames(Burden_GeneCentric_Noncoding_Tune_PRS)[1],paste0("GeneCentric_Noncoding_",colnames(Burden_GeneCentric_Noncoding_Tune_PRS)[2:ncol(Burden_GeneCentric_Noncoding_Tune_PRS)]))
-  colnames(Burden_SlidingWindow_Tune_PRS) <- c(colnames(Burden_SlidingWindow_Tune_PRS)[1],paste0("SlidingWindow_",colnames(Burden_SlidingWindow_Tune_PRS)[2:ncol(Burden_SlidingWindow_Tune_PRS)]))
-  Burden_Combined_Tune <- cbind(Burden_GeneCentric_Coding_Tune_PRS,Burden_GeneCentric_Noncoding_Tune_PRS[,-1],Burden_SlidingWindow_Tune_PRS[,-1])
+  # colnames(Burden_SlidingWindow_Tune_PRS) <- c(colnames(Burden_SlidingWindow_Tune_PRS)[1],paste0("SlidingWindow_",colnames(Burden_SlidingWindow_Tune_PRS)[2:ncol(Burden_SlidingWindow_Tune_PRS)]))
+  Burden_Combined_Tune <- cbind(Burden_GeneCentric_Coding_Tune_PRS,Burden_GeneCentric_Noncoding_Tune_PRS[,-1])#,Burden_SlidingWindow_Tune_PRS[,-1])
   
   colnames(Burden_GeneCentric_Coding_Validation_PRS) <- c(colnames(Burden_GeneCentric_Coding_Validation_PRS)[1],paste0("GeneCentric_Coding_",colnames(Burden_GeneCentric_Coding_Validation_PRS)[2:ncol(Burden_GeneCentric_Coding_Validation_PRS)]))
   colnames(Burden_GeneCentric_Noncoding_Validation_PRS) <- c(colnames(Burden_GeneCentric_Noncoding_Validation_PRS)[1],paste0("GeneCentric_Noncoding_",colnames(Burden_GeneCentric_Noncoding_Validation_PRS)[2:ncol(Burden_GeneCentric_Noncoding_Validation_PRS)]))
-  colnames(Burden_SlidingWindow_Validation_PRS) <- c(colnames(Burden_SlidingWindow_Validation_PRS)[1],paste0("SlidingWindow_",colnames(Burden_SlidingWindow_Validation_PRS)[2:ncol(Burden_SlidingWindow_Validation_PRS)]))
-  Burden_Combined_Validation <- cbind(Burden_GeneCentric_Coding_Validation_PRS,Burden_GeneCentric_Noncoding_Validation_PRS[,-1],Burden_SlidingWindow_Validation_PRS[,-1])
+  # colnames(Burden_SlidingWindow_Validation_PRS) <- c(colnames(Burden_SlidingWindow_Validation_PRS)[1],paste0("SlidingWindow_",colnames(Burden_SlidingWindow_Validation_PRS)[2:ncol(Burden_SlidingWindow_Validation_PRS)]))
+  Burden_Combined_Validation <- cbind(Burden_GeneCentric_Coding_Validation_PRS,Burden_GeneCentric_Noncoding_Validation_PRS[,-1])#,Burden_SlidingWindow_Validation_PRS[,-1])
   
   
   # STAARO_Combined_Tune <- STAARO_Combined_Tune[,-c(16,31,46)]
@@ -115,7 +115,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     confounders <- as.formula(paste0("~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10"))
   }
 
-  arrayid <- as.numeric(commandArgs(TRUE)[1])
+  arrayid <- 2
   
   if(arrayid == 1){
     ##### SL 
@@ -151,12 +151,15 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     if(best_algorithm == "SL.glmnet_All"){
       #final
       final_coefs <- glmnet_coefs
+      final_coefs = final_coefs[2:nrow(final_coefs),]
     }else if(best_algorithm == "SL.glm_All"){
       #final
       final_coefs <- glm_coefs
+      final_coefs = final_coefs[2:length(final_coefs)]
     }else{
       #final
       final_coefs <- alg_weights[1] * glmnet_coefs + alg_weights[2] * glm_coefs + alg_weights[3] * mean_coefs 
+      final_coefs = final_coefs[2:nrow(final_coefs),]
     }
     
     #remove the intercept
@@ -269,7 +272,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_Eur_STAARO.RData"))
     
     ## bootstrap the R2 to provide an approximate distribution 
-    d <- pheno_vad_NonEUR[!is.na(pheno_vad_NonEUR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","prs")]
+    d <- pheno_vad_NonEur[!is.na(pheno_vad_NonEur[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","prs")]
     roc_obj <- roc.binary(status = trait,
                           variable = "prs",
                           confounders = confounders,
@@ -277,19 +280,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_NonEUR",
                                                        AUC = AUC,
                                                        AUC_low = ci_result$percent[4],
@@ -307,18 +312,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
     if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_UNK",
                             AUC = AUC,
@@ -337,19 +345,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_SAS",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
@@ -367,19 +377,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_MIX",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
@@ -397,19 +409,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_AFR",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
@@ -427,19 +441,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_EAS",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
@@ -459,11 +475,11 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     sl <- SuperLearner(Y = pheno_tuning_Burden[,trait], X = Burden_Combined_Tune, family = binomial(), method = "method.AUC",
                        # For a real analysis we would use V = 10.
                        # V = 3,
-                       SL.library = SL.library)
+                       SL.library = SL.library,cvControl = list(V = 20,stratifyCV = TRUE))
     cvsl <- CV.SuperLearner(Y = pheno_tuning_Burden[,trait], X = Burden_Combined_Tune, family = binomial(), method = "method.AUC",
                             # For a real analysis we would use V = 10.
                             # V = 3,
-                            SL.library = SL.library)
+                            SL.library = SL.library,cvControl = list(V = 20,stratifyCV = TRUE))
     
     best_algorithm <- summary(cvsl)$Table$Algorithm[which.max(summary(cvsl)$Table$Ave)]
     
@@ -482,16 +498,17 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     if(best_algorithm == "SL.glmnet_All"){
       #final
       final_coefs <- glmnet_coefs
+      final_coefs = final_coefs[2:nrow(final_coefs),]
     }else if(best_algorithm == "SL.glm_All"){
       #final
       final_coefs <- glm_coefs
+      final_coefs = final_coefs[2:length(final_coefs)]
     }else{
       #final
       final_coefs <- alg_weights[1] * glmnet_coefs + alg_weights[2] * glm_coefs + alg_weights[3] * mean_coefs 
+      final_coefs = final_coefs[2:nrow(final_coefs),]
     }
     
-    #remove the intercept
-    final_coefs = final_coefs[2:nrow(final_coefs),]
     #remove weight 0 coefficients
     final_coefs = final_coefs[final_coefs!=0]
     
@@ -578,19 +595,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_EUR",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
@@ -600,7 +619,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     save(SL.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_Eur_Burden.RData"))
     
     ## bootstrap the R2 to provide an approximate distribution 
-    d <- pheno_vad_NonEUR[!is.na(pheno_vad_NonEUR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","prs")]
+    d <- pheno_vad_NonEur[!is.na(pheno_vad_NonEur[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","prs")]
     roc_obj <- roc.binary(status = trait,
                           variable = "prs",
                           confounders = confounders,
@@ -608,19 +627,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_NonEUR",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
@@ -638,19 +659,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_UNK",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
@@ -668,19 +691,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_SAS",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
@@ -698,19 +723,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_MIX",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
@@ -728,19 +755,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_AFR",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],
@@ -758,19 +787,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
                           precision=seq(0.05,0.95, by=0.05))
     AUC <- roc_obj$auc
     
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = "prs",
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
+    if(AUC == 0.5){
+      ci_result <- data.frame(percent = c(0,0,0,.5,.5))
+    }else{
+      calc_auc <- function(data, indices) {
+        d_sub <- data[indices,] # allows boot to select sample
+        roc_obj <- roc.binary(status = trait,
+                              variable = "prs",
+                              confounders = confounders,
+                              data = d_sub,
+                              precision=seq(0.05,0.95, by=0.05))
+        return(roc_obj$auc)
+      }
+      boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
+      ci_result <- boot.ci(boot_AUC, type = "perc") 
     }
-    boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
     SL.result <- data.frame(method = "SL_Combined_EAS",
                             AUC = AUC,
                             AUC_low = ci_result$percent[4],

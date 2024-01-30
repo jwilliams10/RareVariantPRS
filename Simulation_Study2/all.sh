@@ -19,7 +19,7 @@ Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVarian
 ## step4: Null Models for STAAR
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study2/RareVariant_Analysis/NullModel.R ${SLURM_ARRAY_TASK_ID} > NullModel"${SLURM_ARRAY_TASK_ID}".Rout
 ## step5: STAAR Analysis/Effect Sizes/ PRS for sliding window, gene centric coding, gene centric noncoding
-Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study2/RareVariant_Analysis/STAAR_SlidingWindow.R ${SLURM_ARRAY_TASK_ID} > STAAR_SlidingWindow"${SLURM_ARRAY_TASK_ID}".Rout &
+## Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study2/RareVariant_Analysis/STAAR_SlidingWindow.R ${SLURM_ARRAY_TASK_ID} > STAAR_SlidingWindow"${SLURM_ARRAY_TASK_ID}".Rout &
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study2/RareVariant_Analysis/STAAR_GeneCentric_NonCoding.R ${SLURM_ARRAY_TASK_ID} > STAAR_GeneCentric_NonCoding"${SLURM_ARRAY_TASK_ID}".Rout &
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study2/RareVariant_Analysis/STAAR_GeneCentric_Coding.R ${SLURM_ARRAY_TASK_ID} > STAAR_GeneCentric_Coding"${SLURM_ARRAY_TASK_ID}".Rout &
 wait

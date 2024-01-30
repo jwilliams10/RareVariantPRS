@@ -93,12 +93,7 @@ for(i in 1:22){
   
   if(anyNA(corr0@x)){
     b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)
-    b <- as.numeric(names(table(b))[table(b) > 2])
-    
-    if(length(b) == 0){
-      b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)
-      b <- as.numeric(names(table(b))[table(b) > 1])
-    }
+    b <- as.numeric(names(table(b))[table(b) > 1])
     
     file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_",trait,"_chr",i,".rds"))
     file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_",trait,"_chr",i,".bk"))
@@ -118,7 +113,12 @@ for(i in 1:22){
     corr0 <- snp_cor(G,infos.pos = POS2, size =  ldr)
     while(anyNA(corr0@x)){
       b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)
-      b <- as.numeric(names(table(b))[table(b) > 1])
+      b <- as.numeric(names(table(b))[table(b) > 2])
+      
+      if(length(b) == 0){
+        b <- Matrix::which(is.nan(corr0), arr.ind = TRUE)
+        b <- as.numeric(names(table(b))[table(b) > 1])
+      }
       
       file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_",trait,"_chr",i,".rds"))
       file.remove(paste0("/data/williamsjacr/UKB_WES_Phenotypes/BEDFiles/reference_",trait,"_chr",i,".bk"))

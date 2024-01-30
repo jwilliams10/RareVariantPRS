@@ -97,7 +97,6 @@ prs_validation_all = prs_validation_all %>%
 
 SL.library <- c(
   "SL.glmnet",
-#  "SL.ridge",
   "SL.glm",
   "SL.mean"
 )

@@ -186,49 +186,49 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   
   
   
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_EUR_result.RData"))
-  SlidingWindow_burden_EUR <- AUC.result_SlidingWindow_Burden
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_EUR_result.RData"))
+  # SlidingWindow_burden_EUR <- AUC.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_NonEur_result.RData"))
+  # SlidingWindow_burden_NonEur <- AUC.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_AFR_result.RData"))
+  # SlidingWindow_burden_AFR <- AUC.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_EAS_result.RData"))
+  # SlidingWindow_burden_EAS <- AUC.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_SAS_result.RData"))
+  # SlidingWindow_burden_SAS <- AUC.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_MIX_result.RData"))
+  # SlidingWindow_burden_MIX <- AUC.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_UNK_result.RData"))
+  # SlidingWindow_burden_UNK <- AUC.result_SlidingWindow_Burden
   
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_NonEur_result.RData"))
-  SlidingWindow_burden_NonEur <- AUC.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_AFR_result.RData"))
-  SlidingWindow_burden_AFR <- AUC.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_EAS_result.RData"))
-  SlidingWindow_burden_EAS <- AUC.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_SAS_result.RData"))
-  SlidingWindow_burden_SAS <- AUC.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_MIX_result.RData"))
-  SlidingWindow_burden_MIX <- AUC.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_UNK_result.RData"))
-  SlidingWindow_burden_UNK <- AUC.result_SlidingWindow_Burden
   
   
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_EUR_result.RData"))
-  SlidingWindow_STAARO_EUR <- AUC.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_NonEur_result.RData"))
-  SlidingWindow_STAARO_NonEur <- AUC.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_AFR_result.RData"))
-  SlidingWindow_STAARO_AFR <- AUC.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_EAS_result.RData"))
-  SlidingWindow_STAARO_EAS <- AUC.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_SAS_result.RData"))
-  SlidingWindow_STAARO_SAS <- AUC.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_MIX_result.RData"))
-  SlidingWindow_STAARO_MIX <- AUC.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_UNK_result.RData"))
-  SlidingWindow_STAARO_UNK <- AUC.result_SlidingWindow_STAARO
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_EUR_result.RData"))
+  # SlidingWindow_STAARO_EUR <- AUC.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_NonEur_result.RData"))
+  # SlidingWindow_STAARO_NonEur <- AUC.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_AFR_result.RData"))
+  # SlidingWindow_STAARO_AFR <- AUC.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_EAS_result.RData"))
+  # SlidingWindow_STAARO_EAS <- AUC.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_SAS_result.RData"))
+  # SlidingWindow_STAARO_SAS <- AUC.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_MIX_result.RData"))
+  # SlidingWindow_STAARO_MIX <- AUC.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_UNK_result.RData"))
+  # SlidingWindow_STAARO_UNK <- AUC.result_SlidingWindow_STAARO
   
   
   load(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_sl_result_All_Eur_Burden.RData"))
@@ -339,25 +339,25 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   
   
   results_EUR <- rbind(sl_EUR,ct_EUR,LASSOSUM2_EUR,ldpred2_EUR,genecentric_coding_burden_EUR,genecentric_coding_STAARO_EUR,GeneCentric_Noncoding_burden_EUR,
-                       GeneCentric_Noncoding_STAARO_EUR,SlidingWindow_burden_EUR,SlidingWindow_STAARO_EUR,SL_Burden_EUR,SL_STAARO_EUR,Combined_Burden_EUR,Combined_STAARO_EUR)
+                       GeneCentric_Noncoding_STAARO_EUR,SL_Burden_EUR,SL_STAARO_EUR,Combined_Burden_EUR,Combined_STAARO_EUR)
   results_EUR$Ancestry <- "EUR"
   results_NonEur <- rbind(sl_NonEur,ct_NonEur,LASSOSUM2_NonEur,ldpred2_NonEur,genecentric_coding_burden_NonEur,genecentric_coding_STAARO_NonEur,GeneCentric_Noncoding_burden_NonEur,
-                          GeneCentric_Noncoding_STAARO_NonEur,SlidingWindow_burden_NonEur,SlidingWindow_STAARO_NonEur,SL_Burden_NonEur,SL_STAARO_NonEur,Combined_Burden_NonEur,Combined_STAARO_NonEur)
+                          GeneCentric_Noncoding_STAARO_NonEur,SL_Burden_NonEur,SL_STAARO_NonEur,Combined_Burden_NonEur,Combined_STAARO_NonEur)
   results_NonEur$Ancestry <- "NonEUR"
   results_AFR <- rbind(sl_AFR,ct_AFR,LASSOSUM2_AFR,ldpred2_AFR,genecentric_coding_burden_AFR,genecentric_coding_STAARO_AFR,GeneCentric_Noncoding_burden_AFR,
-                       GeneCentric_Noncoding_STAARO_AFR,SlidingWindow_burden_AFR,SlidingWindow_STAARO_AFR,SL_Burden_AFR,SL_STAARO_AFR,Combined_Burden_AFR,Combined_STAARO_AFR)
+                       GeneCentric_Noncoding_STAARO_AFR,SL_Burden_AFR,SL_STAARO_AFR,Combined_Burden_AFR,Combined_STAARO_AFR)
   results_AFR$Ancestry <- "AFR"
   results_EAS <- rbind(sl_EAS,ct_EAS,LASSOSUM2_EAS,ldpred2_EAS,genecentric_coding_burden_EAS,genecentric_coding_STAARO_EAS,GeneCentric_Noncoding_burden_EAS,
-                       GeneCentric_Noncoding_STAARO_EAS,SlidingWindow_burden_EAS,SlidingWindow_STAARO_EAS,SL_Burden_EAS,SL_STAARO_EAS,Combined_Burden_EAS,Combined_STAARO_EAS)
+                       GeneCentric_Noncoding_STAARO_EAS,SL_Burden_EAS,SL_STAARO_EAS,Combined_Burden_EAS,Combined_STAARO_EAS)
   results_EAS$Ancestry <- "EAS"
   results_SAS <- rbind(sl_SAS,ct_SAS,LASSOSUM2_SAS,ldpred2_SAS,genecentric_coding_burden_SAS,genecentric_coding_STAARO_SAS,GeneCentric_Noncoding_burden_SAS,
-                       GeneCentric_Noncoding_STAARO_SAS,SlidingWindow_burden_SAS,SlidingWindow_STAARO_SAS,SL_Burden_SAS,SL_STAARO_SAS,Combined_Burden_SAS,Combined_STAARO_SAS)
+                       GeneCentric_Noncoding_STAARO_SAS,SL_Burden_SAS,SL_STAARO_SAS,Combined_Burden_SAS,Combined_STAARO_SAS)
   results_SAS$Ancestry <- "SAS"
   results_MIX <- rbind(sl_MIX,ct_MIX,LASSOSUM2_MIX,ldpred2_MIX,genecentric_coding_burden_MIX,genecentric_coding_STAARO_MIX,GeneCentric_Noncoding_burden_MIX,
-                       GeneCentric_Noncoding_STAARO_MIX,SlidingWindow_burden_MIX,SlidingWindow_STAARO_MIX,SL_Burden_MIX,SL_STAARO_MIX,Combined_Burden_MIX,Combined_STAARO_MIX)
+                       GeneCentric_Noncoding_STAARO_MIX,SL_Burden_MIX,SL_STAARO_MIX,Combined_Burden_MIX,Combined_STAARO_MIX)
   results_MIX$Ancestry <- "MIX"
   results_UNK <- rbind(sl_UNK,ct_UNK,LASSOSUM2_UNK,ldpred2_UNK,genecentric_coding_burden_UNK,genecentric_coding_STAARO_UNK,GeneCentric_Noncoding_burden_UNK,
-                       GeneCentric_Noncoding_STAARO_UNK,SlidingWindow_burden_UNK,SlidingWindow_STAARO_UNK,SL_Burden_UNK,SL_STAARO_UNK,Combined_Burden_UNK,Combined_STAARO_UNK)
+                       GeneCentric_Noncoding_STAARO_UNK,SL_Burden_UNK,SL_STAARO_UNK,Combined_Burden_UNK,Combined_STAARO_UNK)
   results_UNK$Ancestry <- "UNK"
   
   results_tmp <- rbind(results_EUR,results_NonEur,results_AFR,results_EAS,results_SAS,results_MIX,results_UNK)
@@ -368,18 +368,21 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
 
 library(stringr)
 
-results$method[str_detect(results$method,"CT")] <- "CT"
-results$method[str_detect(results$method,"SL_Combined")] <- "SL_Combined"
-results$method[str_detect(results$method,"LDPred2")] <- "LDPred2"
-results$method[str_detect(results$method,"LASSOSUM2")] <- "LASSOSUM2"
-results$method[str_detect(results$method,"CV_plus_RV_STAARO")] <- "CV_plus_RV_STAARO"
-results$method[str_detect(results$method,"CV_plus_RV_Burden")] <- "CV_plus_RV_Burden"
-results$method[str_detect(results$method,"SlidingWindow_STAARO")] <- "SlidingWindow_STAARO"
-results$method[str_detect(results$method,"SlidingWindow_Burden")] <- "SlidingWindow_Burden"
-results$method[str_detect(results$method,"GeneCentric_Coding_STAARO")] <- "GeneCentric_Coding_STAARO"
-results$method[str_detect(results$method,"GeneCentric_Coding_Burden")] <- "GeneCentric_Coding_Burden"
-results$method[str_detect(results$method,"GeneCentric_Noncoding_STAARO")] <- "GeneCentric_Noncoding_STAARO"
-results$method[str_detect(results$method,"GeneCentric_Noncoding_Burden")] <- "GeneCentric_Noncoding_Burden"
+results$Method <- results$method
+results <- subset(results,select = -method)
+
+results$Method[str_detect(results$Method,"CT")] <- "CT"
+results$Method[str_detect(results$Method,"SL_Combined")] <- "SL_Combined"
+results$Method[str_detect(results$Method,"LDPred2")] <- "LDPred2"
+results$Method[str_detect(results$Method,"LASSOSUM2")] <- "LASSOSUM2"
+results$Method[str_detect(results$Method,"CV_plus_RV_STAARO")] <- "CV_plus_RV_STAARO"
+results$Method[str_detect(results$Method,"CV_plus_RV_Burden")] <- "CV_plus_RV_Burden"
+results$Method[str_detect(results$Method,"SlidingWindow_STAARO")] <- "SlidingWindow_STAARO"
+results$Method[str_detect(results$Method,"SlidingWindow_Burden")] <- "SlidingWindow_Burden"
+results$Method[str_detect(results$Method,"GeneCentric_Coding_STAARO")] <- "GeneCentric_Coding_STAARO"
+results$Method[str_detect(results$Method,"GeneCentric_Coding_Burden")] <- "GeneCentric_Coding_Burden"
+results$Method[str_detect(results$Method,"GeneCentric_Noncoding_STAARO")] <- "GeneCentric_Noncoding_STAARO"
+results$Method[str_detect(results$Method,"GeneCentric_Noncoding_Burden")] <- "GeneCentric_Noncoding_Burden"
 
 rm(list=setdiff(ls(), "results"))
 
@@ -433,12 +436,12 @@ scale_colour_Publication <- function(...){
 
 library(ggplot2)
 
-common <- results[results$method %in% c("CT","LDPred2","LASSOSUM2","SL_Combined"),]
-common$method <- factor(common$method,levels = c("CT","LDPred2","LASSOSUM2","SL_Combined"))
+common <- results[results$Method %in% c("CT","LDPred2","LASSOSUM2","SL_Combined"),]
+common$Method <- factor(common$Method,levels = c("CT","LDPred2","LASSOSUM2","SL_Combined"))
 
-ggplot(common[common$Ancestry != "EAS",]) +
-  geom_bar(aes(x=method, y=AUC,fill=method), stat="identity", alpha=0.7) +
-#  geom_errorbar( aes(x=method, ymin=AUC_low, ymax=AUC_high), width=0.4, colour="black", alpha=0.9) +  
+ggplot(common[!(common$Ancestry %in% c("EAS","UNK","MIX")),]) +
+  geom_bar(aes(x=Method, y=AUC,fill=Method), stat="identity", alpha=0.7) +
+#  geom_errorbar( aes(x=Method, ymin=AUC_low, ymax=AUC_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Trait), vars(Ancestry)) + 
   ggtitle("Common Variants") + 
   coord_cartesian(ylim=c(0.45,0.8)) + 
@@ -446,12 +449,12 @@ ggplot(common[common$Ancestry != "EAS",]) +
   theme_Publication() + 
   scale_fill_Publication()
 
-rare <- results[results$method %in% c("SlidingWindow_STAARO","SlidingWindow_Burden","GeneCentric_Coding_STAARO","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARO","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARO"),]
-rare$method <- factor(rare$method,levels = c("GeneCentric_Coding_STAARO","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARO","GeneCentric_Noncoding_Burden","SlidingWindow_Burden","SlidingWindow_STAARO","SL_Rare_Burden","SL_Rare_STAARO"))
+rare <- results[results$Method %in% c("SlidingWindow_STAARO","SlidingWindow_Burden","GeneCentric_Coding_STAARO","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARO","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARO"),]
+rare$Method <- factor(rare$Method,levels = c("GeneCentric_Coding_STAARO","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARO","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARO"))
 
-ggplot(rare[rare$Ancestry != "EAS",]) +
-  geom_bar(aes(x=method, y=AUC,fill=method), stat="identity", alpha=0.7) +
-#  geom_errorbar( aes(x=method, ymin=AUC_low, ymax=AUC_high), width=0.4, colour="black", alpha=0.9) +  
+ggplot(rare[!(rare$Ancestry %in% c("EAS","UNK","MIX")),]) +
+  geom_bar(aes(x=Method, y=AUC,fill=Method), stat="identity", alpha=0.7) +
+#  geom_errorbar( aes(x=Method, ymin=AUC_low, ymax=AUC_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Trait), vars(Ancestry)) + 
   ggtitle("Rare Variants") + 
   ylab(bquote("R"^"2")) + 
@@ -459,12 +462,12 @@ ggplot(rare[rare$Ancestry != "EAS",]) +
   theme_Publication() + 
   scale_fill_Publication()
 
-paper <- results[results$method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"),]
-paper$method <- factor(paper$method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"))
+paper <- results[results$Method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"),]
+paper$Method <- factor(paper$Method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"))
 
-ggplot(paper[paper$Ancestry != "EAS",]) +
-  geom_bar(aes(x=method, y=AUC,fill=method), stat="identity", alpha=0.7) +
-  # geom_errorbar( aes(x=method, ymin=AUC_low, ymax=AUC_high), width=0.4, colour="black", alpha=0.9) +  
+ggplot(paper[!(paper$Ancestry %in% c("EAS","UNK","MIX")),]) +
+  geom_bar(aes(x=Method, y=AUC,fill=Method), stat="identity", alpha=0.7) +
+  # geom_errorbar( aes(x=Method, ymin=AUC_low, ymax=AUC_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Trait), vars(Ancestry)) + 
   ggtitle("Paper Plot") + 
   ylab(bquote("R"^"2")) + 

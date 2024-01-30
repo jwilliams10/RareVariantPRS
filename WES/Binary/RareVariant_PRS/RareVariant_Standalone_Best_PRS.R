@@ -15,18 +15,18 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   STAARO_GeneCentric_Noncoding_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricNoncoding/",trait,"_STAARO_GeneCentric_Noncoding_Tune_PRS.csv"))
   STAARO_GeneCentric_Noncoding_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricNoncoding/",trait,"_STAARO_GeneCentric_Noncoding_Validation_PRS.csv"))
   
-  STAARO_SlidingWindow_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_STAARO_SlidingWindow_Tune_PRS.csv"))
-  STAARO_SlidingWindow_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_STAARO_SlidingWindow_Validation_PRS.csv"))
-  
+  # STAARO_SlidingWindow_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_STAARO_SlidingWindow_Tune_PRS.csv"))
+  # STAARO_SlidingWindow_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_STAARO_SlidingWindow_Validation_PRS.csv"))
+  # 
   colnames(STAARO_GeneCentric_Coding_Tune_PRS) <- c(colnames(STAARO_GeneCentric_Coding_Tune_PRS)[1],paste0("GeneCentric_Coding_",colnames(STAARO_GeneCentric_Coding_Tune_PRS)[2:ncol(STAARO_GeneCentric_Coding_Tune_PRS)]))
   colnames(STAARO_GeneCentric_Noncoding_Tune_PRS) <- c(colnames(STAARO_GeneCentric_Noncoding_Tune_PRS)[1],paste0("GeneCentric_Noncoding_",colnames(STAARO_GeneCentric_Noncoding_Tune_PRS)[2:ncol(STAARO_GeneCentric_Noncoding_Tune_PRS)]))
-  colnames(STAARO_SlidingWindow_Tune_PRS) <- c(colnames(STAARO_SlidingWindow_Tune_PRS)[1],paste0("SlidingWindow_",colnames(STAARO_SlidingWindow_Tune_PRS)[2:ncol(STAARO_SlidingWindow_Tune_PRS)]))
-  STAARO_Combined_Tune <- cbind(STAARO_GeneCentric_Coding_Tune_PRS,STAARO_GeneCentric_Noncoding_Tune_PRS[,-1],STAARO_SlidingWindow_Tune_PRS[,-1])
+  # colnames(STAARO_SlidingWindow_Tune_PRS) <- c(colnames(STAARO_SlidingWindow_Tune_PRS)[1],paste0("SlidingWindow_",colnames(STAARO_SlidingWindow_Tune_PRS)[2:ncol(STAARO_SlidingWindow_Tune_PRS)]))
+  STAARO_Combined_Tune <- cbind(STAARO_GeneCentric_Coding_Tune_PRS,STAARO_GeneCentric_Noncoding_Tune_PRS[,-1])#,STAARO_SlidingWindow_Tune_PRS[,-1])
   
   colnames(STAARO_GeneCentric_Coding_Validation_PRS) <- c(colnames(STAARO_GeneCentric_Coding_Validation_PRS)[1],paste0("GeneCentric_Coding_",colnames(STAARO_GeneCentric_Coding_Validation_PRS)[2:ncol(STAARO_GeneCentric_Coding_Validation_PRS)]))
   colnames(STAARO_GeneCentric_Noncoding_Validation_PRS) <- c(colnames(STAARO_GeneCentric_Noncoding_Validation_PRS)[1],paste0("GeneCentric_Noncoding_",colnames(STAARO_GeneCentric_Noncoding_Validation_PRS)[2:ncol(STAARO_GeneCentric_Noncoding_Validation_PRS)]))
-  colnames(STAARO_SlidingWindow_Validation_PRS) <- c(colnames(STAARO_SlidingWindow_Validation_PRS)[1],paste0("SlidingWindow_",colnames(STAARO_SlidingWindow_Validation_PRS)[2:ncol(STAARO_SlidingWindow_Validation_PRS)]))
-  STAARO_Combined_Validation <- cbind(STAARO_GeneCentric_Coding_Validation_PRS,STAARO_GeneCentric_Noncoding_Validation_PRS[,-1],STAARO_SlidingWindow_Validation_PRS[,-1])
+  # colnames(STAARO_SlidingWindow_Validation_PRS) <- c(colnames(STAARO_SlidingWindow_Validation_PRS)[1],paste0("SlidingWindow_",colnames(STAARO_SlidingWindow_Validation_PRS)[2:ncol(STAARO_SlidingWindow_Validation_PRS)]))
+  STAARO_Combined_Validation <- cbind(STAARO_GeneCentric_Coding_Validation_PRS,STAARO_GeneCentric_Noncoding_Validation_PRS[,-1])#,STAARO_SlidingWindow_Validation_PRS[,-1])
   
   
   Burden_GeneCentric_Coding_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricCoding/",trait,"_Burden_GeneCentric_Coding_Tune_PRS.csv"))
@@ -35,18 +35,18 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   Burden_GeneCentric_Noncoding_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricNoncoding/",trait,"_Burden_GeneCentric_Noncoding_Tune_PRS.csv"))
   Burden_GeneCentric_Noncoding_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricNoncoding/",trait,"_Burden_GeneCentric_Noncoding_Validation_PRS.csv"))
   
-  Burden_SlidingWindow_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_Burden_SlidingWindow_Tune_PRS.csv"))
-  Burden_SlidingWindow_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_Burden_SlidingWindow_Validation_PRS.csv"))
-  
+  # Burden_SlidingWindow_Tune_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_Burden_SlidingWindow_Tune_PRS.csv"))
+  # Burden_SlidingWindow_Validation_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/SlidingWindow/",trait,"_Burden_SlidingWindow_Validation_PRS.csv"))
+  # 
   colnames(Burden_GeneCentric_Coding_Tune_PRS) <- c(colnames(Burden_GeneCentric_Coding_Tune_PRS)[1],paste0("GeneCentric_Coding_",colnames(Burden_GeneCentric_Coding_Tune_PRS)[2:ncol(Burden_GeneCentric_Coding_Tune_PRS)]))
   colnames(Burden_GeneCentric_Noncoding_Tune_PRS) <- c(colnames(Burden_GeneCentric_Noncoding_Tune_PRS)[1],paste0("GeneCentric_Noncoding_",colnames(Burden_GeneCentric_Noncoding_Tune_PRS)[2:ncol(Burden_GeneCentric_Noncoding_Tune_PRS)]))
-  colnames(Burden_SlidingWindow_Tune_PRS) <- c(colnames(Burden_SlidingWindow_Tune_PRS)[1],paste0("SlidingWindow_",colnames(Burden_SlidingWindow_Tune_PRS)[2:ncol(Burden_SlidingWindow_Tune_PRS)]))
-  Burden_Combined_Tune <- cbind(Burden_GeneCentric_Coding_Tune_PRS,Burden_GeneCentric_Noncoding_Tune_PRS[,-1],Burden_SlidingWindow_Tune_PRS[,-1])
+  # colnames(Burden_SlidingWindow_Tune_PRS) <- c(colnames(Burden_SlidingWindow_Tune_PRS)[1],paste0("SlidingWindow_",colnames(Burden_SlidingWindow_Tune_PRS)[2:ncol(Burden_SlidingWindow_Tune_PRS)]))
+  Burden_Combined_Tune <- cbind(Burden_GeneCentric_Coding_Tune_PRS,Burden_GeneCentric_Noncoding_Tune_PRS[,-1])#,Burden_SlidingWindow_Tune_PRS[,-1])
   
   colnames(Burden_GeneCentric_Coding_Validation_PRS) <- c(colnames(Burden_GeneCentric_Coding_Validation_PRS)[1],paste0("GeneCentric_Coding_",colnames(Burden_GeneCentric_Coding_Validation_PRS)[2:ncol(Burden_GeneCentric_Coding_Validation_PRS)]))
   colnames(Burden_GeneCentric_Noncoding_Validation_PRS) <- c(colnames(Burden_GeneCentric_Noncoding_Validation_PRS)[1],paste0("GeneCentric_Noncoding_",colnames(Burden_GeneCentric_Noncoding_Validation_PRS)[2:ncol(Burden_GeneCentric_Noncoding_Validation_PRS)]))
-  colnames(Burden_SlidingWindow_Validation_PRS) <- c(colnames(Burden_SlidingWindow_Validation_PRS)[1],paste0("SlidingWindow_",colnames(Burden_SlidingWindow_Validation_PRS)[2:ncol(Burden_SlidingWindow_Validation_PRS)]))
-  Burden_Combined_Validation <- cbind(Burden_GeneCentric_Coding_Validation_PRS,Burden_GeneCentric_Noncoding_Validation_PRS[,-1],Burden_SlidingWindow_Validation_PRS[,-1])
+  # colnames(Burden_SlidingWindow_Validation_PRS) <- c(colnames(Burden_SlidingWindow_Validation_PRS)[1],paste0("SlidingWindow_",colnames(Burden_SlidingWindow_Validation_PRS)[2:ncol(Burden_SlidingWindow_Validation_PRS)]))
+  Burden_Combined_Validation <- cbind(Burden_GeneCentric_Coding_Validation_PRS,Burden_GeneCentric_Noncoding_Validation_PRS[,-1])#,Burden_SlidingWindow_Validation_PRS[,-1])
   
   ## Pull in Phenotypes/Covariates 
   pheno_tuning <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Tune.txt")
@@ -525,218 +525,218 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     
     
     ##### Sliding Window: STAARO
-    AUC_tun_SlidingWindow_STAARO  <- rep(0,15)
-    for(k in 1:15){
-      roc_obj <- roc.binary(status = trait,
-                            variable =paste0("SlidingWindow_PRS_Threshold_",k),
-                            confounders = confounders,
-                            data = pheno_tuning_STAARO,
-                            precision=seq(0.05,0.95, by=0.05))
-      AUC_tun_SlidingWindow_STAARO[k] <- roc_obj$auc
-    }
-    
-    ### EUR
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                          confounders = confounders,
-                          data = pheno_vad_EUR,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_STAARO <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_EUR, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_EUR",
-                                                  AUC = AUC_SlidingWindow_STAARO,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_EUR_result.RData"))
-    
-    ### NonEur
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                          confounders = confounders,
-                          data = pheno_vad_NonEur,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_STAARO <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_NonEur, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_NonEur",
-                                                  AUC = AUC_SlidingWindow_STAARO,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_NonEur_result.RData"))
-    
-    ### EAS
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                          confounders = confounders,
-                          data = pheno_vad_EAS,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_STAARO <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_EAS, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_EAS",
-                                                  AUC = AUC_SlidingWindow_STAARO,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_EAS_result.RData"))
-    
-    ### AFR
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                          confounders = confounders,
-                          data = pheno_vad_AFR,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_STAARO <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_AFR, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_AFR",
-                                                  AUC = AUC_SlidingWindow_STAARO,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_AFR_result.RData"))
-    
-    ### SAS
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                          confounders = confounders,
-                          data = pheno_vad_SAS,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_STAARO <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_SAS, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_SAS",
-                                                  AUC = AUC_SlidingWindow_STAARO,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_SAS_result.RData"))
-    
-    ### MIX
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                          confounders = confounders,
-                          data = pheno_vad_MIX,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_STAARO <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_MIX, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_MIX",
-                                                  AUC = AUC_SlidingWindow_STAARO,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_MIX_result.RData"))
-    
-    ### UNK
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                          confounders = confounders,
-                          data = pheno_vad_UNK,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_STAARO <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_UNK, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_UNK",
-                                                  AUC = AUC_SlidingWindow_STAARO,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_UNK_result.RData"))
+    # AUC_tun_SlidingWindow_STAARO  <- rep(0,15)
+    # for(k in 1:15){
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable =paste0("SlidingWindow_PRS_Threshold_",k),
+    #                         confounders = confounders,
+    #                         data = pheno_tuning_STAARO,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   AUC_tun_SlidingWindow_STAARO[k] <- roc_obj$auc
+    # }
+    # 
+    # ### EUR
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_EUR,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_STAARO <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_EUR, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_EUR",
+    #                                               AUC = AUC_SlidingWindow_STAARO,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_EUR_result.RData"))
+    # 
+    # ### NonEur
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_NonEur,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_STAARO <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_NonEur, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_NonEur",
+    #                                               AUC = AUC_SlidingWindow_STAARO,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_NonEur_result.RData"))
+    # 
+    # ### EAS
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_EAS,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_STAARO <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_EAS, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_EAS",
+    #                                               AUC = AUC_SlidingWindow_STAARO,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_EAS_result.RData"))
+    # 
+    # ### AFR
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_AFR,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_STAARO <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_AFR, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_AFR",
+    #                                               AUC = AUC_SlidingWindow_STAARO,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_AFR_result.RData"))
+    # 
+    # ### SAS
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_SAS,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_STAARO <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_SAS, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_SAS",
+    #                                               AUC = AUC_SlidingWindow_STAARO,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_SAS_result.RData"))
+    # 
+    # ### MIX
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_MIX,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_STAARO <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_MIX, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_MIX",
+    #                                               AUC = AUC_SlidingWindow_STAARO,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_MIX_result.RData"))
+    # 
+    # ### UNK
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_UNK,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_STAARO <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_STAARO)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_UNK, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_STAARO <- data.frame(method = "SlidingWindow_STAARO_UNK",
+    #                                               AUC = AUC_SlidingWindow_STAARO,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_STAARO, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_STAARO_UNK_result.RData"))
     
   }else{
     
@@ -1190,219 +1190,219 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     save(AUC.result_GeneCentric_Noncoding_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_GeneCentric_Noncoding_Burden_UNK_result.RData"))
     
     
-    ##### Sliding Window: Burden
-    AUC_tun_SlidingWindow_Burden  <- rep(0,15)
-    for(k in 1:15){
-      roc_obj <- roc.binary(status = trait,
-                            variable =paste0("SlidingWindow_PRS_Threshold_",k),
-                            confounders = confounders,
-                            data = pheno_tuning_Burden,
-                            precision=seq(0.05,0.95, by=0.05))
-      AUC_tun_SlidingWindow_Burden[k] <- roc_obj$auc
-    }
-    
-    ### EUR
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                          confounders = confounders,
-                          data = pheno_vad_EUR,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_Burden <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_EUR, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_EUR",
-                                                  AUC = AUC_SlidingWindow_Burden,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_EUR_result.RData"))
-    
-    ### NonEur
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                          confounders = confounders,
-                          data = pheno_vad_NonEur,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_Burden <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_NonEur, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_NonEur",
-                                                  AUC = AUC_SlidingWindow_Burden,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_NonEur_result.RData"))
-    
-    ### EAS
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                          confounders = confounders,
-                          data = pheno_vad_EAS,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_Burden <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_EAS, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_EAS",
-                                                  AUC = AUC_SlidingWindow_Burden,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_EAS_result.RData"))
-    
-    ### AFR
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                          confounders = confounders,
-                          data = pheno_vad_AFR,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_Burden <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_AFR, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_AFR",
-                                                  AUC = AUC_SlidingWindow_Burden,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_AFR_result.RData"))
-    
-    ### SAS
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                          confounders = confounders,
-                          data = pheno_vad_SAS,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_Burden <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_SAS, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_SAS",
-                                                  AUC = AUC_SlidingWindow_Burden,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_SAS_result.RData"))
-    
-    ### MIX
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                          confounders = confounders,
-                          data = pheno_vad_MIX,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_Burden <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_MIX, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_MIX",
-                                                  AUC = AUC_SlidingWindow_Burden,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_MIX_result.RData"))
-    
-    ### UNK
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                          confounders = confounders,
-                          data = pheno_vad_UNK,
-                          precision=seq(0.05,0.95, by=0.05))
-    AUC_SlidingWindow_Burden <- roc_obj$auc
-    
-    calc_auc <- function(data, indices) {
-      d_sub <- data[indices,] # allows boot to select sample
-      roc_obj <- roc.binary(status = trait,
-                            variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
-                            confounders = confounders,
-                            data = d_sub,
-                            precision=seq(0.05,0.95, by=0.05))
-      return(roc_obj$auc)
-    }
-    boot_AUC <- boot(data = pheno_vad_UNK, statistic = calc_auc, R = 1000)
-    
-    ci_result <- boot.ci(boot_AUC, type = "perc")
-    if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
-    AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_UNK",
-                                                  AUC = AUC_SlidingWindow_Burden,
-                                                  AUC_low = ci_result$percent[4],
-                                                  AUC_high = ci_result$percent[5]
-    )
-    
-    save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_UNK_result.RData"))
+    # ##### Sliding Window: Burden
+    # AUC_tun_SlidingWindow_Burden  <- rep(0,15)
+    # for(k in 1:15){
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable =paste0("SlidingWindow_PRS_Threshold_",k),
+    #                         confounders = confounders,
+    #                         data = pheno_tuning_Burden,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   AUC_tun_SlidingWindow_Burden[k] <- roc_obj$auc
+    # }
+    # 
+    # ### EUR
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_EUR,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_Burden <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_EUR, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_EUR",
+    #                                               AUC = AUC_SlidingWindow_Burden,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_EUR_result.RData"))
+    # 
+    # ### NonEur
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_NonEur,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_Burden <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_NonEur, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_NonEur",
+    #                                               AUC = AUC_SlidingWindow_Burden,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_NonEur_result.RData"))
+    # 
+    # ### EAS
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_EAS,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_Burden <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_EAS, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_EAS",
+    #                                               AUC = AUC_SlidingWindow_Burden,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_EAS_result.RData"))
+    # 
+    # ### AFR
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_AFR,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_Burden <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_AFR, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_AFR",
+    #                                               AUC = AUC_SlidingWindow_Burden,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_AFR_result.RData"))
+    # 
+    # ### SAS
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_SAS,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_Burden <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_SAS, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_SAS",
+    #                                               AUC = AUC_SlidingWindow_Burden,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_SAS_result.RData"))
+    # 
+    # ### MIX
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_MIX,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_Burden <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_MIX, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_MIX",
+    #                                               AUC = AUC_SlidingWindow_Burden,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_MIX_result.RData"))
+    # 
+    # ### UNK
+    # roc_obj <- roc.binary(status = trait,
+    #                       variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                       confounders = confounders,
+    #                       data = pheno_vad_UNK,
+    #                       precision=seq(0.05,0.95, by=0.05))
+    # AUC_SlidingWindow_Burden <- roc_obj$auc
+    # 
+    # calc_auc <- function(data, indices) {
+    #   d_sub <- data[indices,] # allows boot to select sample
+    #   roc_obj <- roc.binary(status = trait,
+    #                         variable = paste0("SlidingWindow_PRS_Threshold_",which.max(AUC_tun_SlidingWindow_Burden)),
+    #                         confounders = confounders,
+    #                         data = d_sub,
+    #                         precision=seq(0.05,0.95, by=0.05))
+    #   return(roc_obj$auc)
+    # }
+    # boot_AUC <- boot(data = pheno_vad_UNK, statistic = calc_auc, R = 1000)
+    # 
+    # ci_result <- boot.ci(boot_AUC, type = "perc")
+    # if(is.null(ci_result)){ci_result <- data.frame(percent = c(0,0,0,.5,.5))}
+    # AUC.result_SlidingWindow_Burden <- data.frame(method = "SlidingWindow_Burden_UNK",
+    #                                               AUC = AUC_SlidingWindow_Burden,
+    #                                               AUC_low = ci_result$percent[4],
+    #                                               AUC_high = ci_result$percent[5]
+    # )
+    # 
+    # save(AUC.result_SlidingWindow_Burden, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_SlidingWindow_Burden_UNK_result.RData"))
   }
 }
 

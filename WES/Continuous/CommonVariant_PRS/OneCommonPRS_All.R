@@ -104,6 +104,9 @@ prs_validation_all = prs_validation_all %>%
 pheno_tune$y_tune <- NA
 pheno_tune$y_tune[!is.na(pheno_tune[,trait])] <- y_tune
 
+pheno_validation$y_validation <- NA
+pheno_validation$y_validation[!is.na(pheno_validation[,trait])] <- y_validation
+
 ## SL
 
 SL.library <- c(
@@ -214,13 +217,13 @@ write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotyp
 
 load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
-y_validation_EUR <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]]
-y_validation_NonEUR <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]]
-y_validation_UNK <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]]
-y_validation_SAS <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]]
-y_validation_MIX <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]]
-y_validation_AFR <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]]
-y_validation_EAS <- y_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]]
+y_validation_EUR <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],"y_validation"]
+y_validation_NonEUR <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],"y_validation"]
+y_validation_UNK <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],"y_validation"]
+y_validation_SAS <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],"y_validation"]
+y_validation_MIX <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],"y_validation"]
+y_validation_AFR <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],"y_validation"]
+y_validation_EAS <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],"y_validation"]
 
 prs_best_validation_EUR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
 prs_best_validation_NonEur <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
