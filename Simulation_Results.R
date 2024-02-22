@@ -233,50 +233,50 @@ for(i in 1:length(Y_train)){
   
 
   
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_EUR",i,".RData"))
-  SlidingWindow_STAARO_EUR <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_NonEUR",i,".RData"))
-  SlidingWindow_STAARO_NonEur <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_EAS",i,".RData"))
-  SlidingWindow_STAARO_EAS <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_AFR",i,".RData"))
-  SlidingWindow_STAARO_AFR <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_SAS",i,".RData"))
-  SlidingWindow_STAARO_SAS <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_MIX",i,".RData"))
-  SlidingWindow_STAARO_MIX <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_UNK",i,".RData"))
-  SlidingWindow_STAARO_UNK <- r2.result_SlidingWindow_STAARO
-  
-  
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_EUR",i,".RData"))
+  # SlidingWindow_STAARO_EUR <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_NonEUR",i,".RData"))
+  # SlidingWindow_STAARO_NonEur <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_EAS",i,".RData"))
+  # SlidingWindow_STAARO_EAS <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_AFR",i,".RData"))
+  # SlidingWindow_STAARO_AFR <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_SAS",i,".RData"))
+  # SlidingWindow_STAARO_SAS <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_MIX",i,".RData"))
+  # SlidingWindow_STAARO_MIX <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_STAARO_result_UNK",i,".RData"))
+  # SlidingWindow_STAARO_UNK <- r2.result_SlidingWindow_STAARO
   
   
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_EUR",i,".RData"))
-  SlidingWindow_Burden_EUR <- r2.result_SlidingWindow_Burden
   
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_NonEUR",i,".RData"))
-  SlidingWindow_Burden_NonEur <- r2.result_SlidingWindow_Burden
   
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_EAS",i,".RData"))
-  SlidingWindow_Burden_EAS <- r2.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_AFR",i,".RData"))
-  SlidingWindow_Burden_AFR <- r2.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_SAS",i,".RData"))
-  SlidingWindow_Burden_SAS <- r2.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_MIX",i,".RData"))
-  SlidingWindow_Burden_MIX <- r2.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_UNK",i,".RData"))
-  SlidingWindow_Burden_UNK <- r2.result_SlidingWindow_Burden
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_EUR",i,".RData"))
+  # SlidingWindow_Burden_EUR <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_NonEUR",i,".RData"))
+  # SlidingWindow_Burden_NonEur <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_EAS",i,".RData"))
+  # SlidingWindow_Burden_EAS <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_AFR",i,".RData"))
+  # SlidingWindow_Burden_AFR <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_SAS",i,".RData"))
+  # SlidingWindow_Burden_SAS <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_MIX",i,".RData"))
+  # SlidingWindow_Burden_MIX <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/SlidingWindow/SlidingWindow_Burden_result_UNK",i,".RData"))
+  # SlidingWindow_Burden_UNK <- r2.result_SlidingWindow_Burden
   
   
   
@@ -390,7 +390,7 @@ for(i in 1:length(Y_train)){
   results_tmp_EUR <- rbind(sl_all_Eur,ct_EUR,lassosum2_EUR,ldpred2_EUR,
                        GeneCentric_Coding_STAARO_EUR,GeneCentric_Coding_Burden_EUR,
                        GeneCentric_Noncoding_STAARO_EUR,GeneCentric_Noncoding_Burden_EUR,
-                       SlidingWindow_STAARO_EUR,SlidingWindow_Burden_EUR,
+                       # SlidingWindow_STAARO_EUR,SlidingWindow_Burden_EUR,
                        BestAll_RareVariant_STAARO_EUR,BestAll_RareVariant_Burden_EUR,BestAll_Burden_EUR,BestAll_STAARO_EUR)
   
   results_70_EUR <- rbind(results_70_EUR,results_tmp_EUR)
@@ -399,7 +399,7 @@ for(i in 1:length(Y_train)){
   results_tmp_NonEur <- rbind(sl_all_NonEur,ct_NonEur,lassosum2_NonEur,ldpred2_NonEur,
                            GeneCentric_Coding_STAARO_NonEur,GeneCentric_Coding_Burden_NonEur,
                            GeneCentric_Noncoding_STAARO_NonEur,GeneCentric_Noncoding_Burden_NonEur,
-                           SlidingWindow_STAARO_NonEur,SlidingWindow_Burden_NonEur,
+                           # SlidingWindow_STAARO_NonEur,SlidingWindow_Burden_NonEur,
                            BestAll_RareVariant_STAARO_NonEur,BestAll_RareVariant_Burden_NonEur,BestAll_Burden_NonEur,BestAll_STAARO_NonEur)
   
   results_70_NonEur <- rbind(results_70_NonEur,results_tmp_NonEur)
@@ -408,7 +408,7 @@ for(i in 1:length(Y_train)){
   results_tmp_AFR <- rbind(sl_all_AFR,ct_AFR,lassosum2_AFR,ldpred2_AFR,
                               GeneCentric_Coding_STAARO_AFR,GeneCentric_Coding_Burden_AFR,
                               GeneCentric_Noncoding_STAARO_AFR,GeneCentric_Noncoding_Burden_AFR,
-                              SlidingWindow_STAARO_AFR,SlidingWindow_Burden_AFR,
+                              # SlidingWindow_STAARO_AFR,SlidingWindow_Burden_AFR,
                               BestAll_RareVariant_STAARO_AFR,BestAll_RareVariant_Burden_AFR,BestAll_Burden_AFR,BestAll_STAARO_AFR)
   
   results_70_AFR <- rbind(results_70_AFR,results_tmp_AFR)
@@ -416,7 +416,7 @@ for(i in 1:length(Y_train)){
   results_tmp_SAS <- rbind(sl_all_SAS,ct_SAS,lassosum2_SAS,ldpred2_SAS,
                            GeneCentric_Coding_STAARO_SAS,GeneCentric_Coding_Burden_SAS,
                            GeneCentric_Noncoding_STAARO_SAS,GeneCentric_Noncoding_Burden_SAS,
-                           SlidingWindow_STAARO_SAS,SlidingWindow_Burden_SAS,
+                           # SlidingWindow_STAARO_SAS,SlidingWindow_Burden_SAS,
                            BestAll_RareVariant_STAARO_SAS,BestAll_RareVariant_Burden_SAS,BestAll_Burden_SAS,BestAll_STAARO_SAS)
   
   results_70_SAS <- rbind(results_70_SAS,results_tmp_SAS)
@@ -424,7 +424,7 @@ for(i in 1:length(Y_train)){
   results_tmp_EAS <- rbind(sl_all_EAS,ct_EAS,lassosum2_EAS,ldpred2_EAS,
                            GeneCentric_Coding_STAARO_EAS,GeneCentric_Coding_Burden_EAS,
                            GeneCentric_Noncoding_STAARO_EAS,GeneCentric_Noncoding_Burden_EAS,
-                           SlidingWindow_STAARO_EAS,SlidingWindow_Burden_EAS,
+                           # SlidingWindow_STAARO_EAS,SlidingWindow_Burden_EAS,
                            BestAll_RareVariant_STAARO_EAS,BestAll_RareVariant_Burden_EAS,BestAll_Burden_EAS,BestAll_STAARO_EAS)
   
   results_70_EAS <- rbind(results_70_EAS,results_tmp_EAS)
@@ -432,7 +432,7 @@ for(i in 1:length(Y_train)){
   results_tmp_MIX <- rbind(sl_all_MIX,ct_MIX,lassosum2_MIX,ldpred2_MIX,
                            GeneCentric_Coding_STAARO_MIX,GeneCentric_Coding_Burden_MIX,
                            GeneCentric_Noncoding_STAARO_MIX,GeneCentric_Noncoding_Burden_MIX,
-                           SlidingWindow_STAARO_MIX,SlidingWindow_Burden_MIX,
+                           # SlidingWindow_STAARO_MIX,SlidingWindow_Burden_MIX,
                            BestAll_RareVariant_STAARO_MIX,BestAll_RareVariant_Burden_MIX,BestAll_Burden_MIX,BestAll_STAARO_MIX)
   
   results_70_MIX <- rbind(results_70_MIX,results_tmp_MIX)
@@ -440,7 +440,7 @@ for(i in 1:length(Y_train)){
   results_tmp_UNK <- rbind(sl_all_UNK,ct_UNK,lassosum2_UNK,ldpred2_UNK,
                            GeneCentric_Coding_STAARO_UNK,GeneCentric_Coding_Burden_UNK,
                            GeneCentric_Noncoding_STAARO_UNK,GeneCentric_Noncoding_Burden_UNK,
-                           SlidingWindow_STAARO_UNK,SlidingWindow_Burden_UNK,
+                           # SlidingWindow_STAARO_UNK,SlidingWindow_Burden_UNK,
                            BestAll_RareVariant_STAARO_UNK,BestAll_RareVariant_Burden_UNK,BestAll_Burden_UNK,BestAll_STAARO_UNK)
   
   results_70_UNK <- rbind(results_70_UNK,results_tmp_UNK)
@@ -450,8 +450,8 @@ for(i in 1:length(Y_train)){
                           "i","Y_train"))) 
 }
 
-scale <- rep(rep(c("Unscaled","Scaled"),each = 20*14),5)
-causal_prop <- rep(c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01","Causal Prop. 0.001","Causal Prop. 0.0005"),each = 40*14)
+scale <- rep(rep(c("Unscaled","Scaled"),each = 20*12),5)
+causal_prop <- rep(c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01","Causal Prop. 0.001","Causal Prop. 0.0005"),each = 40*12)
 
 results_70_EUR <- data.frame(Scale = scale, Causal_Prop = causal_prop, Method = results_70_EUR$method,R2 = results_70_EUR$r2,R2_Low = results_70_EUR$r2_low,R2_High = results_70_EUR$r2_high)
 results_70_EUR$Train_Size <- nrow(Y_train[[1]])
@@ -710,50 +710,50 @@ for(i in 1:length(Y_train)){
   
   
   
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_EUR",i,".RData"))
-  SlidingWindow_STAARO_EUR <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_NonEUR",i,".RData"))
-  SlidingWindow_STAARO_NonEur <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_EAS",i,".RData"))
-  SlidingWindow_STAARO_EAS <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_AFR",i,".RData"))
-  SlidingWindow_STAARO_AFR <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_SAS",i,".RData"))
-  SlidingWindow_STAARO_SAS <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_MIX",i,".RData"))
-  SlidingWindow_STAARO_MIX <- r2.result_SlidingWindow_STAARO
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_UNK",i,".RData"))
-  SlidingWindow_STAARO_UNK <- r2.result_SlidingWindow_STAARO
-  
-  
-  
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_EUR",i,".RData"))
-  SlidingWindow_Burden_EUR <- r2.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_NonEUR",i,".RData"))
-  SlidingWindow_Burden_NonEur <- r2.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_EAS",i,".RData"))
-  SlidingWindow_Burden_EAS <- r2.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_AFR",i,".RData"))
-  SlidingWindow_Burden_AFR <- r2.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_SAS",i,".RData"))
-  SlidingWindow_Burden_SAS <- r2.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_MIX",i,".RData"))
-  SlidingWindow_Burden_MIX <- r2.result_SlidingWindow_Burden
-  
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_UNK",i,".RData"))
-  SlidingWindow_Burden_UNK <- r2.result_SlidingWindow_Burden
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_EUR",i,".RData"))
+  # SlidingWindow_STAARO_EUR <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_NonEUR",i,".RData"))
+  # SlidingWindow_STAARO_NonEur <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_EAS",i,".RData"))
+  # SlidingWindow_STAARO_EAS <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_AFR",i,".RData"))
+  # SlidingWindow_STAARO_AFR <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_SAS",i,".RData"))
+  # SlidingWindow_STAARO_SAS <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_MIX",i,".RData"))
+  # SlidingWindow_STAARO_MIX <- r2.result_SlidingWindow_STAARO
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_STAARO_result_UNK",i,".RData"))
+  # SlidingWindow_STAARO_UNK <- r2.result_SlidingWindow_STAARO
+  # 
+  # 
+  # 
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_EUR",i,".RData"))
+  # SlidingWindow_Burden_EUR <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_NonEUR",i,".RData"))
+  # SlidingWindow_Burden_NonEur <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_EAS",i,".RData"))
+  # SlidingWindow_Burden_EAS <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_AFR",i,".RData"))
+  # SlidingWindow_Burden_AFR <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_SAS",i,".RData"))
+  # SlidingWindow_Burden_SAS <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_MIX",i,".RData"))
+  # SlidingWindow_Burden_MIX <- r2.result_SlidingWindow_Burden
+  # 
+  # load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/SlidingWindow/SlidingWindow_Burden_result_UNK",i,".RData"))
+  # SlidingWindow_Burden_UNK <- r2.result_SlidingWindow_Burden
   
   
   
@@ -867,7 +867,7 @@ for(i in 1:length(Y_train)){
   results_tmp_EUR <- rbind(sl_all_Eur,ct_EUR,lassosum2_EUR,ldpred2_EUR,
                            GeneCentric_Coding_STAARO_EUR,GeneCentric_Coding_Burden_EUR,
                            GeneCentric_Noncoding_STAARO_EUR,GeneCentric_Noncoding_Burden_EUR,
-                           SlidingWindow_STAARO_EUR,SlidingWindow_Burden_EUR,
+                           # SlidingWindow_STAARO_EUR,SlidingWindow_Burden_EUR,
                            BestAll_RareVariant_STAARO_EUR,BestAll_RareVariant_Burden_EUR,BestAll_Burden_EUR,BestAll_STAARO_EUR)
   
   results_35_EUR <- rbind(results_35_EUR,results_tmp_EUR)
@@ -876,7 +876,7 @@ for(i in 1:length(Y_train)){
   results_tmp_NonEur <- rbind(sl_all_NonEur,ct_NonEur,lassosum2_NonEur,ldpred2_NonEur,
                               GeneCentric_Coding_STAARO_NonEur,GeneCentric_Coding_Burden_NonEur,
                               GeneCentric_Noncoding_STAARO_NonEur,GeneCentric_Noncoding_Burden_NonEur,
-                              SlidingWindow_STAARO_NonEur,SlidingWindow_Burden_NonEur,
+                              # SlidingWindow_STAARO_NonEur,SlidingWindow_Burden_NonEur,
                               BestAll_RareVariant_STAARO_NonEur,BestAll_RareVariant_Burden_NonEur,BestAll_Burden_NonEur,BestAll_STAARO_NonEur)
   
   results_35_NonEur <- rbind(results_35_NonEur,results_tmp_NonEur)
@@ -885,7 +885,7 @@ for(i in 1:length(Y_train)){
   results_tmp_AFR <- rbind(sl_all_AFR,ct_AFR,lassosum2_AFR,ldpred2_AFR,
                            GeneCentric_Coding_STAARO_AFR,GeneCentric_Coding_Burden_AFR,
                            GeneCentric_Noncoding_STAARO_AFR,GeneCentric_Noncoding_Burden_AFR,
-                           SlidingWindow_STAARO_AFR,SlidingWindow_Burden_AFR,
+                           # SlidingWindow_STAARO_AFR,SlidingWindow_Burden_AFR,
                            BestAll_RareVariant_STAARO_AFR,BestAll_RareVariant_Burden_AFR,BestAll_Burden_AFR,BestAll_STAARO_AFR)
   
   results_35_AFR <- rbind(results_35_AFR,results_tmp_AFR)
@@ -893,7 +893,7 @@ for(i in 1:length(Y_train)){
   results_tmp_SAS <- rbind(sl_all_SAS,ct_SAS,lassosum2_SAS,ldpred2_SAS,
                            GeneCentric_Coding_STAARO_SAS,GeneCentric_Coding_Burden_SAS,
                            GeneCentric_Noncoding_STAARO_SAS,GeneCentric_Noncoding_Burden_SAS,
-                           SlidingWindow_STAARO_SAS,SlidingWindow_Burden_SAS,
+                           # SlidingWindow_STAARO_SAS,SlidingWindow_Burden_SAS,
                            BestAll_RareVariant_STAARO_SAS,BestAll_RareVariant_Burden_SAS,BestAll_Burden_SAS,BestAll_STAARO_SAS)
   
   results_35_SAS <- rbind(results_35_SAS,results_tmp_SAS)
@@ -901,7 +901,7 @@ for(i in 1:length(Y_train)){
   results_tmp_EAS <- rbind(sl_all_EAS,ct_EAS,lassosum2_EAS,ldpred2_EAS,
                            GeneCentric_Coding_STAARO_EAS,GeneCentric_Coding_Burden_EAS,
                            GeneCentric_Noncoding_STAARO_EAS,GeneCentric_Noncoding_Burden_EAS,
-                           SlidingWindow_STAARO_EAS,SlidingWindow_Burden_EAS,
+                           # SlidingWindow_STAARO_EAS,SlidingWindow_Burden_EAS,
                            BestAll_RareVariant_STAARO_EAS,BestAll_RareVariant_Burden_EAS,BestAll_Burden_EAS,BestAll_STAARO_EAS)
   
   results_35_EAS <- rbind(results_35_EAS,results_tmp_EAS)
@@ -909,7 +909,7 @@ for(i in 1:length(Y_train)){
   results_tmp_MIX <- rbind(sl_all_MIX,ct_MIX,lassosum2_MIX,ldpred2_MIX,
                            GeneCentric_Coding_STAARO_MIX,GeneCentric_Coding_Burden_MIX,
                            GeneCentric_Noncoding_STAARO_MIX,GeneCentric_Noncoding_Burden_MIX,
-                           SlidingWindow_STAARO_MIX,SlidingWindow_Burden_MIX,
+                           # SlidingWindow_STAARO_MIX,SlidingWindow_Burden_MIX,
                            BestAll_RareVariant_STAARO_MIX,BestAll_RareVariant_Burden_MIX,BestAll_Burden_MIX,BestAll_STAARO_MIX)
   
   results_35_MIX <- rbind(results_35_MIX,results_tmp_MIX)
@@ -917,7 +917,7 @@ for(i in 1:length(Y_train)){
   results_tmp_UNK <- rbind(sl_all_UNK,ct_UNK,lassosum2_UNK,ldpred2_UNK,
                            GeneCentric_Coding_STAARO_UNK,GeneCentric_Coding_Burden_UNK,
                            GeneCentric_Noncoding_STAARO_UNK,GeneCentric_Noncoding_Burden_UNK,
-                           SlidingWindow_STAARO_UNK,SlidingWindow_Burden_UNK,
+                           # SlidingWindow_STAARO_UNK,SlidingWindow_Burden_UNK,
                            BestAll_RareVariant_STAARO_UNK,BestAll_RareVariant_Burden_UNK,BestAll_Burden_UNK,BestAll_STAARO_UNK)
   
   results_35_UNK <- rbind(results_35_UNK,results_tmp_UNK)
@@ -928,8 +928,8 @@ for(i in 1:length(Y_train)){
                           "i","Y_train"))) 
 }
 
-scale <- rep(rep(c("Unscaled","Scaled"),each = 20*14),5)
-causal_prop <- rep(c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01","Causal Prop. 0.001","Causal Prop. 0.0005"),each = 40*14)
+scale <- rep(rep(c("Unscaled","Scaled"),each = 20*12),5)
+causal_prop <- rep(c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01","Causal Prop. 0.001","Causal Prop. 0.0005"),each = 40*12)
 
 results_35_EUR <- data.frame(Scale = scale, Causal_Prop = causal_prop, Method = results_35_EUR$method,R2 = results_35_EUR$r2,R2_Low = results_35_EUR$r2_low,R2_High = results_35_EUR$r2_high)
 results_35_EUR$Train_Size <- nrow(Y_train[[1]])
