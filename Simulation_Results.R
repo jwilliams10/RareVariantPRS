@@ -136,7 +136,7 @@ for(i in 1:length(Y_train)){
   load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_STAARO_result_EUR",i,".RData"))
   GeneCentric_Coding_STAARO_EUR <- r2.result_GeneCentric_Coding_STAARO
   
-  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_Burden_result_NonEUR",i,".RData"))
+  load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_STAARO_result_NonEUR",i,".RData"))
   GeneCentric_Coding_STAARO_NonEur <- r2.result_GeneCentric_Coding_STAARO
   
   load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/GeneCentric_Coding_STAARO_result_EAS",i,".RData"))
