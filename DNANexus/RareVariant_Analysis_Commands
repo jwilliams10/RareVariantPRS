@@ -1,3 +1,4 @@
+##Continuous
 
 ##Gene Centric Coding
 
@@ -115,40 +116,114 @@ done
 done
 
 
-##Sliding Window
 
-for array in {1..6};do
+
+
+
+##Binary
+
+##Gene Centric Coding
+
+for array in {1..5};do
 
 if [ ${array} = 1 ]
 then
-       trait=BMI
+       trait=Asthma
  elif [ ${array} = 2 ]
 then
-       trait=TC
+       trait=T2D
  elif [ ${array} = 3 ]
 then
-       trait=HDL
+       trait=Breast
  elif [ ${array} = 4 ]
 then 
-       trait=LDL
- elif [ ${array} = 5 ]
-then 
-       trait=logTG
+       trait=Prostate
 else
-       trait=Height
+       trait=CAD
 fi
 
 for CHR in {1..22}; do
 dx run staarpipeline --priority=low \
--inullobj_file=UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/nullmodels_staar/${trait}_Train_Null_Model.RData \
+-inullobj_file=UKB_PRS:JW/UKB_Phenotypes/Results/Binary/nullmodels_staar/${trait}_Train_Null_Model.RData \
 -iagds_file=UKB_PRS:UKB_200K_WGS_AGDS_uncompressed_newQClabel/ukb.200k.wgs.chr${CHR}.pass.annotated.gds \
 -iannotation_name_catalog_file=UKB_PRS:UKB_200K_WGS_AGDS_uncompressed_newQClabel/Annotation_name_catalog.csv \
--itest_type=Sliding_Window \
+-itest_type=Gene_Centric_Coding \
+-iuser_cores=32 \
+-iqc_label_dir=annotation/info/QC_label2 \
+-ioutfile=${trait}_UKBB_WES_Coding_Train${CHR} \
+-iannotation_dir=annotation/info/FunctionalAnnotation \
+--destination=UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GeneCentricCoding/ --instance-type="mem3_ssd1_v2_x64" --yes --extra-args '{"executionPolicy":{"restartOn": {"SpotInstanceInterruption": 5}}}'
+done
+
+done
+
+##Gene Centric NonCoding
+
+for array in {1..5};do
+
+if [ ${array} = 1 ]
+then
+       trait=Asthma
+ elif [ ${array} = 2 ]
+then
+       trait=T2D
+ elif [ ${array} = 3 ]
+then
+       trait=Breast
+ elif [ ${array} = 4 ]
+then 
+       trait=Prostate
+else
+       trait=CAD
+fi
+
+for CHR in {1..22}; do
+dx run staarpipeline --priority=low \
+-inullobj_file=UKB_PRS:JW/UKB_Phenotypes/Results/Binary/nullmodels_staar/${trait}_Train_Null_Model.RData \
+-iagds_file=UKB_PRS:UKB_200K_WGS_AGDS_uncompressed_newQClabel/ukb.200k.wgs.chr${CHR}.pass.annotated.gds \
+-iannotation_name_catalog_file=UKB_PRS:UKB_200K_WGS_AGDS_uncompressed_newQClabel/Annotation_name_catalog.csv \
+-itest_type=Gene_Centric_Noncoding \
 -iuser_cores=16 \
 -iqc_label_dir=annotation/info/QC_label2 \
--ioutfile=${trait}_UKBB_WES_Sliding_Train${CHR} \
+-ioutfile=${trait}_UKBB_WES_Noncoding_Train${CHR} \
 -iannotation_dir=annotation/info/FunctionalAnnotation \
---destination=UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/SlidingWindow/ --instance-type="mem3_ssd1_v2_x64" --yes 
+--destination=UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GeneCentricNoncoding/ --instance-type="mem3_ssd1_v2_x64" --yes 
+done
+
+done
+
+
+##Gene Centric ncRNA
+
+for array in {1..5};do
+
+if [ ${array} = 1 ]
+then
+       trait=Asthma
+ elif [ ${array} = 2 ]
+then
+       trait=T2D
+ elif [ ${array} = 3 ]
+then
+       trait=Breast
+ elif [ ${array} = 4 ]
+then 
+       trait=Prostate
+else
+       trait=CAD
+fi
+
+for CHR in {1..22}; do
+dx run staarpipeline --priority=low \
+-inullobj_file=UKB_PRS:JW/UKB_Phenotypes/Results/Binary/nullmodels_staar/${trait}_Train_Null_Model.RData \
+-iagds_file=UKB_PRS:UKB_200K_WGS_AGDS_uncompressed_newQClabel/ukb.200k.wgs.chr${CHR}.pass.annotated.gds \
+-iannotation_name_catalog_file=UKB_PRS:UKB_200K_WGS_AGDS_uncompressed_newQClabel/Annotation_name_catalog.csv \
+-itest_type=ncRNA \
+-iuser_cores=16 \
+-iqc_label_dir=annotation/info/QC_label2 \
+-ioutfile=${trait}_UKBB_WES_ncRNA_Train${CHR} \
+-iannotation_dir=annotation/info/FunctionalAnnotation \
+--destination=UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GeneCentric_ncRNA/ --instance-type="mem3_ssd1_v2_x64" --yes 
 done
 
 done

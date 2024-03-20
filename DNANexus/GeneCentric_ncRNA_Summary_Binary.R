@@ -1,31 +1,29 @@
 rm(list = ls())
 
-# for array in 1 2 3 4 5 6;
+# for array in 1 2 3 4 5;
 # do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/GeneCentric_ncRNA_Summary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/GeneCentric_ncRNA_Summary.sh -icmd="bash GeneCentric_ncRNA_Summary.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentric_ncRNA/ --priority low --instance-type mem2_ssd1_v2_x2
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_Analysis/GeneCentric_ncRNA_Summary_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_Analysis/GeneCentric_ncRNA_Summary_Binary.sh -icmd="bash GeneCentric_ncRNA_Summary_Binary.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GeneCentric_ncRNA/ --priority low --instance-type mem2_ssd1_v2_x2
 # done
 
 library(data.table)
 trait <- as.numeric(commandArgs(TRUE)[1])
 
 if(trait == 1){
-  trait <- "BMI"
+  trait <- "Asthma"
 }else if(trait == 2){
-  trait <- "TC"
+  trait <- "T2D"
 }else if(trait == 3){
-  trait <- "HDL"
+  trait <- "Breast"
 }else if(trait == 4){
-  trait <- "LDL"
-}else if(trait == 5){
-  trait <- "logTG"
+  trait <- "Prostate"
 }else{
-  trait <- "Height"
+  trait <- "CAD"
 }
 
 results_ncRNA_genome <- NULL
 for (i in 1:22){
-  results <- get(load(paste0(trait,"_UKBB_WES_Noncoding_Train",i,".Rdata")))
-  file.remove(paste0(trait,"_UKBB_WES_Noncoding_Train",i,".Rdata"))
+  results <- get(load(paste0(trait,"_UKBB_WES_ncRNA_Train",i,".Rdata")))
+  file.remove(paste0(trait,"_UKBB_WES_ncRNA_Train",i,".Rdata"))
   results_ncRNA_genome <- c(results_ncRNA_genome, results)
 }
 

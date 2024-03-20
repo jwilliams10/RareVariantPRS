@@ -12,11 +12,11 @@ library(readr)
 library(dplyr)
 library(stringr)
 
-# for trait in 1 2 3 4 5 6;
+# for trait in 1 2 3 4 5;
 # do
-# for array in {1..200};
+# for array in {1..1600};
 # do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/GeneCentric_ncRNA_EffectSizes.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/GeneCentric_ncRNA_EffectSizes.sh -icmd="bash GeneCentric_ncRNA_EffectSizes.sh ${trait} ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentric_ncRNA_es/ --priority low --extra-args '{"executionPolicy":{"maxSpotTries":5,"spotOnly":true}}' --instance-type mem3_ssd1_v2_x2
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_PRS/GeneCentric_Noncoding_EffectSizes_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_PRS/GeneCentric_Noncoding_EffectSizes_Binary.sh -icmd="bash GeneCentric_Noncoding_EffectSizes_Binary.sh ${trait} ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GeneCentricNoncoding_es/ --priority low --extra-args '{"executionPolicy":{"maxSpotTries":5,"spotOnly":true}}' --instance-type mem3_ssd1_v2_x2
 # done
 # done
 
@@ -591,11 +591,11 @@ Gene_Centric_Noncoding_Burden_Effect_Size_Jake <- function(chr,gene_name,categor
 #           User Input
 ###########################################################
 
-trait <- gsub("_ncRNA_sig.csv","",list.files()[str_detect(list.files(),"_ncRNA_sig.csv")])
+trait <- gsub("_noncoding_sig.csv","",list.files()[str_detect(list.files(),"_noncoding_sig.csv")])
 
 ### Significant Results 
-ncRNA_sig <- read_csv(paste0(trait,"_ncRNA_sig.csv"))
-colnames(ncRNA_sig) <- c("Gene","Chr","Category","Number_SNV","Burden_1_1","STAAR_O")
+noncoding_sig <- read_csv(paste0(trait,"_noncoding_sig.csv"))
+colnames(noncoding_sig) <- c("Gene","Chr","Category","Number_SNV","Burden_1_1","STAAR_O")
 
 ## Null model
 obj_nullmodel <- get(load(paste0(trait,"_Train_Null_Model.RData")))
@@ -612,35 +612,36 @@ Annotation_name_catalog <- read.csv("Annotation_name_catalog.csv")
 
 chunks <- list()
 
-set <- c(0,18,40,55,64,75,84,93,101,109,116,125,133,142,149,157,164,173,178,186,192,197,200)
+set <- c(0,184,288,384,448,528,616,688,744,816,880,984,1072,1096,1152,1200,1264,1360,1384,1504,1552,1568,1600)
 
 for(i in 1:22){
-  indexes <- which(ncRNA_sig$Chr == i)
+  indexes <- which(noncoding_sig$Chr == i)
   a <- cut(seq_along(indexes), set[i + 1] - set[i], labels = FALSE)
   chunks <- c(chunks,split(indexes,a))
 }
 
 arrayid <- as.numeric(commandArgs(TRUE)[1])
 
-ncRNA_sig <- ncRNA_sig[chunks[[arrayid]],]
+noncoding_sig <- noncoding_sig[chunks[[arrayid]],]
 
-chr <- unique(ncRNA_sig$Chr)
+chr <- unique(noncoding_sig$Chr)
 
 gds.path <- list.files()[str_detect(list.files(),".gds")]
 genofile <- seqOpen(gds.path)
 
-unique_ids <- paste0(ncRNA_sig$Gene,"__",ncRNA_sig$Category)
+unique_ids <- paste0(noncoding_sig$Gene,"__",noncoding_sig$Category)
 
-ncRNA_effectsizes_parlapply <- function(x,
+noncoding_effectsizes_parlapply <- function(x,
                                             chr, genofile, obj_nullmodel, QC_label, variant_type, geno_missing_imputation, Annotation_dir, Annotation_name_catalog){
   tmp <- unlist(strsplit(x,"__"))
   gene <- tmp[1]
   category <- tmp[2]
   
   a <- Gene_Centric_Noncoding_Burden_Effect_Size_Jake(chr = chr,gene_name = gene,category=category,
-                                                      genofile = genofile,obj_nullmodel = obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
-                                                      QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
-                                                      Annotation_dir=Annotation_dir,Annotation_name_catalog = Annotation_name_catalog,silent=FALSE)
+    genofile = genofile,obj_nullmodel = obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
+    QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+    Annotation_dir=Annotation_dir,Annotation_name_catalog = Annotation_name_catalog,silent=FALSE)
+  
   if(!is.null(a)){
     a <- data.frame(Gene = gene,Chr = chr,Category = category,Number_SNV = a[[4]],cMAC = a[[5]],Burden_Score_Stat = a[[6]],Burden_SE_Score = a[[7]],Burden_pvalue = a[[8]],Burden_Est = a[[9]], Burden_SE_Est = a[[10]])
     a <- unique(a)
@@ -648,19 +649,19 @@ ncRNA_effectsizes_parlapply <- function(x,
   return(a)
 } 
 
-a <- lapply(unique_ids,ncRNA_effectsizes_parlapply,
+a <- lapply(unique_ids,noncoding_effectsizes_parlapply,
             chr = chr, genofile = genofile, obj_nullmodel = obj_nullmodel, QC_label = QC_label, variant_type = variant_type, geno_missing_imputation = geno_missing_imputation, Annotation_dir = Annotation_dir, Annotation_name_catalog = Annotation_name_catalog)
 
 seqClose(genofile)
 
 effect_sizes <- data.table::rbindlist(a)
-effect_sizes$Chr <- unique(ncRNA_sig$Chr)
+effect_sizes$Chr <- unique(noncoding_sig$Chr)
 
-ncRNA_sig <- inner_join(ncRNA_sig,effect_sizes)
+noncoding_sig <- inner_join(noncoding_sig,effect_sizes)
 
-write.csv(ncRNA_sig,row.names = FALSE,file = paste0(trait,"_ncRNA_sig_array",arrayid,".csv"))
+write.csv(noncoding_sig,row.names = FALSE,file = paste0(trait,"_noncoding_sig_array",arrayid,".csv"))
 
-a <- list.files()[list.files() != paste0(trait,"_ncRNA_sig_array",arrayid,".csv")]
+a <- list.files()[list.files() != paste0(trait,"_noncoding_sig_array",arrayid,".csv")]
 
 for(i in 1:length(a)){
   system(paste0("rm ",a[i]))

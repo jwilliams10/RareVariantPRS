@@ -1,25 +1,23 @@
 rm(list = ls())
 
-# for array in 1 2 3 4 5 6;
+# for array in 1 2 3 4 5;
 # do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/GeneCentric_Noncoding_Summary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/GeneCentric_Noncoding_Summary.sh -icmd="bash GeneCentric_Noncoding_Summary.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentricNoncoding/ --priority low --instance-type mem2_ssd1_v2_x8
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_Analysis/GeneCentric_Noncoding_Summary_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_Analysis/GeneCentric_Noncoding_Summary_Binary.sh -icmd="bash GeneCentric_Noncoding_Summary_Binary.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GeneCentricNoncoding/ --priority low --instance-type mem2_ssd1_v2_x8
 # done
 
 library(data.table)
 trait <- as.numeric(commandArgs(TRUE)[1])
 
 if(trait == 1){
-  trait <- "BMI"
+  trait <- "Asthma"
 }else if(trait == 2){
-  trait <- "TC"
+  trait <- "T2D"
 }else if(trait == 3){
-  trait <- "HDL"
+  trait <- "Breast"
 }else if(trait == 4){
-  trait <- "LDL"
-}else if(trait == 5){
-  trait <- "logTG"
+  trait <- "Prostate"
 }else{
-  trait <- "Height"
+  trait <- "CAD"
 }
 
 results_noncoding_genome <- NULL
@@ -45,4 +43,4 @@ results_noncoding_genome <- rbindlist(results_noncoding_genome)
 results_noncoding_genome$Number_SNV <- as.numeric(results_noncoding_genome$Number_SNV)
 results_noncoding_genome <- results_noncoding_genome[results_noncoding_genome$Number_SNV < 2000,]
 
-write.csv(results_noncoding_genome,file = paste0(trait,"_noncoding_sig_new.csv"),row.names = FALSE)
+write.csv(results_noncoding_genome,file = paste0(trait,"_noncoding_sig.csv"),row.names = FALSE)

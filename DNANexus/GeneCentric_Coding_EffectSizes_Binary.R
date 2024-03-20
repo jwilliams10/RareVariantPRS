@@ -12,11 +12,11 @@ library(readr)
 library(dplyr)
 library(stringr)
 
-# for trait in 1 2 3 4 5 6;
+# for trait in 1 2 3 4 5;
 # do
 # for array in {1..400};
 # do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/GeneCentric_Coding_EffectSizes.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/GeneCentric_Coding_EffectSizes.sh -icmd="bash GeneCentric_Coding_EffectSizes.sh ${trait} ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentricCoding_es/ --priority low --extra-args '{"executionPolicy":{"maxSpotTries":5,"spotOnly":true}}' --instance-type mem3_ssd1_v2_x2
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_PRS/GeneCentric_Coding_EffectSizes_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_PRS/GeneCentric_Coding_EffectSizes_Binary.sh -icmd="bash GeneCentric_Coding_EffectSizes_Binary.sh ${trait} ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GeneCentricCoding_es/ --priority low --extra-args '{"executionPolicy":{"maxSpotTries":5,"spotOnly":true}}' --instance-type mem3_ssd1_v2_x2
 # done
 # done
 

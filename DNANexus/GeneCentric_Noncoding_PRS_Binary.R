@@ -1,5 +1,15 @@
 rm(list=ls())
+list.files()
 gc()
+
+# for trait in 1 2 3 4 5;
+# do
+# for array in {1..5884};
+# do
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_PRS/GeneCentric_Noncoding_PRS_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_PRS/GeneCentric_Noncoding_PRS_Binary.sh -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/noncoding_chr.csv -icmd="bash GeneCentric_Noncoding_PRS_Binary.sh ${trait} ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GeneCentricNoncoding_PRS/ --priority low --extra-args '{"executionPolicy":{"maxSpotTries":5,"spotOnly":true}}' --instance-type mem3_ssd1_v2_x2
+# done
+# done
+
 ## load required package
 library(gdsfmt)
 library(SeqArray)
@@ -12,17 +22,7 @@ library(readr)
 library(dplyr)
 library(stringr)
 
-# for trait in 1 2 3 4 5 6;
-# do
-# for array in {1..200};
-# do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/GeneCentric_ncRNA_EffectSizes.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/GeneCentric_ncRNA_EffectSizes.sh -icmd="bash GeneCentric_ncRNA_EffectSizes.sh ${trait} ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentric_ncRNA_es/ --priority low --extra-args '{"executionPolicy":{"maxSpotTries":5,"spotOnly":true}}' --instance-type mem3_ssd1_v2_x2
-# done
-# done
-
-## source code
-Burden_Effect_Size <- function(genotype,obj_nullmodel,
-                               rare_maf_cutoff=0.01,rv_num_cutoff=2){
+Burden_PRS <- function(genotype,rare_maf_cutoff=0.01,rv_num_cutoff=2,BETA = NULL){
   
   # if(class(genotype) != "matrix" && !(!is.null(attr(class(genotype), "package")) && attr(class(genotype), "package") == "Matrix")){
   #   stop("genotype is not a matrix!")
@@ -38,87 +38,38 @@ Burden_Effect_Size <- function(genotype,obj_nullmodel,
   genotype <- matrix_flip(genotype)
   MAF <- genotype$MAF
   RV_label <- as.vector((MAF<rare_maf_cutoff)&(MAF>0))
-  Geno_rare <- genotype$Geno[,RV_label]
   
-  rm(genotype)
   gc()
   
-  if(sum(RV_label) >= rv_num_cutoff){
-    G <- as(Geno_rare,"dgCMatrix")
-    MAF <- MAF[RV_label]
+  if(sum(RV_label) == 0){
+    PRS <- matrix(0,nrow = nrow(genotype$Geno),ncol = 1)
+    return(PRS)
+  }else if(sum(RV_label) == 1){
+    Geno_rare <- genotype$Geno[,RV_label,drop = FALSE]
+    G <- Geno_rare
     rm(Geno_rare)
     gc()
     
-    if(obj_nullmodel$relatedness){
-      if(!obj_nullmodel$sparse_kins){
-        
-        ## dense GRM
-        P <- obj_nullmodel$P
-        residuals.phenotype <- obj_nullmodel$scaled.residuals
-        
-        Cov <- t(G)%*%P%*%G
-      }else{
-        ## Sparse GRM 
-        Sigma_i <- obj_nullmodel$Sigma_i
-        Sigma_iX <- as.matrix(obj_nullmodel$Sigma_iX)
-        cov <- obj_nullmodel$cov
-        
-        residuals.phenotype <- obj_nullmodel$scaled.residuals
-        
-        tSigma_iX_G = t(Sigma_iX)%*%G
-        Cov = t(Sigma_i%*%G)%*%G - t(tSigma_iX_G)%*%cov%*%tSigma_iX_G
-        
-      }
-    }else{
-      X <- model.matrix(obj_nullmodel)
-      working <- obj_nullmodel$weights
-      sigma <- sqrt(summary(obj_nullmodel)$dispersion)
-      if(obj_nullmodel$family[1] == "binomial"){
-        tX_G = t(X)%*%diag(working)%*%G
-        Cov = t(G)%*%diag(working)%*%G - t(tX_G)%*%solve(t(X)%*%diag(working)%*%X)%*%tX_G
-        
-      }else if(obj_nullmodel$family[1] == "gaussian"){
-        tX_G = t(X)%*%G
-        Cov = t(G)%*%G - t(tX_G)%*%solve(t(X)%*%X)%*%tX_G
-      }
-      
-      Cov = Cov*sigma^2
-      
-      residuals.phenotype <- obj_nullmodel$y - obj_nullmodel$fitted.values
-      
-    }
-    
-    Score <- t(G)%*%residuals.phenotype 
-    
-    Burden_Score <- sum(Score)
-    Burden_Var <- sum(Cov)
-    
-    Burden_Effect_Size <- Burden_Score/Burden_Var
-    Burden_test_chisq <- Burden_Score^2/Burden_Var
-    Burden_pvalue <- pchisq(Burden_test_chisq,1,lower=FALSE)
-    
-    num_variant <- sum(RV_label) #dim(G)[2]
-    cMAC <- sum(G)
-    
-    return(list(num_variant = num_variant,
-                cMAC = cMAC,
-                RV_label = RV_label,
-                Burden_Score_Stat = Burden_Score, 
-                Burden_SE_Score = sqrt(Burden_Var),
-                Burden_pvalue = Burden_pvalue,
-                Burden_Est = Burden_Effect_Size,
-                Burden_SE_Est = 1/sqrt(Burden_Var)))
+    PRS <- G*BETA
+    return(PRS)
   }else{
-    stop(paste0("Number of rare variant in the set is less than ",rv_num_cutoff,"!"))
+    Geno_rare <- genotype$Geno[,RV_label]
+    G <- Geno_rare
+    rm(Geno_rare)
+    gc()
+    
+    C <- G%*%matrix(1,nrow=ncol(G),ncol = 1)
+    PRS <- C*BETA
+    return(PRS)
   }
   
 }
 
-Gene_Centric_Noncoding_Burden_Effect_Size_Jake <- function(chr,gene_name,category=c("downstream","upstream","UTR","promoter_CAGE","promoter_DHS","enhancer_CAGE","enhancer_DHS","ncRNA"),
-                                                           genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
-                                                           QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
-                                                           Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,silent=FALSE){
-  
+Gene_Centric_Noncoding_Burden_PRS <- function(chr,gene_name,category=c("downstream","upstream","UTR","promoter_CAGE","promoter_DHS","enhancer_CAGE","enhancer_DHS","ncRNA"),
+                                              genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                                              BETA,
+                                              QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
+                                              Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,silent=FALSE){
   ## evaluate choices
   category <- match.arg(category)
   variant_type <- match.arg(variant_type)
@@ -560,45 +511,30 @@ Gene_Centric_Noncoding_Burden_Effect_Size_Jake <- function(chr,gene_name,categor
     }
   }
   
-  burden_eff <- 0
-  try(burden_eff <- Burden_Effect_Size(genotype=Geno,obj_nullmodel=obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+  Burden_PRS <- Burden_PRS(genotype=Geno,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,BETA = BETA)
   
-  results <- c()
-  if(class(burden_eff)=="list"){
-    results_temp <- genes[1,]
-    results_temp[3] <- category
-    results_temp[2] <- chr
-    results_temp[1] <- as.character(gene_name)
-    results_temp[4] <- burden_eff$num_variant
-    
-    results_temp <- c(results_temp,burden_eff$cMAC,burden_eff$Burden_Score_Stat,burden_eff$Burden_SE_Score,burden_eff$Burden_pvalue,burden_eff$Burden_Est,burden_eff$Burden_SE_Est)
-    
-    results <- rbind(results,results_temp)
-  }
-  
-  if(!is.null(results)){
-    colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
-    colnames(results) <- c("Gene name","Chr","Category","#SNV",
-                           "cMAC","Burden_Score_Stat","Burden_SE_Score",
-                           "Burden_pvalue","Burden_Est","Burden_SE_Est")
-  }
+  Burden_PRS <- data.frame(ID = phenotype.id.merge$phenotype.id,PRS = Burden_PRS)
   
   seqResetFilter(genofile)
-  return(results)
+  return(Burden_PRS)
 }
+
 
 ###########################################################
 #           User Input
 ###########################################################
 
-trait <- gsub("_ncRNA_sig.csv","",list.files()[str_detect(list.files(),"_ncRNA_sig.csv")])
+trait <- gsub("_noncoding_sig_es.csv","",list.files()[str_detect(list.files(),"_noncoding_sig_es.csv")])
 
 ### Significant Results 
-ncRNA_sig <- read_csv(paste0(trait,"_ncRNA_sig.csv"))
-colnames(ncRNA_sig) <- c("Gene","Chr","Category","Number_SNV","Burden_1_1","STAAR_O")
+Train_Effect_Sizes_All <- read_csv(paste0(trait,"_noncoding_sig_es.csv"))
 
 ## Null model
-obj_nullmodel <- get(load(paste0(trait,"_Train_Null_Model.RData")))
+obj_nullmodel_tune <- get(load(paste0(trait,"_Tune_Null_Model.RData")))
+obj_nullmodel_validation <- get(load(paste0(trait,"_Validation_Null_Model.RData")))
+
+obj_nullmodel <- obj_nullmodel_tune
+obj_nullmodel$id_include <- c(obj_nullmodel$id_include,obj_nullmodel_validation$id_include)
 
 ## Parameter
 QC_label <- "annotation/info/QC_label2"
@@ -610,57 +546,144 @@ Annotation_dir <- "annotation/info/FunctionalAnnotation"
 ## Annotation channel
 Annotation_name_catalog <- read.csv("Annotation_name_catalog.csv")
 
-chunks <- list()
+thresholds <- c(1e-07,5e-07,1e-06,5e-06,1e-05,5e-05,1e-04,5e-04,1e-03,5e-03,1e-02,5e-02,1e-01,5e-01,1.0)
 
-set <- c(0,18,40,55,64,75,84,93,101,109,116,125,133,142,149,157,164,173,178,186,192,197,200)
-
-for(i in 1:22){
-  indexes <- which(ncRNA_sig$Chr == i)
-  a <- cut(seq_along(indexes), set[i + 1] - set[i], labels = FALSE)
-  chunks <- c(chunks,split(indexes,a))
-}
+PRS <- NULL
 
 arrayid <- as.numeric(commandArgs(TRUE)[1])
+arrayid_original <- arrayid
 
-ncRNA_sig <- ncRNA_sig[chunks[[arrayid]],]
+if(arrayid>2942){
+  Burden <- 1
+  arrayid <- arrayid - 2942
+}else{
+  Burden <- 0
+}
 
-chr <- unique(ncRNA_sig$Chr)
+sets <- c(0,22,44,66,88,110,132,154,176,198,220,242,342,542,1342,2942)
+splits <- diff(sets)
 
-gds.path <- list.files()[str_detect(list.files(),".gds")]
-genofile <- seqOpen(gds.path)
+if(arrayid <= 22){
+  threshold <- 1
+  jobid <- arrayid - 0
+}else if(arrayid <= 44){
+  threshold <- 2
+  jobid <- arrayid - 22
+}else if(arrayid <= 66){
+  threshold <- 3
+  jobid <- arrayid - 44
+}else if(arrayid <= 88){
+  threshold <- 4
+  jobid <- arrayid - 66
+}else if(arrayid <= 110){
+  threshold <- 5
+  jobid <- arrayid - 88
+}else if(arrayid <= 132){
+  threshold <- 6
+  jobid <- arrayid - 110
+}else if(arrayid <= 154){
+  threshold <- 7
+  jobid <- arrayid - 132
+}else if(arrayid <= 176){
+  threshold <- 8
+  jobid <- arrayid - 154
+}else if(arrayid <= 198){
+  threshold <- 9
+  jobid <- arrayid - 176
+}else if(arrayid <= 220){
+  threshold <- 10
+  jobid <- arrayid - 198
+}else if(arrayid <= 242){
+  threshold <- 11
+  jobid <- arrayid - 220
+}else if(arrayid <= 342){
+  threshold <- 12
+  jobid <- arrayid - 242
+  set <- c(0,12,18,24,28,33,39,43,47,51,55,62,67,69,72,75,79,85,87,94,97,98,100)
+}else if(arrayid <= 542){
+  threshold <- 13
+  jobid <- arrayid - 342
+  set <- c(0,23,36,48,56,66,77,86,93,102,110,123,134,137,144,150,158,170,173,188,194,196,200)
+}else if(arrayid <= 1342){
+  threshold <- 14
+  jobid <- arrayid - 542
+  set <- c(0,92,144,192,224,264,308,344,372,408,440,492,536,548,576,600,632,680,692,752,776,784,800)
+}else{
+  threshold <- 15
+  jobid <- arrayid - 1342
+  set <- c(0,184,288,384,448,528,616,688,744,816,880,984,1072,1096,1152,1200,1264,1360,1384,1504,1552,1568,1600)
+}
 
-unique_ids <- paste0(ncRNA_sig$Gene,"__",ncRNA_sig$Category)
+if(Burden == 0){
+  Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$STAAR_O <= thresholds[threshold],]
+}else{
+  Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$Burden_1_1 <= thresholds[threshold],]
+}
 
-ncRNA_effectsizes_parlapply <- function(x,
-                                            chr, genofile, obj_nullmodel, QC_label, variant_type, geno_missing_imputation, Annotation_dir, Annotation_name_catalog){
-  tmp <- unlist(strsplit(x,"__"))
-  gene <- tmp[1]
-  category <- tmp[2]
-  
-  a <- Gene_Centric_Noncoding_Burden_Effect_Size_Jake(chr = chr,gene_name = gene,category=category,
-                                                      genofile = genofile,obj_nullmodel = obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
-                                                      QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
-                                                      Annotation_dir=Annotation_dir,Annotation_name_catalog = Annotation_name_catalog,silent=FALSE)
-  if(!is.null(a)){
-    a <- data.frame(Gene = gene,Chr = chr,Category = category,Number_SNV = a[[4]],cMAC = a[[5]],Burden_Score_Stat = a[[6]],Burden_SE_Score = a[[7]],Burden_pvalue = a[[8]],Burden_Est = a[[9]], Burden_SE_Est = a[[10]])
-    a <- unique(a)
+Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$Burden_Est != 0,]
+
+if(nrow(Train_Effect_Sizes_All) == 0){
+  PRS <- data.frame(ID = 1:length(obj_nullmodel$id_include),PRS = 0)
+}else{
+  chunks <- NULL
+  if(splits[threshold] != 22){
+    for(i in 1:22){
+      indexes <- which(Train_Effect_Sizes_All$Chr == i)
+      if(set[i + 1] - set[i] != 1){
+        a <- cut(seq_along(indexes), set[i + 1] - set[i], labels = FALSE)
+        chunks <- c(chunks,split(indexes,a))
+      }else{
+        chunks <- c(chunks,list(indexes))
+      }
+    }
+    Train_Effect_Sizes_All <- Train_Effect_Sizes_All[chunks[[jobid]],]
+  }else{
+    Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$Chr == jobid,]
   }
-  return(a)
-} 
+  
+  if(nrow(Train_Effect_Sizes_All) == 0){
+    PRS <- data.frame(ID = 1:length(obj_nullmodel$id_include),PRS = 0)
+  }else{
+    chr <- unique(Train_Effect_Sizes_All$Chr)
+    
+    gds.path <- list.files()[str_detect(list.files(),".gds")]
+    genofile <- seqOpen(gds.path)
+    
+    unique_ids <- paste0(Train_Effect_Sizes_All$Gene,"__",Train_Effect_Sizes_All$Category,"__",Train_Effect_Sizes_All$Burden_Est)
+    
+    ncRNA_effectsizes_parlapply <- function(x,
+                                            chr, genofile, obj_nullmodel, QC_label, variant_type, geno_missing_imputation, Annotation_dir, Annotation_name_catalog){
+      
+      tmp <- unlist(strsplit(x,"__"))
+      gene <- tmp[1]
+      category <- tmp[2]
+      BETA <- as.numeric(tmp[3])
+      
+      a <- Gene_Centric_Noncoding_Burden_PRS(chr = chr,gene_name = gene,category=category, BETA = BETA,
+                                             genofile = genofile,obj_nullmodel = obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                                             QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+                                             Annotation_dir=Annotation_dir,Annotation_name_catalog = Annotation_name_catalog,silent=FALSE)
+      return(a)
+    } 
+    
+    PRSs <- lapply(unique_ids,ncRNA_effectsizes_parlapply,
+                   chr = chr, genofile = genofile, obj_nullmodel = obj_nullmodel, QC_label = QC_label, variant_type = variant_type, geno_missing_imputation = geno_missing_imputation, Annotation_dir = Annotation_dir, Annotation_name_catalog = Annotation_name_catalog)
+    
+    seqClose(genofile)
+    
+    PRS_Final <- PRSs[[1]]
+    if(length(PRSs) > 1){
+      for(i in 2:length(PRSs)){
+        PRS_Final[,2] <- PRS_Final[,2] + PRSs[[i]][,2]
+      } 
+    }
+    PRS <- PRS_Final 
+  }
+}
 
-a <- lapply(unique_ids,ncRNA_effectsizes_parlapply,
-            chr = chr, genofile = genofile, obj_nullmodel = obj_nullmodel, QC_label = QC_label, variant_type = variant_type, geno_missing_imputation = geno_missing_imputation, Annotation_dir = Annotation_dir, Annotation_name_catalog = Annotation_name_catalog)
+write.csv(PRS,row.names = FALSE,file = paste0(trait,"_Noncoding_PRS",arrayid_original,".csv"))
 
-seqClose(genofile)
-
-effect_sizes <- data.table::rbindlist(a)
-effect_sizes$Chr <- unique(ncRNA_sig$Chr)
-
-ncRNA_sig <- inner_join(ncRNA_sig,effect_sizes)
-
-write.csv(ncRNA_sig,row.names = FALSE,file = paste0(trait,"_ncRNA_sig_array",arrayid,".csv"))
-
-a <- list.files()[list.files() != paste0(trait,"_ncRNA_sig_array",arrayid,".csv")]
+a <- list.files()[list.files() != paste0(trait,"_Noncoding_PRS",arrayid_original,".csv")]
 
 for(i in 1:length(a)){
   system(paste0("rm ",a[i]))
