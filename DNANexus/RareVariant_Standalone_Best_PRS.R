@@ -6,6 +6,8 @@ library(dplyr)
 library(boot)
 library(RISCA)
 
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/RareVariant_Standalone_Best_PRS.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/RareVariant_Standalone_Best_PRS.sh -icmd="bash RareVariant_Standalone_Best_PRS.sh" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/ --priority low --instance-type mem1_ssd1_v2_x4
+
 trait <- "BMI"
 
 for(trait in c("BMI","HDL","LDL","Height","TC","logTG")){
