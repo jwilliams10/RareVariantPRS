@@ -443,31 +443,33 @@ ggplot(common[!(common$Ancestry %in% c("NonEUR","UNK")),]) +
   geom_bar(aes(x=Method, y=r2,fill=Method), stat="identity", alpha=0.7) +
 #  geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Trait), vars(Ancestry)) + 
-  ggtitle("Common Variants") + 
+  ggtitle("WES Common Variants") + 
   ylab(bquote("R"^"2")) + 
   theme_Publication() + 
-  scale_fill_Publication()
+  scale_fill_Publication() + 
+  ylim(0,0.3)
 
 rare <- results[results$Method %in% c("SlidingWindow_STAARO","SlidingWindow_Burden","GeneCentric_Coding_STAARO","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARO","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARO"),]
 rare$Method <- factor(rare$Method,levels = c("GeneCentric_Coding_STAARO","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARO","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARO"))
 
-ggplot(rare) +
-  geom_bar(aes(x=Method, y=r2,fill=Method), stat="identity", alpha=0.7) +
-  geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
-  facet_grid(vars(Trait), vars(Ancestry)) + 
-  ggtitle("Rare Variants") + 
-  ylab(bquote("R"^"2")) + 
-  theme_Publication() + 
-  scale_fill_Publication()
+# ggplot(rare) +
+#   geom_bar(aes(x=Method, y=r2,fill=Method), stat="identity", alpha=0.7) +
+#   geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
+#   facet_grid(vars(Trait), vars(Ancestry)) + 
+#   ggtitle("Rare Variants") + 
+#   ylab(bquote("R"^"2")) + 
+#   theme_Publication() + 
+#   scale_fill_Publication()
 
 ggplot(rare[!(rare$Ancestry %in% c("NonEUR","UNK")),]) +
   geom_bar(aes(x=Method, y=r2,fill=Method), stat="identity", alpha=0.7) +
 #  geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Trait), vars(Ancestry)) + 
-  ggtitle("Rare Variants") + 
+  ggtitle("WES Rare Variants") + 
   ylab(bquote("R"^"2")) + 
   theme_Publication() + 
-  scale_fill_Publication()
+  scale_fill_Publication() + 
+  ylim(0,0.07)
 
 paper <- results[results$Method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"),]
 paper$Method <- factor(paper$Method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"))
@@ -476,18 +478,19 @@ ggplot(paper[!(paper$Ancestry %in% c("UNK","NonEUR")),]) +
   geom_bar(aes(x=Method, y=r2,fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Trait), vars(Ancestry)) + 
-  ggtitle("Paper Plot") + 
+  ggtitle("WES Overall Results") + 
   ylab(bquote("R"^"2")) + 
   theme_Publication() + 
-  scale_fill_Publication()
+  scale_fill_Publication() + 
+  ylim(0,0.3)
 
 # Max 5, no error bars.
 
-ggplot(paper[paper$Ancestry == "EUR" & paper$Trait == "HDL",]) +
-  geom_bar(aes(x=Method, y=r2,fill=Method), stat="identity", alpha=0.7) +
-#  geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
-#  facet_grid(vars(Trait), vars(Ancestry)) + 
-  ggtitle("HDL EUR") + 
-  ylab(bquote("R"^"2")) + 
-  theme_Publication() + 
-  scale_fill_Publication()
+# ggplot(paper[paper$Ancestry == "EUR" & paper$Trait == "HDL",]) +
+#   geom_bar(aes(x=Method, y=r2,fill=Method), stat="identity", alpha=0.7) +
+# #  geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
+# #  facet_grid(vars(Trait), vars(Ancestry)) + 
+#   ggtitle("HDL EUR") + 
+#   ylab(bquote("R"^"2")) + 
+#   theme_Publication() + 
+#   scale_fill_Publication()
