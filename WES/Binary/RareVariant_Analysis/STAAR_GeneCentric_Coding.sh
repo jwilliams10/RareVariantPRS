@@ -6,7 +6,7 @@
 #SBATCH --mem-per-cpu=30G
 
 # module purge
-module load R/4.3.0
+module load R/4.3.2
 
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/WES/Binary/RareVariant_Analysis/Asthma_STAAR_GeneCentric_Coding.R ${SLURM_ARRAY_TASK_ID} > Asthma_STAAR_GeneCentric_Coding"${SLURM_ARRAY_TASK_ID}".Rout &
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/WES/Binary/RareVariant_Analysis/CAD_STAAR_GeneCentric_Coding.R ${SLURM_ARRAY_TASK_ID} > CAD_STAAR_GeneCentric_Coding"${SLURM_ARRAY_TASK_ID}".Rout &
