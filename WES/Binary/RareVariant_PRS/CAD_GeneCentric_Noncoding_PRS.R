@@ -106,7 +106,7 @@ chunks <- split(1:nrow(Train_Effect_Sizes_All),  cut(seq_along(1:nrow(Train_Effe
 Train_Effect_Sizes_All <- Train_Effect_Sizes_All[chunks[[chunk]],]
 
 if(Burden == 0){
-  Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$STAAR_O <= thresholds[threshold],]
+  Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$STAARB <= thresholds[threshold],]
 }else{
   Train_Effect_Sizes_All <- Train_Effect_Sizes_All[Train_Effect_Sizes_All$Burden_1_1 <= thresholds[threshold],]
 }
