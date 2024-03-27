@@ -471,8 +471,8 @@ ggplot(rare[!(rare$Ancestry %in% c("NonEUR","UNK")),]) +
   scale_fill_Publication() + 
   ylim(0,0.07)
 
-paper <- results[results$Method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"),]
-paper$Method <- factor(paper$Method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"))
+paper <- results[results$Method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_Burden","CV_plus_RV_STAARO","SL_Combined"),]
+paper$Method <- factor(paper$Method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_Burden","CV_plus_RV_STAARO","SL_Combined"))
 
 ggplot(paper[!(paper$Ancestry %in% c("UNK","NonEUR")),]) +
   geom_bar(aes(x=Method, y=r2,fill=Method), stat="identity", alpha=0.7) +
