@@ -372,12 +372,15 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     tune_model <- glm(as.formula(paste0(trait,"~CV_PRS+RV_PRS+age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data = pheno_tuning,family = binomial)
   }
   
+<<<<<<< Updated upstream
   if(is.na(coef(tune_model)[3])){
     pheno_tuning$PRS <- coef(tune_model)[2]*pheno_tuning$CV_PRS
   }else{
     pheno_tuning$PRS <- coef(tune_model)[2]*pheno_tuning$CV_PRS + coef(tune_model)[3]*pheno_tuning$RV_PRS 
   }
   
+=======
+>>>>>>> Stashed changes
   roc_obj_comb <- roc.binary(status = trait,
                              variable = "PRS",
                              confounders = confounders,
