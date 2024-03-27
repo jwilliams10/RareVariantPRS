@@ -6,7 +6,7 @@
 #SBATCH --mem-per-cpu=30G
 
 # module purge
-module load R/4.3.0
+module load R/4.3.2
 
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/WES/Continuous/RareVariant_PRS/BMI_GeneCentric_Coding_PRS.R ${SLURM_ARRAY_TASK_ID} > BMI_GeneCentric_Coding_PRS"${SLURM_ARRAY_TASK_ID}".Rout &
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/WES/Continuous/RareVariant_PRS/LDL_GeneCentric_Coding_PRS.R ${SLURM_ARRAY_TASK_ID} > LDL_GeneCentric_Coding_PRS"${SLURM_ARRAY_TASK_ID}".Rout &

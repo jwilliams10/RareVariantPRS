@@ -375,14 +375,16 @@ results$Method[str_detect(results$Method,"CT")] <- "CT"
 results$Method[str_detect(results$Method,"SL_Combined")] <- "SL_Combined"
 results$Method[str_detect(results$Method,"LDPred2")] <- "LDPred2"
 results$Method[str_detect(results$Method,"LASSOSUM2")] <- "LASSOSUM2"
-results$Method[str_detect(results$Method,"CV_plus_RV_STAARO")] <- "CV_plus_RV_STAARO"
+results$Method[str_detect(results$Method,"CV_plus_RV_STAARO")] <- "CV_plus_RV_STAARB"
 results$Method[str_detect(results$Method,"CV_plus_RV_Burden")] <- "CV_plus_RV_Burden"
-results$Method[str_detect(results$Method,"SlidingWindow_STAARO")] <- "SlidingWindow_STAARO"
+results$Method[str_detect(results$Method,"SlidingWindow_STAARO")] <- "SlidingWindow_STAARB"
 results$Method[str_detect(results$Method,"SlidingWindow_Burden")] <- "SlidingWindow_Burden"
-results$Method[str_detect(results$Method,"GeneCentric_Coding_STAARO")] <- "GeneCentric_Coding_STAARO"
+results$Method[str_detect(results$Method,"GeneCentric_Coding_STAARO")] <- "GeneCentric_Coding_STAARB"
 results$Method[str_detect(results$Method,"GeneCentric_Coding_Burden")] <- "GeneCentric_Coding_Burden"
-results$Method[str_detect(results$Method,"GeneCentric_Noncoding_STAARO")] <- "GeneCentric_Noncoding_STAARO"
+results$Method[str_detect(results$Method,"GeneCentric_Noncoding_STAARO")] <- "GeneCentric_Noncoding_STAARB"
 results$Method[str_detect(results$Method,"GeneCentric_Noncoding_Burden")] <- "GeneCentric_Noncoding_Burden"
+
+results$Method[str_detect(results$Method,"SL_Rare_STAARO")] <- "SL_Rare_STAARB"
 
 rm(list=setdiff(ls(), "results"))
 
@@ -443,34 +445,34 @@ ggplot(common[!(common$Ancestry %in% c("EAS","UNK","MIX")),]) +
   geom_bar(aes(x=Method, y=AUC,fill=Method), stat="identity", alpha=0.7) +
 #  geom_errorbar( aes(x=Method, ymin=AUC_low, ymax=AUC_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Trait), vars(Ancestry)) + 
-  ggtitle("Common Variants") + 
+  ggtitle("WES Common Variants") + 
   coord_cartesian(ylim=c(0.45,0.8)) + 
-  ylab(bquote("R"^"2")) + 
+  ylab("AUC") + 
   theme_Publication() + 
   scale_fill_Publication()
 
-rare <- results[results$Method %in% c("SlidingWindow_STAARO","SlidingWindow_Burden","GeneCentric_Coding_STAARO","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARO","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARO"),]
-rare$Method <- factor(rare$Method,levels = c("GeneCentric_Coding_STAARO","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARO","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARO"))
+rare <- results[results$Method %in% c("SlidingWindow_STAARO","SlidingWindow_Burden","GeneCentric_Coding_STAARB","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARB","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARB"),]
+rare$Method <- factor(rare$Method,levels = c("GeneCentric_Coding_STAARB","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARB","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARB"))
 
 ggplot(rare[!(rare$Ancestry %in% c("EAS","UNK","MIX")),]) +
   geom_bar(aes(x=Method, y=AUC,fill=Method), stat="identity", alpha=0.7) +
 #  geom_errorbar( aes(x=Method, ymin=AUC_low, ymax=AUC_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Trait), vars(Ancestry)) + 
-  ggtitle("Rare Variants") + 
-  ylab(bquote("R"^"2")) + 
+  ggtitle("WES Rare Variants") + 
+  ylab("AUC") + 
   coord_cartesian(ylim=c(0.45,0.7)) + 
   theme_Publication() + 
   scale_fill_Publication()
 
-paper <- results[results$Method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"),]
-paper$Method <- factor(paper$Method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO"))
+paper <- results[results$Method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARB","CV_plus_RV_Burden"),]
+paper$Method <- factor(paper$Method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_Burden","CV_plus_RV_STAARB"))
 
 ggplot(paper[!(paper$Ancestry %in% c("EAS","UNK","MIX")),]) +
   geom_bar(aes(x=Method, y=AUC,fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=AUC_low, ymax=AUC_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(Trait), vars(Ancestry)) + 
-  ggtitle("Paper Plot") + 
-  ylab(bquote("R"^"2")) + 
+  ggtitle("WES Overall") + 
+  ylab("AUC") + 
   coord_cartesian(ylim=c(0.45,0.8)) + 
   theme_Publication() + 
   scale_fill_Publication()

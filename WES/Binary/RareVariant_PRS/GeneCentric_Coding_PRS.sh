@@ -3,10 +3,10 @@
 #SBATCH -N 1
 #SBATCH --time=144:00:00
 #SBATCH --array=1-990
-#SBATCH --mem-per-cpu=75G
+#SBATCH --mem-per-cpu=40G
 
 # module purge
-module load R/4.3.0
+module load R/4.3.2
 
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/WES/Binary/RareVariant_PRS/Asthma_GeneCentric_Coding_PRS.R ${SLURM_ARRAY_TASK_ID} > Asthma_GeneCentric_Coding_PRS"${SLURM_ARRAY_TASK_ID}".Rout &
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/WES/Binary/RareVariant_PRS/CAD_GeneCentric_Coding_PRS.R ${SLURM_ARRAY_TASK_ID} > CAD_GeneCentric_Coding_PRS"${SLURM_ARRAY_TASK_ID}".Rout &

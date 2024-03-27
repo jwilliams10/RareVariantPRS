@@ -2,8 +2,8 @@
 #SBATCH -n 1
 #SBATCH -N 1
 #SBATCH --time=144:00:00
-#SBATCH --array=1-379
-#SBATCH --mem-per-cpu=30G
+#SBATCH --array=332
+#SBATCH --mem-per-cpu=60G
 
 # module purge
 module load R/4.3.2

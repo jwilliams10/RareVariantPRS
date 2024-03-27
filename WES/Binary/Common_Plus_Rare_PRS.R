@@ -37,12 +37,32 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
       confounders <- as.formula(paste0("~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10"))
       tune_model <- glm(as.formula(paste0(trait,"~CV_PRS+RV_PRS+age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data = pheno_tuning,family = binomial)
     }
-  
+    
     if(is.na(coef(tune_model)[3])){
       pheno_tuning$PRS <- coef(tune_model)[2]*pheno_tuning$CV_PRS
     }else{
       pheno_tuning$PRS <- coef(tune_model)[2]*pheno_tuning$CV_PRS + coef(tune_model)[3]*pheno_tuning$RV_PRS 
     }
+    
+    roc_obj_comb <- roc.binary(status = trait,
+                               variable = "PRS",
+                               confounders = confounders,
+                               data = pheno_tuning,
+                               precision=seq(0.05,0.95, by=0.05))
+    
+    roc_obj_CV <- roc.binary(status = trait,
+                             variable = "CV_PRS",
+                             confounders = confounders,
+                             data = pheno_tuning,
+                             precision=seq(0.05,0.95, by=0.05))
+    
+    roc_obj_RV <- roc.binary(status = trait,
+                             variable = "RV_PRS",
+                             confounders = confounders,
+                             data = pheno_tuning,
+                             precision=seq(0.05,0.95, by=0.05))
+    
+    var <- c("PRS","CV_PRS","RV_PRS")[which.max(c(roc_obj_comb$auc,roc_obj_CV$auc,roc_obj_RV$auc))]
     
     pheno_vad <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
     
@@ -78,7 +98,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_EUR[!is.na(pheno_vad_EUR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -87,7 +107,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -110,7 +130,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_NonEur[!is.na(pheno_vad_NonEur[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -119,7 +139,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -142,7 +162,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_UNK[!is.na(pheno_vad_UNK[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -151,7 +171,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -175,7 +195,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_SAS[!is.na(pheno_vad_SAS[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -184,7 +204,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -208,7 +228,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_MIX[!is.na(pheno_vad_MIX[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -217,7 +237,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -241,7 +261,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_AFR[!is.na(pheno_vad_AFR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -250,7 +270,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -277,7 +297,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
       d <- pheno_vad_EAS[!is.na(pheno_vad_EAS[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
       
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d,
                             precision=seq(0.05,0.95, by=0.05))
@@ -286,7 +306,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
       calc_auc <- function(data, indices) {
         d_sub <- data[indices,] # allows boot to select sample
         roc_obj <- roc.binary(status = trait,
-                              variable = "PRS",
+                              variable = var,
                               confounders = confounders,
                               data = d_sub,
                               precision=seq(0.05,0.95, by=0.05))
@@ -328,7 +348,31 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
       tune_model <- glm(as.formula(paste0(trait,"~CV_PRS+RV_PRS+age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data = pheno_tuning,family = binomial)
     }
     
-    pheno_tuning$PRS <- coef(tune_model)[2]*pheno_tuning$CV_PRS + coef(tune_model)[3]*pheno_tuning$RV_PRS
+    if(is.na(coef(tune_model)[3])){
+      pheno_tuning$PRS <- coef(tune_model)[2]*pheno_tuning$CV_PRS
+    }else{
+      pheno_tuning$PRS <- coef(tune_model)[2]*pheno_tuning$CV_PRS + coef(tune_model)[3]*pheno_tuning$RV_PRS 
+    }
+    
+    roc_obj_comb <- roc.binary(status = trait,
+                               variable = ="PRS",
+                               confounders = confounders,
+                               data = pheno_tuning,
+                               precision=seq(0.05,0.95, by=0.05))
+    
+    roc_obj_CV <- roc.binary(status = trait,
+                             variable = "CV_PRS",
+                             confounders = confounders,
+                             data = pheno_tuning,
+                             precision=seq(0.05,0.95, by=0.05))
+    
+    roc_obj_RV <- roc.binary(status = trait,
+                             variable = "RV_PRS",
+                             confounders = confounders,
+                             data = pheno_tuning,
+                             precision=seq(0.05,0.95, by=0.05))
+    
+    var <- c("PRS","CV_PRS","RV_PRS")[which.max(c(roc_obj_comb$auc,roc_obj_CV$auc,roc_obj_RV$auc))]
     
     pheno_vad <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
     
@@ -344,7 +388,11 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     pheno_vad <- pheno_vad[!is.na(pheno_vad[,trait]),]
     PRSs_Validation <- pheno_vad[,c(1,27,28)]
     
-    pheno_vad$PRS <- coef(tune_model)[2]*pheno_vad$CV_PRS + coef(tune_model)[3]*pheno_vad$RV_PRS
+    if(is.na(coef(tune_model)[3])){
+      pheno_vad$PRS <- coef(tune_model)[2]*pheno_vad$CV_PRS
+    }else{
+      pheno_vad$PRS <- coef(tune_model)[2]*pheno_vad$CV_PRS + coef(tune_model)[3]*pheno_vad$RV_PRS
+    }
     
     load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
     
@@ -360,7 +408,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_EUR[!is.na(pheno_vad_EUR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -369,7 +417,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -392,7 +440,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_NonEur[!is.na(pheno_vad_NonEur[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -401,7 +449,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -424,7 +472,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_UNK[!is.na(pheno_vad_UNK[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -433,7 +481,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -457,7 +505,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_SAS[!is.na(pheno_vad_SAS[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -466,7 +514,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -490,7 +538,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_MIX[!is.na(pheno_vad_MIX[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -499,7 +547,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -523,7 +571,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     d <- pheno_vad_AFR[!is.na(pheno_vad_AFR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
     
     roc_obj <- roc.binary(status = trait,
-                          variable = "PRS",
+                          variable = var,
                           confounders = confounders,
                           data = d,
                           precision=seq(0.05,0.95, by=0.05))
@@ -532,7 +580,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
     calc_auc <- function(data, indices) {
       d_sub <- data[indices,] # allows boot to select sample
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d_sub,
                             precision=seq(0.05,0.95, by=0.05))
@@ -559,7 +607,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
       d <- pheno_vad_EAS[!is.na(pheno_vad_EAS[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10","PRS")]
       
       roc_obj <- roc.binary(status = trait,
-                            variable = "PRS",
+                            variable = var,
                             confounders = confounders,
                             data = d,
                             precision=seq(0.05,0.95, by=0.05))
@@ -568,7 +616,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
       calc_auc <- function(data, indices) {
         d_sub <- data[indices,] # allows boot to select sample
         roc_obj <- roc.binary(status = trait,
-                              variable = "PRS",
+                              variable = var,
                               confounders = confounders,
                               data = d_sub,
                               precision=seq(0.05,0.95, by=0.05))
