@@ -17,6 +17,7 @@ cp -a BestPRS/. Results/
 cd Results/
 rm *.txt
 rm *.sscore
+rm *.log
 cd ..
 
 tar -czvf Results.tar.gz Results/
