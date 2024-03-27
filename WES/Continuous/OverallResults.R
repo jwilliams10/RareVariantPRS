@@ -375,14 +375,16 @@ results$Method[str_detect(results$Method,"CT")] <- "CT"
 results$Method[str_detect(results$Method,"SL_Combined")] <- "SL_Combined"
 results$Method[str_detect(results$Method,"LDPred2")] <- "LDPred2"
 results$Method[str_detect(results$Method,"LASSOSUM2")] <- "LASSOSUM2"
-results$Method[str_detect(results$Method,"CV_plus_RV_STAARO")] <- "CV_plus_RV_STAARO"
+results$Method[str_detect(results$Method,"CV_plus_RV_STAARO")] <- "CV_plus_RV_STAARB11"
 results$Method[str_detect(results$Method,"CV_plus_RV_Burden")] <- "CV_plus_RV_Burden"
-results$Method[str_detect(results$Method,"SlidingWindow_STAARO")] <- "SlidingWindow_STAARO"
+results$Method[str_detect(results$Method,"SlidingWindow_STAARO")] <- "SlidingWindow_STAARB11"
 results$Method[str_detect(results$Method,"SlidingWindow_Burden")] <- "SlidingWindow_Burden"
-results$Method[str_detect(results$Method,"GeneCentric_Coding_STAARO")] <- "GeneCentric_Coding_STAARO"
+results$Method[str_detect(results$Method,"GeneCentric_Coding_STAARO")] <- "GeneCentric_Coding_STAARB11"
 results$Method[str_detect(results$Method,"GeneCentric_Coding_Burden")] <- "GeneCentric_Coding_Burden"
-results$Method[str_detect(results$Method,"GeneCentric_Noncoding_STAARO")] <- "GeneCentric_Noncoding_STAARO"
+results$Method[str_detect(results$Method,"GeneCentric_Noncoding_STAARO")] <- "GeneCentric_Noncoding_STAARB11"
 results$Method[str_detect(results$Method,"GeneCentric_Noncoding_Burden")] <- "GeneCentric_Noncoding_Burden"
+
+results$Method[str_detect(results$Method,"SL_Rare_STAARO")] <- "SL_Rare_STAARB11"
 
 rm(list=setdiff(ls(), "results"))
 
@@ -449,8 +451,8 @@ ggplot(common[!(common$Ancestry %in% c("NonEUR","UNK")),]) +
   scale_fill_Publication() + 
   ylim(0,0.3)
 
-rare <- results[results$Method %in% c("SlidingWindow_STAARO","SlidingWindow_Burden","GeneCentric_Coding_STAARO","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARO","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARO"),]
-rare$Method <- factor(rare$Method,levels = c("GeneCentric_Coding_STAARO","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARO","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARO"))
+rare <- results[results$Method %in% c("SlidingWindow_STAARB11","SlidingWindow_Burden","GeneCentric_Coding_STAARB11","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARB11","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARB11"),]
+rare$Method <- factor(rare$Method,levels = c("GeneCentric_Coding_STAARB11","GeneCentric_Coding_Burden","GeneCentric_Noncoding_STAARB11","GeneCentric_Noncoding_Burden","SL_Rare_Burden","SL_Rare_STAARB11"))
 
 # ggplot(rare) +
 #   geom_bar(aes(x=Method, y=r2,fill=Method), stat="identity", alpha=0.7) +
@@ -471,8 +473,8 @@ ggplot(rare[!(rare$Ancestry %in% c("NonEUR","UNK")),]) +
   scale_fill_Publication() + 
   ylim(0,0.07)
 
-paper <- results[results$Method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_Burden","CV_plus_RV_STAARO","SL_Combined"),]
-paper$Method <- factor(paper$Method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_Burden","CV_plus_RV_STAARO","SL_Combined"))
+paper <- results[results$Method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_Burden","CV_plus_RV_STAARB11","SL_Combined"),]
+paper$Method <- factor(paper$Method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_Burden","CV_plus_RV_STAARB11","SL_Combined"))
 
 ggplot(paper[!(paper$Ancestry %in% c("UNK","NonEUR")),]) +
   geom_bar(aes(x=Method, y=r2,fill=Method), stat="identity", alpha=0.7) +
