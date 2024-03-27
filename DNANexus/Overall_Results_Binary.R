@@ -416,8 +416,8 @@ ggplot(rare[!(rare$Ancestry %in% c("EAS","UNK","MIX")),]) +
   theme_Publication() + 
   scale_fill_Publication()
 
-paper <- Results_Binary[Results_Binary$Method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO","CV_plus_RV_Burden"),]
-paper$Method <- factor(paper$Method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_Burden","CV_plus_RV_STAARO"))
+paper <- Results_Binary[Results_Binary$Method %in% c("CT","LDPred2","LASSOSUM2","CV_plus_RV_STAARO","CV_plus_RV_Burden","SL_Combined"),]
+paper$Method <- factor(paper$Method,levels = c("CT","LDPred2","LASSOSUM2","CV_plus_RV_Burden","CV_plus_RV_STAARO","SL_Combined"))
 
 ggplot(paper[!(paper$Ancestry %in% c("EAS","UNK","MIX")),]) +
   geom_bar(aes(x=Method, y=AUC,fill=Method), stat="identity", alpha=0.7) +
