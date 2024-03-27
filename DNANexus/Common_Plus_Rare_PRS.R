@@ -33,7 +33,13 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   
   PRSs_Tune$Residuals <- model.null$residuals
   
-  model.best <- lm(Residuals~CV_PRS + RV_PRS,data = PRSs_Tune)
+  model.full <- lm(Residuals~CV_PRS + RV_PRS,data = PRSs_Tune)
+  
+  model.CV <- lm(Residuals~CV_PRS,data = PRSs_Tune)
+  
+  model.RV <- lm(Residuals~RV_PRS,data = PRSs_Tune)
+  
+  model.best <- list(model.full,model.CV,model.RV)[[which.max(c(summary(model.full)$r.square,summary(model.CV)$r.square,summary(model.RV)$r.square))]]
   
   pheno_vad <- read.delim("All_Validation.txt")
   
@@ -279,7 +285,13 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   
   PRSs_Tune$Residuals <- model.null$residuals
   
-  model.best <- lm(Residuals~CV_PRS + RV_PRS,data = PRSs_Tune)
+  model.full <- lm(Residuals~CV_PRS + RV_PRS,data = PRSs_Tune)
+  
+  model.CV <- lm(Residuals~CV_PRS,data = PRSs_Tune)
+  
+  model.RV <- lm(Residuals~RV_PRS,data = PRSs_Tune)
+  
+  model.best <- list(model.full,model.CV,model.RV)[[which.max(c(summary(model.full)$r.square,summary(model.CV)$r.square,summary(model.RV)$r.square))]]
   
   pheno_vad <- read.delim("All_Validation.txt")
   
