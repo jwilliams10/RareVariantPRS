@@ -12,18 +12,15 @@ Gene_Centric_Coding_G_Star <- function(chr,gene_name,category=c("plof","plof_ds"
   phenotype.id <- as.character(obj_nullmodel$id_include)
   ## get SNV id, position, REF, ALT (whole genome)
   filter <- seqGetData(genofile, QC_label)
-  if(variant_type=="variant")
-  {
+  if(variant_type=="variant"){
     SNVlist <- filter == "PASS"
   }
   
-  if(variant_type=="SNV")
-  {
+  if(variant_type=="SNV"){
     SNVlist <- (filter == "PASS") & isSNV(genofile)
   }
   
-  if(variant_type=="Indel")
-  {
+  if(variant_type=="Indel"){
     SNVlist <- (filter == "PASS") & (!isSNV(genofile))
   }
   
@@ -118,6 +115,10 @@ Gene_Centric_Coding_G_Star <- function(chr,gene_name,category=c("plof","plof_ds"
   G <- Geno_rare
   rm(Geno_rare)
   gc()
+  
+  if(is.null(dim(G))){
+    G <- matrix(G,ncol = 1)
+  }
   
   C <- G%*%matrix(1,nrow=ncol(G),ncol = 1)
   

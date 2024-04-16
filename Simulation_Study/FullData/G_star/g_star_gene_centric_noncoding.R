@@ -462,6 +462,10 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
   rm(Geno_rare)
   gc()
   
+  if(is.null(dim(G))){
+    G <- matrix(G,ncol = 1)
+  }
+  
   C <- G%*%matrix(1,nrow=ncol(G),ncol = 1)
   
   seqResetFilter(genofile)

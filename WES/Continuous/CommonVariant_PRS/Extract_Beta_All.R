@@ -5,6 +5,53 @@ library(pROC)
 library(bigsnpr)
 library(bigsparser)
 library(readr)
+library(stringr)
+
+BMI_Final_Coefficients_CT <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/BMI_Final_Coefficients.csv")
+BMI_Final_Coefficients_LDPred <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/BMI_Final_Coefficients.csv")
+BMI_Final_Coefficients_LASSOSUM <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/BMI_Final_Coefficients.csv")
+
+BMI_All <- cbind(BMI_Final_Coefficients_CT,BMI_Final_Coefficients_LDPred[,str_detect(colnames(BMI_Final_Coefficients_LDPred),"LDPred2")],BMI_Final_Coefficients_LASSOSUM[,str_detect(colnames(BMI_Final_Coefficients_LASSOSUM),"LASSOSum2")])
+
+BMI_Final_Coefficients_SL <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/BMI_final_coef.csv")
+
+CV_SL_Beta <- BMI_Final_Coefficients_CT[,c("CHR","SNP","REF","BP","A1","P")]
+CV_SL_Beta$Beta <- 0
+
+for(i in 1:nrow(BMI_Final_Coefficients_SL)){
+  
+}
+
+BMI_Final_Coefficients_RV <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/BMI_final_coef.csv")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## CT
 

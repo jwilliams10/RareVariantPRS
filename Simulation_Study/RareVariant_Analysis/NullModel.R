@@ -12,14 +12,13 @@ library(STAARpipeline)
 
 i <- as.numeric(commandArgs(TRUE)[1])
 
-load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/phenotypes/Y_Tune.RData")
-
-
 load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/phenotypes/Y_Train.RData")
 pheno_train <- Y_train[[i]]
 colnames(pheno_train) <- c("IID","Y")
 
 common_prs <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Train_All",i,".txt"))
+
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Train_All",i,".txt")))
 
 pheno_train <- inner_join(pheno_train,common_prs,by = "IID")
 
@@ -35,6 +34,8 @@ pheno_tune <- Y_tune[[i]]
 colnames(pheno_tune) <- c("IID","Y")
 
 common_prs <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Tune_All",i,".txt"))
+
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Tune_All",i,".txt")))
 
 pheno_tune <- inner_join(pheno_tune,common_prs,by = "IID")
 
