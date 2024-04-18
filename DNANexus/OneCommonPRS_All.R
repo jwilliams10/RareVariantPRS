@@ -255,6 +255,39 @@ r2_tune <- vector()
 for(i in 1:length(prs_columns)){
   r2_tune[i] <- summary(lm(as.formula(paste0("y_tune ~",colnames(pheno_tune)[prs_columns[i]])),data = pheno_tune))$r.squared
 }
+
+if(colnames(pheno_tune)[prs_columns[which.max(r2_tune)]] == "prs"){
+  if(best_algorithm == "SL.glmnet_All"){
+    beta_sl <- data.frame(Coef = row.names(coef(sl$fitLibrary$SL.glmnet_All$object)),Beta = as.numeric(coef(sl$fitLibrary$SL.glmnet_All$object)))
+  }else if(best_algorithm == "SL.ridge_All"){
+    beta_sl <- data.frame(Coef = row.names(sl$fitLibrary$SL.ridge_All$bestCoef),Beta = as.numeric(sl$fitLibrary$SL.ridge_All$bestCoef[,1]))
+  }else if(best_algorithm == "SL.glm_All"){
+    beta_sl <- data.frame(Coef = names(coef(sl$fitLibrary$SL.glm_All$object)),Beta = as.numeric(coef(sl$fitLibrary$SL.glm_All$object)))
+  }else{
+    beta_lasso <- data.frame(Coef = row.names(coef(sl$fitLibrary$SL.glmnet_All$object)),Beta = as.numeric(coef(sl$fitLibrary$SL.glmnet_All$object)))
+    beta_ridge <- data.frame(Coef = row.names(sl$fitLibrary$SL.ridge_All$bestCoef),Beta = as.numeric(sl$fitLibrary$SL.ridge_All$bestCoef[,1]))
+    beta_glm <- data.frame(Coef = names(coef(sl$fitLibrary$SL.glm_All$object)),Beta = as.numeric(coef(sl$fitLibrary$SL.glm_All$object)))
+    beta_mean <- data.frame(Coef = names(coef(sl$fitLibrary$SL.glm_All$object)), Beta = 0)
+    beta_mean$Beta[1] <- sl$fitLibrary$SL.mean_All$object
+    
+    beta_sl <- data.frame(Coef = names(coef(sl$fitLibrary$SL.glm_All$object)), Beta = 0)
+    beta_sl$Beta <- as.numeric(sl$coef[names(sl$coef) == "SL.glmnet_All"]) * beta_lasso$Beta + 
+      as.numeric(sl$coef[names(sl$coef) == "SL.ridge_All"]) * beta_ridge$Beta + 
+      as.numeric(sl$coef[names(sl$coef) == "SL.glm_All"]) * beta_glm$Beta + 
+      as.numeric(sl$coef[names(sl$coef) == "SL.mean_All"]) * beta_mean$Beta 
+  }
+  write.csv(beta_sl,file = paste0(trait,"_Final_Coefficients.csv"),row.names = FALSE)
+  
+}else{
+  beta_coefs <- data.frame(Coef = colnames(pheno_tune)[prs_columns[which.max(r2_tune)]],Beta = 1)
+  write.csv(beta_coefs,file = paste0(trait,"_Final_Coefficients.csv"),row.names = FALSE)
+}
+
+
+
+
+
+
 prs_best_train <- data.frame(IID = pheno_train$IID,prs = pheno_train[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
 
 prs_best_tune <- data.frame(IID = pheno_tune$IID,prs = pheno_tune[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
@@ -268,173 +301,99 @@ write.table(prs_best_validation,file=paste0(trait,"_Best_Validation_All.txt"),se
 load("all_phenotypes.RData")
 file.remove("all_phenotypes.RData")
 
-y_validation_EUR <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],"y_validation"]
-y_validation_NonEUR <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],"y_validation"]
-y_validation_UNK <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],"y_validation"]
-y_validation_SAS <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],"y_validation"]
-y_validation_MIX <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],"y_validation"]
-y_validation_AFR <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],"y_validation"]
-y_validation_EAS <- pheno_validation[pheno_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],"y_validation"]
 
-prs_best_validation_EUR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-prs_best_validation_NonEur <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-prs_best_validation_UNK <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
-prs_best_validation_SAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-prs_best_validation_MIX <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
-prs_best_validation_AFR <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
-prs_best_validation_EAS <- prs_best_validation[prs_best_validation$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+pheno_validation_raw <- pheno_validation
+pheno_validation_adjusted <- pheno_validation
 
-## bootstrap the R2 to provide an approximate distribution 
-model <- lm(y_validation_EUR~prs_best_validation_EUR$prs)
-r2 <- summary(model)$r.square
 
-data <- data.frame(y = y_validation_EUR, x = prs_best_validation_EUR$prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
+tmp <- data.frame(y = pheno_validation_adjusted[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]],pheno_validation_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+mod <- lm(y~.,data = tmp)
+R <- mod$residuals
+tmp <- data.frame(y = R^2,pheno_validation_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+mod <- lm(y~.,data = tmp)
+y_hat <- predict(mod,tmp)
+if(sum(sqrt(y_hat)) == 0){
+  pheno_validation_adjusted[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- 0
+}else{
+  pheno_validation_adjusted[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- R/sqrt(y_hat)
 }
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
-ci_result <- boot.ci(boot_r2, type = "perc")
-SL.result <- data.frame(method = "SL_Combined_Eur",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
 
-save(SL.result,file = paste0(trait,"_sl_result_All_Eur.RData"))
+pheno_validation_raw_EUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+pheno_validation_raw_NonEUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+pheno_validation_raw_UNK <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+pheno_validation_raw_SAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+pheno_validation_raw_MIX <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_raw_AFR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+pheno_validation_raw_EAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
-## bootstrap the R2 to provide an approximate distribution 
-model <- lm(y_validation_NonEUR~prs_best_validation_NonEur$prs)
-r2 <- summary(model)$r.square
+pheno_validation_adjusted_EUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+pheno_validation_adjusted_NonEUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+pheno_validation_adjusted_UNK <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+pheno_validation_adjusted_SAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+pheno_validation_adjusted_MIX <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_adjusted_AFR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+pheno_validation_adjusted_EAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
-data <- data.frame(y = y_validation_NonEUR, x = prs_best_validation_NonEur$prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+pheno_validation_raw_EUR$y_validation <- scale(pheno_validation_raw_EUR$y_validation)
+pheno_validation_raw_NonEUR$y_validation <- scale(pheno_validation_raw_NonEUR$y_validation)
+pheno_validation_raw_UNK$y_validation <- scale(pheno_validation_raw_UNK$y_validation)
+pheno_validation_raw_SAS$y_validation <- scale(pheno_validation_raw_SAS$y_validation)
+pheno_validation_raw_MIX$y_validation <- scale(pheno_validation_raw_MIX$y_validation)
+pheno_validation_raw_AFR$y_validation <- scale(pheno_validation_raw_AFR$y_validation)
+pheno_validation_raw_EAS$y_validation <- scale(pheno_validation_raw_EAS$y_validation)
 
-ci_result <- boot.ci(boot_r2, type = "perc")
-SL.result <- data.frame(method = "SL_Combined_NonEur",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
+pheno_validation_adjusted_EUR$y_validation <- scale(pheno_validation_adjusted_EUR$y_validation)
+pheno_validation_adjusted_NonEUR$y_validation <- scale(pheno_validation_adjusted_NonEUR$y_validation)
+pheno_validation_adjusted_UNK$y_validation <- scale(pheno_validation_adjusted_UNK$y_validation)
+pheno_validation_adjusted_SAS$y_validation <- scale(pheno_validation_adjusted_SAS$y_validation)
+pheno_validation_adjusted_MIX$y_validation <- scale(pheno_validation_adjusted_MIX$y_validation)
+pheno_validation_adjusted_AFR$y_validation <- scale(pheno_validation_adjusted_AFR$y_validation)
+pheno_validation_adjusted_EAS$y_validation <- scale(pheno_validation_adjusted_EAS$y_validation)
 
-save(SL.result,file = paste0(trait,"_sl_result_All_NonEur.RData"))
 
-## bootstrap the R2 to provide an approximate distribution 
-model <- lm(y_validation_UNK~prs_best_validation_UNK$prs)
-r2 <- summary(model)$r.square
+pheno_validation_raw_EUR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_EUR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
+pheno_validation_raw_NonEUR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_NonEUR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
+pheno_validation_raw_UNK[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_UNK[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
+pheno_validation_raw_SAS[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_SAS[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
+pheno_validation_raw_MIX[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_MIX[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
+pheno_validation_raw_AFR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_AFR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
+pheno_validation_raw_EAS[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_EAS[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
 
-data <- data.frame(y = y_validation_UNK, x = prs_best_validation_UNK$prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EUR))[2]
+se_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EUR))$coefficients[2,2]
+beta_validation_raw_NonEUR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_NonEUR))[2]
+se_validation_raw_NonEUR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_NonEUR))$coefficients[2,2]
+beta_validation_raw_UNK <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_UNK))[2]
+se_validation_raw_UNK <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_UNK))$coefficients[2,2]
+beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_SAS))[2]
+se_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_SAS))$coefficients[2,2]
+beta_validation_raw_MIX <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_MIX))[2]
+se_validation_raw_MIX <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_MIX))$coefficients[2,2]
+beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_AFR))[2]
+se_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_AFR))$coefficients[2,2]
+beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EAS))[2]
+se_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EAS))$coefficients[2,2]
 
-ci_result <- boot.ci(boot_r2, type = "perc")
-SL.result <- data.frame(method = "SL_Combined_UNK",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
+beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EUR))[2]
+se_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EUR))$coefficients[2,2]
+beta_validation_adjusted_NonEUR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_NonEUR))[2]
+se_validation_adjusted_NonEUR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_NonEUR))$coefficients[2,2]
+beta_validation_adjusted_UNK <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_UNK))[2]
+se_validation_adjusted_UNK <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_UNK))$coefficients[2,2]
+beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_SAS))[2]
+se_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_SAS))$coefficients[2,2]
+beta_validation_adjusted_MIX <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_MIX))[2]
+se_validation_adjusted_MIX <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_MIX))$coefficients[2,2]
+beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_AFR))[2]
+se_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_AFR))$coefficients[2,2]
+beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EAS))[2]
+se_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EAS))$coefficients[2,2]
 
-save(SL.result,file = paste0(trait,"_sl_result_All_UNK.RData"))
+CV_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
+                         beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
+                         se_raw = c(se_validation_raw_EUR,se_validation_raw_NonEUR,se_validation_raw_UNK,se_validation_raw_SAS,se_validation_raw_MIX,se_validation_raw_AFR,se_validation_raw_EAS), 
+                         beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_NonEUR,beta_validation_adjusted_UNK,beta_validation_adjusted_SAS,beta_validation_adjusted_MIX,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
+                         se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_NonEUR,se_validation_adjusted_UNK,se_validation_adjusted_SAS,se_validation_adjusted_MIX,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
 
-## bootstrap the R2 to provide an approximate distribution 
-model <- lm(y_validation_SAS~prs_best_validation_SAS$prs)
-r2 <- summary(model)$r.square
-
-data <- data.frame(y = y_validation_SAS, x = prs_best_validation_SAS$prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
-
-ci_result <- boot.ci(boot_r2, type = "perc")
-SL.result <- data.frame(method = "SL_Combined_SAS",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
-
-save(SL.result,file = paste0(trait,"_sl_result_All_SAS.RData"))
-
-## bootstrap the R2 to provide an approximate distribution 
-model <- lm(y_validation_MIX~prs_best_validation_MIX$prs)
-r2 <- summary(model)$r.square
-
-data <- data.frame(y = y_validation_MIX, x = prs_best_validation_MIX$prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
-
-ci_result <- boot.ci(boot_r2, type = "perc")
-SL.result <- data.frame(method = "SL_Combined_MIX",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
-
-save(SL.result,file = paste0(trait,"_sl_result_All_MIX.RData"))
-
-## bootstrap the R2 to provide an approximate distribution 
-model <- lm(y_validation_AFR~prs_best_validation_AFR$prs)
-r2 <- summary(model)$r.square
-
-data <- data.frame(y = y_validation_AFR, x = prs_best_validation_AFR$prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
-
-ci_result <- boot.ci(boot_r2, type = "perc")
-SL.result <- data.frame(method = "SL_Combined_AFR",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
-
-save(SL.result,file = paste0(trait,"_sl_result_All_AFR.RData"))
-
-## bootstrap the R2 to provide an approximate distribution 
-model <- lm(y_validation_EAS~prs_best_validation_EAS$prs)
-r2 <- summary(model)$r.square
-
-data <- data.frame(y = y_validation_EAS, x = prs_best_validation_EAS$prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
-
-ci_result <- boot.ci(boot_r2, type = "perc")
-SL.result <- data.frame(method = "SL_Combined_EAS",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
-
-save(SL.result,file = paste0(trait,"_sl_result_All_EAS.RData"))
-
+write.csv(CV_Results,file = paste0(trait,"Best_Betas.csv"),row.names = FALSE)
