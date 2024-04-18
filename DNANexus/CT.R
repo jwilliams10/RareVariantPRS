@@ -180,7 +180,6 @@ pheno_vad <- left_join(pheno_vad,prs_mat_validation,by = "IID")
 system(paste0("rm All_Train.txt"))
 system(paste0("rm All_Tune.txt"))
 system(paste0("rm All_Validation.txt"))
-system(paste0("rm all_phenotypes.RData"))
 
 #calculate R2 for each of the tuning dataset
 # This is done by regressing the residuals of the model with all covariates against the prs
