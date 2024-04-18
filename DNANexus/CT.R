@@ -81,6 +81,8 @@ write.table(prs.file,file = paste0(trait,"_prs_coeff"),col.names = T,row.names =
 p.value.file <- prs.all[,c("SNP","P")]
 write.table(p.value.file,file = paste0(trait,"_p_value"),col.names = T,row.names = F,quote=F)
 
+beta_final <- inner_join(prs.file,p.value.file)
+
 pthres <- c(5E-08,5E-07,5E-06,5E-05,5E-04,5E-03,5E-02,5E-01,1.0)
 n_pthres <- length(pthres)
 ## Write a file with the p-value thresholds 
