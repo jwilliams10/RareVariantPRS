@@ -24,7 +24,7 @@ i <- as.numeric(commandArgs(TRUE)[1])
 
 Train_PVals_All <- get(load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/coding_sig",i,".Rdata")))
 Train_PVals_All <- Train_PVals_All[Train_PVals_All$STAARB <= 1e-03,]
-system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/coding_sig",i,".Rdata")))
+# system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/GeneCentricCoding/coding_sig",i,".Rdata")))
 
 ## agds dir
 agds_dir <- get(load("/data/williamsjacr/UKB_WES_Full_Processed_Data/agds/agds_dir.Rdata"))
@@ -34,9 +34,9 @@ obj_nullmodel_train <- get(load(paste0("/data/williamsjacr/UKB_WES_Simulation/Si
 obj_nullmodel_tune <- get(load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/nullmodels_staar/Tune_Null_Model",i,".RData")))
 obj_nullmodel_validation <- get(load(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/nullmodels_staar/Validation_Null_Model",i,".RData")))
 
-system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/nullmodels_staar/Train_Null_Model",i,".RData")))
-system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/nullmodels_staar/Tune_Null_Model",i,".RData")))
-system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/nullmodels_staar/Validation_Null_Model",i,".RData")))
+# system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/nullmodels_staar/Train_Null_Model",i,".RData")))
+# system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/nullmodels_staar/Tune_Null_Model",i,".RData")))
+# system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/nullmodels_staar/Validation_Null_Model",i,".RData")))
 
 obj_nullmodel <- obj_nullmodel_train
 obj_nullmodel$id_include <- c(obj_nullmodel_train$id_include,obj_nullmodel_tune$id_include,obj_nullmodel_validation$id_include)
@@ -109,7 +109,7 @@ model.null <- lm(Y~1,data=pheno_tune)
 y_tune <- model.null$residual
 
 load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/phenotypes/Y_Validation.RData")
-pheno_valid <- Y_tune[[i]]
+pheno_valid <- Y_validation[[i]]
 colnames(pheno_valid) <- c("IID","Y")
 pheno_valid <- inner_join(pheno_valid,X_valid)
 X_valid <- as.matrix(pheno_valid[,3:ncol(pheno_valid),drop = FALSE])
@@ -196,64 +196,70 @@ drop <- names(data.frame(all_prs_tune))[drop]
 all_prs_tune <- dplyr::select(all_prs_tune, -c(drop))
 all_prs_valid <- dplyr::select(all_prs_valid, -c(drop))
 
-
-
-SL.library <- c(
-  "SL.glmnet",
-  "SL.ridge",
-  "SL.glm",
-  "SL.mean"
-)
-
-full_superlearner <- SuperLearner(Y = y_tune, X = all_prs_tune, family = gaussian(),
-                                  # For a real analysis we would use V = 10.
-                                  # V = 3,
-                                  SL.library = SL.library,cvControl = list(V = 20))
-cvsl <- CV.SuperLearner(Y = y_tune, X = all_prs_tune, family = gaussian(),
-                        # For a real analysis we would use V = 10.
-                        # V = 3,
-                        SL.library = SL.library,cvControl = list(V = 20))
-
-best_algorithm <- summary(cvsl)$Table$Algorithm[which.min(summary(cvsl)$Table$Ave)]
-
-a_tune <- predict(full_superlearner, all_prs_tune, onlySL = FALSE)
-a_vad <- predict(full_superlearner, all_prs_valid, onlySL = FALSE)
-
-prs_best_tune_sl <- a_tune$pred
-prs_best_tune_glmnet <- a_tune$library.predict[,1]
-prs_best_tune_ridge <- a_tune$library.predict[,2]
-prs_best_tune_glm <- a_tune$library.predict[,3]
-prs_best_tune_mean <- a_tune$library.predict[,4]
-
-prs_best_vad_sl <- a_vad$pred
-prs_best_vad_glmnet <- a_vad$library.predict[,1]
-prs_best_vad_ridge <- a_vad$library.predict[,2]
-prs_best_vad_glm <- a_vad$library.predict[,3]
-prs_best_vad_mean <- a_vad$library.predict[,4]
-
-if(best_algorithm == "SL.glmnet_All"){
-  #final
-  prs_best_tune <- prs_best_tune_glmnet
-  prs_best_vad <- prs_best_vad_glmnet
-}else if(best_algorithm == "SL.ridge_All"){
-  #final
-  prs_best_tune <- prs_best_tune_ridge
-  prs_best_vad <- prs_best_vad_ridge
-}else if(best_algorithm == "SL.glm_All"){
-  #final
-  prs_best_tune <- prs_best_tune_glm
-  prs_best_vad <- prs_best_vad_glm
-}else if(best_algorithm == "SL.mean_All"){
-  #final
-  prs_best_tune <- prs_best_tune_mean
-  prs_best_vad <- prs_best_vad_mean
-} else {
-  prs_best_tune <- prs_best_tune_sl
-  prs_best_vad <- prs_best_vad_sl
+if(ncol(all_prs_tune) == 1){
+  tmp_tune <- data.frame(y = y_tune,X = all_prs_tune[,1])
+  tmp_valid <- data.frame(X = all_prs_valid[,1])
+  mod <- lm(y~X,data = tmp_tune)
+  prs_best_tune <- predict(mod,tmp_tune)
+  prs_best_vad <- predict(mod,tmp_valid)
+}else{
+  SL.library <- c(
+    "SL.glmnet",
+    "SL.ridge",
+    "SL.glm",
+    "SL.mean"
+  )
+  
+  full_superlearner <- SuperLearner(Y = y_tune, X = all_prs_tune, family = gaussian(),
+                                    # For a real analysis we would use V = 10.
+                                    # V = 3,
+                                    SL.library = SL.library,cvControl = list(V = 20))
+  cvsl <- CV.SuperLearner(Y = y_tune, X = all_prs_tune, family = gaussian(),
+                          # For a real analysis we would use V = 10.
+                          # V = 3,
+                          SL.library = SL.library,cvControl = list(V = 20))
+  
+  best_algorithm <- summary(cvsl)$Table$Algorithm[which.min(summary(cvsl)$Table$Ave)]
+  
+  a_tune <- predict(full_superlearner, all_prs_tune, onlySL = FALSE)
+  a_vad <- predict(full_superlearner, all_prs_valid, onlySL = FALSE)
+  
+  prs_best_tune_sl <- a_tune$pred
+  prs_best_tune_glmnet <- a_tune$library.predict[,1]
+  prs_best_tune_ridge <- a_tune$library.predict[,2]
+  prs_best_tune_glm <- a_tune$library.predict[,3]
+  prs_best_tune_mean <- a_tune$library.predict[,4]
+  
+  prs_best_vad_sl <- a_vad$pred
+  prs_best_vad_glmnet <- a_vad$library.predict[,1]
+  prs_best_vad_ridge <- a_vad$library.predict[,2]
+  prs_best_vad_glm <- a_vad$library.predict[,3]
+  prs_best_vad_mean <- a_vad$library.predict[,4]
+  
+  if(best_algorithm == "SL.glmnet_All"){
+    #final
+    prs_best_tune <- prs_best_tune_glmnet
+    prs_best_vad <- prs_best_vad_glmnet
+  }else if(best_algorithm == "SL.ridge_All"){
+    #final
+    prs_best_tune <- prs_best_tune_ridge
+    prs_best_vad <- prs_best_vad_ridge
+  }else if(best_algorithm == "SL.glm_All"){
+    #final
+    prs_best_tune <- prs_best_tune_glm
+    prs_best_vad <- prs_best_vad_glm
+  }else if(best_algorithm == "SL.mean_All"){
+    #final
+    prs_best_tune <- prs_best_tune_mean
+    prs_best_vad <- prs_best_vad_mean
+  } else {
+    prs_best_tune <- prs_best_tune_sl
+    prs_best_vad <- prs_best_vad_sl
+  }
 }
 
-tune_dat_sl_R2 <- data.frame(y = y_tune,x = prs_best_tune_sl)
-valid_dat_sl_R2 <- data.frame(y = y_valid,x = prs_best_vad_sl)
+tune_dat_sl_R2 <- data.frame(y = y_tune,x = prs_best_tune)
+valid_dat_sl_R2 <- data.frame(y = y_valid,x = prs_best_vad)
 
 r2_sl_tune <- summary(lm(y~x,data = tune_dat_sl_R2))$r.squared
 

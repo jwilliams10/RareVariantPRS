@@ -1,7 +1,6 @@
 rm(list = ls())
 library(data.table)
 library(dplyr)
-library(boot)
 
 load("/data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/phenotypes/Y_Tune.RData")
 
@@ -22,6 +21,9 @@ kbpthr <- 500
 # Run plink 1.9 with summary statistics data with --bfile being the 1000 genomes reference file, --clump being the summary statistics file, and this is written to temp.dir/LD_clump
 system(paste0("/data/williamsjacr/software/plink --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/reference_CT.txt --clump /data/williamsjacr/UKB_WES_Simulation/Simulation2/GWAS_Summary_Statistics/tmp",i,".txt --clump-p1 ",pthr," --clump-r2 ",r2thr,"  --clump-kb ",kbpthr," --out ","/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/LD_clump",i))
 
+system(paste0("rm /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/LD_clump",i,".log"))
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/GWAS_Summary_Statistics/tmp",i,".txt")))
+
 ################################################
 
 ## This is the beginning of the thresholding step of clumping and threshold
@@ -29,6 +31,7 @@ system(paste0("/data/williamsjacr/software/plink --bfile /data/williamsjacr/UKB_
 #p-value thresholds
 pthres <- c(5E-08,5E-07,5E-06,5E-05,5E-04,5E-03,5E-02,5E-01,1.0)
 LD <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/LD_clump",i,".clumped")))
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/LD_clump",i,".clumped")))
 # grab the index SNP for each clump
 clump.snp <- LD[,3,drop=F]
 # join against the summary data, this is now a dataset with n = number of index SNPs
@@ -62,6 +65,13 @@ system(paste0("/data/williamsjacr/software/plink2 --q-score-range /data/williams
 system(paste0("/data/williamsjacr/software/plink2 --q-score-range /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/q_range_file",i," /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/p_value",i," header --threads 2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_coeff",i," cols=+scoresums,-scoreavgs header no-mean-imputation  --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/tune.txt --out /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_tune",i))
 system(paste0("/data/williamsjacr/software/plink2 --q-score-range /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/q_range_file",i," /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/p_value",i," header --threads 2 --score /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_coeff",i," cols=+scoresums,-scoreavgs header no-mean-imputation  --bfile /data/williamsjacr/UKB_WES_Simulation/chr22_fulldata/chr22_filtered_common --keep /data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/validation.txt --out /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_validation",i))
 
+system(paste0("rm /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_train",i,".log"))
+system(paste0("rm /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_tune",i,".log"))
+system(paste0("rm /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_validation",i,".log"))
+system(paste0("rm /data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/q_range_file",i))
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/p_value",i)))
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_coeff",i)))
+
 #########################################################################
 
 ### Merge all the outputted files from the previous command into one large data file
@@ -70,6 +80,7 @@ temp <- 1
 for(k in 1:length(pthres)){
   
   prs_temp <- fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_train",i,".p_value_",k,".sscore"))
+  system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_train",i,".p_value_",k,".sscore")))
   # times (2*number of SNPs)
   prs_list[[temp]] <- prs_temp[,5:ncol(prs_temp)]
   
@@ -87,6 +98,7 @@ temp <- 1
 for(k in 1:length(pthres)){
   
   prs_temp <- fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_tune",i,".p_value_",k,".sscore"))
+  system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_tune",i,".p_value_",k,".sscore")))
   # times (2*number of SNPs)
   prs_list[[temp]] <- prs_temp[,5:ncol(prs_temp)]
   
@@ -105,6 +117,7 @@ temp <- 1
 for(k in 1:length(pthres)){
   
   prs_temp <- fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_validation",i,".p_value_",k,".sscore"))
+  system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_validation",i,".p_value_",k,".sscore")))
   # times (2*number of SNPs)
   prs_list[[temp]] <- prs_temp[,5:ncol(prs_temp)]
   
@@ -134,16 +147,6 @@ pheno_vad <- Y_validation[[i]]
 colnames(pheno_vad) <- c("id","Y")
 pheno_vad <- left_join(pheno_vad,prs_mat_validation,by = "id")
 
-load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
-
-pheno_vad_EUR <- pheno_vad[pheno_vad$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-pheno_vad_NonEur <- pheno_vad[pheno_vad$id %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-pheno_vad_UNK <- pheno_vad[pheno_vad$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
-pheno_vad_SAS <- pheno_vad[pheno_vad$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-pheno_vad_MIX <- pheno_vad[pheno_vad$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
-pheno_vad_AFR <- pheno_vad[pheno_vad$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
-pheno_vad_EAS <- pheno_vad[pheno_vad$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
-
 #calculate R2 for each of the tuning dataset
 # This is done by regressing the residuals of the model with all covariates against the prs
 r2_tun_vec <- rep(0,length(pthres))
@@ -155,205 +158,59 @@ for(k in 1:length(pthres)){
 }
 #find best p-value threshold
 idx <- which.max(r2_tun_vec)
-#write down best prs in the prs folder/ save it and store it
-prs_train_max <- pheno_train[,c("id",paste0("p_value_",idx))]
-colnames(prs_train_max) <- c("IID","prs")
-write.table(prs_train_max, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_train_best",i,".txt"),row.names = F)
 
-prs_tune_max <- pheno_tuning[,c("id",paste0("p_value_",idx))]
-colnames(prs_tune_max) <- c("IID","prs")
-write.table(prs_tune_max, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_tune_best",i,".txt"),row.names = F)
 
-prs_vad_max <- pheno_vad[,c("id",paste0("p_value_",idx))]
-colnames(prs_vad_max) <- c("IID","prs")
-write.table(prs_vad_max, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_validation_best",i,".txt"),row.names = F)
 
-## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_EUR)
-prs <- pheno_vad_EUR[,paste0("p_value_",idx)]
-model.vad.prs <- lm(model.vad.null$residual~prs)
-r2 <- summary(model.vad.prs)$r.square
 
-data <- data.frame(y = model.vad.null$residual, x = prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
 
-ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result <- data.frame(method = "CT_EUR",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
-## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
-CT.result <- list(r2.result,r2_tun_vec)
+pheno_vad$y_validation <- NA
+pheno_vad$y_validation <- lm(Y~1,data=pheno_vad)$residual
 
-save(CT.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/CT_result_EUR",i,".RData"))
+pheno_validation_raw <- pheno_vad
 
-## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_NonEur)
-prs <- pheno_vad_NonEur[,paste0("p_value_",idx)]
-model.vad.prs <- lm(model.vad.null$residual~prs)
-r2 <- summary(model.vad.prs)$r.square
+pheno_validation_raw_EUR <- pheno_validation_raw[pheno_validation_raw$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+pheno_validation_raw_NonEUR <- pheno_validation_raw[pheno_validation_raw$id %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+pheno_validation_raw_UNK <- pheno_validation_raw[pheno_validation_raw$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+pheno_validation_raw_SAS <- pheno_validation_raw[pheno_validation_raw$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+pheno_validation_raw_MIX <- pheno_validation_raw[pheno_validation_raw$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_raw_AFR <- pheno_validation_raw[pheno_validation_raw$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+pheno_validation_raw_EAS <- pheno_validation_raw[pheno_validation_raw$id %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
-data <- data.frame(y = model.vad.null$residual, x = prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
+pheno_validation_raw_EUR$y_validation <- scale(pheno_validation_raw_EUR$y_validation)
+pheno_validation_raw_NonEUR$y_validation <- scale(pheno_validation_raw_NonEUR$y_validation)
+pheno_validation_raw_UNK$y_validation <- scale(pheno_validation_raw_UNK$y_validation)
+pheno_validation_raw_SAS$y_validation <- scale(pheno_validation_raw_SAS$y_validation)
+pheno_validation_raw_MIX$y_validation <- scale(pheno_validation_raw_MIX$y_validation)
+pheno_validation_raw_AFR$y_validation <- scale(pheno_validation_raw_AFR$y_validation)
+pheno_validation_raw_EAS$y_validation <- scale(pheno_validation_raw_EAS$y_validation)
 
-ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result <- data.frame(method = "CT_NonEur",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
+pheno_validation_raw_EUR[,paste0("p_value_",idx)] <- scale(pheno_validation_raw_EUR[,paste0("p_value_",idx)])
+pheno_validation_raw_NonEUR[,paste0("p_value_",idx)] <- scale(pheno_validation_raw_NonEUR[,paste0("p_value_",idx)])
+pheno_validation_raw_UNK[,paste0("p_value_",idx)] <- scale(pheno_validation_raw_UNK[,paste0("p_value_",idx)])
+pheno_validation_raw_SAS[,paste0("p_value_",idx)] <- scale(pheno_validation_raw_SAS[,paste0("p_value_",idx)])
+pheno_validation_raw_MIX[,paste0("p_value_",idx)] <- scale(pheno_validation_raw_MIX[,paste0("p_value_",idx)])
+pheno_validation_raw_AFR[,paste0("p_value_",idx)] <- scale(pheno_validation_raw_AFR[,paste0("p_value_",idx)])
+pheno_validation_raw_EAS[,paste0("p_value_",idx)] <- scale(pheno_validation_raw_EAS[,paste0("p_value_",idx)])
 
-## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
-CT.result <- list(r2.result,r2_tun_vec)
+beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_EUR))[2]
+se_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_EUR))$coefficients[2,2]
+beta_validation_raw_NonEUR <- coef(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_NonEUR))[2]
+se_validation_raw_NonEUR <- summary(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_NonEUR))$coefficients[2,2]
+beta_validation_raw_UNK <- coef(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_UNK))[2]
+se_validation_raw_UNK <- summary(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_UNK))$coefficients[2,2]
+beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_SAS))[2]
+se_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_SAS))$coefficients[2,2]
+beta_validation_raw_MIX <- coef(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_MIX))[2]
+se_validation_raw_MIX <- summary(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_MIX))$coefficients[2,2]
+beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_AFR))[2]
+se_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_AFR))$coefficients[2,2]
+beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_EAS))[2]
+se_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("p_value_",idx))),data = pheno_validation_raw_EAS))$coefficients[2,2]
 
-save(CT.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/CT_result_NonEur",i,".RData"))
+CT_Results <- data.frame(i = i,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
+                         beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
+                         se_raw = c(se_validation_raw_EUR,se_validation_raw_NonEUR,se_validation_raw_UNK,se_validation_raw_SAS,se_validation_raw_MIX,se_validation_raw_AFR,se_validation_raw_EAS))
 
-## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_UNK)
-prs <- pheno_vad_UNK[,paste0("p_value_",idx)]
-model.vad.prs <- lm(model.vad.null$residual~prs)
-r2 <- summary(model.vad.prs)$r.square
-
-data <- data.frame(y = model.vad.null$residual, x = prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
-
-ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result <- data.frame(method = "CT_UNK",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
-
-## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
-CT.result <- list(r2.result,r2_tun_vec)
-
-save(CT.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/CT_result_UNK",i,".RData"))
-
-## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_AFR)
-prs <- pheno_vad_AFR[,paste0("p_value_",idx)]
-model.vad.prs <- lm(model.vad.null$residual~prs)
-r2 <- summary(model.vad.prs)$r.square
-
-data <- data.frame(y = model.vad.null$residual, x = prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
-
-ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result <- data.frame(method = "CT_AFR",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
-
-## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
-CT.result <- list(r2.result,r2_tun_vec)
-
-save(CT.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/CT_result_AFR",i,".RData"))
-
-## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_SAS)
-prs <- pheno_vad_SAS[,paste0("p_value_",idx)]
-model.vad.prs <- lm(model.vad.null$residual~prs)
-r2 <- summary(model.vad.prs)$r.square
-
-data <- data.frame(y = model.vad.null$residual, x = prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
-
-ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result <- data.frame(method = "CT_SAS",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
-
-## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
-CT.result <- list(r2.result,r2_tun_vec)
-
-save(CT.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/CT_result_SAS",i,".RData"))
-
-## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_EAS)
-prs <- pheno_vad_EAS[,paste0("p_value_",idx)]
-model.vad.prs <- lm(model.vad.null$residual~prs)
-r2 <- summary(model.vad.prs)$r.square
-
-data <- data.frame(y = model.vad.null$residual, x = prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
-
-ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result <- data.frame(method = "CT_EAS",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
-
-## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
-CT.result <- list(r2.result,r2_tun_vec)
-
-save(CT.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/CT_result_EAS",i,".RData"))
-
-## bootstrap the R2 to provide an approximate distribution 
-model.vad.null  <- lm(Y~1,data=pheno_vad_MIX)
-prs <- pheno_vad_MIX[,paste0("p_value_",idx)]
-model.vad.prs <- lm(model.vad.null$residual~prs)
-r2 <- summary(model.vad.prs)$r.square
-
-data <- data.frame(y = model.vad.null$residual, x = prs)
-R2Boot <- function(data,indices){
-  boot_data <- data[indices, ]
-  model <- lm(y ~ x, data = boot_data)
-  result <- summary(model)$r.square
-  return(c(result))
-}
-boot_r2 <- boot(data = data, statistic = R2Boot, R = 1000)
-
-ci_result <- boot.ci(boot_r2, type = "perc")
-r2.result <- data.frame(method = "CT_MIX",
-                        r2 = r2,
-                        r2_low = ci_result$percent[4],
-                        r2_high = ci_result$percent[5]
-)
-
-## Save the R2 for the validation set w/ its confidence bounds, as well as the R2 tuning vector
-CT.result <- list(r2.result,r2_tun_vec)
-
-save(CT.result,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/CT_result_MIX",i,".RData"))
-
+write.csv(CT_Results,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/Best_Betas",i,".csv"),row.names = FALSE)

@@ -417,7 +417,7 @@ write.table(best_prs_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotyp
 ##### Final Coefficients
 
 all_betas <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_lassosum2.txt"), sep="")
-colnames(all_betas) <- c("SNP","ALT","REF",paste0("LASSOSum2_SCORE",1:nrow(sets),"_SUM"))
+colnames(all_betas) <- c("SNP","ALT","REF",paste0("LASSOSum2_SCORE",1:300,"_SUM"))
 system(paste("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_lassosum2.txt")))
 
 dat <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/",trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")

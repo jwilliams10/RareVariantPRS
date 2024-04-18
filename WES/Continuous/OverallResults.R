@@ -15,6 +15,12 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   full_results <- rbind(full_results,rbind(CT_Results,LDPred2_Results,LASSOSUM2_Results,CV_Results,CV_RV_Results))
 }
 
+full_results$beta_adjusted[full_results$beta_adjusted < 0 & full_results$Method %in% c("LDPred","LASSOSum")] <- -1*full_results$beta_adjusted[full_results$beta_adjusted < 0 & full_results$Method %in% c("LDPred","LASSOSum")]
+full_results$beta_raw[full_results$beta_raw < 0 & full_results$Method %in% c("LDPred","LASSOSum")] <- -1*full_results$beta_raw[full_results$beta_raw < 0 & full_results$Method %in% c("LDPred","LASSOSum")]
+
+full_results$beta_adjusted[full_results$beta_adjusted < 0] <- 0
+full_results$beta_raw[full_results$beta_raw < 0] <- 0
+
 theme_Publication <- function(base_size=12) {
   library(grid)
   library(ggthemes)
@@ -27,7 +33,7 @@ theme_Publication <- function(base_size=12) {
             panel.border = element_rect(colour = NA),
             axis.title = element_text(face = "bold",size = 16),
             axis.title.y = element_text(angle=90,vjust =2),
-            axis.title.x = element_text(vjust = -0.2),
+            axis.title.x = element_blank(),
             axis.text.x = element_blank(), 
             axis.line = element_line(colour="black",size=2),
             axis.ticks = element_line(),

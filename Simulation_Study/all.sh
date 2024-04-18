@@ -24,7 +24,7 @@ Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVarian
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study/RareVariant_Analysis/STAAR_GeneCentric_Coding.R ${SLURM_ARRAY_TASK_ID} > STAAR_GeneCentric_Coding"${SLURM_ARRAY_TASK_ID}".Rout &
 wait
 ## step6: Rare Variant Standalone PRS and Single Best Rare Variant PRS
-Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study/RareVariant_PRS/RareVariant_Standalone_Best_PRS.R ${SLURM_ARRAY_TASK_ID} > RareVariant_Standalone_Best_PRS"${SLURM_ARRAY_TASK_ID}".Rout &
+## Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study/RareVariant_PRS/RareVariant_Standalone_Best_PRS.R ${SLURM_ARRAY_TASK_ID} > RareVariant_Standalone_Best_PRS"${SLURM_ARRAY_TASK_ID}".Rout &
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study/RareVariant_PRS/Single_RareVariant_PRS_All.R ${SLURM_ARRAY_TASK_ID} > Single_RareVariant_PRS_All"${SLURM_ARRAY_TASK_ID}".Rout &
 wait
 ## step7: Common + Rare PRS

@@ -259,8 +259,8 @@ if(best_algorithm == "SL.glmnet_All"){
   prs_best_vad <- prs_best_vad_sl
 }
 
-tune_dat_sl_R2 <- data.frame(y = y_tune,x = prs_best_tune_sl)
-valid_dat_sl_R2 <- data.frame(y = y_valid,x = prs_best_vad_sl)
+tune_dat_sl_R2 <- data.frame(y = y_tune,x = prs_best_tune)
+valid_dat_sl_R2 <- data.frame(y = y_valid,x = prs_best_vad)
 
 r2_sl_tune <- summary(lm(y~x,data = tune_dat_sl_R2))$r.squared
 

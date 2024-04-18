@@ -72,21 +72,21 @@ for(k in 1:length(pthres)){
   temp <- temp + 1
 }
 q_range <- q_range[1:(temp-1),]
-write.table(q_range,file = "/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/q_range_file",row.names = F,col.names = F,quote=F)
+write.table(q_range,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"q_range_file"),row.names = F,col.names = F,quote=F)
 
 #PRS = G*beta/(2*number of SNPs) #column header is SCORE_AVG
 #PRS = G*beta
 # Literally just multiply the score file (weighted or unweighted coefficients) by the G matrix, q-score-range is only for C + T, for LD pred score file would be weight coefficients 
 
-system(paste0("/data/williamsjacr/software/plink2 --q-score-range /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/q_range_file /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_p_value header --threads 2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_coeff cols=+scoresums,-scoreavgs header no-mean-imputation  --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/train.txt --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_train"))
-system(paste0("/data/williamsjacr/software/plink2 --q-score-range /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/q_range_file /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_p_value header --threads 2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_coeff cols=+scoresums,-scoreavgs header no-mean-imputation  --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/tune.txt --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_tune"))
-system(paste0("/data/williamsjacr/software/plink2 --q-score-range /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/q_range_file /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_p_value header --threads 2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_coeff cols=+scoresums,-scoreavgs header no-mean-imputation  --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_validation"))
+system(paste0("/data/williamsjacr/software/plink2 --q-score-range /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"q_range_file /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_p_value header --threads 2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_coeff cols=+scoresums,-scoreavgs header no-mean-imputation  --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/train.txt --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_train"))
+system(paste0("/data/williamsjacr/software/plink2 --q-score-range /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"q_range_file /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_p_value header --threads 2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_coeff cols=+scoresums,-scoreavgs header no-mean-imputation  --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/tune.txt --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_tune"))
+system(paste0("/data/williamsjacr/software/plink2 --q-score-range /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"q_range_file /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_p_value header --threads 2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_coeff cols=+scoresums,-scoreavgs header no-mean-imputation  --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_validation"))
 #########################################################################
 
 system(paste0("rm /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_validation.log"))
 system(paste0("rm /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_tune.log"))
 system(paste0("rm /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_train.log"))
-system(paste0("rm /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/q_range_file"))
+system(paste0("rm /data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"q_range_file"))
 system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_p_value")))
 system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_coeff")))
 
