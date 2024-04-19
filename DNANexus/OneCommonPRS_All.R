@@ -197,7 +197,7 @@ if(best_algorithm == "SL.glmnet_All"){
   prs_best_validation <- prs_best_validation_sl
 }
 
-prs_best_validation <- data.frame(IID = pheno_validation$IID[!is.na(pheno_validation[,trait])],prs = prs_best_validation)
+prs_best_validation <- data.frame(IID = pheno_validation$IID,prs = prs_best_validation)
 
 
 a <- predict(sl, prs_train_all, onlySL = FALSE)
