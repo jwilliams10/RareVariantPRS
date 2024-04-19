@@ -223,8 +223,11 @@ system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB
 ################
 
 prs_mat_train <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_prs_train.sscore"))
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_prs_train.log")))
 prs_mat_tune <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_prs_tune.sscore"))
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_prs_tune.log")))
 prs_mat_validation <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_prs_validation.sscore"))
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_prs_validation.log")))
 
 sets <- expand.grid(p = p_seq, h2 = h2_seq, sparse = c(FALSE))
 
@@ -237,23 +240,13 @@ pheno_tuning <- left_join(pheno_tuning,prs_mat_tune,by = "IID")
 pheno_vad <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
 pheno_vad <- left_join(pheno_vad,prs_mat_validation,by = "IID")
 
-load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
-
-pheno_vad_EUR <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-pheno_vad_NonEur <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-pheno_vad_UNK <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
-pheno_vad_SAS <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-pheno_vad_MIX <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
-pheno_vad_AFR <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
-pheno_vad_EAS <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
-
 #calculate AUC for each of the tuning dataset
 # This is done by regressing the residuals of the model with all covariates against the prs
 AUC_tun_vec <- rep(0,nrow(sets))
 if(trait %in% c("Breast","Prostate")){
-  confounders <- as.formula(paste0("~age+age2+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10"))
+  confounders <- paste0("~age+age2+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")
 }else{
-  confounders <- as.formula(paste0("~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10"))
+  confounders <- paste0("~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")
 }
 
 for(k in 1:nrow(sets)){
@@ -262,7 +255,7 @@ for(k in 1:nrow(sets)){
   
   roc_obj <- roc.binary(status = trait,
                        variable = paste0("SCORE",k,"_SUM"),
-                       confounders = confounders,
+                       confounders = as.formula(confounders),
                        data = d,
                        precision=seq(0.05,0.95, by=0.05))
   
@@ -279,248 +272,112 @@ write.table(best_prs_train,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Bi
 write.table(best_prs_tune,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2_tune_prs_best.txt"),sep = "\t",row.names = FALSE)
 write.table(best_prs_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2_validation_prs_best.txt"),sep = "\t",row.names = FALSE)
 
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_EUR[!is.na(pheno_vad_EUR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
+##### Final Coefficients
 
-roc_obj <- roc.binary(status = trait,
-                     variable = paste0("SCORE",idx,"_SUM"),
-                     confounders = confounders,
-                     data = d,
-                     precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
+all_betas <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2.txt"), sep="")
+colnames(all_betas) <- c("SNP","ALT","REF",paste0("LDPred2_SCORE",1:nrow(sets),"_SUM"))
+system(paste("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Binary/",trait,"_ldpred2.txt")))
 
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                       variable = paste0("SCORE",idx,"_SUM"),
-                       confounders = confounders,
-                       data = d_sub,
-                       precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
-}
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
-
-AUC.result <- data.frame(method = "LDPred2_EUR",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
-
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-ldpred2.result <- list(AUC.result,AUC_tun_vec)
-
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2_result_EUR.RData"))
-
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_NonEur[!is.na(pheno_vad_NonEur[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
-
-roc_obj <- roc.binary(status = trait,
-                      variable = paste0("SCORE",idx,"_SUM"),
-                      confounders = confounders,
-                      data = d,
-                      precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
-
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d_sub,
-                        precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
-}
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
-
-AUC.result <- data.frame(method = "LDPred2_NonEur",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
-
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-ldpred2.result <- list(AUC.result,AUC_tun_vec)
-
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2_result_NonEur.RData"))
-
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_UNK[!is.na(pheno_vad_UNK[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
-
-roc_obj <- roc.binary(status = trait,
-                      variable = paste0("SCORE",idx,"_SUM"),
-                      confounders = confounders,
-                      data = d,
-                      precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
-
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d_sub,
-                        precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
-}
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
-
-AUC.result <- data.frame(method = "LDPred2_UNK",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
-
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-ldpred2.result <- list(AUC.result,AUC_tun_vec)
-
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2_result_UNK.RData"))
-
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_AFR[!is.na(pheno_vad_AFR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
-
-roc_obj <- roc.binary(status = trait,
-                      variable = paste0("SCORE",idx,"_SUM"),
-                      confounders = confounders,
-                      data = d,
-                      precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
-
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d_sub,
-                        precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
-}
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
-
-AUC.result <- data.frame(method = "LDPred2_AFR",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
-
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-ldpred2.result <- list(AUC.result,AUC_tun_vec)
-
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2_result_AFR.RData"))
-
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_SAS[!is.na(pheno_vad_SAS[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
-
-roc_obj <- roc.binary(status = trait,
-                      variable = paste0("SCORE",idx,"_SUM"),
-                      confounders = confounders,
-                      data = d,
-                      precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
-
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d_sub,
-                        precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
-}
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
-
-AUC.result <- data.frame(method = "LDPred2_SAS",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
-
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-ldpred2.result <- list(AUC.result,AUC_tun_vec)
-
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2_result_SAS.RData"))
-
-## bootstrap the AUC to provide an approximate distribution 
-if(trait %in% c("Prostate","CAD")){
-  ldpred2.result <- NA
+if(trait == "Asthma"){
+  dat <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Binary/GWAS_Summary_Statistics/regenie_step2_act_Asthma.regenie", sep="")
+}else if(trait == "CAD"){
+  dat <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Binary/GWAS_Summary_Statistics/regenie_step2_act_CAD.regenie", sep="")
+}else if(trait == "T2D"){
+  dat <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Binary/GWAS_Summary_Statistics/regenie_step2_act_T2D.regenie", sep="")
+}else if(trait == "Breast"){
+  dat <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Binary/GWAS_Summary_Statistics/regenie_step2_bp_Breast.regenie", sep="")
 }else{
-  d <- pheno_vad_EAS[!is.na(pheno_vad_EAS[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-  d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
-  
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d,
-                        precision=seq(0.05,0.95, by=0.05))
-  AUC <- roc_obj$auc
-  
-  calc_auc <- function(data, indices) {
-    d_sub <- data[indices,] # allows boot to select sample
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SCORE",idx,"_SUM"),
-                          confounders = confounders,
-                          data = d_sub,
-                          precision=seq(0.05,0.95, by=0.05))
-    return(roc_obj$auc)
-  }
-  boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-  ci_result <- boot.ci(boot_AUC, type = "perc")
-  
-  AUC.result <- data.frame(method = "LDPred2_EAS",
-                           AUC = AUC,
-                           AUC_low = ci_result$percent[4],
-                           AUC_high = ci_result$percent[5]
-  )
-  
-  ## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-  ldpred2.result <- list(AUC.result,AUC_tun_vec)
+  dat <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Binary/GWAS_Summary_Statistics/regenie_step2_bp_Prostate.regenie", sep="")
 }
 
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2_result_EAS.RData"))
+colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
 
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_MIX[!is.na(pheno_vad_MIX[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
+dat <- dat[,c("CHROM","ID","REF","POS","ALT")]
+colnames(dat) <- c("CHR","SNP","REF","BP","A1")
 
-roc_obj <- roc.binary(status = trait,
-                      variable = paste0("SCORE",idx,"_SUM"),
-                      confounders = confounders,
-                      data = d,
-                      precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
 
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d_sub,
-                        precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
+dat <- left_join(dat,all_betas)
+dat[is.na(dat)] <- 0
+
+write.csv(dat,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_Final_Coefficients.csv"),row.names = FALSE)
+
+
+
+
+
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
+
+pheno_validation_raw <- pheno_vad
+pheno_validation_adjusted <- pheno_vad
+
+mod <- lm(as.formula(paste0(paste0("SCORE",idx,"_SUM"),"~pc1 + pc2 + pc3 + pc4 + pc5")),data = pheno_validation_adjusted)
+R <- mod$residuals
+tmp <- data.frame(y = R^2,pheno_validation_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+mod <- lm(y~.,data = tmp)
+y_hat <- predict(mod,tmp)
+if(sum(sqrt(y_hat)) == 0){
+  pheno_validation_adjusted[,paste0("SCORE",idx,"_SUM")] <- 0
+}else{
+  pheno_validation_adjusted[,paste0("SCORE",idx,"_SUM")] <- R/sqrt(y_hat)
 }
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
 
-AUC.result <- data.frame(method = "LDPred2_MIX",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
+pheno_validation_raw_EUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+pheno_validation_raw_NonEUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+pheno_validation_raw_UNK <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+pheno_validation_raw_SAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+pheno_validation_raw_MIX <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_raw_AFR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+pheno_validation_raw_EAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-ldpred2.result <- list(AUC.result,AUC_tun_vec)
+pheno_validation_adjusted_EUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+pheno_validation_adjusted_NonEUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+pheno_validation_adjusted_UNK <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+pheno_validation_adjusted_SAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+pheno_validation_adjusted_MIX <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_adjusted_AFR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+pheno_validation_adjusted_EAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
-save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2_result_MIX.RData"))
+pheno_validation_raw_EUR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_EUR[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_NonEUR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_NonEUR[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_UNK[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_UNK[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_SAS[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_SAS[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_MIX[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_MIX[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")])
 
+beta_validation_raw_EUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))[2]
+se_validation_raw_EUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_NonEUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))[2]
+se_validation_raw_NonEUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_SAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))[2]
+se_validation_raw_SAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_MIX <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))[2]
+se_validation_raw_MIX <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_raw_AFR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))[2]
+se_validation_raw_AFR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_EAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))[2]
+se_validation_raw_EAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))$coefficients[2,2]
+
+beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))[2]
+se_validation_adjusted_EUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_NonEUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))[2]
+se_validation_adjusted_NonEUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))[2]
+se_validation_adjusted_SAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_MIX <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))[2]
+se_validation_adjusted_MIX <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))[2]
+se_validation_adjusted_AFR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))[2]
+se_validation_adjusted_EAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))$coefficients[2,2]
+
+ldpred2_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
+                              beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
+                              se_raw = c(se_validation_raw_EUR,se_validation_raw_NonEUR,se_validation_raw_UNK,se_validation_raw_SAS,se_validation_raw_MIX,se_validation_raw_AFR,se_validation_raw_EAS), 
+                              beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_NonEUR,beta_validation_adjusted_UNK,beta_validation_adjusted_SAS,beta_validation_adjusted_MIX,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
+                              se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_NonEUR,se_validation_adjusted_UNK,se_validation_adjusted_SAS,se_validation_adjusted_MIX,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
+
+write.csv(ldpred2_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"Best_Betas.csv"),row.names = FALSE)
 
 
 
@@ -531,8 +388,11 @@ save(ldpred2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/
 
 
 prs_mat_train <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_prs_train.sscore"))
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_prs_train.log")))
 prs_mat_tune <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_prs_tune.sscore"))
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_prs_tune.log")))
 prs_mat_validation <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_prs_validation.sscore"))
+system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_prs_validation.log")))
 
 ## Pull in Phenotypes/Covariates 
 pheno_train <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Train.txt")
@@ -544,16 +404,6 @@ pheno_tuning <- left_join(pheno_tuning,prs_mat_tune,by = "IID")
 pheno_vad <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
 pheno_vad <- left_join(pheno_vad,prs_mat_validation,by = "IID")
 
-load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
-
-pheno_vad_EUR <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-pheno_vad_NonEur <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-pheno_vad_UNK <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
-pheno_vad_SAS <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-pheno_vad_MIX <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
-pheno_vad_AFR <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
-pheno_vad_EAS <- pheno_vad[pheno_vad$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
-
 AUC_tun_vec <- rep(0,300)
 for(k in 1:300){
   d <- pheno_tuning[!is.na(pheno_tuning[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",k,"_SUM"))]
@@ -561,7 +411,7 @@ for(k in 1:300){
   
   roc_obj <- roc.binary(status = trait,
                         variable = paste0("SCORE",k,"_SUM"),
-                        confounders = confounders,
+                        confounders = as.formula(confounders),
                         data = d,
                         precision=seq(0.05,0.95, by=0.05))
   
@@ -578,245 +428,79 @@ write.table(best_prs_train,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Bi
 write.table(best_prs_tune,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_lassosum2_tune_prs_best.txt"),sep = "\t",row.names = FALSE)
 write.table(best_prs_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_lassosum2_validation_prs_best.txt"),sep = "\t",row.names = FALSE)
 
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_EUR[!is.na(pheno_vad_EUR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
-roc_obj <- roc.binary(status = trait,
-                      variable = paste0("SCORE",idx,"_SUM"),
-                      confounders = confounders,
-                      data = d,
-                      precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
+pheno_vad$y_validation <- NA
+pheno_vad$y_validation[!is.na(pheno_vad[,trait])] <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad)$residual
 
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d_sub,
-                        precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
-}
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
+pheno_validation_raw <- pheno_vad
+pheno_validation_adjusted <- pheno_vad
 
-AUC.result <- data.frame(method = "LASSOSUM2_EUR",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
-
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-LASSOSUM2.result <- list(AUC.result,AUC_tun_vec)
-
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_EUR.RData"))
-
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_NonEur[!is.na(pheno_vad_NonEur[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
-
-roc_obj <- roc.binary(status = trait,
-                      variable = paste0("SCORE",idx,"_SUM"),
-                      confounders = confounders,
-                      data = d,
-                      precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
-
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d_sub,
-                        precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
-}
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
-
-AUC.result <- data.frame(method = "LASSOSUM2_NonEur",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
-
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-LASSOSUM2.result <- list(AUC.result,AUC_tun_vec)
-
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_NonEur.RData"))
-
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_UNK[!is.na(pheno_vad_UNK[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
-
-roc_obj <- roc.binary(status = trait,
-                      variable = paste0("SCORE",idx,"_SUM"),
-                      confounders = confounders,
-                      data = d,
-                      precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
-
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d_sub,
-                        precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
-}
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
-
-AUC.result <- data.frame(method = "LASSOSUM2_UNK",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
-
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-LASSOSUM2.result <- list(AUC.result,AUC_tun_vec)
-
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_UNK.RData"))
-
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_AFR[!is.na(pheno_vad_AFR[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
-
-roc_obj <- roc.binary(status = trait,
-                      variable = paste0("SCORE",idx,"_SUM"),
-                      confounders = confounders,
-                      data = d,
-                      precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
-
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d_sub,
-                        precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
-}
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
-
-AUC.result <- data.frame(method = "LASSOSUM2_AFR",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
-
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-LASSOSUM2.result <- list(AUC.result,AUC_tun_vec)
-
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_AFR.RData"))
-
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_SAS[!is.na(pheno_vad_SAS[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
-
-roc_obj <- roc.binary(status = trait,
-                      variable = paste0("SCORE",idx,"_SUM"),
-                      confounders = confounders,
-                      data = d,
-                      precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
-
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d_sub,
-                        precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
-}
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
-
-AUC.result <- data.frame(method = "LASSOSUM2_SAS",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
-
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-LASSOSUM2.result <- list(AUC.result,AUC_tun_vec)
-
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_SAS.RData"))
-
-## bootstrap the AUC to provide an approximate distribution 
-if(trait %in% c("Prostate","CAD")){
-  LASSOSUM2.result <- NA
+mod <- lm(as.formula(paste0(paste0("SCORE",idx,"_SUM"),"~pc1 + pc2 + pc3 + pc4 + pc5")),data = pheno_validation_adjusted)
+R <- mod$residuals
+tmp <- data.frame(y = R^2,pheno_validation_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+mod <- lm(y~.,data = tmp)
+y_hat <- predict(mod,tmp)
+if(sum(sqrt(y_hat)) == 0){
+  pheno_validation_adjusted[,paste0("SCORE",idx,"_SUM")] <- 0
 }else{
-  d <- pheno_vad_EAS[!is.na(pheno_vad_EAS[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-  d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
-  
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d,
-                        precision=seq(0.05,0.95, by=0.05))
-  AUC <- roc_obj$auc
-  
-  calc_auc <- function(data, indices) {
-    d_sub <- data[indices,] # allows boot to select sample
-    roc_obj <- roc.binary(status = trait,
-                          variable = paste0("SCORE",idx,"_SUM"),
-                          confounders = confounders,
-                          data = d_sub,
-                          precision=seq(0.05,0.95, by=0.05))
-    return(roc_obj$auc)
-  }
-  boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-  ci_result <- boot.ci(boot_AUC, type = "perc")
-  
-  AUC.result <- data.frame(method = "LASSOSUM2_EAS",
-                           AUC = AUC,
-                           AUC_low = ci_result$percent[4],
-                           AUC_high = ci_result$percent[5]
-  )
-  
-  ## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-  LASSOSUM2.result <- list(AUC.result,AUC_tun_vec)
+  pheno_validation_adjusted[,paste0("SCORE",idx,"_SUM")] <- R/sqrt(y_hat)
 }
 
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_EAS.RData"))
+pheno_validation_raw_EUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+pheno_validation_raw_NonEUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+pheno_validation_raw_UNK <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+pheno_validation_raw_SAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+pheno_validation_raw_MIX <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_raw_AFR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+pheno_validation_raw_EAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
-## bootstrap the AUC to provide an approximate distribution 
-d <- pheno_vad_MIX[!is.na(pheno_vad_MIX[,trait]),c(trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10",paste0("SCORE",idx,"_SUM"))]
-d[,paste0("SCORE",idx,"_SUM")] <- -1*d[,paste0("SCORE",idx,"_SUM")]
+pheno_validation_adjusted_EUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+pheno_validation_adjusted_NonEUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+pheno_validation_adjusted_UNK <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+pheno_validation_adjusted_SAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+pheno_validation_adjusted_MIX <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_adjusted_AFR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+pheno_validation_adjusted_EAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
-roc_obj <- roc.binary(status = trait,
-                      variable = paste0("SCORE",idx,"_SUM"),
-                      confounders = confounders,
-                      data = d,
-                      precision=seq(0.05,0.95, by=0.05))
-AUC <- roc_obj$auc
+pheno_validation_raw_EUR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_EUR[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_NonEUR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_NonEUR[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_UNK[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_UNK[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_SAS[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_SAS[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_MIX[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_MIX[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")])
 
-calc_auc <- function(data, indices) {
-  d_sub <- data[indices,] # allows boot to select sample
-  roc_obj <- roc.binary(status = trait,
-                        variable = paste0("SCORE",idx,"_SUM"),
-                        confounders = confounders,
-                        data = d_sub,
-                        precision=seq(0.05,0.95, by=0.05))
-  return(roc_obj$auc)
-}
-boot_AUC <- boot(data = d, statistic = calc_auc, R = 1000)
-ci_result <- boot.ci(boot_AUC, type = "perc")
+beta_validation_raw_EUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))[2]
+se_validation_raw_EUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_NonEUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))[2]
+se_validation_raw_NonEUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_SAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))[2]
+se_validation_raw_SAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_MIX <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))[2]
+se_validation_raw_MIX <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_raw_AFR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))[2]
+se_validation_raw_AFR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_EAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))[2]
+se_validation_raw_EAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))$coefficients[2,2]
 
-AUC.result <- data.frame(method = "LASSOSUM2_MIX",
-                        AUC = AUC,
-                        AUC_low = ci_result$percent[4],
-                        AUC_high = ci_result$percent[5]
-)
+beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))[2]
+se_validation_adjusted_EUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_NonEUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))[2]
+se_validation_adjusted_NonEUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))[2]
+se_validation_adjusted_SAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_MIX <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))[2]
+se_validation_adjusted_MIX <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))[2]
+se_validation_adjusted_AFR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))[2]
+se_validation_adjusted_EAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))$coefficients[2,2]
 
-## Save the AUC for the validation set w/ its confidence bounds, as well as the AUC tuning vector
-LASSOSUM2.result <- list(AUC.result,AUC_tun_vec)
+lassosum2_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
+                                beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
+                                se_raw = c(se_validation_raw_EUR,se_validation_raw_NonEUR,se_validation_raw_UNK,se_validation_raw_SAS,se_validation_raw_MIX,se_validation_raw_AFR,se_validation_raw_EAS), 
+                                beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_NonEUR,beta_validation_adjusted_UNK,beta_validation_adjusted_SAS,beta_validation_adjusted_MIX,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
+                                se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_NonEUR,se_validation_adjusted_UNK,se_validation_adjusted_SAS,se_validation_adjusted_MIX,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
 
-save(LASSOSUM2.result,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_LASSOSUM2_result_MIX.RData"))
-
+write.csv(lassosum2_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"Best_Betas.csv"),row.names = FALSE)

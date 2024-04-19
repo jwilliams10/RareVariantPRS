@@ -75,7 +75,7 @@ for(k in 1:length(pthres)){
   temp <- temp + 1
 }
 q_range <- q_range[1:(temp-1),]
-write.table(q_range,file = "/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/CT/q_range_file",row.names = F,col.names = F,quote=F)
+write.table(q_range,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/CT/",trait,"q_range_file"),row.names = F,col.names = F,quote=F)
 
 #PRS = G*beta/(2*number of SNPs) #column header is SCORE_AVG
 #PRS = G*beta

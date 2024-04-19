@@ -115,7 +115,7 @@ pheno_validation <- read.delim("All_Validation.txt")
 file.remove("All_Validation.txt")
 pheno_validation <- left_join(pheno_validation,prs_validation_all,by = "IID")
 
-prs_validation_all <- pheno_validation[!is.na(pheno_validation[,trait]),-c(1:27)]
+prs_validation_all <- pheno_validation[,-c(1:27)]
 
 ## Null Models
 
