@@ -248,6 +248,9 @@ dat$P <- 10^(-1*dat$LOG10P)
 dat <- dat[,c("CHROM","ID","REF","POS","ALT","BETA","P")]
 colnames(dat) <- c("CHR","SNP","REF","BP","A1","BETA","P")
 
+dat$BETA[is.na(dat$P)] <- 0
+dat$P[is.na(dat$P)] <- 0
+
 dat$CT_p_value_1 <- 0
 dat$CT_p_value_1[dat$P <= pthres[1]] <- dat$BETA[dat$P <= pthres[1]]
 dat$CT_p_value_1[!(dat$SNP %in% beta_final$SNP)] <- 0
