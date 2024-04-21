@@ -162,9 +162,9 @@ colnames(lm_valid_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_valid_dat) - 1)))
 
 
 all_prs_tune <- cbind(lasso_prs_tune,ridge_prs_tune,lm_prs_tune)
-colnames(all_prs_tune) <- c(paste0("lasso_prs",1:ncol(lasso_prs_tune)),paste0("ridge_prs",1:ncol(ridge_prs_tune)),"lm_prs")
+colnames(all_prs_tune) <- c(paste0("lasso_prs",1:ncol(lasso_prs_tune)),paste0("ridge_prs",1:ncol(ridge_prs_tune)),"lm_prs1")
 all_prs_valid <- cbind(lasso_prs_vad,ridge_prs_vad,lm_prs_vad)
-colnames(all_prs_valid) <- c(paste0("lasso_prs",1:ncol(lasso_prs_vad)),paste0("ridge_prs",1:ncol(ridge_prs_vad)),"lm_prs")
+colnames(all_prs_valid) <- c(paste0("lasso_prs",1:ncol(lasso_prs_vad)),paste0("ridge_prs",1:ncol(ridge_prs_vad)),"lm_prs1")
 
 all_tune <- data.frame(y = y_tune,all_prs_tune)
 all_valid <- data.frame(y = y_valid,all_prs_valid)

@@ -276,7 +276,7 @@ write.table(best_prs_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotyp
 
 all_betas <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2.txt"), sep="")
 colnames(all_betas) <- c("SNP","ALT","REF",paste0("LDPred2_SCORE",1:nrow(sets),"_SUM"))
-system(paste("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Binary/",trait,"_ldpred2.txt")))
+system(paste("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"_ldpred2.txt")))
 
 if(trait == "Asthma"){
   dat <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Binary/GWAS_Summary_Statistics/regenie_step2_act_Asthma.regenie", sep="")
@@ -315,6 +315,10 @@ R <- mod$residuals
 tmp <- data.frame(y = R^2,pheno_validation_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
 mod <- lm(y~.,data = tmp)
 y_hat <- predict(mod,tmp)
+if(sum(y_hat < 0) > 0){
+  mod <- lm(y~1,data = tmp)
+  y_hat <- predict(mod,tmp)
+}
 if(sum(sqrt(y_hat)) == 0){
   pheno_validation_adjusted[,paste0("SCORE",idx,"_SUM")] <- 0
 }else{
@@ -345,31 +349,36 @@ pheno_validation_raw_MIX[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_
 pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")])
 pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")])
 
-beta_validation_raw_EUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))[2]
-se_validation_raw_EUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_NonEUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))[2]
-se_validation_raw_NonEUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_SAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))[2]
-se_validation_raw_SAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))$coefficients[2,2]
-beta_validation_raw_MIX <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))[2]
-se_validation_raw_MIX <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))$coefficients[2,2]
-beta_validation_raw_AFR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))[2]
-se_validation_raw_AFR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_EAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))[2]
-se_validation_raw_EAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_EUR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))[2]
+se_validation_raw_EUR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_NonEUR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))[2]
+se_validation_raw_NonEUR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_SAS <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))[2]
+se_validation_raw_SAS <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_MIX <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))[2]
+se_validation_raw_MIX <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_raw_AFR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))[2]
+se_validation_raw_AFR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_EAS <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))[2]
+se_validation_raw_EAS <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_UNK <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_UNK,family = binomial()))[2]
+se_validation_raw_UNK <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_UNK,family = binomial()))$coefficients[2,2]
 
-beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))[2]
-se_validation_adjusted_EUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_NonEUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))[2]
-se_validation_adjusted_NonEUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))[2]
-se_validation_adjusted_SAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_MIX <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))[2]
-se_validation_adjusted_MIX <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))[2]
-se_validation_adjusted_AFR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))[2]
-se_validation_adjusted_EAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))$coefficients[2,2]
+
+beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))[2]
+se_validation_adjusted_EUR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_NonEUR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))[2]
+se_validation_adjusted_NonEUR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))[2]
+se_validation_adjusted_SAS <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_MIX <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))[2]
+se_validation_adjusted_MIX <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))[2]
+se_validation_adjusted_AFR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))[2]
+se_validation_adjusted_EAS <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_UNK <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_UNK,family = binomial()))[2]
+se_validation_adjusted_UNK <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_UNK,family = binomial()))$coefficients[2,2]
 
 ldpred2_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
                               beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
@@ -428,10 +437,41 @@ write.table(best_prs_train,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Bi
 write.table(best_prs_tune,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_lassosum2_tune_prs_best.txt"),sep = "\t",row.names = FALSE)
 write.table(best_prs_validation,file=paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_lassosum2_validation_prs_best.txt"),sep = "\t",row.names = FALSE)
 
-load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
-pheno_vad$y_validation <- NA
-pheno_vad$y_validation[!is.na(pheno_vad[,trait])] <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_vad)$residual
+
+##### Final Coefficients
+all_betas <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_lassosum2.txt"), sep="")
+colnames(all_betas) <- c("SNP","ALT","REF",paste0("LASSOSum2_SCORE",1:300,"_SUM"))
+system(paste("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_lassosum2.txt")))
+
+if(trait == "Asthma"){
+  dat <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Binary/GWAS_Summary_Statistics/regenie_step2_act_Asthma.regenie", sep="")
+}else if(trait == "CAD"){
+  dat <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Binary/GWAS_Summary_Statistics/regenie_step2_act_CAD.regenie", sep="")
+}else if(trait == "T2D"){
+  dat <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Binary/GWAS_Summary_Statistics/regenie_step2_act_T2D.regenie", sep="")
+}else if(trait == "Breast"){
+  dat <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Binary/GWAS_Summary_Statistics/regenie_step2_bp_Breast.regenie", sep="")
+}else{
+  dat <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Binary/GWAS_Summary_Statistics/regenie_step2_bp_Prostate.regenie", sep="")
+}
+
+colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
+
+dat <- dat[,c("CHROM","ID","REF","POS","ALT")]
+colnames(dat) <- c("CHR","SNP","REF","BP","A1")
+
+dat <- left_join(dat,all_betas)
+dat[is.na(dat)] <- 0
+
+write.csv(dat,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"_Final_Coefficients.csv"),row.names = FALSE)
+
+
+
+
+
+
+load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
 pheno_validation_raw <- pheno_vad
 pheno_validation_adjusted <- pheno_vad
@@ -471,31 +511,36 @@ pheno_validation_raw_MIX[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_
 pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")])
 pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")])
 
-beta_validation_raw_EUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))[2]
-se_validation_raw_EUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_NonEUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))[2]
-se_validation_raw_NonEUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_SAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))[2]
-se_validation_raw_SAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))$coefficients[2,2]
-beta_validation_raw_MIX <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))[2]
-se_validation_raw_MIX <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))$coefficients[2,2]
-beta_validation_raw_AFR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))[2]
-se_validation_raw_AFR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_EAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))[2]
-se_validation_raw_EAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_EUR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))[2]
+se_validation_raw_EUR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_NonEUR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))[2]
+se_validation_raw_NonEUR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_SAS <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))[2]
+se_validation_raw_SAS <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_MIX <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))[2]
+se_validation_raw_MIX <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_raw_AFR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))[2]
+se_validation_raw_AFR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_EAS <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))[2]
+se_validation_raw_EAS <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_UNK <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_UNK,family = binomial()))[2]
+se_validation_raw_UNK <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_raw_UNK,family = binomial()))$coefficients[2,2]
 
-beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))[2]
-se_validation_adjusted_EUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_NonEUR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))[2]
-se_validation_adjusted_NonEUR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))[2]
-se_validation_adjusted_SAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_MIX <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))[2]
-se_validation_adjusted_MIX <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))[2]
-se_validation_adjusted_AFR <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))[2]
-se_validation_adjusted_EAS <- summary(glm(as.formula(paste0(trait,paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))$coefficients[2,2]
+
+beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))[2]
+se_validation_adjusted_EUR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_NonEUR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))[2]
+se_validation_adjusted_NonEUR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))[2]
+se_validation_adjusted_SAS <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_MIX <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))[2]
+se_validation_adjusted_MIX <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))[2]
+se_validation_adjusted_AFR <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))[2]
+se_validation_adjusted_EAS <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_UNK <- coef(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_UNK,family = binomial()))[2]
+se_validation_adjusted_UNK <- summary(glm(as.formula(paste0(trait,"~",paste0("SCORE",idx,"_SUM"),"+",gsub("~","",confounders))),data = pheno_validation_adjusted_UNK,family = binomial()))$coefficients[2,2]
 
 lassosum2_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
                                 beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
