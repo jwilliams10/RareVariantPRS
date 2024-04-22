@@ -8,6 +8,7 @@ library(STAARpipelineSummary)
 library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 library(readr)
 library(data.table)
+library(stringr)
 
 # for array in {1..22};
 # do
