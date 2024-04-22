@@ -91,5 +91,7 @@ for(trait in c("BMI","TC","LDL","logTG","Height")){
 results_coding_genome <- results_coding_genome[results_coding_genome$STAARB < 1e-3,]
 results_noncoding_genome <- results_noncoding_genome[results_noncoding_genome$STAARB < 1e-3,]
 
-write.csv(results_coding_genome,file = paste0(trait,"_coding_sig.csv"),row.names = FALSE)
-write.csv(results_noncoding_genome,file = paste0(trait,"_noncoding_sig.csv"),row.names = FALSE) 
+write.csv(results_coding_genome,file = paste0("coding_sig.csv"),row.names = FALSE)
+write.csv(results_noncoding_genome,file = paste0("noncoding_sig.csv"),row.names = FALSE)
+
+system("rm *.Rdata")
