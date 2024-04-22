@@ -9,10 +9,10 @@ library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 library(readr)
 library(data.table)
 
-# for array in {1..22};
-# do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/CommonVariant_PRS/G_Extraction_Coding.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/CommonVariant_PRS/G_Extraction_Coding.sh -icmd="bash G_Extraction_Coding.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentricCoding/ --priority low --instance-type mem3_ssd1_v2_x4
-# done
+for array in {1..22};
+do
+dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/CommonVariant_PRS/G_Extraction_Coding.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/CommonVariant_PRS/G_Extraction_Coding.sh -icmd="bash G_Extraction_Coding.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentricCoding/ --priority low --instance-type mem3_ssd1_v2_x4
+done
 
 Gene_Centric_Coding_G_Star <- function(chr,gene_name,category=c("plof","plof_ds","missense","disruptive_missense","synonymous"),
                                        genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
@@ -155,21 +155,24 @@ Train_PVals_All <- Train_PVals_All[Train_PVals_All$Chr == chr,]
 for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   ## Null Model
   obj_nullmodel_train <- get(load(paste0(trait,"_Train_Null_Model.RData")))
+  system(paste0("rm ",paste0(trait,"_Train_Null_Model.RData")))
   obj_nullmodel_tune <- get(load(paste0(trait,"_Tune_Null_Model.RData")))
+  system(paste0("rm ",paste0(trait,"_Tune_Null_Model.RData")))
   obj_nullmodel_validation <- get(load(paste0(trait,"_Validation_Null_Model.RData")))
+  system(paste0("rm ",paste0(trait,"_Validation_Null_Model.RData")))
   
   obj_nullmodel <- obj_nullmodel_train
   obj_nullmodel$id_include <- c(obj_nullmodel_train$id_include,obj_nullmodel_tune$id_include,obj_nullmodel_validation$id_include)
   
   ## Parameter
-  QC_label <- "annotation/info/QC_label"
+  QC_label <- "annotation/info/QC_label2"
   geno_missing_imputation <- "mean"
   variant_type <- "SNV"	
   
   ## Annotation_dir
-  Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
+  Annotation_dir <- "annotation/info/FunctionalAnnotation"
   ## Annotation channel
-  Annotation_name_catalog <- get(load("Annotation_name_catalog.Rdata"))
+  Annotation_name_catalog <- read.csv("Annotation_name_catalog.csv")
   
   G_star_gene_centric_coding <- list()
   
@@ -197,5 +200,6 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   fwrite(G_star_gene_centric_coding,file = paste0(trait,"_G_Star_Coding_Chr",chr,".csv"))
 }
 
+system("rm Annotation_name_catalog.csv")
 
 

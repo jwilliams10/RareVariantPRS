@@ -178,14 +178,14 @@ obj_nullmodel <- obj_nullmodel_train
 obj_nullmodel$id_include <- c(obj_nullmodel_train$id_include,obj_nullmodel_tune$id_include,obj_nullmodel_validation$id_include)
 
 ## Parameter
-QC_label <- "annotation/info/QC_label"
+QC_label <- "annotation/info/QC_label2"
 geno_missing_imputation <- "mean"
 variant_type <- "SNV"	
 
 ## Annotation_dir
-Annotation_dir <- "annotation/info/FunctionalAnnotation/FunctionalAnnotation"
+Annotation_dir <- "annotation/info/FunctionalAnnotation"
 ## Annotation channel
-Annotation_name_catalog <- get(load("Annotation_name_catalog.Rdata"))
+Annotation_name_catalog <- read.csv("Annotation_name_catalog.csv")
 
 G_star_gene_centric_coding <- list()
 
