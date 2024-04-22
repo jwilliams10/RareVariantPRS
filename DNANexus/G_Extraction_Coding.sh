@@ -15,4 +15,4 @@ dx download UKB_PRS:UKB_200K_WGS_AGDS_uncompressed_newQClabel/ukb.200k.wgs.chr${
 dx download UKB_PRS:UKB_200K_WGS_AGDS_uncompressed_newQClabel/Annotation_name_catalog.csv
 
 # mount PWD and run bigsnpr using my_r_script.r
-docker run -v $PWD:/data -w /data --entrypoint /bin/bash r_with_plink -l -c "Rscript G_Extraction_Coding.R"
+docker run -v $PWD:/data -w /data --entrypoint /bin/bash r_with_plink -l -c "Rscript G_Extraction_Coding.R ${1}"
