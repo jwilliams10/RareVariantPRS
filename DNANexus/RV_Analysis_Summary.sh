@@ -21,8 +21,16 @@ else
 fi
 
 for i in {1..22};do
+dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentricCoding/${trait}_UKBB_WES_Coding_Train${i}.Rdata
+done
+
+for i in {1..22};do
 dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentricNoncoding/${trait}_UKBB_WES_Noncoding_Train${i}.Rdata
 done
 
+for i in {1..22};do
+dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentric_ncRNA/${trait}_UKBB_WES_ncRNA_Train${i}.Rdata
+done
+
 # mount PWD and run bigsnpr using my_r_script.r
-docker run -v $PWD:/data -w /data --entrypoint /bin/bash r_with_plink -l -c "Rscript GeneCentric_Noncoding_Summary.R ${1}"
+docker run -v $PWD:/data -w /data --entrypoint /bin/bash r_with_plink -l -c "Rscript RV_Analysis_Summary.R ${1}"
