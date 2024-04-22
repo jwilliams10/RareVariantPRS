@@ -521,7 +521,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   ## Annotation channel
   Annotation_name_catalog <- read.csv("Annotation_name_catalog.csv")
   
-  G_star_gene_centric_coding <- list()
+  G_star_gene_centric_noncoding <- list()
   
   gds.path <- list.files()[str_detect(list.files(),".gds")]
   genofile <- seqOpen(gds.path)
