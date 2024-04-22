@@ -2,7 +2,7 @@ rm(list = ls())
 
 # for array in 1 2 3 4 5 6;
 # do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/GeneCentric_Coding_Summary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/GeneCentric_Coding_Summary.sh -icmd="bash GeneCentric_Coding_Summary.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentricCoding/ --priority low --instance-type mem2_ssd1_v2_x2
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/RV_Analysis_Summary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/RV_Analysis_Summary.sh -icmd="bash RV_Analysis_Summary.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/ --priority low --instance-type mem2_ssd1_v2_x4
 # done
 
 library(data.table)
@@ -76,8 +76,8 @@ results_noncoding_genome <- results_noncoding_genome[results_noncoding_genome$Nu
 
 results_ncRNA_genome <- NULL
 for (i in 1:22){
-  results <- get(load(paste0(trait,"_UKBB_WES_Noncoding_Train",i,".Rdata")))
-  file.remove(paste0(trait,"_UKBB_WES_Noncoding_Train",i,".Rdata"))
+  results <- get(load(paste0(trait,"_UKBB_WES_ncRNA_Train",i,".Rdata")))
+  file.remove(paste0(trait,"_UKBB_WES_ncRNA_Train",i,".Rdata"))
   results_ncRNA_genome <- c(results_ncRNA_genome, results)
 }
 
