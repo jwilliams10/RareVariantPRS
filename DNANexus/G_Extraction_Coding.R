@@ -177,28 +177,33 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   
   G_star_gene_centric_coding <- list()
   
-  gds.path <- list.files()[str_detect(list.files(),".gds")]
-  genofile <- seqOpen(gds.path)
+  Train_PVals_All_tmp <- Train_PVals_All[Train_PVals_All$Trait == trait,]
   
-  for(i in 1:nrow(Train_PVals_All)){
-    ## Chr
-    chr <- Train_PVals_All$Chr[i]
-    ## Gene name
-    gene_name <- Train_PVals_All$Gene[i]
-    ## Coding mask
-    category <- Train_PVals_All$Category[i]
+  if(nrow(Train_PVals_All_tmp) == 0){
+    write.csv(NULL,file = paste0(trait,"_G_Star_Coding_Chr",chr,".csv"))
+  }else{
+    gds.path <- list.files()[str_detect(list.files(),".gds")]
+    genofile <- seqOpen(gds.path)
     
-    G_star_gene_centric_coding[[i]] <- Gene_Centric_Coding_G_Star(chr=chr,gene_name=gene_name,category=category ,
-                                                                  genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
-                                                                  QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
-                                                                  Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,silent=FALSE) 
-  } 
-  
-  seqClose(genofile)
-  
-  G_star_gene_centric_coding <- do.call(cbind,G_star_gene_centric_coding)
-  
-  fwrite(G_star_gene_centric_coding,file = paste0(trait,"_G_Star_Coding_Chr",chr,".csv"))
+    for(i in 1:nrow(Train_PVals_All_tmp)){
+      ## Chr
+      chr <- Train_PVals_All_tmp$Chr[i]
+      ## Gene name
+      gene_name <- Train_PVals_All_tmp$Gene[i]
+      ## Coding mask
+      category <- Train_PVals_All_tmp$Category[i]
+      
+      G_star_gene_centric_coding[[i]] <- Gene_Centric_Coding_G_Star(chr=chr,gene_name=gene_name,category=category ,
+                                                                    genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                                                                    QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+                                                                    Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,silent=FALSE) 
+    } 
+    
+    seqClose(genofile)
+    
+    G_star_gene_centric_coding <- do.call(cbind,G_star_gene_centric_coding)
+    fwrite(G_star_gene_centric_coding,file = paste0(trait,"_G_Star_Coding_Chr",chr,".csv"),row.names = FALSE)
+  }
 }
 
 system("rm Annotation_name_catalog.csv")

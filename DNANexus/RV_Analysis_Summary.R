@@ -81,7 +81,7 @@ for(trait in c("BMI","TC","LDL","logTG","Height")){
   results_ncRNA_genome$Number_SNV <- as.numeric(results_ncRNA_genome$Number_SNV)
   results_ncRNA_genome <- results_ncRNA_genome[results_ncRNA_genome$Number_SNV < 2000,]
   
-  results_noncoding_genome_tmp <- cbind(results_noncoding_genome_tmp,results_ncRNA_genome)
+  results_noncoding_genome_tmp <- rbind(results_noncoding_genome_tmp,results_ncRNA_genome)
   results_noncoding_genome_tmp$Trait <- trait
   
   results_noncoding_genome <- rbind(results_noncoding_genome,results_noncoding_genome_tmp)
