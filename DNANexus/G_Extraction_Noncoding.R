@@ -489,9 +489,6 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
   return(C)
 }
 
-
-
-
 chr <- as.numeric(commandArgs(TRUE)[1])
 
 Train_PVals_All <- read.csv(paste0("noncoding_sig.csv"))
