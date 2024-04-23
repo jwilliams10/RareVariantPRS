@@ -3,21 +3,21 @@ docker load -i r_with_plink.tar.gz
 
 if [ $1 = 1 ]
 then
-       trait=Asthma
+       trait=BMI
  elif [ $1 = 2 ]
 then
-       trait=T2D
+       trait=TC
  elif [ $1 = 3 ]
 then
-       trait=Breast
+       trait=HDL
  elif [ $1 = 4 ]
 then 
-       trait=Prostate
+       trait=LDL
  elif [ $1 = 5 ]
 then 
-       trait=
+       trait=logTG
 else
-       trait=CAD
+       trait=Height
 fi
 
 if [ $2 -lt 41 ]
