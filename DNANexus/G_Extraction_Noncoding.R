@@ -265,7 +265,7 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     }
     
     variant.id <- seqGetData(genofile, "variant.id")
-    variant.id.SNV.PromrOCRs <- variant.id[SNVlist]
+    variant.id.SNV <- variant.id[SNVlist]
     
     dfPromrOCRsVarGene.SNV <- dfPromrOCRsVarGene[SNVlist,]
     dfPromrOCRsVarGene.SNV$rOCRsvpos <- as.character(dfPromrOCRsVarGene.SNV$rOCRsvpos)
