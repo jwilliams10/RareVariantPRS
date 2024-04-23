@@ -272,8 +272,8 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     
     print("SNVlist")
     print(sum(SNVlist))
-    print("variant.id.SNV")
-    print(variant.id.SNV)
+    print("length(variant.id.SNV)")
+    print(length(variant.id.SNV))
     
     dfPromrOCRsVarGene.SNV <- dfPromrOCRsVarGene[SNVlist,]
     dfPromrOCRsVarGene.SNV$rOCRsvpos <- as.character(dfPromrOCRsVarGene.SNV$rOCRsvpos)
@@ -285,6 +285,12 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     
     ### Gene
     is.in <- which(dfPromrOCRsVarGene.SNV[,5]==gene_name)
+    
+    print("is.in")
+    print(is.in)
+    print("str(dfPromrOCRsVarGene.SNV)")
+    print(str(dfPromrOCRsVarGene.SNV))
+    
     variant.is.in <- variant.id.SNV[is.in]
     
   }else if(category=="enhancer_CAGE"){
