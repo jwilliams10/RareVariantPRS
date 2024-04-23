@@ -247,7 +247,7 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     dfPromrOCRsVarGene <- data.frame(rOCRsvchr,rOCRsvpos,rOCRsvref,rOCRsvalt,rOCRsGene)
     
     print("rOCRsGene")
-    print(rOCRsGene)
+ #   print(rOCRsGene)
     print("head(dfPromrOCRsVarGene)")
     print(head(dfPromrOCRsVarGene))
     
@@ -271,7 +271,7 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     variant.id.SNV <- variant.id[SNVlist]
     
     print("SNVlist")
-    print(SNVlist)
+    print(sum(SNVlist))
     print("variant.id.SNV")
     print(variant.id.SNV)
     
