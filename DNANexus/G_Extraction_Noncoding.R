@@ -205,8 +205,6 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
       SNVlist <- (filter == "PASS") & (!isSNV(genofile))
     }
     
-    print(SNVlist)
-    
     variant.id <- seqGetData(genofile, "variant.id")
     variant.id.SNV <- variant.id[SNVlist]
     
@@ -244,6 +242,8 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     rOCRsvalt <- as.character(seqGetData(genofile,"$alt"))
     dfPromrOCRsVarGene <- data.frame(rOCRsvchr,rOCRsvpos,rOCRsvref,rOCRsvalt,rOCRsGene)
     
+    print(dfPromrOCRsVarGene)
+    
     rm(varid)
     
     ## get SNV id
@@ -262,6 +262,8 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     
     variant.id <- seqGetData(genofile, "variant.id")
     variant.id.SNV <- variant.id[SNVlist]
+    
+    print(SNVlist)
     
     dfPromrOCRsVarGene.SNV <- dfPromrOCRsVarGene[SNVlist,]
     dfPromrOCRsVarGene.SNV$rOCRsvpos <- as.character(dfPromrOCRsVarGene.SNV$rOCRsvpos)
