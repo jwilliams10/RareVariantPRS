@@ -43,7 +43,6 @@ library(STAARpipeline)
 #           User Input
 ###########################################################
 ## aGDS directory
-agds_dir <- get(load("agds_dir.Rdata"))
 ## Null model
 obj_nullmodel <- get(load(paste0(trait,"_Train_Null_Model.RData")))
 
