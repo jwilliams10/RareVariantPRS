@@ -222,16 +222,20 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     
   }else if(category=="promoter_DHS"){
     ## Promoter
+    print("var id")
     varid <- seqGetData(genofile, "variant.id")
     txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
     promGobj <- promoters(genes(txdb), upstream = 3000, downstream = 3000)
     
+    print("rOCRsAnno")
     # Subsetting Promoters that within +/-3kb of TSS and have rOCRs signals
     rOCRsAnno <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="DHS")]))
     rOCRsBvt <- rOCRsAnno!=""
     rOCRsidx <- which(rOCRsBvt,useNames=TRUE)
+    print("rOCRsidx")
     seqSetFilter(genofile,variant.id=varid[rOCRsidx])
     
+    print("promGobj")
     seqSetFilter(genofile,promGobj,intersect=TRUE)
     rOCRspromgene <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.Info")]))
     rOCRsGene <- unlist(lapply(strsplit(rOCRspromgene,"\\(|\\,|;|-"),`[[`,1))
@@ -242,7 +246,10 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     rOCRsvalt <- as.character(seqGetData(genofile,"$alt"))
     dfPromrOCRsVarGene <- data.frame(rOCRsvchr,rOCRsvpos,rOCRsvref,rOCRsvalt,rOCRsGene)
     
-    print(dfPromrOCRsVarGene)
+    print("rOCRsGene")
+    print(rOCRsGene)
+    print("head(dfPromrOCRsVarGene)")
+    print(head(dfPromrOCRsVarGene))
     
     rm(varid)
     
@@ -263,7 +270,10 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     variant.id <- seqGetData(genofile, "variant.id")
     variant.id.SNV <- variant.id[SNVlist]
     
+    print("SNVlist")
     print(SNVlist)
+    print("variant.id.SNV")
+    print(variant.id.SNV)
     
     dfPromrOCRsVarGene.SNV <- dfPromrOCRsVarGene[SNVlist,]
     dfPromrOCRsVarGene.SNV$rOCRsvpos <- as.character(dfPromrOCRsVarGene.SNV$rOCRsvpos)
@@ -438,6 +448,9 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     
   }
   
+  print("sum(variant.is.in)")
+  print(sum(variant.is.in))
+  
   seqSetFilter(genofile,variant.id=variant.is.in,sample.id=phenotype.id)
   
   ## genotype id
@@ -478,16 +491,19 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
   }
   genotype <- matrix_flip(genotype)
   
-  print(dim(genotype))
   MAF <- genotype$MAF
   RV_label <- as.vector((MAF<rare_maf_cutoff)&(MAF>0))
   
-  print(RV_label)
+  print("sum(RV_label)")
+  print(sum(RV_label))
   
   Geno_rare <- genotype$Geno[,RV_label]
   G <- Geno_rare
   rm(Geno_rare)
   gc()
+  
+  print("dim(G)")
+  print(dim(G))
   
   if(is.null(dim(G))){
     G <- matrix(G,ncol = 1)
