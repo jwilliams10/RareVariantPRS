@@ -242,8 +242,6 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     rOCRsvalt <- as.character(seqGetData(genofile,"$alt"))
     dfPromrOCRsVarGene <- data.frame(rOCRsvchr,rOCRsvpos,rOCRsvref,rOCRsvalt,rOCRsGene)
     
-    print(dfPromrOCRsVarGene)
-    
     rm(varid)
     
     ## get SNV id
@@ -262,8 +260,6 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     
     variant.id <- seqGetData(genofile, "variant.id")
     variant.id.SNV <- variant.id[SNVlist]
-    
-    print(SNVlist)
     
     dfPromrOCRsVarGene.SNV <- dfPromrOCRsVarGene[SNVlist,]
     dfPromrOCRsVarGene.SNV$rOCRsvpos <- as.character(dfPromrOCRsVarGene.SNV$rOCRsvpos)
@@ -438,8 +434,6 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     
   }
   
-  print(variant.is.in)
-  
   seqSetFilter(genofile,variant.id=variant.is.in,sample.id=phenotype.id)
   
   ## genotype id
@@ -454,6 +448,8 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
   ##Genotype
   Geno <- seqGetData(genofile, "$dosage")
   Geno <- Geno[id.genotype.match,,drop=FALSE]
+  
+  seqResetFilter(genofile)
   
   ## impute missing
   if(!is.null(dim(Geno))){
@@ -494,8 +490,6 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
   }
   
   C <- G%*%matrix(1,nrow=ncol(G),ncol = 1)
-  
-  seqResetFilter(genofile)
   
   return(C)
 }
@@ -539,7 +533,6 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
     write.csv(NULL,file = paste0(trait,"_G_Star_Noncoding_Chr",chr,".csv"))
   }else{
     gds.path <- list.files()[str_detect(list.files(),".gds")]
-    genofile <- seqOpen(gds.path)
     
     for(i in 1:nrow(Train_PVals_All)){
       ## Chr
@@ -552,12 +545,14 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
       print(gene_name)
       print(category)
       
+      genofile <- seqOpen(gds.path)
+      
       G_star_gene_centric_noncoding[[i]] <- Gene_Centric_Noncoding_G_Star(chr=chr,gene_name=gene_name,category=category ,
                                                                           genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
                                                                           QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
                                                                           Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,silent=FALSE)  
+      seqClose(genofile)
     }
-    seqClose(genofile)
     
     G_star_gene_centric_noncoding <- do.call(cbind,G_star_gene_centric_noncoding)
     
