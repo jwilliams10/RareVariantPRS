@@ -471,8 +471,13 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     genotype <- as.matrix(genotype)
   }
   genotype <- matrix_flip(genotype)
+  
+  print(dim(genotype))
   MAF <- genotype$MAF
   RV_label <- as.vector((MAF<rare_maf_cutoff)&(MAF>0))
+  
+  print(RV_label)
+  
   Geno_rare <- genotype$Geno[,RV_label]
   G <- Geno_rare
   rm(Geno_rare)
