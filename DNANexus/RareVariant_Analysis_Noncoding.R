@@ -38,6 +38,9 @@ library(SeqArray)
 library(SeqVarTools)
 library(STAAR)
 library(STAARpipeline)
+library(readr)
+library(dplyr)
+library(stringr)
 
 ###########################################################
 #           User Input
