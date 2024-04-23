@@ -522,6 +522,8 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   
   Train_PVals_All_tmp <- Train_PVals_All[Train_PVals_All$Trait == trait,]
   
+  print(head(Train_PVals_All_tmp))
+  
   if(nrow(Train_PVals_All_tmp) == 0){
     write.csv(NULL,file = paste0(trait,"_G_Star_Noncoding_Chr",chr,".csv"))
   }else{
@@ -535,6 +537,9 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
       gene_name <- Train_PVals_All$Gene[i]
       ## Coding mask
       category <- Train_PVals_All$Category[i]
+      
+      print(gene_name)
+      print(category)
       
       G_star_gene_centric_noncoding[[i]] <- Gene_Centric_Noncoding_G_Star(chr=chr,gene_name=gene_name,category=category ,
                                                                           genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
