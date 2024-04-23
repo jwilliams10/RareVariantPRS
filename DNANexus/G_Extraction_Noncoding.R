@@ -222,8 +222,6 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     is.in <- which(dfPromCAGEVarGene.SNV[,5]==gene_name)
     variant.is.in <- variant.id.SNV[is.in]
     
-    print(variant.is.in)
-    
   }else if(category=="promoter_DHS"){
     ## Promoter
     varid <- seqGetData(genofile, "variant.id")
@@ -437,6 +435,8 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     variant.is.in <- variant.id.ncRNA[is.in]
     
   }
+  
+  print(variant.is.in)
   
   seqSetFilter(genofile,variant.id=variant.is.in,sample.id=phenotype.id)
   
