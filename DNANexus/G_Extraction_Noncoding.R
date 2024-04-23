@@ -222,20 +222,16 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     
   }else if(category=="promoter_DHS"){
     ## Promoter
-    print("var id")
     varid <- seqGetData(genofile, "variant.id")
     txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
     promGobj <- promoters(genes(txdb), upstream = 3000, downstream = 3000)
     
-    print("rOCRsAnno")
     # Subsetting Promoters that within +/-3kb of TSS and have rOCRs signals
     rOCRsAnno <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="DHS")]))
     rOCRsBvt <- rOCRsAnno!=""
     rOCRsidx <- which(rOCRsBvt,useNames=TRUE)
-    print("rOCRsidx")
     seqSetFilter(genofile,variant.id=varid[rOCRsidx])
     
-    print("promGobj")
     seqSetFilter(genofile,promGobj,intersect=TRUE)
     rOCRspromgene <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.Info")]))
     rOCRsGene <- unlist(lapply(strsplit(rOCRspromgene,"\\(|\\,|;|-"),`[[`,1))
@@ -246,34 +242,30 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
     rOCRsvalt <- as.character(seqGetData(genofile,"$alt"))
     dfPromrOCRsVarGene <- data.frame(rOCRsvchr,rOCRsvpos,rOCRsvref,rOCRsvalt,rOCRsGene)
     
-    print("rOCRsGene")
- #   print(rOCRsGene)
-    print("head(dfPromrOCRsVarGene)")
+     print("head(dfPromrOCRsVarGene)")
     print(head(dfPromrOCRsVarGene))
     
     rm(varid)
     
     ## get SNV id
     filter <- seqGetData(genofile, QC_label)
-    if(variant_type=="variant"){
+    if(variant_type=="variant")
+    {
       SNVlist <- filter == "PASS"
     }
     
-    if(variant_type=="SNV"){
+    if(variant_type=="SNV")
+    {
       SNVlist <- (filter == "PASS") & isSNV(genofile)
     }
     
-    if(variant_type=="Indel"){
+    if(variant_type=="Indel")
+    {
       SNVlist <- (filter == "PASS") & (!isSNV(genofile))
     }
     
     variant.id <- seqGetData(genofile, "variant.id")
-    variant.id.SNV <- variant.id[SNVlist]
-    
-    print("SNVlist")
-    print(sum(SNVlist))
-    print("length(variant.id.SNV)")
-    print(length(variant.id.SNV))
+    variant.id.SNV.PromrOCRs <- variant.id[SNVlist]
     
     dfPromrOCRsVarGene.SNV <- dfPromrOCRsVarGene[SNVlist,]
     dfPromrOCRsVarGene.SNV$rOCRsvpos <- as.character(dfPromrOCRsVarGene.SNV$rOCRsvpos)
