@@ -91,7 +91,7 @@ ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("WES Raw PRS Results") + 
+  ggtitle("WES Adjusted PRS Results") + 
   ylab("Beta") + 
   theme_Publication() + 
   scale_fill_Publication()

@@ -529,7 +529,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   system(paste0("rm ",paste0(trait,"_Validation_Null_Model.RData")))
   
   obj_nullmodel <- obj_nullmodel_train
-  # obj_nullmodel$id_include <- c(obj_nullmodel_train$id_include,obj_nullmodel_tune$id_include,obj_nullmodel_validation$id_include)
+  obj_nullmodel$id_include <- c(obj_nullmodel_train$id_include,obj_nullmodel_tune$id_include,obj_nullmodel_validation$id_include)
   
   ## Parameter
   QC_label <- "annotation/info/QC_label2"
