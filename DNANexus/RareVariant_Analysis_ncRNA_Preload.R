@@ -5,7 +5,7 @@ gc()
 # do
 # for array in {1..222};
 # do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/RareVariant_Analysis_Noncoding_Preload.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/RareVariant_Analysis_Noncoding_Preload.sh -icmd="bash RareVariant_Analysis_Noncoding_Preload.sh ${trait} ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentricNoncoding/ --priority low --extra-args '{"executionPolicy":{"maxSpotTries":5,"spotOnly":true}}' --instance-type mem3_ssd1_v2_x2
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/RareVariant_Analysis_ncRNA_Preload.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/RareVariant_Analysis_ncRNA_Preload.sh -icmd="bash RareVariant_Analysis_ncRNA_Preload.sh ${trait} ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentric_ncRNA/ --priority low --extra-args '{"executionPolicy":{"maxSpotTries":5,"spotOnly":true}}' --instance-type mem3_ssd1_v2_x4
 # done
 # done
 
@@ -274,7 +274,9 @@ ncRNA_nolongmask <- function(chr,gene_name,genofile,obj_nullmodel,
   return(results)
 }
 
-genofile <- seqOpen(agds.file)
+agds.path <- list.files()[str_detect(list.files(),".gds")]
+
+genofile <- seqOpen(agds.path)
 
 ## genes info
 ncRNA_longmasks <- c("KCNQ1OT1","AC006548.28","RP3-394A18.1","RP3-323A16.1","RP5-1039K5.19","SNHG14","LL22NC03-86G7.1")
