@@ -75,7 +75,6 @@ arrayid <- as.numeric(commandArgs(TRUE)[2])
 ## gene number in job
 gene_num_in_array <- 50 
 group.num.allchr <- ceiling(table(genes_info[,2])/gene_num_in_array)
-sum(group.num.allchr)
 
 chr <- which.max(arrayid <= cumsum(group.num.allchr))
 group.num <- group.num.allchr[chr]
@@ -127,3 +126,7 @@ for(kk in sub_seq_id){
 save(results_noncoding,file=paste0(output_file_name,"_",arrayid,".Rdata"))
 
 seqClose(genofile)
+
+system(paste0("rm Annotation_name_catalog.csv"))
+system(paste0("rm ",agds.path))
+system(paste0("rm ",paste0(trait,"_Train_Null_Model.RData")))
