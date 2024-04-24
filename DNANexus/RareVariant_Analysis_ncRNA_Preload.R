@@ -312,7 +312,7 @@ for(kk in sub_seq_id){
 
 seqClose(genofile)
 
-rm(list=setdiff(ls(), c("results_ncRNA", "output_file_name","arrayid"))); gc()
+rm(list=setdiff(ls(), c("results_ncRNA", "output_file_name","arrayid","agds.path","trait"))); gc()
 save(results_ncRNA, file = paste0(output_file_name,"_",arrayid,".Rdata"))
 
 system(paste0("rm Annotation_name_catalog.csv"))
