@@ -302,7 +302,7 @@ results_ncRNA <- c()
 for(kk in sub_seq_id){
   print(kk)
   gene_name <- ncRNA_gene_chr[kk,2]
-  results <- gene_centric_ncRNA_dnanexus(ncRNA_gene_chr=ncRNA_gene_chr,gene_name = gene_name,chr=chr,genofile=genofile,obj_nullmodel=nullobj,rare_maf_cutoff=max.maf,
+  results <- gene_centric_ncRNA_dnanexus(ncRNA_gene_chr=ncRNA_gene_chr,gene_name = gene_name,chr=chr,genofile=genofile,obj_nullmodel=obj_nullmodel,rare_maf_cutoff=max.maf,
                                              QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
                                              Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
                                              Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=TRUE)
