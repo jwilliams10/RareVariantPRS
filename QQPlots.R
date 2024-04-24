@@ -272,28 +272,12 @@ coding_qqplot_STAARO <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   
 }
 
-layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
-
-print("WES Coding Burden Binary")
-
-for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
-  coding_sig <- read.csv(paste0("~/Downloads/Downloaded_QQplotData/WES/",trait,"_coding_sig.csv"))
-  
-  coding_sig_plof <- coding_sig[coding_sig$Category == "plof",]
-  coding_sig_plofds <- coding_sig[coding_sig$Category == "plof_ds",]
-  coding_sig_missense <- coding_sig[coding_sig$Category == "missense",]
-  coding_sig_synonymous <- coding_sig[coding_sig$Category == "synonymous",]
-  coding_sig_disruptive_missense <- coding_sig[coding_sig$Category == "disruptive_missense",]
-  
-  coding_qqplot_burden(coding_sig = coding_sig, coding_sig_plof = coding_sig_plof,coding_sig_plofds = coding_sig_plofds, coding_sig_missense = coding_sig_missense,coding_sig_synonymous = coding_sig_synonymous,coding_sig_disruptive_missense = coding_sig_disruptive_missense,trait = trait) 
-}
-
 print("WES Coding STAARB Binary")
 
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
-  coding_sig <- read.csv(paste0("~/Downloads/Downloaded_QQplotData/WES/",trait,"_coding_sig.csv"))
+  coding_sig <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricCoding/",trait,"_coding_sig.csv"))
   
   coding_sig_plof <- coding_sig[coding_sig$Category == "plof",]
   coding_sig_plofds <- coding_sig[coding_sig$Category == "plof_ds",]
@@ -304,28 +288,12 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   coding_qqplot_STAARB(coding_sig = coding_sig, coding_sig_plof = coding_sig_plof,coding_sig_plofds = coding_sig_plofds, coding_sig_missense = coding_sig_missense,coding_sig_synonymous = coding_sig_synonymous,coding_sig_disruptive_missense = coding_sig_disruptive_missense,trait = trait) 
 }
 
-layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
-
-print("WES Coding Burden Continuous")
-
-for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
-  coding_sig <- read.csv(paste0("~/Downloads/Downloaded_QQplotData/WES/",trait,"_coding_sig.csv"))
-  
-  coding_sig_plof <- coding_sig[coding_sig$Category == "plof",]
-  coding_sig_plofds <- coding_sig[coding_sig$Category == "plof_ds",]
-  coding_sig_missense <- coding_sig[coding_sig$Category == "missense",]
-  coding_sig_synonymous <- coding_sig[coding_sig$Category == "synonymous",]
-  coding_sig_disruptive_missense <- coding_sig[coding_sig$Category == "disruptive_missense",]
-  
-  coding_qqplot_burden(coding_sig = coding_sig, coding_sig_plof = coding_sig_plof,coding_sig_plofds = coding_sig_plofds, coding_sig_missense = coding_sig_missense,coding_sig_synonymous = coding_sig_synonymous,coding_sig_disruptive_missense = coding_sig_disruptive_missense,trait = trait) 
-}
-
 print("WES Coding STAARB Continuous")
 
 layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
-  coding_sig <- read.csv(paste0("~/Downloads/Downloaded_QQplotData/WES/",trait,"_coding_sig.csv"))
+  coding_sig <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/GeneCentricCoding/",trait,"_coding_sig.csv"))
   
   coding_sig_plof <- coding_sig[coding_sig$Category == "plof",]
   coding_sig_plofds <- coding_sig[coding_sig$Category == "plof_ds",]
