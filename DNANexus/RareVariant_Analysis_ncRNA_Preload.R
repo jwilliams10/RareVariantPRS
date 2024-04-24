@@ -62,7 +62,6 @@ arrayid <- as.numeric(commandArgs(TRUE)[2])
 ## gene number in job
 gene_num_in_array <- 100 
 group.num.allchr <- ceiling(table(ncRNA_gene[,1])/gene_num_in_array)
-sum(group.num.allchr)
 
 chr <- which.max(arrayid <= cumsum(group.num.allchr))
 group.num <- group.num.allchr[chr]
@@ -277,15 +276,6 @@ ncRNA_nolongmask <- function(chr,gene_name,genofile,obj_nullmodel,
 agds.path <- list.files()[str_detect(list.files(),".gds")]
 
 genofile <- seqOpen(agds.path)
-
-## genes info
-ncRNA_longmasks <- c("KCNQ1OT1","AC006548.28","RP3-394A18.1","RP3-323A16.1","RP5-1039K5.19","SNHG14","LL22NC03-86G7.1")
-ncRNA_gene_chr <- ncRNA_gene[ncRNA_gene[,1]==chr,]
-ncRNA_gene_chr <- ncRNA_gene_chr[!ncRNA_gene_chr[,2] %in% ncRNA_longmasks,]
-sub_seq_num <- dim(ncRNA_gene_chr)[1]
-
-## array_id
-sub_seq_id <- 1:sub_seq_num	
 
 gene_centric_ncRNA_dnanexus <- function(ncRNA_gene_chr,gene_name,chr,genofile,obj_nullmodel,rare_maf_cutoff,
                                         QC_label,variant_type,geno_missing_imputation,
