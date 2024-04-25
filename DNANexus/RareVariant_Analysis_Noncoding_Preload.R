@@ -1866,7 +1866,7 @@ for(kk in sub_seq_id){
                                              Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
                                              Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=TRUE)
   
-  results_noncoding[[i]] <-results
+  results_noncoding[[count]] <-results
   count <- count + 1
 }
 
