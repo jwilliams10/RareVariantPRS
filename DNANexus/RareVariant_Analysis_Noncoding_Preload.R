@@ -1852,7 +1852,8 @@ seqResetFilter(genofile)
 rm(dfHancerrOCRsVarGene)
 gc()
 
-results_noncoding <- c()
+results_noncoding <- list()
+count <- 1
 for(kk in sub_seq_id){
   print(kk)
   gene_name <- genes_info_chr[kk,1]
@@ -1865,9 +1866,8 @@ for(kk in sub_seq_id){
                                              Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
                                              Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=TRUE)
   
-  print(str(results))
-  
-  results_noncoding <- append(results_noncoding,results)
+  results_noncoding[[i]] <-results
+  count <- count + 1
 }
 
 seqClose(genofile)
