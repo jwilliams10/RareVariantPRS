@@ -1865,6 +1865,8 @@ for(kk in sub_seq_id){
                                              Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
                                              Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=TRUE)
   
+  print(str(results))
+  
   results_noncoding <- append(results_noncoding,results)
 }
 
