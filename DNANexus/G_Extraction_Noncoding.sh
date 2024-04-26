@@ -2,7 +2,7 @@
 docker load -i r_with_plink.tar.gz
 
 dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/coding_sig.csv
-dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/noncoding_sig_11.csv
+dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/noncoding_sig.csv
 
 for trait in BMI HDL LDL Height TC logTG;
 do

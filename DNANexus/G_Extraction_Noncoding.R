@@ -514,16 +514,15 @@ Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream",
 
 chr <- as.numeric(commandArgs(TRUE)[1])
 
-Train_PVals_All <- read.csv(paste0("noncoding_sig_11.csv"))
+Train_PVals_All <- read.csv(paste0("noncoding_sig.csv"))
 Train_PVals_All <- Train_PVals_All[Train_PVals_All$Chr == chr,]
-
 Train_PVals_All <- Train_PVals_All[Train_PVals_All$STAARB < 1e-3,]
 
 ## agds dir
 
-# for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
-trait <- "BMI"
-  ## Null Model
+for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
+
+    ## Null Model
   obj_nullmodel_train <- get(load(paste0(trait,"_Train_Null_Model.RData")))
   system(paste0("rm ",paste0(trait,"_Train_Null_Model.RData")))
   obj_nullmodel_tune <- get(load(paste0(trait,"_Tune_Null_Model.RData")))
@@ -579,7 +578,7 @@ trait <- "BMI"
     
     fwrite(G_star_gene_centric_noncoding,file = paste0(trait,"_G_Star_Noncoding_Chr",chr,".csv"),row.names = FALSE)
   } 
-# }
+}
 
 system("rm Annotation_name_catalog.csv")
 system(paste0("rm ",gds.path))

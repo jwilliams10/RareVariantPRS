@@ -150,6 +150,7 @@ chr <- as.numeric(commandArgs(TRUE)[1])
 
 Train_PVals_All <- read.csv(paste0("coding_sig.csv"))
 Train_PVals_All <- Train_PVals_All[Train_PVals_All$Chr == chr,]
+Train_PVals_All <- Train_PVals_All[Train_PVals_All$STAARB < 1e-3,]
 
 ## agds dir
 
