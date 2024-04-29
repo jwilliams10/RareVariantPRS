@@ -39,8 +39,8 @@ for(trait in c("BMI","TC","LDL","logTG","Height")){
   
   results_noncoding_genome_tmp <- NULL
   for (i in 1:379){
-    results <- get(load(paste0(trait,"_UKBB_WGS_Noncoding_Train",i,".Rdata")))
-    file.remove(paste0(trait,"_UKBB_WGS_Noncoding_Train",i,".Rdata"))
+    results <- get(load(paste0(trait,"_UKBB_WGS_Noncoding_Train_",i,".Rdata")))
+    file.remove(paste0(trait,"_UKBB_WGS_Noncoding_Train_",i,".Rdata"))
     results_noncoding_genome_tmp <- c(results_noncoding_genome_tmp, results)
   }
   
