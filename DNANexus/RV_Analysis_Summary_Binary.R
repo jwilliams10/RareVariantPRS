@@ -1,7 +1,7 @@
 rm(list = ls())
 
 
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/RV_Analysis_Summary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/RV_Analysis_Summary.sh -icmd="bash RV_Analysis_Summary.sh" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/ --priority low --instance-type mem2_ssd1_v2_x4
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_Analysis/RV_Analysis_Summary_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_Analysis/RV_Analysis_Summary_Binary.sh -icmd="bash RV_Analysis_Summary.sh" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/BestRareVariantPRS/ --priority low --instance-type mem2_ssd1_v2_x4
 
 
 library(data.table)
@@ -9,7 +9,7 @@ library(data.table)
 results_coding_genome <- NULL
 results_noncoding_genome <- NULL
 
-for(trait in c("BMI","TC","LDL","logTG","Height")){
+for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   results_coding_genome_tmp <- NULL
   for (i in 1:22){
     results <- get(load(paste0(trait,"_UKBB_WES_Coding_Train",i,".Rdata")))
