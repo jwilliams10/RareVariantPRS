@@ -1,7 +1,7 @@
 rm(list = ls())
 
 
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_Analysis/RV_Analysis_Summary_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_Analysis/RV_Analysis_Summary_Binary.sh -icmd="bash RV_Analysis_Summary.sh" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/BestRareVariantPRS/ --priority low --instance-type mem2_ssd1_v2_x4
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_Analysis/RV_Analysis_Summary_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_Analysis/RV_Analysis_Summary_Binary.sh -icmd="bash RV_Analysis_Summary_Binary.sh" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/BestRareVariantPRS/ --priority low --instance-type mem2_ssd1_v2_x4
 
 
 library(data.table)
