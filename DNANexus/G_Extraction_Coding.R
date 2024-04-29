@@ -12,7 +12,7 @@ library(stringr)
 
 # for array in {1..22};
 # do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/G_Extraction_Coding.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_Analysis/G_Extraction_Coding.sh -icmd="bash G_Extraction_Coding.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GeneCentricCoding/ --priority low --instance-type mem3_ssd1_v2_x4
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/G_Extraction_Coding.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/G_Extraction_Coding.sh -icmd="bash G_Extraction_Coding.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/G_star/ --priority low --instance-type mem3_ssd1_v2_x4
 # done
 
 Gene_Centric_Coding_G_Star <- function(chr,gene_name,category=c("plof","plof_ds","missense","disruptive_missense","synonymous"),
