@@ -8,7 +8,7 @@ dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GeneCentricCoding/${trait}_
 done
 
 for i in {1..379};do
-dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GeneCentricNoncoding/${trait}_UKBB_WGS_Noncoding_Train${i}.Rdata
+dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GeneCentricNoncoding/${trait}_UKBB_WGS_Noncoding_Train_${i}.Rdata
 done
 
 for i in {1..22};do
