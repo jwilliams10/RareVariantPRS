@@ -9,7 +9,7 @@ library(data.table)
 results_coding_genome <- NULL
 results_noncoding_genome <- NULL
 
-for(trait in c("BMI","TC","LDL","logTG","Height")){
+for(trait in c("BMI","TC","LDL","HDL","logTG","Height")){
   results_coding_genome_tmp <- NULL
   for (i in 1:22){
     results <- get(load(paste0(trait,"_UKBB_WES_Coding_Train",i,".Rdata")))
