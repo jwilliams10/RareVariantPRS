@@ -895,6 +895,11 @@ RV_PRS_raw_MIX$RV_PRS <- scale(RV_PRS_raw_MIX$RV_PRS)
 RV_PRS_raw_AFR$RV_PRS <- scale(RV_PRS_raw_AFR$RV_PRS)
 RV_PRS_raw_EAS$RV_PRS <- scale(RV_PRS_raw_EAS$RV_PRS)
 
+if(trait %in% c("Breast","Prostate")){
+  confounders <- paste0("~age+age2+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")
+}else{
+  confounders <-  paste0("~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")
+}
 
 beta_validation_raw_EUR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EUR,family = binomial()))[2]
 se_validation_raw_EUR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EUR,family = binomial()))$coefficients[2,2]
