@@ -6,6 +6,11 @@ library(dplyr)
 library(boot)
 library(RISCA)
 
+# for array in 1 2 3 4 5;
+# do
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/Common_Plus_Rare_PRS_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/Common_Plus_Rare_PRS_Binary.sh -icmd="bash Common_Plus_Rare_PRS_Binary.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/BestPRS/ --priority low --instance-type mem1_ssd1_v2_x4
+# done
+
 trait <- as.numeric(commandArgs(TRUE)[1])
 
 if(trait == 1){

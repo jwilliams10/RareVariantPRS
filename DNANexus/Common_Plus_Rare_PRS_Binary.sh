@@ -22,4 +22,4 @@ dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/BestRareVariantPRS/${trait}
 dx download UKB_PRS:JW/UKB_Phenotypes/Results/all_phenotypes.RData
 
 # mount PWD and run bigsnpr using my_r_script.r
-docker run -v $PWD:/data -w /data --entrypoint /bin/bash r_with_plink -l -c "Rscript Single_RareVariant_PRS_All_Binary.R ${1}"
+docker run -v $PWD:/data -w /data --entrypoint /bin/bash r_with_plink -l -c "Rscript Common_Plus_Rare_PRS_Binary.R ${1}"
