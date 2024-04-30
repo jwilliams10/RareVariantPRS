@@ -476,7 +476,7 @@ chrs <- unique(Noncoding_Train_PVals_All$Chr)
 G_star_gene_centric_noncoding <- read.csv(paste0(trait,"_G_Star_Noncoding_Chr",chrs[1],".csv"))
 system(paste0("rm ",paste0(trait,"_G_Star_Noncoding_Chr",chrs[1],".csv")))
 for(i in 2:length(chrs)){
-  G_star_gene_centric_noncoding <- cbind(G_star_gene_centric_coding,read.csv(paste0(trait,"_G_Star_Noncoding_Chr",chrs[i],".csv")))
+  G_star_gene_centric_noncoding <- cbind(G_star_gene_centric_noncoding,read.csv(paste0(trait,"_G_Star_Noncoding_Chr",chrs[i],".csv")))
   system(paste0("rm ",paste0(trait,"_G_Star_Noncoding_Chr",chrs[i],".csv")))
 }
 
