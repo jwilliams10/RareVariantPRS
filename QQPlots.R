@@ -411,7 +411,7 @@ layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   noncoding_sig <- read.csv(paste0("~/Downloads/noncoding_sig_Binary.csv"))
-  noncoding_sig <- noncoding_sig[coding_sig$Trait == trait,]
+  noncoding_sig <- noncoding_sig[noncoding_sig$Trait == trait,]
   
   noncoding_sig_UTR <- noncoding_sig[noncoding_sig$Category == "UTR",]
   noncoding_sig_promoter_CAGE <- noncoding_sig[noncoding_sig$Category == "promoter_CAGE",]
@@ -431,7 +431,7 @@ layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   noncoding_sig <- read.csv(paste0("~/Downloads/noncoding_sig.csv"))
-  noncoding_sig <- noncoding_sig[coding_sig$Trait == trait,]
+  noncoding_sig <- noncoding_sig[noncoding_sig$Trait == trait,]
   
   noncoding_sig_UTR <- noncoding_sig[noncoding_sig$Category == "UTR",]
   noncoding_sig_promoter_CAGE <- noncoding_sig[noncoding_sig$Category == "promoter_CAGE",]
