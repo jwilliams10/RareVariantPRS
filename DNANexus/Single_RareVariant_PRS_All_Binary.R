@@ -472,7 +472,7 @@ obj_nullmodel <- obj_nullmodel_train
 obj_nullmodel$id_include <- c(obj_nullmodel_train$id_include,obj_nullmodel_tune$id_include,obj_nullmodel_validation$id_include)
 
 
-chrs <- unique(Coding_Train_PVals_All$Chr)
+chrs <- unique(Noncoding_Train_PVals_All$Chr)
 G_star_gene_centric_noncoding <- read.csv(paste0(trait,"_G_Star_Noncoding_Chr",chrs[1],".csv"))
 system(paste0("rm ",paste0(trait,"_G_Star_Noncoding_Chr",chrs[1],".csv")))
 for(i in 2:length(chrs)){
