@@ -249,7 +249,7 @@ if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
 
 if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
   beta_matrix$Beta_Final <- beta_matrix[,best_thresh]
-  write.csv(beta_matrix[,c("Gene","Chr","Category","Number_SNV","Beta_Final")],file = paste0(trait,"_Coding_Final_Coefficients.csv"),row.names = FALSE)
+  write.csv(beta_matrix[,c("Gene","Chr","Category","Number_SNV","Beta_Final")],file = paste0(trait,"_Coding_Sole_Coefficients.csv"),row.names = FALSE)
 }else{
   if(best_algorithm == "SL.glmnet_All"){
     beta_full_superlearner <- data.frame(Coef = row.names(coef(full_superlearner$fitLibrary$SL.glmnet_All$object)),Beta = as.numeric(coef(full_superlearner$fitLibrary$SL.glmnet_All$object)))
@@ -273,7 +273,7 @@ if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
   for(i in 1:nrow(beta_full_superlearner)){
     beta_matrix$Beta_Final <- beta_matrix[,beta_full_superlearner$Coef[i]]*beta_full_superlearner$Beta[i]
   }
-  write.csv(beta_matrix[,c("Gene","Chr","Category","Number_SNV","Beta_Final")],file = paste0(trait,"_Coding_Final_Coefficients.csv"),row.names = FALSE)
+  write.csv(beta_matrix[,c("Gene","Chr","Category","Number_SNV","Beta_Final")],file = paste0(trait,"_Coding_Sole_Coefficients.csv"),row.names = FALSE)
 }
 
 
@@ -284,7 +284,7 @@ if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
 
 
 
-
+RV_Tune_Coding_PRS <- data.frame(IID = pheno_tune$IID,Y = tune_dat_sl_AUC[,1],RV_Coding_PRS = tune_dat_sl_AUC[,2])
 
 
 
@@ -292,7 +292,7 @@ if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
 
 load("all_phenotypes.RData")
 
-RV_PRS <- data.frame(IID = pheno_valid$IID,Y = valid_dat_sl_AUC[,1],RV_PRS = valid_dat_sl_AUC[,2],pheno_valid[,c("age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")])
+RV_PRS <- data.frame(IID = pheno_valid$IID,Y = valid_dat_sl_AUC[,1],RV_Coding_PRS = valid_dat_sl_AUC[,2],pheno_valid[,c("age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")])
 
 write.csv(RV_PRS,file = paste0(trait,"_Coding_BestPRS.csv"),row.names = FALSE)
 
@@ -300,7 +300,7 @@ RV_PRS_raw <- RV_PRS
 RV_PRS_adjusted <- RV_PRS
 
 
-tmp <- data.frame(y = RV_PRS_adjusted[,"RV_PRS"],RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+tmp <- data.frame(y = RV_PRS_adjusted[,"RV_Coding_PRS"],RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
 mod <- lm(y~.,data = tmp)
 R <- mod$residuals
 tmp <- data.frame(y = R^2,RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
@@ -311,9 +311,9 @@ if(sum(y_hat < 0) > 0){
   y_hat <- predict(mod,tmp)
 }
 if(sum(sqrt(y_hat)) == 0){
-  RV_PRS_adjusted[,"RV_PRS"] <- 0
+  RV_PRS_adjusted[,"RV_Coding_PRS"] <- 0
 }else{
-  RV_PRS_adjusted[,"RV_PRS"] <- R/sqrt(y_hat)
+  RV_PRS_adjusted[,"RV_Coding_PRS"] <- R/sqrt(y_hat)
 }
 
 
@@ -333,45 +333,45 @@ RV_PRS_adjusted_MIX <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[uk
 RV_PRS_adjusted_AFR <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 RV_PRS_adjusted_EAS <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
-RV_PRS_raw_EUR$RV_PRS <- scale(RV_PRS_raw_EUR$RV_PRS)
-RV_PRS_raw_NonEUR$RV_PRS <- scale(RV_PRS_raw_NonEUR$RV_PRS)
-RV_PRS_raw_UNK$RV_PRS <- scale(RV_PRS_raw_UNK$RV_PRS)
-RV_PRS_raw_SAS$RV_PRS <- scale(RV_PRS_raw_SAS$RV_PRS)
-RV_PRS_raw_MIX$RV_PRS <- scale(RV_PRS_raw_MIX$RV_PRS)
-RV_PRS_raw_AFR$RV_PRS <- scale(RV_PRS_raw_AFR$RV_PRS)
-RV_PRS_raw_EAS$RV_PRS <- scale(RV_PRS_raw_EAS$RV_PRS)
+RV_PRS_raw_EUR$RV_Coding_PRS <- scale(RV_PRS_raw_EUR$RV_Coding_PRS)
+RV_PRS_raw_NonEUR$RV_Coding_PRS <- scale(RV_PRS_raw_NonEUR$RV_Coding_PRS)
+RV_PRS_raw_UNK$RV_Coding_PRS <- scale(RV_PRS_raw_UNK$RV_Coding_PRS)
+RV_PRS_raw_SAS$RV_Coding_PRS <- scale(RV_PRS_raw_SAS$RV_Coding_PRS)
+RV_PRS_raw_MIX$RV_Coding_PRS <- scale(RV_PRS_raw_MIX$RV_Coding_PRS)
+RV_PRS_raw_AFR$RV_Coding_PRS <- scale(RV_PRS_raw_AFR$RV_Coding_PRS)
+RV_PRS_raw_EAS$RV_Coding_PRS <- scale(RV_PRS_raw_EAS$RV_Coding_PRS)
 
 
-beta_validation_raw_EUR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EUR,family = binomial()))[2]
-se_validation_raw_EUR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EUR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_NonEUR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_NonEUR,family = binomial()))[2]
-se_validation_raw_NonEUR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_NonEUR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_SAS <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_SAS,family = binomial()))[2]
-se_validation_raw_SAS <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_SAS,family = binomial()))$coefficients[2,2]
-beta_validation_raw_MIX <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_MIX,family = binomial()))[2]
-se_validation_raw_MIX <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_MIX,family = binomial()))$coefficients[2,2]
-beta_validation_raw_AFR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AFR,family = binomial()))[2]
-se_validation_raw_AFR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AFR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_EAS <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EAS,family = binomial()))[2]
-se_validation_raw_EAS <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EAS,family = binomial()))$coefficients[2,2]
-beta_validation_raw_UNK <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_UNK,family = binomial()))[2]
-se_validation_raw_UNK <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_UNK,family = binomial()))$coefficients[2,2]
+beta_validation_raw_EUR <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EUR,family = binomial()))[2]
+se_validation_raw_EUR <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_NonEUR <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_NonEUR,family = binomial()))[2]
+se_validation_raw_NonEUR <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_SAS <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_SAS,family = binomial()))[2]
+se_validation_raw_SAS <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_MIX <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_MIX,family = binomial()))[2]
+se_validation_raw_MIX <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_raw_AFR <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AFR,family = binomial()))[2]
+se_validation_raw_AFR <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_EAS <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EAS,family = binomial()))[2]
+se_validation_raw_EAS <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_UNK <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_UNK,family = binomial()))[2]
+se_validation_raw_UNK <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_UNK,family = binomial()))$coefficients[2,2]
 
 
-beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EUR,family = binomial()))[2]
-se_validation_adjusted_EUR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EUR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_NonEUR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_NonEUR,family = binomial()))[2]
-se_validation_adjusted_NonEUR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_NonEUR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_SAS,family = binomial()))[2]
-se_validation_adjusted_SAS <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_SAS,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_MIX <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_MIX,family = binomial()))[2]
-se_validation_adjusted_MIX <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_MIX,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AFR,family = binomial()))[2]
-se_validation_adjusted_AFR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AFR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EAS,family = binomial()))[2]
-se_validation_adjusted_EAS <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EAS,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_UNK <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_UNK,family = binomial()))[2]
-se_validation_adjusted_UNK <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_UNK,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EUR,family = binomial()))[2]
+se_validation_adjusted_EUR <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_NonEUR <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_NonEUR,family = binomial()))[2]
+se_validation_adjusted_NonEUR <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_SAS,family = binomial()))[2]
+se_validation_adjusted_SAS <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_MIX <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_MIX,family = binomial()))[2]
+se_validation_adjusted_MIX <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AFR,family = binomial()))[2]
+se_validation_adjusted_AFR <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EAS,family = binomial()))[2]
+se_validation_adjusted_EAS <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EAS,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_UNK <- coef(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_UNK,family = binomial()))[2]
+se_validation_adjusted_UNK <- summary(glm(as.formula(paste0("Y~","RV_Coding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_UNK,family = binomial()))$coefficients[2,2]
 
 RV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
                              beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
@@ -449,7 +449,7 @@ write.csv(RV_PRS_Results,file = paste0(trait,"_Coding_Best_Betas.csv"),row.names
 
 
 
-rm(list=setdiff(ls(), "trait"))
+rm(list=setdiff(ls(), c("trait","RV_Tune_Coding_PRS")))
 
 
 Noncoding_Train_PVals_All <- read.csv("noncoding_sig.csv")
@@ -679,7 +679,7 @@ if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
 
 if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
   beta_matrix$Beta_Final <- beta_matrix[,best_thresh]
-  write.csv(beta_matrix[,c("Gene","Chr","Category","Number_SNV","Beta_Final")],file = paste0(trait,"_Noncoding_Final_Coefficients.csv"),row.names = FALSE)
+  write.csv(beta_matrix[,c("Gene","Chr","Category","Number_SNV","Beta_Final")],file = paste0(trait,"_Noncoding_Sole_Coefficients.csv"),row.names = FALSE)
 }else{
   if(best_algorithm == "SL.glmnet_All"){
     beta_full_superlearner <- data.frame(Coef = row.names(coef(full_superlearner$fitLibrary$SL.glmnet_All$object)),Beta = as.numeric(coef(full_superlearner$fitLibrary$SL.glmnet_All$object)))
@@ -703,7 +703,7 @@ if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
   for(i in 1:nrow(beta_full_superlearner)){
     beta_matrix$Beta_Final <- beta_matrix[,beta_full_superlearner$Coef[i]]*beta_full_superlearner$Beta[i]
   }
-  write.csv(beta_matrix[,c("Gene","Chr","Category","Number_SNV","Beta_Final")],file = paste0(trait,"_Noncoding_Final_Coefficients.csv"),row.names = FALSE)
+  write.csv(beta_matrix[,c("Gene","Chr","Category","Number_SNV","Beta_Final")],file = paste0(trait,"_Noncoding_Sole_Coefficients.csv"),row.names = FALSE)
 }
 
 
@@ -711,6 +711,7 @@ if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
 
 
 
+RV_Tune_Noncoding_PRS <- data.frame(IID = pheno_tune$IID,Y = tune_dat_sl_AUC[,1],RV_Noncoding_PRS = tune_dat_sl_AUC[,2])
 
 
 
@@ -721,15 +722,137 @@ if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
 
 
 load("all_phenotypes.RData")
-system("rm all_phenotypes.Rdata")
 
-RV_PRS <- data.frame(IID = pheno_valid$IID,Y = valid_dat_sl_AUC[,1],RV_PRS = valid_dat_sl_AUC[,2],pheno_valid[,c("age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")])
+RV_PRS <- data.frame(IID = pheno_valid$IID,Y = valid_dat_sl_AUC[,1],RV_Noncoding_PRS = valid_dat_sl_AUC[,2],pheno_valid[,c("age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")])
 
 write.csv(RV_PRS,file = paste0(trait,"_Noncoding_BestPRS.csv"),row.names = FALSE)
 
 RV_PRS_raw <- RV_PRS
 RV_PRS_adjusted <- RV_PRS
 
+
+tmp <- data.frame(y = RV_PRS_adjusted[,"RV_Noncoding_PRS"],RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+mod <- lm(y~.,data = tmp)
+R <- mod$residuals
+tmp <- data.frame(y = R^2,RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+mod <- lm(y~.,data = tmp)
+y_hat <- predict(mod,tmp)
+if(sum(y_hat < 0) > 0){
+  mod <- lm(y~1,data = tmp)
+  y_hat <- predict(mod,tmp)
+}
+if(sum(sqrt(y_hat)) == 0){
+  RV_PRS_adjusted[,"RV_Noncoding_PRS"] <- 0
+}else{
+  RV_PRS_adjusted[,"RV_Noncoding_PRS"] <- R/sqrt(y_hat)
+}
+
+
+RV_PRS_raw_EUR <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+RV_PRS_raw_NonEUR <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+RV_PRS_raw_UNK <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+RV_PRS_raw_SAS <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+RV_PRS_raw_MIX <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+RV_PRS_raw_AFR <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+RV_PRS_raw_EAS <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+
+RV_PRS_adjusted_EUR <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+RV_PRS_adjusted_NonEUR <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+RV_PRS_adjusted_UNK <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+RV_PRS_adjusted_SAS <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+RV_PRS_adjusted_MIX <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+RV_PRS_adjusted_AFR <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+RV_PRS_adjusted_EAS <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+
+RV_PRS_raw_EUR$RV_Noncoding_PRS <- scale(RV_PRS_raw_EUR$RV_Noncoding_PRS)
+RV_PRS_raw_NonEUR$RV_Noncoding_PRS <- scale(RV_PRS_raw_NonEUR$RV_Noncoding_PRS)
+RV_PRS_raw_UNK$RV_Noncoding_PRS <- scale(RV_PRS_raw_UNK$RV_Noncoding_PRS)
+RV_PRS_raw_SAS$RV_Noncoding_PRS <- scale(RV_PRS_raw_SAS$RV_Noncoding_PRS)
+RV_PRS_raw_MIX$RV_Noncoding_PRS <- scale(RV_PRS_raw_MIX$RV_Noncoding_PRS)
+RV_PRS_raw_AFR$RV_Noncoding_PRS <- scale(RV_PRS_raw_AFR$RV_Noncoding_PRS)
+RV_PRS_raw_EAS$RV_Noncoding_PRS <- scale(RV_PRS_raw_EAS$RV_Noncoding_PRS)
+
+
+beta_validation_raw_EUR <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EUR,family = binomial()))[2]
+se_validation_raw_EUR <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_NonEUR <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_NonEUR,family = binomial()))[2]
+se_validation_raw_NonEUR <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_SAS <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_SAS,family = binomial()))[2]
+se_validation_raw_SAS <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_MIX <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_MIX,family = binomial()))[2]
+se_validation_raw_MIX <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_raw_AFR <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AFR,family = binomial()))[2]
+se_validation_raw_AFR <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_raw_EAS <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EAS,family = binomial()))[2]
+se_validation_raw_EAS <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_UNK <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_UNK,family = binomial()))[2]
+se_validation_raw_UNK <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_UNK,family = binomial()))$coefficients[2,2]
+
+
+beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EUR,family = binomial()))[2]
+se_validation_adjusted_EUR <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_NonEUR <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_NonEUR,family = binomial()))[2]
+se_validation_adjusted_NonEUR <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_NonEUR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_SAS,family = binomial()))[2]
+se_validation_adjusted_SAS <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_SAS,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_MIX <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_MIX,family = binomial()))[2]
+se_validation_adjusted_MIX <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AFR,family = binomial()))[2]
+se_validation_adjusted_AFR <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AFR,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EAS,family = binomial()))[2]
+se_validation_adjusted_EAS <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EAS,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_UNK <- coef(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_UNK,family = binomial()))[2]
+se_validation_adjusted_UNK <- summary(glm(as.formula(paste0("Y~","RV_Noncoding_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_UNK,family = binomial()))$coefficients[2,2]
+
+RV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
+                             beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
+                             se_raw = c(se_validation_raw_EUR,se_validation_raw_NonEUR,se_validation_raw_UNK,se_validation_raw_SAS,se_validation_raw_MIX,se_validation_raw_AFR,se_validation_raw_EAS), 
+                             beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_NonEUR,beta_validation_adjusted_UNK,beta_validation_adjusted_SAS,beta_validation_adjusted_MIX,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
+                             se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_NonEUR,se_validation_adjusted_UNK,se_validation_adjusted_SAS,se_validation_adjusted_MIX,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
+
+write.csv(RV_PRS_Results,file = paste0(trait,"_Noncoding_Best_Betas.csv"),row.names = FALSE)
+
+
+
+
+
+
+
+
+
+
+rm(list=setdiff(ls(), c("trait","RV_Tune_Coding_PRS","RV_Tune_Noncoding_PRS")))
+
+RV_Vad_Coding_PRS <- read.csv(paste0(trait,"_Coding_BestPRS.csv"))
+RV_Vad_Noncoding_PRS <- read.csv(paste0(trait,"_Noncoding_BestPRS.csv"))
+
+RV_Vad_PRS <- inner_join(RV_Vad_Coding_PRS,RV_Vad_Noncoding_PRS)
+
+RV_Tune_PRS <- inner_join(RV_Tune_Coding_PRS,RV_Tune_Noncoding_PRS)
+
+mod <- glm(Y~RV_Coding_PRS+RV_Noncoding_PRS,data = RV_Tune_PRS,family = binomial())
+
+RV_Vad_PRS$RV_PRS <- predict(mod,RV_Vad_PRS)
+
+Coefficients_Coding <- read.csv(paste0(trait,"_Coding_Sole_Coefficients.csv"))
+Coefficients_Noncoding <- read.csv(paste0(trait,"_Noncoding_Sole_Coefficients.csv"))
+print(coef(mod))
+Coefficients_Coding$Beta_Final <- coef(mod)[2]*Coefficients_Coding$Beta_Final
+Coefficients_Noncoding$Beta_Final <- coef(mod)[3]*Coefficients_Noncoding$Beta_Final
+write.csv(Coefficients_Coding,paste0(trait,"_Coding_Final_Coefficients.csv"),row.names = FALSE)
+write.csv(Coefficients_Noncoding,paste0(trait,"_Noncoding_Final_Coefficients.csv"),row.names = FALSE)
+
+
+RV_Vad_PRS <- RV_Vad_PRS[,c("IID","Y","RV_PRS","age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")]
+
+write.csv(RV_Vad_PRS,file = paste0(trait,"_BestPRS.csv"),row.names = FALSE)
+
+load("all_phenotypes.RData")
+system("rm all_phenotypes.RData")
+
+
+RV_PRS_raw <- RV_Vad_PRS
+RV_PRS_adjusted <- RV_Vad_PRS
 
 tmp <- data.frame(y = RV_PRS_adjusted[,"RV_PRS"],RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
 mod <- lm(y~.,data = tmp)
@@ -810,7 +933,10 @@ RV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SA
                              beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_NonEUR,beta_validation_adjusted_UNK,beta_validation_adjusted_SAS,beta_validation_adjusted_MIX,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
                              se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_NonEUR,se_validation_adjusted_UNK,se_validation_adjusted_SAS,se_validation_adjusted_MIX,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
 
-write.csv(RV_PRS_Results,file = paste0(trait,"_Noncoding_Best_Betas.csv"),row.names = FALSE)
+write.csv(RV_PRS_Results,file = paste0(trait,"_Best_Betas.csv"),row.names = FALSE)
+
+
+
 
 
 
