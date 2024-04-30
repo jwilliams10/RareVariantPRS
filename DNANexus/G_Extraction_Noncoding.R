@@ -583,6 +583,6 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
 system("rm Annotation_name_catalog.csv")
 system(paste0("rm ",gds.path))
 system("rm coding_sig.csv")
-system("rm noncoding_sig_11.csv")
+system("rm noncoding_sig.csv")
 
 
