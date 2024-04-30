@@ -45,11 +45,12 @@ obj_nullmodel_validation <- get(load(paste0(trait,"_Validation_Null_Model.RData"
 obj_nullmodel <- obj_nullmodel_train
 obj_nullmodel$id_include <- c(obj_nullmodel_train$id_include,obj_nullmodel_tune$id_include,obj_nullmodel_validation$id_include)
 
-
-G_star_gene_centric_coding <- NULL
-for(chr in 1:22){
-  G_star_gene_centric_coding <- cbind(G_star_gene_centric_coding,read.csv(paste0(trait,"_G_Star_Coding_Chr",chr,".csv")))
-  system(paste0("rm ",paste0(trait,"_G_Star_Coding_Chr",chr,".csv")))
+chrs <- unique(Coding_Train_PVals_All$Chr)
+G_star_gene_centric_coding <- read.csv(paste0(trait,"_G_Star_Coding_Chr",chrs[1],".csv"))
+system(paste0("rm ",paste0(trait,"_G_Star_Coding_Chr",chrs[1],".csv")))
+for(i in 2:length(chrs)){
+  G_star_gene_centric_coding <- cbind(G_star_gene_centric_coding,read.csv(paste0(trait,"_G_Star_Coding_Chr",chrs[i],".csv")))
+  system(paste0("rm ",paste0(trait,"_G_Star_Coding_Chr",chrs[i],".csv")))
 }
 
 col_remove <- apply(G_star_gene_centric_coding,2,function(x){sum(x != 0)}) > 10 & colSums(G_star_gene_centric_coding) > 10 
@@ -471,10 +472,12 @@ obj_nullmodel <- obj_nullmodel_train
 obj_nullmodel$id_include <- c(obj_nullmodel_train$id_include,obj_nullmodel_tune$id_include,obj_nullmodel_validation$id_include)
 
 
-G_star_gene_centric_noncoding <- NULL
-for(chr in 1:22){
-  G_star_gene_centric_noncoding <- cbind(G_star_gene_centric_noncoding,read.csv(paste0(trait,"_G_Star_Noncoding_Chr",chr,".csv")))
-  system(paste0("rm ",paste0(trait,"_G_Star_Noncoding_Chr",chr,".csv")))
+chrs <- unique(Coding_Train_PVals_All$Chr)
+G_star_gene_centric_noncoding <- read.csv(paste0(trait,"_G_Star_Noncoding_Chr",chrs[1],".csv"))
+system(paste0("rm ",paste0(trait,"_G_Star_Noncoding_Chr",chrs[1],".csv")))
+for(i in 2:length(chrs)){
+  G_star_gene_centric_noncoding <- cbind(G_star_gene_centric_coding,read.csv(paste0(trait,"_G_Star_Noncoding_Chr",chrs[i],".csv")))
+  system(paste0("rm ",paste0(trait,"_G_Star_Noncoding_Chr",chrs[i],".csv")))
 }
 
 col_remove <- apply(G_star_gene_centric_noncoding,2,function(x){sum(x != 0)}) > 10 & colSums(G_star_gene_centric_noncoding) > 10 
