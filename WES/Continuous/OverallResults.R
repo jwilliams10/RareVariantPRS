@@ -80,6 +80,7 @@ ggplot(full_results) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WES Raw PRS Results") + 
   ylab("Beta") + 
+  ylim(0,0.6) +
   theme_Publication() + 
   scale_fill_Publication()
 
@@ -89,5 +90,6 @@ ggplot(full_results) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WES Adjusted PRS Results") + 
   ylab("Beta") + 
+  ylim(0,0.6) +
   theme_Publication() + 
   scale_fill_Publication()

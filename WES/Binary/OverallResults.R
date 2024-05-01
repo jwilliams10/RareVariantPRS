@@ -83,7 +83,8 @@ ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WES Raw PRS Results") + 
-  ylab("Beta") + 
+  ylab("Beta") +
+  ylim(0,0.95) +
   theme_Publication() + 
   scale_fill_Publication()
 
@@ -93,5 +94,6 @@ ggplot(full_results) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WES Adjusted PRS Results") + 
   ylab("Beta") + 
+  ylim(0,0.95) +
   theme_Publication() + 
   scale_fill_Publication()
