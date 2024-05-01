@@ -511,21 +511,21 @@ G_star_gene_centric_noncoding_train <- G_star_gene_centric_noncoding[ids_gstar %
 G_star_gene_centric_noncoding_tune <- G_star_gene_centric_noncoding[ids_gstar %in% obj_nullmodel_tune$id_include,]
 G_star_gene_centric_noncoding_vad <- G_star_gene_centric_noncoding[ids_gstar %in% obj_nullmodel_validation$id_include,]
 
-X_train <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_train$id_include],G_star_gene_centric_coding_train)
+X_train <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_train$id_include],G_star_gene_centric_noncoding_train)
 pheno_train <- read.delim("All_Train.txt")
 pheno_train <- inner_join(pheno_train,X_train)
 X_train <- as.matrix(pheno_train[,27:ncol(pheno_train),drop = FALSE])
 model.null <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_train)
 y_train <- model.null$residual
 
-X_tune <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_tune$id_include],G_star_gene_centric_coding_tune)
+X_tune <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_tune$id_include],G_star_gene_centric_noncoding_tune)
 pheno_tune <- read.delim("All_Tune.txt")
 pheno_tune <- inner_join(pheno_tune,X_tune)
 X_tune <- as.matrix(pheno_tune[,27:ncol(pheno_tune),drop = FALSE])
 model.null <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_tune)
 y_tune <- model.null$residual
 
-X_valid <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_validation$id_include],G_star_gene_centric_coding_vad)
+X_valid <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_validation$id_include],G_star_gene_centric_noncoding_vad)
 pheno_valid <- read.delim("All_Validation.txt")
 pheno_valid <- inner_join(pheno_valid,X_valid)
 X_valid <- as.matrix(pheno_valid[,27:ncol(pheno_valid),drop = FALSE])
