@@ -289,7 +289,7 @@ if(r2_sl_tune < r2_bestoverall_tune){
 
 
 
-RV_Tune_Coding_PRS <- data.frame(IID = pheno_tune$IID,Y = tune_dat_sl_AUC[,1],RV_Coding_PRS = tune_dat_sl_AUC[,2])
+RV_Tune_Coding_PRS <- data.frame(IID = pheno_tune$IID,Y = tune_dat_sl_R2[,1],RV_Coding_PRS = tune_dat_sl_R2[,2])
 
 
 
@@ -734,7 +734,7 @@ if(r2_sl_tune < r2_bestoverall_tune){
 
 
 
-RV_Tune_Noncoding_PRS <- data.frame(IID = pheno_tune$IID,Y = tune_dat_sl_AUC[,1],RV_Noncoding_PRS = tune_dat_sl_AUC[,2])
+RV_Tune_Noncoding_PRS <- data.frame(IID = pheno_tune$IID,Y = tune_dat_sl_R2[,1],RV_Noncoding_PRS = tune_dat_sl_R2[,2])
 
 
 
