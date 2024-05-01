@@ -40,4 +40,4 @@ done
 
 
 # mount PWD and run bigsnpr using my_r_script.r
-docker run -v $PWD:/data -w /data --entrypoint /bin/bash r_with_plink -l -c "Rscript Single_RareVariant_PRS_Al.R ${1}"
+docker run -v $PWD:/data -w /data --entrypoint /bin/bash r_with_plink -l -c "Rscript Single_RareVariant_PRS_All.R ${1}"
