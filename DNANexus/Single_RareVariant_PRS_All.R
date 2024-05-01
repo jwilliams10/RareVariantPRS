@@ -83,6 +83,7 @@ y_tune <- model.null$residual
 X_valid <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_validation$id_include],G_star_gene_centric_coding_vad)
 pheno_valid <- read.delim("All_Validation.txt")
 pheno_valid <- inner_join(pheno_valid,X_valid)
+X_valid <- as.matrix(pheno_valid[,27:ncol(pheno_valid),drop = FALSE])
 model.null <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_valid)
 y_valid <- model.null$residual
 
@@ -527,6 +528,7 @@ y_tune <- model.null$residual
 X_valid <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_validation$id_include],G_star_gene_centric_coding_vad)
 pheno_valid <- read.delim("All_Validation.txt")
 pheno_valid <- inner_join(pheno_valid,X_valid)
+X_valid <- as.matrix(pheno_valid[,27:ncol(pheno_valid),drop = FALSE])
 model.null <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_valid)
 y_valid <- model.null$residual
 
