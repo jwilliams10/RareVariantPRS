@@ -9,6 +9,10 @@ library(boot)
 library(stringr)
 library(glmnet)
 
+# for array in 1 2 3 4 5 6;
+# do
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/Common_Plus_Rare_PRS.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/Common_Plus_Rare_PRS.sh -icmd="bash Common_Plus_Rare_PRS.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/BestPRS/ --priority low --instance-type mem1_ssd1_v2_x4
+# done
 
 trait <- as.numeric(commandArgs(TRUE)[1])
 

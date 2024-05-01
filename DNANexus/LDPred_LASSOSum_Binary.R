@@ -433,7 +433,7 @@ colnames(dat) <- c("CHR","SNP","REF","BP","A1")
 dat <- left_join(dat,all_betas)
 dat[is.na(dat)] <- 0
 
-write.csv(dat,file = paste0(trait,"_Final_Coefficients.csv"),row.names = FALSE)
+write.csv(dat,file = paste0(trait,"_Final_Coefficients_LDPred2.csv"),row.names = FALSE)
 
 
 
@@ -520,7 +520,7 @@ ldpred2_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","S
                               beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_NonEUR,beta_validation_adjusted_UNK,beta_validation_adjusted_SAS,beta_validation_adjusted_MIX,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
                               se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_NonEUR,se_validation_adjusted_UNK,se_validation_adjusted_SAS,se_validation_adjusted_MIX,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
 
-write.csv(ldpred2_Results,file = paste0(trait,"Best_Betas.csv"),row.names = FALSE)
+write.csv(ldpred2_Results,file = paste0(trait,"Best_Betas_LDPred2.csv"),row.names = FALSE)
 
 
 
@@ -604,7 +604,7 @@ colnames(dat) <- c("CHR","SNP","REF","BP","A1")
 dat <- left_join(dat,all_betas)
 dat[is.na(dat)] <- 0
 
-write.csv(dat,file = paste0(trait,"_Final_Coefficients.csv"),row.names = FALSE)
+write.csv(dat,file = paste0(trait,"_Final_Coefficients_LASSOSum.csv"),row.names = FALSE)
 
 
 
@@ -686,7 +686,7 @@ lassosum2_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK",
                                 beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_NonEUR,beta_validation_adjusted_UNK,beta_validation_adjusted_SAS,beta_validation_adjusted_MIX,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
                                 se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_NonEUR,se_validation_adjusted_UNK,se_validation_adjusted_SAS,se_validation_adjusted_MIX,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
 
-write.csv(lassosum2_Results,file = paste0(trait,"Best_Betas.csv"),row.names = FALSE)
+write.csv(lassosum2_Results,file = paste0(trait,"Best_Betas_LASSOSum.csv"),row.names = FALSE)
 
 system(paste0("rm All_Train.txt"))
 system(paste0("rm All_Tune.txt"))

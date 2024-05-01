@@ -1,29 +1,25 @@
 # load bigsnpr image
 
-dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/CT/ -r
-dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/LDPred2_LASSOSum2/ -r
-dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/Combined_Common_PRS/ -r
-dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/BestRareVariantPRS/ -r
-dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/BestPRS/ -r
+mkdir Results
 
-mkdir Results_Binary
+cd Results/
 
-cp -a CT/. Results_Binary/
-cp -a LDPred2_LASSOSum2/. Results_Binary/
-cp -a Combined_Common_PRS/. Results_Binary/
-cp -a BestRareVariantPRS/. Results_Binary/
-cp -a BestPRS/. Results_Binary/
+for trait in Asthma CAD T2D Breast Prostate;
+do
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/CT/${trait}Best_Betas.csv
+  mv ${trait}Best_Betas.csv ${trait}_Best_Betas_CT.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/LDPred2_LASSOSum2/${trait}Best_Betas_LASSOSum.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/LDPred2_LASSOSum2/${trait}Best_Betas_LDPred2.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/Combined_Common_PRS/${trait}Best_Betas.csv
+  mv ${trait}Best_Betas.csv ${trait}_Best_Betas_CV_SL.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/BestRareVariantPRS/${trait}_Coding_Best_Betas.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/BestRareVariantPRS/${trait}_Noncoding_Best_Betas.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/BestRareVariantPRS/${trait}_Best_Betas.csv
+  mv ${trait}_Best_Betas.csv ${trait}_Best_Betas_RV_SL.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Binary/BestPRS/${trait}Best_Betas.csv
+  mv ${trait}Best_Betas.csv ${trait}_Best_Betas_CV_RV.csv
+done
 
-cd Results_Binary/
-rm *.txt
-rm *.log
-rm *.sscore
 cd ..
 
-tar -czvf Results_Binary.tar.gz Results_Binary/
-
-rm -r CT/
-rm -r LDPred2_LASSOSum2/
-rm -r Combined_Common_PRS/
-rm -r BestRareVariantPRS/
-rm -r BestPRS/
+tar -czvf Results_Binary.tar.gz Results/

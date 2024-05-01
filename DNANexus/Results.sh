@@ -1,29 +1,25 @@
 # load bigsnpr image
 
-dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/CT/ -r
-dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/LDPred2_LASSOSum2/ -r
-dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/Combined_Common_PRS/ -r
-dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/ -r
-dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/BestPRS/ -r
-
 mkdir Results
 
-cp -a CT/. Results/
-cp -a LDPred2_LASSOSum2/. Results/
-cp -a Combined_Common_PRS/. Results/
-cp -a BestRareVariantPRS/. Results/
-cp -a BestPRS/. Results/
-
 cd Results/
-rm *.txt
-rm *.sscore
-rm *.log
+
+for trait in BMI HDL LDL Height TC logTG;
+do
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/CT/${trait}Best_Betas.csv
+  mv ${trait}Best_Betas.csv ${trait}_Best_Betas_CT.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/LDPred2_LASSOSum2/${trait}Best_Betas_LASSOSum.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/LDPred2_LASSOSum2/${trait}Best_Betas_LDPred2.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/Combined_Common_PRS/${trait}Best_Betas.csv
+  mv ${trait}Best_Betas.csv ${trait}_Best_Betas_CV_SL.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/${trait}_Coding_Best_Betas.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/${trait}_Noncoding_Best_Betas.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/${trait}_Best_Betas.csv
+  mv ${trait}_Best_Betas.csv ${trait}_Best_Betas_RV_SL.csv
+  dx download UKB_PRS:/JW/UKB_Phenotypes/Results/Continuous/BestPRS/${trait}Best_Betas.csv
+  mv ${trait}Best_Betas.csv ${trait}_Best_Betas_CV_RV.csv
+done
+
 cd ..
 
 tar -czvf Results.tar.gz Results/
-
-rm -r CT/
-rm -r LDPred2_LASSOSum2/
-rm -r Combined_Common_PRS/
-rm -r BestRareVariantPRS/
-rm -r BestPRS/
