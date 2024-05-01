@@ -37,7 +37,7 @@ theme_Publication <- function(base_size=12) {
             panel.border = element_rect(colour = NA),
             axis.title = element_text(face = "bold",size = 16),
             axis.title.y = element_text(angle=90,vjust =2),
-            axis.title.x = element_text(vjust = -0.2),
+            axis.title.x = element_blank(),
             axis.text.x = element_blank(), 
             axis.line = element_line(colour="black",size=2),
             axis.ticks = element_line(),
