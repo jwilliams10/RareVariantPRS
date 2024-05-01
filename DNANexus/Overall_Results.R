@@ -93,6 +93,7 @@ ggplot(full_results) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WGS Raw PRS Results") + 
   ylab("Beta") + 
+  ylim(0,0.6) +
   theme_Publication() + 
   scale_fill_Publication()
 
@@ -102,6 +103,7 @@ ggplot(full_results) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WGS Adjusted PRS Results") + 
   ylab("Beta") + 
+  ylim(0,0.6) +
   theme_Publication() + 
   scale_fill_Publication()
 
@@ -110,5 +112,6 @@ ggplot(CV_Coding_Noncoding) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WGS Raw PRS Results") + 
   ylab("Beta") + 
+  ylim(0,0.6) +
   theme_Publication() + 
   scale_fill_Publication()
