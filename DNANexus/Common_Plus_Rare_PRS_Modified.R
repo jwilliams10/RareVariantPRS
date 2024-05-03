@@ -32,6 +32,7 @@ if(trait == 1){
 
 
 RV_PRS <- read.csv(paste0(trait,"_Modified_BestPRS.csv"))
+colnames(RV_PRS)[colnames(RV_PRS) == "RV_Coding_PRS"] <- "RV_PRS"
 system(paste0("rm ",paste0(trait,"_Modified_BestPRS.csv")))
 CV_PRS <- read.delim(paste0(trait,"_Best_Validation_All.txt"))
 system(paste0("rm ",paste0(trait,"_Best_Validation_All.txt")))
