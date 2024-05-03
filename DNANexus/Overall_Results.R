@@ -18,11 +18,14 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   RV_Results_Noncoding <- read.csv(paste0("/Users/williamsjacr/Downloads/Results/",trait,"_Noncoding_Best_Betas.csv"))
   RV_Results_Noncoding$Method <- "Noncoding"
   
+  RV_Results_SL <- read.csv(paste0("/Users/williamsjacr/Downloads/Results/",trait,"_Best_Betas_RV_SL.csv"))
+  RV_Results_SL$Method <- "RV_SL"
+  
   CV_RV_Results <- read.csv(paste0("/Users/williamsjacr/Downloads/Results/",trait,"_Best_Betas_CV_RV.csv"))
   
   
   
-  full_results <- rbind(full_results,rbind(CT_Results,LDPred2_Results,LASSOSUM2_Results,CV_Results,RV_Results_Coding,RV_Results_Noncoding,CV_RV_Results))
+  full_results <- rbind(full_results,rbind(CT_Results,LDPred2_Results,LASSOSUM2_Results,CV_Results,RV_Results_Coding,RV_Results_Noncoding,RV_Results_SL,CV_RV_Results))
 }
 
 full_results$beta_adjusted[full_results$beta_adjusted < 0 & full_results$Method %in% c("LDPred","LASSOSum")] <- -1*full_results$beta_adjusted[full_results$beta_adjusted < 0 & full_results$Method %in% c("LDPred","LASSOSum")]
@@ -69,19 +72,17 @@ theme_Publication <- function(base_size=12) {
 scale_fill_Publication <- function(...){
   library(scales)
   discrete_scale("fill","Publication",manual_pal(values = c("#386cb0","#EF7E3D","#ffd558","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)
-  
 }
 
 scale_colour_Publication <- function(...){
   library(scales)
   discrete_scale("colour","Publication",manual_pal(values = c("#386cb0","#EF7E3D","#ffd558","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)
-  
 }
 
 
 library(ggplot2)
 CV_Coding_Noncoding <- full_results[full_results$Method %in% c("Coding","Noncoding","CV","RV"),]
-full_results <- full_results[!(full_results$Method %in% c("Coding","Noncoding")),]
+full_results <- full_results[!(full_results$Method %in% c("Coding","Noncoding","RV_SL")),]
 
 full_results$Method1 <- full_results$Method
 full_results$Method <- factor(full_results$Method,levels = c("CT","LDPred","LASSOSum","CV_SL","RV","CV"))
