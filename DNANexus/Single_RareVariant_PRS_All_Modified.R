@@ -12,7 +12,7 @@ library(RISCA)
 
 # for array in {1..6};
 # do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/Single_RareVariant_PRS_All.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/Single_RareVariant_PRS_All.sh -icmd="bash Single_RareVariant_PRS_All.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/ --priority low --instance-type mem3_ssd1_v2_x4
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/Single_RareVariant_PRS_All_Modified.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/RareVariant_PRS/Single_RareVariant_PRS_All_Modified.sh -icmd="bash Single_RareVariant_PRS_All_Modified.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/ --priority low --instance-type mem3_ssd1_v2_x4
 # done
 
 trait <- as.numeric(commandArgs(TRUE)[1])
