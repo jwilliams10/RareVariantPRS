@@ -1,29 +1,31 @@
 rm(list = ls())
 
-full_results <- NULL
+# full_results <- NULL
+# 
+# for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
+#   CT_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/CT/",trait,"Best_Betas.csv"))
+#   CT_Results$Method <- "CT"
+#   LDPred2_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"Best_Betas.csv"))
+#   LDPred2_Results$Method <- "LDPred"
+#   LASSOSUM2_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"Best_Betas.csv"))
+#   LASSOSUM2_Results$Method <- "LASSOSum"
+#   CV_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_Common_PRS/",trait,"Best_Betas.csv"))
+#   CV_Results$Method <- "CV_SL"
+#   CV_RV_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Common_plus_RareVariants/",trait,"Best_Betas.csv"))
+#   full_results <- rbind(full_results,rbind(CT_Results,LDPred2_Results,LASSOSUM2_Results,CV_Results,CV_RV_Results))
+# }
+# 
+# rm(list=setdiff(ls(), "full_results"))
+# 
+# full_results$beta_adjusted[full_results$beta_adjusted < 0 & full_results$Method %in% c("LDPred","LASSOSum")] <- -1*full_results$beta_adjusted[full_results$beta_adjusted < 0 & full_results$Method %in% c("LDPred","LASSOSum")]
+# full_results$beta_raw[full_results$beta_raw < 0 & full_results$Method %in% c("LDPred","LASSOSum")] <- -1*full_results$beta_raw[full_results$beta_raw < 0 & full_results$Method %in% c("LDPred","LASSOSum")]
+# 
+# full_results$beta_adjusted[full_results$beta_adjusted < 0] <- 0
+# full_results$beta_raw[full_results$beta_raw < 0] <- 0
+# 
+# full_results <- full_results[full_results$ancestry !="EAS",]
 
-for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
-  CT_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/CT/",trait,"Best_Betas.csv"))
-  CT_Results$Method <- "CT"
-  LDPred2_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LDPred2/",trait,"Best_Betas.csv"))
-  LDPred2_Results$Method <- "LDPred"
-  LASSOSUM2_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/LASSOSUM2/",trait,"Best_Betas.csv"))
-  LASSOSUM2_Results$Method <- "LASSOSum"
-  CV_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_Common_PRS/",trait,"Best_Betas.csv"))
-  CV_Results$Method <- "CV_SL"
-  CV_RV_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Common_plus_RareVariants/",trait,"Best_Betas.csv"))
-  full_results <- rbind(full_results,rbind(CT_Results,LDPred2_Results,LASSOSUM2_Results,CV_Results,CV_RV_Results))
-}
-
-rm(list=setdiff(ls(), "full_results"))
-
-full_results$beta_adjusted[full_results$beta_adjusted < 0 & full_results$Method %in% c("LDPred","LASSOSum")] <- -1*full_results$beta_adjusted[full_results$beta_adjusted < 0 & full_results$Method %in% c("LDPred","LASSOSum")]
-full_results$beta_raw[full_results$beta_raw < 0 & full_results$Method %in% c("LDPred","LASSOSum")] <- -1*full_results$beta_raw[full_results$beta_raw < 0 & full_results$Method %in% c("LDPred","LASSOSum")]
-
-full_results$beta_adjusted[full_results$beta_adjusted < 0] <- 0
-full_results$beta_raw[full_results$beta_raw < 0] <- 0
-
-full_results <- full_results[full_results$ancestry !="EAS",]
+full_results <- read.csv("~/Desktop/RareVariantPRS_Results/WES_Results_Binary.csv")
 
 theme_Publication <- function(base_size=12) {
   library(grid)
