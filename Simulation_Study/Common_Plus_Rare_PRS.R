@@ -25,7 +25,7 @@ CV_RV_PRS_raw <- CV_RV_PRS
 CV_RV_PRS_adjusted <- CV_RV_PRS
 
 load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
-CV_RV_PRS <- inner_join(CV_RV_PRS,ukb_pheno[,c("IID","pc1","pc2","pc3","pc4","pc5")])
+CV_RV_PRS_adjusted <- inner_join(CV_RV_PRS_adjusted,ukb_pheno[,c("IID","pc1","pc2","pc3","pc4","pc5")])
 
 for(i in c("RV_PRS","prs")){
   tmp <- data.frame(y = CV_RV_PRS_adjusted[,i],CV_RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
