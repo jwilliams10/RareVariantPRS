@@ -1,5 +1,7 @@
 rm(list = ls())
 
+library(ggplot2)
+
 WES_Results_Continuous <- read.csv("~/Desktop/RareVariantPRS_Results/WES_Results_Continuous.csv")
 WES_Results_Continuous$Data_Type <- "WES"
 WES_Results_Binary <- read.csv("~/Desktop/RareVariantPRS_Results/WES_Results_Binary.csv")

@@ -554,13 +554,13 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   }else{
     gds.path <- list.files()[str_detect(list.files(),".gds")]
     
-    for(i in 1:nrow(Train_PVals_All)){
+    for(i in 1:nrow(Train_PVals_All_tmp)){
       ## Chr
-      chr <- Train_PVals_All$Chr[i]
+      chr <- Train_PVals_All_tmp$Chr[i]
       ## Gene name
-      gene_name <- Train_PVals_All$Gene[i]
+      gene_name <- Train_PVals_All_tmp$Gene[i]
       ## Coding mask
-      category <- Train_PVals_All$Category[i]
+      category <- Train_PVals_All_tmp$Category[i]
       
       print(gene_name)
       print(category)
