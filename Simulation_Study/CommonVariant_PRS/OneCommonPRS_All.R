@@ -223,6 +223,22 @@ load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
 
 pheno_validation_raw <- pheno_validation
+pheno_validation_adjusted <- pheno_validation
+pheno_validation_adjusted <- inner_join(pheno_validation_adjusted,ukb_pheno[,c("IID","pc1","pc2","pc3","pc4","pc5")])
+
+
+tmp <- data.frame(y = pheno_validation_adjusted[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]],pheno_validation_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+mod <- lm(y~.,data = tmp)
+R <- mod$residuals
+tmp <- data.frame(y = R^2,pheno_validation_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+mod <- lm(y~.,data = tmp)
+y_hat <- predict(mod,tmp)
+if(sum(sqrt(y_hat)) == 0){
+  pheno_validation_adjusted[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- 0
+}else{
+  pheno_validation_adjusted[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- R/sqrt(y_hat)
+}
+
 
 pheno_validation_raw_EUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
 pheno_validation_raw_NonEUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
@@ -232,6 +248,14 @@ pheno_validation_raw_MIX <- pheno_validation_raw[pheno_validation_raw$IID %in% u
 pheno_validation_raw_AFR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 pheno_validation_raw_EAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
+pheno_validation_adjusted_EUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
+pheno_validation_adjusted_NonEUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
+pheno_validation_adjusted_UNK <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
+pheno_validation_adjusted_SAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
+pheno_validation_adjusted_MIX <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_adjusted_AFR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
+pheno_validation_adjusted_EAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
+
 pheno_validation_raw_EUR$y_validation <- scale(pheno_validation_raw_EUR$y_validation)
 pheno_validation_raw_NonEUR$y_validation <- scale(pheno_validation_raw_NonEUR$y_validation)
 pheno_validation_raw_UNK$y_validation <- scale(pheno_validation_raw_UNK$y_validation)
@@ -239,6 +263,15 @@ pheno_validation_raw_SAS$y_validation <- scale(pheno_validation_raw_SAS$y_valida
 pheno_validation_raw_MIX$y_validation <- scale(pheno_validation_raw_MIX$y_validation)
 pheno_validation_raw_AFR$y_validation <- scale(pheno_validation_raw_AFR$y_validation)
 pheno_validation_raw_EAS$y_validation <- scale(pheno_validation_raw_EAS$y_validation)
+
+pheno_validation_adjusted_EUR$y_validation <- scale(pheno_validation_adjusted_EUR$y_validation)
+pheno_validation_adjusted_NonEUR$y_validation <- scale(pheno_validation_adjusted_NonEUR$y_validation)
+pheno_validation_adjusted_UNK$y_validation <- scale(pheno_validation_adjusted_UNK$y_validation)
+pheno_validation_adjusted_SAS$y_validation <- scale(pheno_validation_adjusted_SAS$y_validation)
+pheno_validation_adjusted_MIX$y_validation <- scale(pheno_validation_adjusted_MIX$y_validation)
+pheno_validation_adjusted_AFR$y_validation <- scale(pheno_validation_adjusted_AFR$y_validation)
+pheno_validation_adjusted_EAS$y_validation <- scale(pheno_validation_adjusted_EAS$y_validation)
+
 
 pheno_validation_raw_EUR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_EUR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
 pheno_validation_raw_NonEUR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_NonEUR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
@@ -263,8 +296,25 @@ se_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~",colnames(p
 beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EAS))[2]
 se_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EAS))$coefficients[2,2]
 
+beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EUR))[2]
+se_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EUR))$coefficients[2,2]
+beta_validation_adjusted_NonEUR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_NonEUR))[2]
+se_validation_adjusted_NonEUR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_NonEUR))$coefficients[2,2]
+beta_validation_adjusted_UNK <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_UNK))[2]
+se_validation_adjusted_UNK <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_UNK))$coefficients[2,2]
+beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_SAS))[2]
+se_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_SAS))$coefficients[2,2]
+beta_validation_adjusted_MIX <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_MIX))[2]
+se_validation_adjusted_MIX <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_MIX))$coefficients[2,2]
+beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_AFR))[2]
+se_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_AFR))$coefficients[2,2]
+beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EAS))[2]
+se_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EAS))$coefficients[2,2]
+
 CV_Results <- data.frame(i = i,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
                          beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
-                         se_raw = c(se_validation_raw_EUR,se_validation_raw_NonEUR,se_validation_raw_UNK,se_validation_raw_SAS,se_validation_raw_MIX,se_validation_raw_AFR,se_validation_raw_EAS))
+                         se_raw = c(se_validation_raw_EUR,se_validation_raw_NonEUR,se_validation_raw_UNK,se_validation_raw_SAS,se_validation_raw_MIX,se_validation_raw_AFR,se_validation_raw_EAS), 
+                         beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_NonEUR,beta_validation_adjusted_UNK,beta_validation_adjusted_SAS,beta_validation_adjusted_MIX,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
+                         se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_NonEUR,se_validation_adjusted_UNK,se_validation_adjusted_SAS,se_validation_adjusted_MIX,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
 
 write.csv(CV_Results,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Betas",i,".csv"),row.names = FALSE)
