@@ -36,6 +36,8 @@ rm(list = ls())
 
 full_results <- read.csv("~/Desktop/RareVariantPRS_Results/WGS_Results_Continuous.csv")
 
+full_results <- full_results[full_results$ancestry %in% c("EUR","AFR","SAS","MIX"),]
+
 theme_Publication <- function(base_size=12) {
   library(grid)
   library(ggthemes)
