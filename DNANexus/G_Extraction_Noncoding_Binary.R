@@ -12,7 +12,7 @@ library(stringr)
 
 # for array in {1..22};
 # do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_PRS/G_Extraction_Noncoding_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_PRS/G_Extraction_Noncoding_Binary.sh -icmd="bash G_Extraction_Noncoding_Binary.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/G_star/ --priority low --instance-type mem3_ssd1_v2_x4
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_PRS/G_Extraction_Noncoding_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/RareVariant_PRS/G_Extraction_Noncoding_Binary.sh -icmd="bash G_Extraction_Noncoding_Binary.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/G_star/ --priority low --instance-type mem3_ssd1_v2_x8
 # done
 
 Gene_Centric_Noncoding_G_Star <- function(chr,gene_name,category=c("downstream","upstream","UTR","promoter_CAGE","promoter_DHS","enhancer_CAGE","enhancer_DHS","ncRNA"),
