@@ -77,6 +77,9 @@ full_results$Method <- factor(full_results$Method,levels = c("CT","LDPred","LASS
 full_results$Method1[full_results$Method1 == "RV"] <- "CV"
 full_results$Method1 <- factor(full_results$Method1,levels = c("CT","LDPred","LASSOSum","CV_SL","CV"))
 
+full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+
+
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 

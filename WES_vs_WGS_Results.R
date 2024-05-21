@@ -24,7 +24,7 @@ theme_Publication <- function(base_size=12) {
             axis.title = element_text(face = "bold",size = 16),
             axis.title.y = element_text(angle=90,vjust =2),
             axis.title.x = element_blank(),
-            axis.text.x = element_blank(),
+            # axis.text.x = element_blank(), 
             axis.line = element_line(colour="black",size=2),
             axis.ticks = element_line(),
             # panel.grid.major = element_line(colour="#f0f0f0"),
@@ -32,7 +32,7 @@ theme_Publication <- function(base_size=12) {
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank(),
             legend.key = element_rect(colour = NA),
-            #legend.position = "bottom",
+            legend.position = "bottom",
             #legend.direction = "horizontal",
             #legend.key.size= unit(0.2, "cm"),
             #legend.margin = unit(0, "cm"),
@@ -42,6 +42,7 @@ theme_Publication <- function(base_size=12) {
             strip.background=element_rect(colour="#f0f0f0",fill="#f0f0f0"),
             strip.text = element_text(face="bold")
     ))
+  
 }
 scale_fill_Publication <- function(...){
   library(scales)
@@ -56,11 +57,42 @@ full_results_Continuous <- rbind(WES_Results_Continuous,WGS_Results_Continuous)
 full_results_Continuous <- full_results_Continuous[full_results_Continuous$Method %in% c("CV","RV"),]
 full_results_Continuous$Method_DataSource <- paste0(full_results_Continuous$Method,"_",full_results_Continuous$Data_Type)
 
-ggplot(full_results_Continuous) +
+full_results_Continuous <- full_results_Continuous[full_results_Continuous$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+
+full_results_Binary <- rbind(WES_Results_Binary,WGS_Results_Binary)
+full_results_Binary <- full_results_Binary[full_results_Binary$Method %in% c("CV","RV"),]
+full_results_Binary$Method_DataSource <- paste0(full_results_Binary$Method,"_",full_results_Binary$Data_Type)
+
+full_results_Binary <- full_results_Binary[full_results_Binary$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+
+plot1 <- ggplot(full_results_Continuous) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) +
   ggtitle("WES vs WGS Adjusted PRS Results") +
   ylab("Beta") +
   ylim(0,0.6) +
   theme_Publication() +
-  scale_fill_Publication()
+  scale_fill_Publication() + guides(fill=guide_legend(title="Method/Data Type"))
+
+plot2 <- ggplot(full_results_Binary) +
+  geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
+  facet_grid(vars(trait), vars(ancestry)) +
+  ggtitle("WES vs WGS Adjusted PRS Results") +
+  ylab("Beta") +
+  ylim(0,0.6) +
+  theme_Publication() +
+  scale_fill_Publication() + guides(fill=guide_legend(title="Method/Data Type"))
+
+
+prow <- plot_grid(
+  plot1 + theme(legend.position="none"),
+  plot2 + theme(legend.position="none"),
+  align = 'vh',
+  labels = c("Continuous","Binary"),
+  hjust = -1,
+  ncol = 2
+)
+
+legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
+
+print(plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1)))

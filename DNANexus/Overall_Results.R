@@ -11,20 +11,20 @@ rm(list = ls())
 #   LASSOSUM2_Results$Method <- "LASSOSum"
 #   CV_Results <- read.csv(paste0("/Users/williamsjacr/Downloads/Results/",trait,"_Best_Betas_CV_SL.csv"))
 #   CV_Results$Method <- "CV_SL"
-#   
+# 
 #   RV_Results_Coding <- read.csv(paste0("/Users/williamsjacr/Downloads/Results/",trait,"_Coding_Best_Betas.csv"))
 #   RV_Results_Coding$Method <- "Coding"
-#   
+# 
 #   RV_Results_Noncoding <- read.csv(paste0("/Users/williamsjacr/Downloads/Results/",trait,"_Noncoding_Best_Betas.csv"))
 #   RV_Results_Noncoding$Method <- "Noncoding"
-#   
+# 
 #   RV_Results_SL <- read.csv(paste0("/Users/williamsjacr/Downloads/Results/",trait,"_Best_Betas_RV_SL.csv"))
 #   RV_Results_SL$Method <- "RV_SL"
-#   
+# 
 #   CV_RV_Results <- read.csv(paste0("/Users/williamsjacr/Downloads/Results/",trait,"_Best_Betas_CV_RV.csv"))
-#   
-#   
-#   
+# 
+# 
+# 
 #   full_results <- rbind(full_results,rbind(CT_Results,LDPred2_Results,LASSOSUM2_Results,CV_Results,RV_Results_Coding,RV_Results_Noncoding,RV_Results_SL,CV_RV_Results))
 # }
 # 
@@ -92,6 +92,8 @@ full_results$Method1 <- full_results$Method
 full_results$Method <- factor(full_results$Method,levels = c("CT","LDPred","LASSOSum","CV_SL","RV","CV"))
 full_results$Method1[full_results$Method1 == "RV"] <- "CV"
 full_results$Method1 <- factor(full_results$Method1,levels = c("CT","LDPred","LASSOSum","CV_SL","CV"))
+
+full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","MIX"),]
 
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
