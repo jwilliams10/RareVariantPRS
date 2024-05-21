@@ -27,8 +27,8 @@ CV_RV_PRS_adjusted <- CV_RV_PRS
 load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 CV_RV_PRS_adjusted <- inner_join(CV_RV_PRS_adjusted,ukb_pheno[,c("IID","pc1","pc2","pc3","pc4","pc5")])
 
-for(i in c("RV_PRS","prs")){
-  tmp <- data.frame(y = CV_RV_PRS_adjusted[,i],CV_RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+for(j in c("RV_PRS","prs")){
+  tmp <- data.frame(y = CV_RV_PRS_adjusted[,j],CV_RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
   mod <- lm(y~.,data = tmp)
   R <- mod$residuals
   tmp <- data.frame(y = R^2,CV_RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
@@ -39,9 +39,9 @@ for(i in c("RV_PRS","prs")){
     y_hat <- predict(mod,tmp)
   }
   if(sum(sqrt(y_hat)) == 0){
-    CV_RV_PRS_adjusted[,i] <- 0
+    CV_RV_PRS_adjusted[,j] <- 0
   }else{
-    CV_RV_PRS_adjusted[,i] <- R/sqrt(y_hat)
+    CV_RV_PRS_adjusted[,j] <- R/sqrt(y_hat)
   }
 }
 
