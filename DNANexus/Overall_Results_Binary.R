@@ -91,6 +91,8 @@ library(ggplot2)
 CV_Coding_Noncoding <- full_results[full_results$Method %in% c("Coding","Noncoding","CV","RV"),]
 full_results <- full_results[!(full_results$Method %in% c("Coding","Noncoding")),]
 
+full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+
 full_results$Method1 <- full_results$Method
 full_results$Method <- factor(full_results$Method,levels = c("CT","LDPred","LASSOSum","CV_SL","RV","CV"))
 full_results$Method1[full_results$Method1 == "RV"] <- "CV"
@@ -100,7 +102,7 @@ ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WGS Raw PRS Results") + 
-  ylab("Beta") + 
+  ylab("log(Odds Ratio) of PRS per SD") + 
   ylim(0,0.95) +
   theme_Publication() + 
   scale_fill_Publication()
@@ -109,8 +111,8 @@ ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("WGS Adjusted PRS Results") + 
-  ylab("Beta") + 
+  ggtitle("WGS Ancestry Adjusted PRS Results") + 
+  ylab("log(Odds Ratio) of PRS per SD") + 
   ylim(0,0.95) +
   theme_Publication() + 
   scale_fill_Publication()
@@ -120,7 +122,7 @@ ggplot(CV_Coding_Noncoding) +
   geom_bar(aes(x=Method, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WGS Raw PRS Results") + 
-  ylab("Beta") + 
+  ylab("log(Odds Ratio) of PRS per SD") + 
   ylim(0,0.95) +
   theme_Publication() + 
   scale_fill_Publication()
