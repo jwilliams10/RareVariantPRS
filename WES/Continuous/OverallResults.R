@@ -72,10 +72,13 @@ scale_colour_Publication <- function(...){
 
 
 library(ggplot2)
+full_results$Method[full_results$Method == "CV"] <- "RICE-CV" 
+full_results$Method[full_results$Method == "RV"] <- "RICE-RV" 
+
 full_results$Method1 <- full_results$Method
-full_results$Method <- factor(full_results$Method,levels = c("CT","LDPred","LASSOSum","CV_SL","RV","CV"))
-full_results$Method1[full_results$Method1 == "RV"] <- "CV"
-full_results$Method1 <- factor(full_results$Method1,levels = c("CT","LDPred","LASSOSum","CV_SL","CV"))
+full_results$Method <- factor(full_results$Method,levels = c("CT","LDPred","LASSOSum","CV_SL","RICE-RV","RICE-CV"))
+full_results$Method1[full_results$Method1 == "RICE-RV"] <- "RICE-CV"
+full_results$Method1 <- factor(full_results$Method1,levels = c("CT","LDPred","LASSOSum","CV_SL","RICE-CV"))
 
 full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","MIX"),]
 
@@ -84,7 +87,7 @@ ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WES Raw PRS Results") + 
-  ylab("Beta") + 
+  ylab("Beta of PRS per SD") + 
   ylim(0,0.6) +
   theme_Publication() + 
   scale_fill_Publication()
@@ -93,8 +96,8 @@ ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("WES Adjusted PRS Results") + 
-  ylab("Beta") + 
+  ggtitle("WES Ancestry Adjusted PRS Results") + 
+  ylab("Beta of PRS per SD") + 
   ylim(0,0.6) +
   theme_Publication() + 
   scale_fill_Publication()

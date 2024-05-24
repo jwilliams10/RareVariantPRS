@@ -1,3 +1,27 @@
+# %%writefile score_task.R
+# 
+# tasks <- data.frame(check.names = FALSE)
+# 
+# for (chrom in 1:22) {
+#   tasks <- rbind(tasks, data.frame(
+#     '--env CHR'=chrom,
+#     '--input BED_File'=paste0("gs://fc-aou-datasets-controlled/v7/wgs/short_read/snpindel/acaf_threshold_v7.1/plink_bed/acaf_threshold.chr",chrom,".bed"),
+#     '--input BIM_File'=paste0("gs://fc-aou-datasets-controlled/v7/wgs/short_read/snpindel/acaf_threshold_v7.1/plink_bed/acaf_threshold.chr",chrom,".bim"),
+#     '--input FAM_File'=paste0("gs://fc-aou-datasets-controlled/v7/wgs/short_read/snpindel/acaf_threshold_v7.1/plink_bed/acaf_threshold.chr",chrom,".fam"),
+#     '--input Ancestry_File'="gs://fc-aou-datasets-controlled/v7/wgs/short_read/snpindel/aux/ancestry/ancestry_preds.tsv",
+#     '--input R_Script'="gs://fc-secure-797107a7-4402-4122-941c-9a486e0d633e/JW/AoU_Phenotypes/Scripts/Common_Variants.R",
+#     '--output-recursive OUTPUT_PATH'="gs://fc-secure-797107a7-4402-4122-941c-9a486e0d633e/JW/AoU_Phenotypes/Data/CommonVariants",
+#     # '--output out_file'=paste0("gs://fc-secure-797107a7-4402-4122-941c-9a486e0d633e/JW/AoU_Phenotypes/Results/test",chrom,".Rdata"),
+#     check.names = FALSE
+#   ))
+# }
+# 
+# write.table(tasks, 
+#             file="score_task.txt", 
+#             row.names=F, col.names=T, 
+#             sep='\t', quote=F)
+
+
 rm(list = ls())
 
 chr <- as.numeric(commandArgs(TRUE)[1])
