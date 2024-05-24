@@ -42,14 +42,14 @@ for(i in 1:length(Y_train)){
   
   Best_Betas_lm <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Common_plus_RareVariants/Best_Betas",i,".csv"))
   
-  if(sum(Best_Betas_CV_SL$beta_raw == Best_Betas_LDPred$beta_raw) == 7){
-    Best_Betas_CV_SL$beta_raw <- -1*Best_Betas_CV_SL$beta_raw
-    Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"]
+  if(sum(Best_Betas_CV_SL$beta_adjusted == Best_Betas_LDPred$beta_adjusted) == 7){
+    Best_Betas_CV_SL$beta_adjusted <- -1*Best_Betas_CV_SL$beta_adjusted
+    Best_Betas_lm$beta_adjusted[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_adjusted[Best_Betas_lm$Method == "CV"]
   }
   
-  if(sum(Best_Betas_CV_SL$beta_raw == Best_Betas_LASSOSum$beta_raw) == 7){
-    Best_Betas_CV_SL$beta_raw <- -1*Best_Betas_CV_SL$beta_raw
-    Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"]
+  if(sum(Best_Betas_CV_SL$beta_adjusted == Best_Betas_LASSOSum$beta_adjusted) == 7){
+    Best_Betas_CV_SL$beta_adjusted <- -1*Best_Betas_CV_SL$beta_adjusted
+    Best_Betas_lm$beta_adjusted[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_adjusted[Best_Betas_lm$Method == "CV"]
   }
   
   betas_tmp <- rbind(Best_Betas_CV_SL,Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RV_SL,Best_Betas_lm)
@@ -68,7 +68,7 @@ results_70$Scale <- as.character(results_70$Scale)
 results_70$Scale[results_70$Scale == "0"] <- "Unscaled"
 results_70$Scale[results_70$Scale == "1"] <- "Scaled"
 
-results_70 <- data.frame(Scale = results_70$Scale, Causal_Prop = results_70$Causal_Prop, Method = results_70$Method,Ancestry = results_70$ancestry,Beta = results_70$beta_raw,SE_Beta = results_70$se_raw)
+results_70 <- data.frame(Scale = results_70$Scale, Causal_Prop = results_70$Causal_Prop, Method = results_70$Method,Ancestry = results_70$ancestry,Beta = results_70$beta_adjusted,SE_Beta = results_70$se_raw)
 results_70$Train_Size <- nrow(Y_train[[1]])
 
 
@@ -101,14 +101,14 @@ for(i in 1:length(Y_train)){
   
   Best_Betas_lm <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Common_plus_RareVariants/Best_Betas",i,".csv"))
   
-  if(sum(Best_Betas_CV_SL$beta_raw == Best_Betas_LDPred$beta_raw) == 7){
-    Best_Betas_CV_SL$beta_raw <- -1*Best_Betas_CV_SL$beta_raw
-    Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"]
+  if(sum(Best_Betas_CV_SL$beta_adjusted == Best_Betas_LDPred$beta_adjusted) == 7){
+    Best_Betas_CV_SL$beta_adjusted <- -1*Best_Betas_CV_SL$beta_adjusted
+    Best_Betas_lm$beta_adjusted[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_adjusted[Best_Betas_lm$Method == "CV"]
   }
   
-  if(sum(Best_Betas_CV_SL$beta_raw == Best_Betas_LASSOSum$beta_raw) == 7){
-    Best_Betas_CV_SL$beta_raw <- -1*Best_Betas_CV_SL$beta_raw
-    Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"]
+  if(sum(Best_Betas_CV_SL$beta_adjusted == Best_Betas_LASSOSum$beta_adjusted) == 7){
+    Best_Betas_CV_SL$beta_adjusted <- -1*Best_Betas_CV_SL$beta_adjusted
+    Best_Betas_lm$beta_adjusted[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_adjusted[Best_Betas_lm$Method == "CV"]
   }
   
   betas_tmp <- rbind(Best_Betas_CV_SL,Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RV_SL,Best_Betas_lm)
@@ -126,7 +126,7 @@ results_35$Scale <- as.character(results_35$Scale)
 results_35$Scale[results_35$Scale == "0"] <- "Unscaled"
 results_35$Scale[results_35$Scale == "1"] <- "Scaled"
 
-results_35 <- data.frame(Scale = results_35$Scale, Causal_Prop = results_35$Causal_Prop, Method = results_35$Method,Ancestry = results_35$ancestry,Beta = results_35$beta_raw,SE_Beta = results_35$se_raw)
+results_35 <- data.frame(Scale = results_35$Scale, Causal_Prop = results_35$Causal_Prop, Method = results_35$Method,Ancestry = results_35$ancestry,Beta = results_35$beta_adjusted,SE_Beta = results_35$se_raw)
 results_35$Train_Size <- nrow(Y_train[[1]])
 
 
