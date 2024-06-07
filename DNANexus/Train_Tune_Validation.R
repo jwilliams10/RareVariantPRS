@@ -24,12 +24,17 @@ library(SeqArray)
 
 ukb_pheno <- fread("ukb_multi.pheno")
 ukb_covariate <- fread("ukb_multi.cov")
+ukb_ancestries <- readRDS("ukb_multi_anc.RDS")
 
 ukb_covariate <- ukb_covariate[,c("FID","IID","ancestry","female","age",paste0("pc",1:10))]
 colnames(ukb_covariate) <- c(colnames(ukb_covariate)[1:3],"sex",colnames(ukb_covariate)[5:15])
 
-ukb_pheno <- inner_join(ukb_pheno,ukb_covariate)
+colnames(ukb_pheno)[colnames(ukb_pheno) == "ancestry"] <- "ethnicity"
 
+ukb_pheno <- inner_join(ukb_pheno,ukb_ancestries[,c("FID","predicted")])
+colnames(ukb_pheno)[colnames(ukb_pheno) == "predicted"] <- "ancestry"
+
+ukb_pheno <- inner_join(ukb_pheno,ukb_covariate)
 ukb_pheno <- as.data.frame(ukb_pheno)
 
 bed_ids <- fread("all_chr.fam")
@@ -62,15 +67,13 @@ i_EUR <- i[ukb_pheno$ancestry[i] == "EUR"]
 i_AFR <- i[ukb_pheno$ancestry[i] == "AFR"]
 i_SAS <- i[ukb_pheno$ancestry[i] == "SAS"]
 i_EAS <- i[ukb_pheno$ancestry[i] == "EAS"]
-i_MIX <- i[ukb_pheno$ancestry[i] == "MIX"]
-i_UNK <- i[ukb_pheno$ancestry[i] == "UNK"]
+i_AMR <- i[ukb_pheno$ancestry[i] == "AMR"]
 
 tune <- c(sample(i_EUR,round(length(i_EUR)/2)),
           sample(i_AFR,round(length(i_AFR)/2)),
           sample(i_SAS,round(length(i_SAS)/2)),
           sample(i_EAS,round(length(i_EAS)/2)),
-          sample(i_MIX,round(length(i_MIX)/2)),
-          sample(i_UNK,round(length(i_UNK)/2)))
+          sample(i_AMR,round(length(i_AMR)/2)))
 
 validation <- i[!(i %in% tune)]
 
@@ -129,3 +132,4 @@ file.remove("all_chr.fam")
 file.remove("ukb.200k.wgs.chr22.pass.annotated.gds")
 file.remove("ukb_multi.cov")
 file.remove("ukb_multi.pheno")
+file.remove("ukb_multi_anc.RDS")

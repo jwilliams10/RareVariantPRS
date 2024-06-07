@@ -57,34 +57,26 @@ load("all_phenotypes.RData")
 system("rm all_phenotypes.RData")
 
 CV_RV_PRS_raw_EUR <- CV_RV_PRS_raw[CV_RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-CV_RV_PRS_raw_NonEUR <- CV_RV_PRS_raw[CV_RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-CV_RV_PRS_raw_UNK <- CV_RV_PRS_raw[CV_RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
 CV_RV_PRS_raw_SAS <- CV_RV_PRS_raw[CV_RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-CV_RV_PRS_raw_MIX <- CV_RV_PRS_raw[CV_RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+CV_RV_PRS_raw_AMR <- CV_RV_PRS_raw[CV_RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 CV_RV_PRS_raw_AFR <- CV_RV_PRS_raw[CV_RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 CV_RV_PRS_raw_EAS <- CV_RV_PRS_raw[CV_RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 CV_RV_PRS_adjusted_EUR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-CV_RV_PRS_adjusted_NonEUR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-CV_RV_PRS_adjusted_UNK <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
 CV_RV_PRS_adjusted_SAS <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-CV_RV_PRS_adjusted_MIX <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+CV_RV_PRS_adjusted_AMR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 CV_RV_PRS_adjusted_AFR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 CV_RV_PRS_adjusted_EAS <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 CV_RV_PRS_raw_EUR$RV_PRS <- scale(CV_RV_PRS_raw_EUR$RV_PRS)
-CV_RV_PRS_raw_NonEUR$RV_PRS <- scale(CV_RV_PRS_raw_NonEUR$RV_PRS)
-CV_RV_PRS_raw_UNK$RV_PRS <- scale(CV_RV_PRS_raw_UNK$RV_PRS)
 CV_RV_PRS_raw_SAS$RV_PRS <- scale(CV_RV_PRS_raw_SAS$RV_PRS)
-CV_RV_PRS_raw_MIX$RV_PRS <- scale(CV_RV_PRS_raw_MIX$RV_PRS)
+CV_RV_PRS_raw_AMR$RV_PRS <- scale(CV_RV_PRS_raw_AMR$RV_PRS)
 CV_RV_PRS_raw_AFR$RV_PRS <- scale(CV_RV_PRS_raw_AFR$RV_PRS)
 CV_RV_PRS_raw_EAS$RV_PRS <- scale(CV_RV_PRS_raw_EAS$RV_PRS)
 
 CV_RV_PRS_raw_EUR$prs <- scale(CV_RV_PRS_raw_EUR$prs)
-CV_RV_PRS_raw_NonEUR$prs <- scale(CV_RV_PRS_raw_NonEUR$prs)
-CV_RV_PRS_raw_UNK$prs <- scale(CV_RV_PRS_raw_UNK$prs)
 CV_RV_PRS_raw_SAS$prs <- scale(CV_RV_PRS_raw_SAS$prs)
-CV_RV_PRS_raw_MIX$prs <- scale(CV_RV_PRS_raw_MIX$prs)
+CV_RV_PRS_raw_AMR$prs <- scale(CV_RV_PRS_raw_AMR$prs)
 CV_RV_PRS_raw_AFR$prs <- scale(CV_RV_PRS_raw_AFR$prs)
 CV_RV_PRS_raw_EAS$prs <- scale(CV_RV_PRS_raw_EAS$prs)
 
@@ -101,25 +93,15 @@ se_beta_raw_CV_EUR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confound
 best_beta_raw_RV_EUR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_EUR,family = binomial()))[3]
 se_beta_raw_RV_EUR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_EUR,family = binomial()))$coefficients[3,2]
 
-best_beta_raw_CV_NonEUR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_NonEUR,family = binomial()))[2]
-se_beta_raw_CV_NonEUR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_NonEUR,family = binomial()))$coefficients[2,2]
-best_beta_raw_RV_NonEUR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_NonEUR,family = binomial()))[3]
-se_beta_raw_RV_NonEUR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_NonEUR,family = binomial()))$coefficients[3,2]
-
-best_beta_raw_CV_UNK <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_UNK,family = binomial()))[2]
-se_beta_raw_CV_UNK <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_UNK,family = binomial()))$coefficients[2,2]
-best_beta_raw_RV_UNK <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_UNK,family = binomial()))[3]
-se_beta_raw_RV_UNK <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_UNK,family = binomial()))$coefficients[3,2]
-
 best_beta_raw_CV_SAS <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_SAS,family = binomial()))[2]
 se_beta_raw_CV_SAS <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_SAS,family = binomial()))$coefficients[2,2]
 best_beta_raw_RV_SAS <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_SAS,family = binomial()))[3]
 se_beta_raw_RV_SAS <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_SAS,family = binomial()))$coefficients[3,2]
 
-best_beta_raw_CV_MIX <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_MIX,family = binomial()))[2]
-se_beta_raw_CV_MIX <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_MIX,family = binomial()))$coefficients[2,2]
-best_beta_raw_RV_MIX <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_MIX,family = binomial()))[3]
-se_beta_raw_RV_MIX <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_MIX,family = binomial()))$coefficients[3,2]
+best_beta_raw_CV_AMR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_AMR,family = binomial()))[2]
+se_beta_raw_CV_AMR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_AMR,family = binomial()))$coefficients[2,2]
+best_beta_raw_RV_AMR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_AMR,family = binomial()))[3]
+se_beta_raw_RV_AMR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_AMR,family = binomial()))$coefficients[3,2]
 
 best_beta_raw_CV_AFR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_AFR,family = binomial()))[2]
 se_beta_raw_CV_AFR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_raw_AFR,family = binomial()))$coefficients[2,2]
@@ -138,25 +120,15 @@ se_beta_adjusted_CV_EUR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",con
 best_beta_adjusted_RV_EUR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_EUR,family = binomial()))[3]
 se_beta_adjusted_RV_EUR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_EUR,family = binomial()))$coefficients[3,2]
 
-best_beta_adjusted_CV_NonEUR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_NonEUR,family = binomial()))[2]
-se_beta_adjusted_CV_NonEUR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_NonEUR,family = binomial()))$coefficients[2,2]
-best_beta_adjusted_RV_NonEUR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_NonEUR,family = binomial()))[3]
-se_beta_adjusted_RV_NonEUR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_NonEUR,family = binomial()))$coefficients[3,2]
-
-best_beta_adjusted_CV_UNK <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_UNK,family = binomial()))[2]
-se_beta_adjusted_CV_UNK <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_UNK,family = binomial()))$coefficients[2,2]
-best_beta_adjusted_RV_UNK <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_UNK,family = binomial()))[3]
-se_beta_adjusted_RV_UNK <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_UNK,family = binomial()))$coefficients[3,2]
-
 best_beta_adjusted_CV_SAS <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_SAS,family = binomial()))[2]
 se_beta_adjusted_CV_SAS <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_SAS,family = binomial()))$coefficients[2,2]
 best_beta_adjusted_RV_SAS <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_SAS,family = binomial()))[3]
 se_beta_adjusted_RV_SAS <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_SAS,family = binomial()))$coefficients[3,2]
 
-best_beta_adjusted_CV_MIX <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_MIX,family = binomial()))[2]
-se_beta_adjusted_CV_MIX <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_MIX,family = binomial()))$coefficients[2,2]
-best_beta_adjusted_RV_MIX <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_MIX,family = binomial()))[3]
-se_beta_adjusted_RV_MIX <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_MIX,family = binomial()))$coefficients[3,2]
+best_beta_adjusted_CV_AMR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_AMR,family = binomial()))[2]
+se_beta_adjusted_CV_AMR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_AMR,family = binomial()))$coefficients[2,2]
+best_beta_adjusted_RV_AMR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_AMR,family = binomial()))[3]
+se_beta_adjusted_RV_AMR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_AMR,family = binomial()))$coefficients[3,2]
 
 best_beta_adjusted_CV_AFR <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_AFR,family = binomial()))[2]
 se_beta_adjusted_CV_AFR <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_AFR,family = binomial()))$coefficients[2,2]
@@ -169,18 +141,18 @@ best_beta_adjusted_RV_EAS <- coef(glm(as.formula(paste0("Y~prs + RV_PRS + ",conf
 se_beta_adjusted_RV_EAS <- summary(glm(as.formula(paste0("Y~prs + RV_PRS + ",confounders)),data = CV_RV_PRS_adjusted_EAS,family = binomial()))$coefficients[3,2]
 
 
-CV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
-                             beta_raw = c(best_beta_raw_CV_EUR,best_beta_raw_CV_NonEUR,best_beta_raw_CV_UNK,best_beta_raw_CV_SAS,best_beta_raw_CV_MIX,best_beta_raw_CV_AFR,best_beta_raw_CV_EAS), 
-                             se_raw = c(se_beta_raw_CV_EUR,se_beta_raw_CV_NonEUR,se_beta_raw_CV_UNK,se_beta_raw_CV_SAS,se_beta_raw_CV_MIX,se_beta_raw_CV_AFR,se_beta_raw_CV_EAS), 
-                             beta_adjusted = c(best_beta_adjusted_CV_EUR,best_beta_adjusted_CV_NonEUR,best_beta_adjusted_CV_UNK,best_beta_adjusted_CV_SAS,best_beta_adjusted_CV_MIX,best_beta_adjusted_CV_AFR,best_beta_adjusted_CV_EAS), 
-                             se_adjusted = c(se_beta_adjusted_CV_EUR,se_beta_adjusted_CV_NonEUR,se_beta_adjusted_CV_UNK,se_beta_adjusted_CV_SAS,se_beta_adjusted_CV_MIX,se_beta_adjusted_CV_AFR,se_beta_adjusted_CV_EAS),
+CV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
+                             beta_raw = c(best_beta_raw_CV_EUR,best_beta_raw_CV_SAS,best_beta_raw_CV_AMR,best_beta_raw_CV_AFR,best_beta_raw_CV_EAS), 
+                             se_raw = c(se_beta_raw_CV_EUR,se_beta_raw_CV_SAS,se_beta_raw_CV_AMR,se_beta_raw_CV_AFR,se_beta_raw_CV_EAS), 
+                             beta_adjusted = c(best_beta_adjusted_CV_EUR,best_beta_adjusted_CV_SAS,best_beta_adjusted_CV_AMR,best_beta_adjusted_CV_AFR,best_beta_adjusted_CV_EAS), 
+                             se_adjusted = c(se_beta_adjusted_CV_EUR,se_beta_adjusted_CV_SAS,se_beta_adjusted_CV_AMR,se_beta_adjusted_CV_AFR,se_beta_adjusted_CV_EAS),
                              Method = "CV")
 
-RV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
-                             beta_raw = c(best_beta_raw_RV_EUR,best_beta_raw_RV_NonEUR,best_beta_raw_RV_UNK,best_beta_raw_RV_SAS,best_beta_raw_RV_MIX,best_beta_raw_RV_AFR,best_beta_raw_RV_EAS), 
-                             se_raw = c(se_beta_raw_RV_EUR,se_beta_raw_RV_NonEUR,se_beta_raw_RV_UNK,se_beta_raw_RV_SAS,se_beta_raw_RV_MIX,se_beta_raw_RV_AFR,se_beta_raw_RV_EAS), 
-                             beta_adjusted = c(best_beta_adjusted_RV_EUR,best_beta_adjusted_RV_NonEUR,best_beta_adjusted_RV_UNK,best_beta_adjusted_RV_SAS,best_beta_adjusted_RV_MIX,best_beta_adjusted_RV_AFR,best_beta_adjusted_RV_EAS), 
-                             se_adjusted = c(se_beta_adjusted_RV_EUR,se_beta_adjusted_RV_NonEUR,se_beta_adjusted_RV_UNK,se_beta_adjusted_RV_SAS,se_beta_adjusted_RV_MIX,se_beta_adjusted_RV_AFR,se_beta_adjusted_RV_EAS),
+RV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
+                             beta_raw = c(best_beta_raw_RV_EUR,best_beta_raw_RV_SAS,best_beta_raw_RV_AMR,best_beta_raw_RV_AFR,best_beta_raw_RV_EAS), 
+                             se_raw = c(se_beta_raw_RV_EUR,se_beta_raw_RV_SAS,se_beta_raw_RV_AMR,se_beta_raw_RV_AFR,se_beta_raw_RV_EAS), 
+                             beta_adjusted = c(best_beta_adjusted_RV_EUR,best_beta_adjusted_RV_SAS,best_beta_adjusted_RV_AMR,best_beta_adjusted_RV_AFR,best_beta_adjusted_RV_EAS), 
+                             se_adjusted = c(se_beta_adjusted_RV_EUR,se_beta_adjusted_RV_SAS,se_beta_adjusted_RV_AMR,se_beta_adjusted_RV_AFR,se_beta_adjusted_RV_EAS),
                              Method = "RV")
 
 
