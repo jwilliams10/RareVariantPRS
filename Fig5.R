@@ -222,6 +222,73 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
 
 
 
+### Demo
+
+
+rm(list = ls())
+
+theme_Publication <- function(base_size=12) {
+  library(grid)
+  library(ggthemes)
+  (theme_foundation(base_size=base_size, )
+    + theme(plot.title = element_text(face = "bold",
+                                      size = rel(1.1), hjust = 0.5),
+            text = element_text(),
+            panel.background = element_rect(colour = NA),
+            plot.background = element_rect(colour = NA),
+            panel.border = element_rect(colour = NA),
+            axis.title = element_text(face = "bold",size = 24),
+            axis.title.y = element_text(angle=90,vjust =2),
+            axis.text.y = element_blank(),
+            axis.text.x = element_text(face = "bold",size = 18), 
+            axis.line = element_line(colour="black",size=2),
+            axis.ticks = element_line(),
+            # panel.grid.major = element_line(colour="#f0f0f0"),
+            # panel.grid.minor = element_line(colour="#f0f0f0"),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            legend.key = element_rect(colour = NA),
+            legend.position = "bottom",
+            #legend.direction = "horizontal",
+            #legend.key.size= unit(0.2, "cm"),
+            #legend.margin = unit(0, "cm"),
+            legend.title = element_text(face="bold.italic", size =24),
+            legend.text = element_text(face ="bold",size = 18),
+            plot.margin=unit(c(10,5,5,5),"mm"),
+            strip.background=element_rect(colour="#f0f0f0",fill="#f0f0f0"),
+            strip.text = element_text(face="bold")
+    ))
+  
+}
+
+data <- data.frame(Common_Bin = rep(1:9,3), Mean = c(1:9 * .2 + .5,1:9 * .2 + 1,1:9 * .2 + 1.5),color = rep(c("Below 5%","30% - 70%","Above 95%"),each = 9))
+data$SE <- 0.1
+
+data$color <- factor(data$color,levels = c("Below 5%","30% - 70%","Above 95%"))
+
+ggplot(data=data, aes(x=Common_Bin, y=Mean, color = color)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(" Standardized")) +
+  scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) +
+  xlab("Common Variant Quantiles") +
+  ylab("Observed Value of Standardized Trait") + 
+  guides(color=guide_legend(title="Rare Variant Quantiles"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

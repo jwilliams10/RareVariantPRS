@@ -148,17 +148,20 @@ rm(list = ls())
 # 
 # overall_results <- results[results$Method %in% c("CT","LASSOSum","LDPred","CV_SL","CV","RV"),]
 
-overall_results <- read.csv("~/Desktop/RareVariantPRS_Results/Overall_Results_SimStudy.csv")
+overall_results <- read.csv("Desktop/RareVariantPRS_Results/Overall_Results_SimStudy.csv")
 
-overall_results <- overall_results[overall_results$Ancestry %in% c("AFR","EUR","SAS","MIX"),]
-
+overall_results <- overall_results[overall_results$Ancestry %in% c("AFR","EUR","SAS","AMR","EAS"),]
+overall_results <- overall_results[overall_results$Method %in% c("CT","LASSOSum","LDPred","CV","RV"),]
 overall_results$Method[overall_results$Method == "CV"] <- "RICE-CV" 
 overall_results$Method[overall_results$Method == "RV"] <- "RICE-RV" 
+overall_results$Method[overall_results$Method == "LDPred"] <- "LDpred2"
+overall_results$Method[overall_results$Method == "LASSOSum"] <- "Lassosum2"
+
 
 overall_results$Method1 <- overall_results$Method
-overall_results$Method <- factor(overall_results$Method,levels = c("CT","LDPred","LASSOSum","CV_SL","RICE-RV","RICE-CV"))
+overall_results$Method <- factor(overall_results$Method,levels = c("CT","LDpred2","Lassosum2","RICE-RV","RICE-CV"))
 overall_results$Method1[overall_results$Method1 == "RICE-RV"] <- "RICE-CV"
-overall_results$Method1 <- factor(overall_results$Method1,levels = c("CT","LDPred","LASSOSum","CV_SL","RICE-CV"))
+overall_results$Method1 <- factor(overall_results$Method1,levels = c("CT","LDpred2","Lassosum2","RICE-CV"))
 
 
 ####################################################### Plots
@@ -200,47 +203,55 @@ theme_Publication <- function(base_size=12) {
 
 scale_fill_Publication <- function(...){
   library(scales)
-  discrete_scale("fill","Publication",manual_pal(values = c("#386cb0","#EF7E3D","#ffd558","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)
-  
-}
-
-scale_colour_Publication <- function(...){
-  library(scales)
-  discrete_scale("colour","Publication",manual_pal(values = c("#386cb0","#EF7E3D","#ffd558","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)
+  discrete_scale("fill","Publication",manual_pal(values = c("#5EBD3E","#FFB900","#F78200","#E23838","#973999","#009cdf")), ...)
   
 }
 
 library(ggplot2)
+library(dplyr)
 
-ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 49,172") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
+ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 49,172") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
   ggtitle("Simulation Results; Scaled G, n = 49,172") + 
   ylab("Beta of PRS per SD") + 
   theme_Publication() + 
+  ylim(0,0.4) +
   scale_fill_Publication()
 
-ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
+ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 49,172") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation Results; Scaled G, n = 49,172") + 
+  ylab("Beta of PRS per SD") + 
+  theme_Publication() + 
+  ylim(0,0.4)+
+  scale_fill_Publication()
+
+ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
   ggtitle("Simulation Results; Scaled G, n = 98,343") + 
   ylab("Beta of PRS per SD") + 
   theme_Publication() + 
+  ylim(0,0.4) +
   scale_fill_Publication()
 
-ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 49,172") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
+ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 49,172") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
   ggtitle("Simulation Results; Unscaled G, n = 49,172") + 
   ylab("Beta of PRS per SD") + 
   theme_Publication() + 
+  ylim(0,0.4) +
   scale_fill_Publication()
 
-ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.01","Causal Prop. 0.0005")),]) +
+ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
   ggtitle("Simulation Results; Unscaled G, n = 98,343") + 
   ylab("Beta of PRS per SD") + 
   theme_Publication() + 
+  ylim(0,0.4) +
   scale_fill_Publication()
 

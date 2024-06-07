@@ -60,27 +60,24 @@ theme_Publication <- function(base_size=12) {
 
 scale_fill_Publication <- function(...){
   library(scales)
-  discrete_scale("fill","Publication",manual_pal(values = c("#386cb0","#EF7E3D","#ffd558","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)
-  
-}
-
-scale_colour_Publication <- function(...){
-  library(scales)
-  discrete_scale("colour","Publication",manual_pal(values = c("#386cb0","#EF7E3D","#ffd558","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)
+  discrete_scale("fill","Publication",manual_pal(values = c("#5EBD3E","#FFB900","#F78200","#E23838","#973999","#009cdf")), ...)
   
 }
 
 
 library(ggplot2)
+full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+full_results <- full_results[full_results$Method %in% c("CT","LASSOSum","LDPred","CV","RV"),]
 full_results$Method[full_results$Method == "CV"] <- "RICE-CV" 
 full_results$Method[full_results$Method == "RV"] <- "RICE-RV" 
+full_results$Method[full_results$Method == "LDPred"] <- "LDpred2"
+full_results$Method[full_results$Method == "LASSOSum"] <- "Lassosum2"
+
 
 full_results$Method1 <- full_results$Method
-full_results$Method <- factor(full_results$Method,levels = c("CT","LDPred","LASSOSum","CV_SL","RICE-RV","RICE-CV"))
+full_results$Method <- factor(full_results$Method,levels = c("CT","LDpred2","Lassosum2","RICE-RV","RICE-CV"))
 full_results$Method1[full_results$Method1 == "RICE-RV"] <- "RICE-CV"
-full_results$Method1 <- factor(full_results$Method1,levels = c("CT","LDPred","LASSOSum","CV_SL","RICE-CV"))
-
-full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+full_results$Method1 <- factor(full_results$Method1,levels = c("CT","LDpred2","Lassosum2","RICE-CV"))
 
 
 ggplot(full_results) +
