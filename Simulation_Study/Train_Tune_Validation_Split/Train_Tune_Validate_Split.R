@@ -22,15 +22,13 @@ i_EUR <- i[ukb_pheno$ancestry[i] == "EUR"]
 i_AFR <- i[ukb_pheno$ancestry[i] == "AFR"]
 i_SAS <- i[ukb_pheno$ancestry[i] == "SAS"]
 i_EAS <- i[ukb_pheno$ancestry[i] == "EAS"]
-i_MIX <- i[ukb_pheno$ancestry[i] == "MIX"]
-i_UNK <- i[ukb_pheno$ancestry[i] == "UNK"]
+i_AMR <- i[ukb_pheno$ancestry[i] == "AMR"]
 
 tune <- c(sample(i_EUR,round(length(i_EUR)/2)),
           sample(i_AFR,round(length(i_AFR)/2)),
           sample(i_SAS,round(length(i_SAS)/2)),
           sample(i_EAS,round(length(i_EAS)/2)),
-          sample(i_MIX,round(length(i_MIX)/2)),
-          sample(i_UNK,round(length(i_UNK)/2)))
+          sample(i_AMR,round(length(i_AMR)/2)))
 
 validation <- i[!(i %in% tune)]
 
@@ -101,15 +99,13 @@ i_EUR <- i[ukb_pheno$ancestry[i] == "EUR"]
 i_AFR <- i[ukb_pheno$ancestry[i] == "AFR"]
 i_SAS <- i[ukb_pheno$ancestry[i] == "SAS"]
 i_EAS <- i[ukb_pheno$ancestry[i] == "EAS"]
-i_MIX <- i[ukb_pheno$ancestry[i] == "MIX"]
-i_UNK <- i[ukb_pheno$ancestry[i] == "UNK"]
+i_AMR <- i[ukb_pheno$ancestry[i] == "AMR"]
 
 tune <- c(sample(i_EUR,round(length(i_EUR)/2)),
           sample(i_AFR,round(length(i_AFR)/2)),
           sample(i_SAS,round(length(i_SAS)/2)),
           sample(i_EAS,round(length(i_EAS)/2)),
-          sample(i_MIX,round(length(i_MIX)/2)),
-          sample(i_UNK,round(length(i_UNK)/2)))
+          sample(i_AMR,round(length(i_AMR)/2)))
 
 validation <- i[!(i %in% tune)]
 

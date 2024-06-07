@@ -297,55 +297,41 @@ if(sum(sqrt(y_hat)) == 0){
 }
 
 pheno_validation_raw_EUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-pheno_validation_raw_NonEUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-pheno_validation_raw_UNK <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
 pheno_validation_raw_SAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-pheno_validation_raw_MIX <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_raw_AMR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 pheno_validation_raw_AFR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 pheno_validation_raw_EAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 pheno_validation_adjusted_EUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-pheno_validation_adjusted_NonEUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-pheno_validation_adjusted_UNK <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
 pheno_validation_adjusted_SAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-pheno_validation_adjusted_MIX <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_adjusted_AMR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 pheno_validation_adjusted_AFR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 pheno_validation_adjusted_EAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 pheno_validation_raw_EUR$y_validation <- scale(pheno_validation_raw_EUR$y_validation)
-pheno_validation_raw_NonEUR$y_validation <- scale(pheno_validation_raw_NonEUR$y_validation)
-pheno_validation_raw_UNK$y_validation <- scale(pheno_validation_raw_UNK$y_validation)
 pheno_validation_raw_SAS$y_validation <- scale(pheno_validation_raw_SAS$y_validation)
-pheno_validation_raw_MIX$y_validation <- scale(pheno_validation_raw_MIX$y_validation)
+pheno_validation_raw_AMR$y_validation <- scale(pheno_validation_raw_AMR$y_validation)
 pheno_validation_raw_AFR$y_validation <- scale(pheno_validation_raw_AFR$y_validation)
 pheno_validation_raw_EAS$y_validation <- scale(pheno_validation_raw_EAS$y_validation)
 
 pheno_validation_raw_EUR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_EUR[,paste0("SCORE",idx,"_SUM")])
-pheno_validation_raw_NonEUR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_NonEUR[,paste0("SCORE",idx,"_SUM")])
-pheno_validation_raw_UNK[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_UNK[,paste0("SCORE",idx,"_SUM")])
 pheno_validation_raw_SAS[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_SAS[,paste0("SCORE",idx,"_SUM")])
-pheno_validation_raw_MIX[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_MIX[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_AMR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_AMR[,paste0("SCORE",idx,"_SUM")])
 pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")])
 pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")])
 
 pheno_validation_adjusted_EUR$y_validation <- scale(pheno_validation_adjusted_EUR$y_validation)
-pheno_validation_adjusted_NonEUR$y_validation <- scale(pheno_validation_adjusted_NonEUR$y_validation)
-pheno_validation_adjusted_UNK$y_validation <- scale(pheno_validation_adjusted_UNK$y_validation)
 pheno_validation_adjusted_SAS$y_validation <- scale(pheno_validation_adjusted_SAS$y_validation)
-pheno_validation_adjusted_MIX$y_validation <- scale(pheno_validation_adjusted_MIX$y_validation)
+pheno_validation_adjusted_AMR$y_validation <- scale(pheno_validation_adjusted_AMR$y_validation)
 pheno_validation_adjusted_AFR$y_validation <- scale(pheno_validation_adjusted_AFR$y_validation)
 pheno_validation_adjusted_EAS$y_validation <- scale(pheno_validation_adjusted_EAS$y_validation)
 
 beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EUR))[2]
 se_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EUR))$coefficients[2,2]
-beta_validation_raw_NonEUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_NonEUR))[2]
-se_validation_raw_NonEUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_NonEUR))$coefficients[2,2]
-beta_validation_raw_UNK <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_UNK))[2]
-se_validation_raw_UNK <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_UNK))$coefficients[2,2]
 beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_SAS))[2]
 se_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_SAS))$coefficients[2,2]
-beta_validation_raw_MIX <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_MIX))[2]
-se_validation_raw_MIX <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_MIX))$coefficients[2,2]
+beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AMR))[2]
+se_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AMR))$coefficients[2,2]
 beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AFR))[2]
 se_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AFR))$coefficients[2,2]
 beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EAS))[2]
@@ -353,24 +339,20 @@ se_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SC
 
 beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EUR))[2]
 se_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EUR))$coefficients[2,2]
-beta_validation_adjusted_NonEUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_NonEUR))[2]
-se_validation_adjusted_NonEUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_NonEUR))$coefficients[2,2]
-beta_validation_adjusted_UNK <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_UNK))[2]
-se_validation_adjusted_UNK <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_UNK))$coefficients[2,2]
 beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_SAS))[2]
 se_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_SAS))$coefficients[2,2]
-beta_validation_adjusted_MIX <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_MIX))[2]
-se_validation_adjusted_MIX <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_MIX))$coefficients[2,2]
+beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AMR))[2]
+se_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AMR))$coefficients[2,2]
 beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AFR))[2]
 se_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AFR))$coefficients[2,2]
 beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EAS))[2]
 se_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EAS))$coefficients[2,2]
 
-ldpred2_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
-                         beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
-                         se_raw = c(se_validation_raw_EUR,se_validation_raw_NonEUR,se_validation_raw_UNK,se_validation_raw_SAS,se_validation_raw_MIX,se_validation_raw_AFR,se_validation_raw_EAS), 
-                         beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_NonEUR,beta_validation_adjusted_UNK,beta_validation_adjusted_SAS,beta_validation_adjusted_MIX,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
-                         se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_NonEUR,se_validation_adjusted_UNK,se_validation_adjusted_SAS,se_validation_adjusted_MIX,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
+ldpred2_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
+                         beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_SAS,beta_validation_raw_AMR,beta_validation_raw_AFR,beta_validation_raw_EAS), 
+                         se_raw = c(se_validation_raw_EUR,se_validation_raw_SAS,se_validation_raw_AMR,se_validation_raw_AFR,se_validation_raw_EAS), 
+                         beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_SAS,beta_validation_adjusted_AMR,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
+                         se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_SAS,se_validation_adjusted_AMR,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
 
 write.csv(ldpred2_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"Best_Betas.csv"),row.names = FALSE)
 
@@ -456,55 +438,41 @@ if(sum(sqrt(y_hat)) == 0){
 }
 
 pheno_validation_raw_EUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-pheno_validation_raw_NonEUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-pheno_validation_raw_UNK <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
 pheno_validation_raw_SAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-pheno_validation_raw_MIX <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_raw_AMR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 pheno_validation_raw_AFR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 pheno_validation_raw_EAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 pheno_validation_adjusted_EUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-pheno_validation_adjusted_NonEUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-pheno_validation_adjusted_UNK <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
 pheno_validation_adjusted_SAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-pheno_validation_adjusted_MIX <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_adjusted_AMR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 pheno_validation_adjusted_AFR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 pheno_validation_adjusted_EAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 pheno_validation_raw_EUR$y_validation <- scale(pheno_validation_raw_EUR$y_validation)
-pheno_validation_raw_NonEUR$y_validation <- scale(pheno_validation_raw_NonEUR$y_validation)
-pheno_validation_raw_UNK$y_validation <- scale(pheno_validation_raw_UNK$y_validation)
 pheno_validation_raw_SAS$y_validation <- scale(pheno_validation_raw_SAS$y_validation)
-pheno_validation_raw_MIX$y_validation <- scale(pheno_validation_raw_MIX$y_validation)
+pheno_validation_raw_AMR$y_validation <- scale(pheno_validation_raw_AMR$y_validation)
 pheno_validation_raw_AFR$y_validation <- scale(pheno_validation_raw_AFR$y_validation)
 pheno_validation_raw_EAS$y_validation <- scale(pheno_validation_raw_EAS$y_validation)
 
 pheno_validation_raw_EUR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_EUR[,paste0("SCORE",idx,"_SUM")])
-pheno_validation_raw_NonEUR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_NonEUR[,paste0("SCORE",idx,"_SUM")])
-pheno_validation_raw_UNK[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_UNK[,paste0("SCORE",idx,"_SUM")])
 pheno_validation_raw_SAS[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_SAS[,paste0("SCORE",idx,"_SUM")])
-pheno_validation_raw_MIX[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_MIX[,paste0("SCORE",idx,"_SUM")])
+pheno_validation_raw_AMR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_AMR[,paste0("SCORE",idx,"_SUM")])
 pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_AFR[,paste0("SCORE",idx,"_SUM")])
 pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")] <- scale(pheno_validation_raw_EAS[,paste0("SCORE",idx,"_SUM")])
 
 pheno_validation_adjusted_EUR$y_validation <- scale(pheno_validation_adjusted_EUR$y_validation)
-pheno_validation_adjusted_NonEUR$y_validation <- scale(pheno_validation_adjusted_NonEUR$y_validation)
-pheno_validation_adjusted_UNK$y_validation <- scale(pheno_validation_adjusted_UNK$y_validation)
 pheno_validation_adjusted_SAS$y_validation <- scale(pheno_validation_adjusted_SAS$y_validation)
-pheno_validation_adjusted_MIX$y_validation <- scale(pheno_validation_adjusted_MIX$y_validation)
+pheno_validation_adjusted_AMR$y_validation <- scale(pheno_validation_adjusted_AMR$y_validation)
 pheno_validation_adjusted_AFR$y_validation <- scale(pheno_validation_adjusted_AFR$y_validation)
 pheno_validation_adjusted_EAS$y_validation <- scale(pheno_validation_adjusted_EAS$y_validation)
 
 beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EUR))[2]
 se_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EUR))$coefficients[2,2]
-beta_validation_raw_NonEUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_NonEUR))[2]
-se_validation_raw_NonEUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_NonEUR))$coefficients[2,2]
-beta_validation_raw_UNK <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_UNK))[2]
-se_validation_raw_UNK <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_UNK))$coefficients[2,2]
 beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_SAS))[2]
 se_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_SAS))$coefficients[2,2]
-beta_validation_raw_MIX <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_MIX))[2]
-se_validation_raw_MIX <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_MIX))$coefficients[2,2]
+beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AMR))[2]
+se_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AMR))$coefficients[2,2]
 beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AFR))[2]
 se_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AFR))$coefficients[2,2]
 beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EAS))[2]
@@ -512,23 +480,19 @@ se_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SC
 
 beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EUR))[2]
 se_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EUR))$coefficients[2,2]
-beta_validation_adjusted_NonEUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_NonEUR))[2]
-se_validation_adjusted_NonEUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_NonEUR))$coefficients[2,2]
-beta_validation_adjusted_UNK <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_UNK))[2]
-se_validation_adjusted_UNK <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_UNK))$coefficients[2,2]
 beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_SAS))[2]
 se_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_SAS))$coefficients[2,2]
-beta_validation_adjusted_MIX <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_MIX))[2]
-se_validation_adjusted_MIX <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_MIX))$coefficients[2,2]
+beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AMR))[2]
+se_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AMR))$coefficients[2,2]
 beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AFR))[2]
 se_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AFR))$coefficients[2,2]
 beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EAS))[2]
 se_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EAS))$coefficients[2,2]
 
-lassosum2_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
-                              beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
-                              se_raw = c(se_validation_raw_EUR,se_validation_raw_NonEUR,se_validation_raw_UNK,se_validation_raw_SAS,se_validation_raw_MIX,se_validation_raw_AFR,se_validation_raw_EAS), 
-                              beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_NonEUR,beta_validation_adjusted_UNK,beta_validation_adjusted_SAS,beta_validation_adjusted_MIX,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
-                              se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_NonEUR,se_validation_adjusted_UNK,se_validation_adjusted_SAS,se_validation_adjusted_MIX,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
+lassosum2_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
+                              beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_SAS,beta_validation_raw_AMR,beta_validation_raw_AFR,beta_validation_raw_EAS), 
+                              se_raw = c(se_validation_raw_EUR,se_validation_raw_SAS,se_validation_raw_AMR,se_validation_raw_AFR,se_validation_raw_EAS), 
+                              beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_SAS,beta_validation_adjusted_AMR,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
+                              se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_SAS,se_validation_adjusted_AMR,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
 
 write.csv(lassosum2_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"Best_Betas.csv"),row.names = FALSE)

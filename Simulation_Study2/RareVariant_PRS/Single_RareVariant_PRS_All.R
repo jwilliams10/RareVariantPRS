@@ -304,56 +304,42 @@ if(sum(sqrt(y_hat)) == 0){
 
 
 RV_PRS_raw_EUR <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-RV_PRS_raw_NonEUR <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-RV_PRS_raw_UNK <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
 RV_PRS_raw_SAS <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-RV_PRS_raw_MIX <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+RV_PRS_raw_AMR <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 RV_PRS_raw_AFR <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 RV_PRS_raw_EAS <- RV_PRS_raw[RV_PRS_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 RV_PRS_adjusted_EUR <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-RV_PRS_adjusted_NonEUR <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-RV_PRS_adjusted_UNK <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
 RV_PRS_adjusted_SAS <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-RV_PRS_adjusted_MIX <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+RV_PRS_adjusted_AMR <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 RV_PRS_adjusted_AFR <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 RV_PRS_adjusted_EAS <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 RV_PRS_raw_EUR$Y <- scale(RV_PRS_raw_EUR$Y)
-RV_PRS_raw_NonEUR$Y <- scale(RV_PRS_raw_NonEUR$Y)
-RV_PRS_raw_UNK$Y <- scale(RV_PRS_raw_UNK$Y)
 RV_PRS_raw_SAS$Y <- scale(RV_PRS_raw_SAS$Y)
-RV_PRS_raw_MIX$Y <- scale(RV_PRS_raw_MIX$Y)
+RV_PRS_raw_AMR$Y <- scale(RV_PRS_raw_AMR$Y)
 RV_PRS_raw_AFR$Y <- scale(RV_PRS_raw_AFR$Y)
 RV_PRS_raw_EAS$Y <- scale(RV_PRS_raw_EAS$Y)
 
 RV_PRS_adjusted_EUR$Y <- scale(RV_PRS_adjusted_EUR$Y)
-RV_PRS_adjusted_NonEUR$Y <- scale(RV_PRS_adjusted_NonEUR$Y)
-RV_PRS_adjusted_UNK$Y <- scale(RV_PRS_adjusted_UNK$Y)
 RV_PRS_adjusted_SAS$Y <- scale(RV_PRS_adjusted_SAS$Y)
-RV_PRS_adjusted_MIX$Y <- scale(RV_PRS_adjusted_MIX$Y)
+RV_PRS_adjusted_AMR$Y <- scale(RV_PRS_adjusted_AMR$Y)
 RV_PRS_adjusted_AFR$Y <- scale(RV_PRS_adjusted_AFR$Y)
 RV_PRS_adjusted_EAS$Y <- scale(RV_PRS_adjusted_EAS$Y)
 
 RV_PRS_raw_EUR$RV_PRS <- scale(RV_PRS_raw_EUR$RV_PRS)
-RV_PRS_raw_NonEUR$RV_PRS <- scale(RV_PRS_raw_NonEUR$RV_PRS)
-RV_PRS_raw_UNK$RV_PRS <- scale(RV_PRS_raw_UNK$RV_PRS)
 RV_PRS_raw_SAS$RV_PRS <- scale(RV_PRS_raw_SAS$RV_PRS)
-RV_PRS_raw_MIX$RV_PRS <- scale(RV_PRS_raw_MIX$RV_PRS)
+RV_PRS_raw_AMR$RV_PRS <- scale(RV_PRS_raw_AMR$RV_PRS)
 RV_PRS_raw_AFR$RV_PRS <- scale(RV_PRS_raw_AFR$RV_PRS)
 RV_PRS_raw_EAS$RV_PRS <- scale(RV_PRS_raw_EAS$RV_PRS)
 
 
 best_beta_raw_RV_EUR <- coef(lm(Y~RV_PRS,data = RV_PRS_raw_EUR))[2]
 se_beta_raw_RV_EUR <- summary(lm(Y~RV_PRS,data = RV_PRS_raw_EUR))$coefficients[2,2]
-best_beta_raw_RV_NonEUR <- coef(lm(Y~RV_PRS,data = RV_PRS_raw_NonEUR))[2]
-se_beta_raw_RV_NonEUR <- summary(lm(Y~RV_PRS,data = RV_PRS_raw_NonEUR))$coefficients[2,2]
-best_beta_raw_RV_UNK <- coef(lm(Y~RV_PRS,data = RV_PRS_raw_UNK))[2]
-se_beta_raw_RV_UNK <- summary(lm(Y~RV_PRS,data = RV_PRS_raw_UNK))$coefficients[2,2]
 best_beta_raw_RV_SAS <- coef(lm(Y~RV_PRS,data = RV_PRS_raw_SAS))[2]
 se_beta_raw_RV_SAS <- summary(lm(Y~RV_PRS,data = RV_PRS_raw_SAS))$coefficients[2,2]
-best_beta_raw_RV_MIX <- coef(lm(Y~RV_PRS,data = RV_PRS_raw_MIX))[2]
-se_beta_raw_RV_MIX <- summary(lm(Y~RV_PRS,data = RV_PRS_raw_MIX))$coefficients[2,2]
+best_beta_raw_RV_AMR <- coef(lm(Y~RV_PRS,data = RV_PRS_raw_AMR))[2]
+se_beta_raw_RV_AMR <- summary(lm(Y~RV_PRS,data = RV_PRS_raw_AMR))$coefficients[2,2]
 best_beta_raw_RV_AFR <- coef(lm(Y~RV_PRS,data = RV_PRS_raw_AFR))[2]
 se_beta_raw_RV_AFR <- summary(lm(Y~RV_PRS,data = RV_PRS_raw_AFR))$coefficients[2,2]
 best_beta_raw_RV_EAS <- coef(lm(Y~RV_PRS,data = RV_PRS_raw_EAS))[2]
@@ -361,23 +347,19 @@ se_beta_raw_RV_EAS <- summary(lm(Y~RV_PRS,data = RV_PRS_raw_EAS))$coefficients[2
 
 best_beta_adjusted_RV_EUR <- coef(lm(Y~RV_PRS,data = RV_PRS_adjusted_EUR))[2]
 se_beta_adjusted_RV_EUR <- summary(lm(Y~RV_PRS,data = RV_PRS_adjusted_EUR))$coefficients[2,2]
-best_beta_adjusted_RV_NonEUR <- coef(lm(Y~RV_PRS,data = RV_PRS_adjusted_NonEUR))[2]
-se_beta_adjusted_RV_NonEUR <- summary(lm(Y~RV_PRS,data = RV_PRS_adjusted_NonEUR))$coefficients[2,2]
-best_beta_adjusted_RV_UNK <- coef(lm(Y~RV_PRS,data = RV_PRS_adjusted_UNK))[2]
-se_beta_adjusted_RV_UNK <- summary(lm(Y~RV_PRS,data = RV_PRS_adjusted_UNK))$coefficients[2,2]
 best_beta_adjusted_RV_SAS <- coef(lm(Y~RV_PRS,data = RV_PRS_adjusted_SAS))[2]
 se_beta_adjusted_RV_SAS <- summary(lm(Y~RV_PRS,data = RV_PRS_adjusted_SAS))$coefficients[2,2]
-best_beta_adjusted_RV_MIX <- coef(lm(Y~RV_PRS,data = RV_PRS_adjusted_MIX))[2]
-se_beta_adjusted_RV_MIX <- summary(lm(Y~RV_PRS,data = RV_PRS_adjusted_MIX))$coefficients[2,2]
+best_beta_adjusted_RV_AMR <- coef(lm(Y~RV_PRS,data = RV_PRS_adjusted_AMR))[2]
+se_beta_adjusted_RV_AMR <- summary(lm(Y~RV_PRS,data = RV_PRS_adjusted_AMR))$coefficients[2,2]
 best_beta_adjusted_RV_AFR <- coef(lm(Y~RV_PRS,data = RV_PRS_adjusted_AFR))[2]
 se_beta_adjusted_RV_AFR <- summary(lm(Y~RV_PRS,data = RV_PRS_adjusted_AFR))$coefficients[2,2]
 best_beta_adjusted_RV_EAS <- coef(lm(Y~RV_PRS,data = RV_PRS_adjusted_EAS))[2]
 se_beta_adjusted_RV_EAS <- summary(lm(Y~RV_PRS,data = RV_PRS_adjusted_EAS))$coefficients[2,2]
 
-RV_PRS_Results <- data.frame(i = i,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
-                             beta_raw = c(best_beta_raw_RV_EUR,best_beta_raw_RV_NonEUR,best_beta_raw_RV_UNK,best_beta_raw_RV_SAS,best_beta_raw_RV_MIX,best_beta_raw_RV_AFR,best_beta_raw_RV_EAS), 
-                             se_raw = c(se_beta_raw_RV_EUR,se_beta_raw_RV_NonEUR,se_beta_raw_RV_UNK,se_beta_raw_RV_SAS,se_beta_raw_RV_MIX,se_beta_raw_RV_AFR,se_beta_raw_RV_EAS), 
-                             beta_adjusted = c(best_beta_adjusted_RV_EUR,best_beta_adjusted_RV_NonEUR,best_beta_adjusted_RV_UNK,best_beta_adjusted_RV_SAS,best_beta_adjusted_RV_MIX,best_beta_adjusted_RV_AFR,best_beta_adjusted_RV_EAS), 
-                             se_adjusted = c(se_beta_adjusted_RV_EUR,se_beta_adjusted_RV_NonEUR,se_beta_adjusted_RV_UNK,se_beta_adjusted_RV_SAS,se_beta_adjusted_RV_MIX,se_beta_adjusted_RV_AFR,se_beta_adjusted_RV_EAS))
+RV_PRS_Results <- data.frame(i = i,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
+                             beta_raw = c(best_beta_raw_RV_EUR,best_beta_raw_RV_SAS,best_beta_raw_RV_AMR,best_beta_raw_RV_AFR,best_beta_raw_RV_EAS), 
+                             se_raw = c(se_beta_raw_RV_EUR,se_beta_raw_RV_SAS,se_beta_raw_RV_AMR,se_beta_raw_RV_AFR,se_beta_raw_RV_EAS), 
+                             beta_adjusted = c(best_beta_adjusted_RV_EUR,best_beta_adjusted_RV_SAS,best_beta_adjusted_RV_AMR,best_beta_adjusted_RV_AFR,best_beta_adjusted_RV_EAS), 
+                             se_adjusted = c(se_beta_adjusted_RV_EUR,se_beta_adjusted_RV_SAS,se_beta_adjusted_RV_AMR,se_beta_adjusted_RV_AFR,se_beta_adjusted_RV_EAS))
 
 write.csv(RV_PRS_Results,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/Best_Betas",i,".csv"),row.names = FALSE)

@@ -274,64 +274,50 @@ if(sum(sqrt(y_hat)) == 0){
 
 
 pheno_validation_raw_EUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-pheno_validation_raw_NonEUR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-pheno_validation_raw_UNK <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
 pheno_validation_raw_SAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-pheno_validation_raw_MIX <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_raw_AMR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 pheno_validation_raw_AFR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 pheno_validation_raw_EAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 pheno_validation_adjusted_EUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-pheno_validation_adjusted_NonEUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"],]
-pheno_validation_adjusted_UNK <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"],]
 pheno_validation_adjusted_SAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
-pheno_validation_adjusted_MIX <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+pheno_validation_adjusted_AMR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 pheno_validation_adjusted_AFR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 pheno_validation_adjusted_EAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 pheno_validation_raw_EUR[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]] <- scale(pheno_validation_raw_EUR[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]])
-pheno_validation_raw_NonEUR[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]] <- scale(pheno_validation_raw_NonEUR[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]])
-pheno_validation_raw_UNK[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]] <- scale(pheno_validation_raw_UNK[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]])
 pheno_validation_raw_SAS[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]] <- scale(pheno_validation_raw_SAS[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]])
-pheno_validation_raw_MIX[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]] <- scale(pheno_validation_raw_MIX[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]])
+pheno_validation_raw_AMR[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]] <- scale(pheno_validation_raw_AMR[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]])
 pheno_validation_raw_AFR[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]] <- scale(pheno_validation_raw_AFR[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]])
 pheno_validation_raw_EAS[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]] <- scale(pheno_validation_raw_EAS[,colnames(pheno_tune)[prs_columns[which.max(auc_tune)]]])
 
 
 beta_validation_raw_EUR <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))[2]
 se_validation_raw_EUR <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_EUR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_NonEUR <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))[2]
-se_validation_raw_NonEUR <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_NonEUR,family = binomial()))$coefficients[2,2]
 beta_validation_raw_SAS <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))[2]
 se_validation_raw_SAS <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_SAS,family = binomial()))$coefficients[2,2]
-beta_validation_raw_MIX <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))[2]
-se_validation_raw_MIX <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_raw_AMR <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_AMR,family = binomial()))[2]
+se_validation_raw_AMR <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_AMR,family = binomial()))$coefficients[2,2]
 beta_validation_raw_AFR <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))[2]
 se_validation_raw_AFR <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_AFR,family = binomial()))$coefficients[2,2]
 beta_validation_raw_EAS <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))[2]
 se_validation_raw_EAS <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_EAS,family = binomial()))$coefficients[2,2]
-beta_validation_raw_UNK <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_UNK,family = binomial()))[2]
-se_validation_raw_UNK <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_raw_UNK,family = binomial()))$coefficients[2,2]
 
 beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))[2]
 se_validation_adjusted_EUR <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EUR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_NonEUR <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))[2]
-se_validation_adjusted_NonEUR <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_NonEUR,family = binomial()))$coefficients[2,2]
 beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))[2]
 se_validation_adjusted_SAS <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_SAS,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_MIX <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))[2]
-se_validation_adjusted_MIX <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_MIX,family = binomial()))$coefficients[2,2]
+beta_validation_adjusted_AMR <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AMR,family = binomial()))[2]
+se_validation_adjusted_AMR <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AMR,family = binomial()))$coefficients[2,2]
 beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))[2]
 se_validation_adjusted_AFR <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_AFR,family = binomial()))$coefficients[2,2]
 beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))[2]
 se_validation_adjusted_EAS <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_EAS,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_UNK <- coef(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_UNK,family = binomial()))[2]
-se_validation_adjusted_UNK <- summary(glm(as.formula(paste0(trait,"~",colnames(pheno_tune)[prs_columns[which.max(auc_tune)]],"+",gsub("~","",confounders))),data = pheno_validation_adjusted_UNK,family = binomial()))$coefficients[2,2]
 
-SL_Results <- data.frame(trait = trait,ancestry = c("EUR","NonEUR","UNK","SAS","MIX","AFR","EAS"), 
-                         beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_NonEUR,beta_validation_raw_UNK,beta_validation_raw_SAS,beta_validation_raw_MIX,beta_validation_raw_AFR,beta_validation_raw_EAS), 
-                         se_raw = c(se_validation_raw_EUR,se_validation_raw_NonEUR,se_validation_raw_UNK,se_validation_raw_SAS,se_validation_raw_MIX,se_validation_raw_AFR,se_validation_raw_EAS), 
-                         beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_NonEUR,beta_validation_adjusted_UNK,beta_validation_adjusted_SAS,beta_validation_adjusted_MIX,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
-                         se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_NonEUR,se_validation_adjusted_UNK,se_validation_adjusted_SAS,se_validation_adjusted_MIX,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
+SL_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
+                         beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_SAS,beta_validation_raw_AMR,beta_validation_raw_AFR,beta_validation_raw_EAS), 
+                         se_raw = c(se_validation_raw_EUR,se_validation_raw_SAS,se_validation_raw_AMR,se_validation_raw_AFR,se_validation_raw_EAS), 
+                         beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_SAS,beta_validation_adjusted_AMR,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
+                         se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_SAS,se_validation_adjusted_AMR,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
 
 write.csv(SL_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_Common_PRS/",trait,"Best_Betas.csv"),row.names = FALSE)

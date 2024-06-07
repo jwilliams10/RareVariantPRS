@@ -46,27 +46,21 @@ Y <- list()
 load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
 h2_overall_EUR <- vector()
-h2_overall_NonEur <- vector()
 h2_overall_EAS <- vector()
 h2_overall_SAS <- vector()
-h2_overall_UNK <- vector()
-h2_overall_MIX <- vector()
+h2_overall_AMR <- vector()
 h2_overall_AFR <- vector()
 
 h2_common_EUR <- vector()
-h2_common_NonEur <- vector()
 h2_common_EAS <- vector()
 h2_common_SAS <- vector()
-h2_common_UNK <- vector()
-h2_common_MIX <- vector()
+h2_common_AMR <- vector()
 h2_common_AFR <- vector()
 
 h2_rare_EUR <- vector()
-h2_rare_NonEur <- vector()
 h2_rare_EAS <- vector()
 h2_rare_SAS <- vector()
-h2_rare_UNK <- vector()
-h2_rare_MIX <- vector()
+h2_rare_AMR <- vector()
 h2_rare_AFR <- vector()
 
 count <- 1
@@ -127,28 +121,22 @@ for(j in 1:length(causalprop_vec)){
       Y_tmp <- Y_raw + epsilon
       
       h2_common_EUR[count] <- var(Y_hat$Y_hat_Common[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]])
-      h2_common_NonEur[count] <- var(Y_hat$Y_hat_Common[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]])
       h2_common_SAS[count] <- var(Y_hat$Y_hat_Common[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]])
       h2_common_AFR[count] <- var(Y_hat$Y_hat_Common[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]])
-      h2_common_MIX[count] <- var(Y_hat$Y_hat_Common[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]])
+      h2_common_AMR[count] <- var(Y_hat$Y_hat_Common[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"]])
       h2_common_EAS[count] <- var(Y_hat$Y_hat_Common[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]])
-      h2_common_UNK[count] <- var(Y_hat$Y_hat_Common[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]])
       
       h2_rare_EUR[count] <- var(Y_hat$Y_hat_Rare[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]])
-      h2_rare_NonEur[count] <- var(Y_hat$Y_hat_Rare[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]])
       h2_rare_SAS[count] <- var(Y_hat$Y_hat_Rare[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]])
       h2_rare_AFR[count] <- var(Y_hat$Y_hat_Rare[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]])
-      h2_rare_MIX[count] <- var(Y_hat$Y_hat_Rare[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]])
+      h2_rare_AMR[count] <- var(Y_hat$Y_hat_Rare[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"]])
       h2_rare_EAS[count] <- var(Y_hat$Y_hat_Rare[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]])
-      h2_rare_UNK[count] <- var(Y_hat$Y_hat_Rare[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]])
       
       h2_overall_EUR[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]])
-      h2_overall_NonEur[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry != "EUR"]])
       h2_overall_SAS[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]])
       h2_overall_AFR[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]])
-      h2_overall_MIX[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"]])
+      h2_overall_AMR[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"]])
       h2_overall_EAS[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]])
-      h2_overall_UNK[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "UNK"]])
       
       Y[[count]] <- data.frame(IDs = Y_hat$IDs,Y=Y_tmp)
       
