@@ -22,8 +22,6 @@ rm(list = ls())
 # 
 # full_results$beta_adjusted[full_results$beta_adjusted < 0] <- 0
 # full_results$beta_raw[full_results$beta_raw < 0] <- 0
-# 
-# full_results <- full_results[full_results$ancestry !="EAS",]
 
 full_results <- read.csv("~/Desktop/RareVariantPRS_Results/WES_Results_Binary.csv")
 full_results <- full_results[full_results$Method %in% c("CT","LASSOSum","LDPred","CV","RV"),]
