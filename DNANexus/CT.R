@@ -40,7 +40,7 @@ if(trait == 1){
 }
 
 dat <- read.delim(paste0(trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")
-colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1","TEST","OBS_CT","BETA","SE","T_STAT","P","ERRCODE")
+colnames(dat) <- c("CHROM","POS","ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","OBS_CT","BETA","SE","T_STAT","P","ERRCODE")
 dat <- dat[dat$TEST == "ADD",]
 
 dat <- dat[,c("CHROM","ID","REF","POS","A1","BETA","P")]
@@ -208,7 +208,7 @@ write.table(prs_vad_max, file = paste0("",trait,"_prs_validation_best.txt"),row.
 
 ##### Final Coefficients
 dat <- read.delim(paste0(trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")
-colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1","TEST","OBS_CT","BETA","SE","T_STAT","P","ERRCODE")
+colnames(dat) <- c("CHROM","POS","ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","OBS_CT","BETA","SE","T_STAT","P","ERRCODE")
 dat <- dat[dat$TEST == "ADD",]
 
 dat <- dat[,c("CHROM","ID","REF","POS","A1","BETA","P")]

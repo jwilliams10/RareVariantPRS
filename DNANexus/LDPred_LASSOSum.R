@@ -117,7 +117,7 @@ ldr <- 3/1000
 ncores <- 1
 
 dat <- fread(paste0(trait,"_sumstats.",trait,".glm.linear"))
-colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","A1","TEST","N","BETA","SE","T_STAT","P","ERRCODE")
+colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","N","BETA","SE","T_STAT","P","ERRCODE")
 dat <- dat[dat$TEST == "ADD",]
 
 dat <- as.data.frame(dat)
@@ -409,8 +409,10 @@ colnames(all_betas) <- c("SNP","ALT","REF",paste0("LDPred2_SCORE",1:nrow(sets),"
 system(paste("rm ",paste0(trait,"_ldpred2.txt")))
 
 dat <- fread(paste0(trait,"_sumstats.",trait,".glm.linear"))
-colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","A1","TEST","N","BETA","SE","T_STAT","P","ERRCODE")
+colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","N","BETA","SE","T_STAT","P","ERRCODE")
 dat <- dat[dat$TEST == "ADD",]
+
+dat <- as.data.frame(dat)
 
 dat <- dat[,c("CHR","SNP_ID","REF","POS","A1")]
 colnames(dat) <- c("CHR","SNP","REF","BP","A1")
@@ -554,8 +556,11 @@ colnames(all_betas) <- c("SNP","ALT","REF",paste0("LASSOSum2_SCORE",1:300,"_SUM"
 system(paste("rm ",paste0(trait,"_lassosum2.txt")))
 
 dat <- fread(paste0(trait,"_sumstats.",trait,".glm.linear"))
-colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","A1","TEST","N","BETA","SE","T_STAT","P","ERRCODE")
+colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","N","BETA","SE","T_STAT","P","ERRCODE")
 dat <- dat[dat$TEST == "ADD",]
+
+dat <- as.data.frame(dat)
+
 dat <- dat[,c("CHR","SNP_ID","REF","POS","A1")]
 colnames(dat) <- c("CHR","SNP","REF","BP","A1")
 

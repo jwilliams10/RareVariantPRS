@@ -26,15 +26,19 @@ ukb_pheno <- fread("ukb_multi.pheno")
 ukb_covariate <- fread("ukb_multi.cov")
 ukb_ancestries <- readRDS("ukb_multi_anc.RDS")
 
+
+
+
 ukb_covariate <- ukb_covariate[,c("FID","IID","ancestry","female","age",paste0("pc",1:10))]
 colnames(ukb_covariate) <- c(colnames(ukb_covariate)[1:3],"sex",colnames(ukb_covariate)[5:15])
+
+ukb_pheno <- inner_join(ukb_pheno,ukb_covariate)
 
 colnames(ukb_pheno)[colnames(ukb_pheno) == "ancestry"] <- "ethnicity"
 
 ukb_pheno <- inner_join(ukb_pheno,ukb_ancestries[,c("FID","predicted")])
 colnames(ukb_pheno)[colnames(ukb_pheno) == "predicted"] <- "ancestry"
 
-ukb_pheno <- inner_join(ukb_pheno,ukb_covariate)
 ukb_pheno <- as.data.frame(ukb_pheno)
 
 bed_ids <- fread("all_chr.fam")

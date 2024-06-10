@@ -352,7 +352,7 @@ pheno_validation_raw_EAS[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]]
 
 beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EUR))[2]
 se_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EUR))$coefficients[2,2]
-eta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_SAS))[2]
+beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_SAS))[2]
 se_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_SAS))$coefficients[2,2]
 beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_AMR))[2]
 se_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_AMR))$coefficients[2,2]
