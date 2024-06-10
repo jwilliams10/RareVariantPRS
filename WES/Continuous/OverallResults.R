@@ -66,7 +66,7 @@ scale_fill_Publication <- function(...){
 
 
 library(ggplot2)
-full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","AMR"),]
 full_results <- full_results[full_results$Method %in% c("CT","LASSOSum","LDPred","CV","RV"),]
 full_results$Method[full_results$Method == "CV"] <- "RICE-CV" 
 full_results$Method[full_results$Method == "RV"] <- "RICE-RV" 
