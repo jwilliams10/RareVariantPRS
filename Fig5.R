@@ -91,7 +91,7 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   load("Desktop/RareVariantPRS_Results/all_phenotypes.RData")
   
   CV_RV_PRS_adjusted_EUR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-  CV_RV_PRS_adjusted_MIX <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+  CV_RV_PRS_adjusted_AMR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
   CV_RV_PRS_adjusted_AFR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
   CV_RV_PRS_adjusted_SAS <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
   
@@ -108,18 +108,18 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   
   CV_RV_PRS_adjusted_EUR$Rare_Bin <- factor(CV_RV_PRS_adjusted_EUR$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
   
-  Rare_quants <- quantile(CV_RV_PRS_adjusted_MIX$RV_PRS,c(0,.05,.2,.3,.4,.6,.7,.8,.95))
+  Rare_quants <- quantile(CV_RV_PRS_adjusted_AMR$RV_PRS,c(0,.05,.2,.3,.4,.6,.7,.8,.95))
   for(i in 1:8){
-    CV_RV_PRS_adjusted_MIX$Rare_Bin[CV_RV_PRS_adjusted_MIX$RV_PRS < unname(Rare_quants[i + 1]) & CV_RV_PRS_adjusted_MIX$RV_PRS >= unname(Rare_quants[i])] <- i
+    CV_RV_PRS_adjusted_AMR$Rare_Bin[CV_RV_PRS_adjusted_AMR$RV_PRS < unname(Rare_quants[i + 1]) & CV_RV_PRS_adjusted_AMR$RV_PRS >= unname(Rare_quants[i])] <- i
   }
   
-  CV_RV_PRS_adjusted_MIX$Rare_Bin[CV_RV_PRS_adjusted_MIX$Rare_Bin == 1] <- "Below 5%"
-  CV_RV_PRS_adjusted_MIX$Rare_Bin[CV_RV_PRS_adjusted_MIX$Rare_Bin %in% c("4","5","6")] <- "30% - 70%"
-  CV_RV_PRS_adjusted_MIX$Rare_Bin[CV_RV_PRS_adjusted_MIX$Rare_Bin %in% c("9")] <- "Above 95%"
+  CV_RV_PRS_adjusted_AMR$Rare_Bin[CV_RV_PRS_adjusted_AMR$Rare_Bin == 1] <- "Below 5%"
+  CV_RV_PRS_adjusted_AMR$Rare_Bin[CV_RV_PRS_adjusted_AMR$Rare_Bin %in% c("4","5","6")] <- "30% - 70%"
+  CV_RV_PRS_adjusted_AMR$Rare_Bin[CV_RV_PRS_adjusted_AMR$Rare_Bin %in% c("9")] <- "Above 95%"
   
-  CV_RV_PRS_adjusted_MIX <- CV_RV_PRS_adjusted_MIX[CV_RV_PRS_adjusted_MIX$Rare_Bin %in% c("Below 5%","30% - 70%","Above 95%"),]
+  CV_RV_PRS_adjusted_AMR <- CV_RV_PRS_adjusted_AMR[CV_RV_PRS_adjusted_AMR$Rare_Bin %in% c("Below 5%","30% - 70%","Above 95%"),]
   
-  CV_RV_PRS_adjusted_MIX$Rare_Bin <- factor(CV_RV_PRS_adjusted_MIX$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
+  CV_RV_PRS_adjusted_AMR$Rare_Bin <- factor(CV_RV_PRS_adjusted_AMR$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
   
   Rare_quants <- quantile(CV_RV_PRS_adjusted_AFR$RV_PRS,c(0,.05,.2,.3,.4,.6,.7,.8,.95))
   for(i in 1:8){
@@ -148,7 +148,7 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   CV_RV_PRS_adjusted_SAS$Rare_Bin <- factor(CV_RV_PRS_adjusted_SAS$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
   
   CV_RV_PRS_adjusted_EUR$Y <- scale(CV_RV_PRS_adjusted_EUR$Y)
-  CV_RV_PRS_adjusted_MIX$Y <- scale(CV_RV_PRS_adjusted_MIX$Y)
+  CV_RV_PRS_adjusted_AMR$Y <- scale(CV_RV_PRS_adjusted_AMR$Y)
   CV_RV_PRS_adjusted_AFR$Y <- scale(CV_RV_PRS_adjusted_AFR$Y)
   CV_RV_PRS_adjusted_SAS$Y <- scale(CV_RV_PRS_adjusted_SAS$Y)
   
@@ -159,12 +159,12 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   colnames(CV_RV_PRS_adjusted_EUR_se) <- c("Common_Bin","Rare_Bin","SE")
   CV_RV_PRS_adjusted_EUR <- inner_join(CV_RV_PRS_adjusted_EUR,CV_RV_PRS_adjusted_EUR_se)
 
-  CV_RV_PRS_adjusted_MIX_se <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_MIX,function(x){sd(x)/sqrt(length(x))})
-  CV_RV_PRS_adjusted_MIX <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_MIX,mean)
+  CV_RV_PRS_adjusted_AMR_se <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_AMR,function(x){sd(x)/sqrt(length(x))})
+  CV_RV_PRS_adjusted_AMR <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_AMR,mean)
 
-  colnames(CV_RV_PRS_adjusted_MIX) <- c("Common_Bin","Rare_Bin","Mean")
-  colnames(CV_RV_PRS_adjusted_MIX_se) <- c("Common_Bin","Rare_Bin","SE")
-  CV_RV_PRS_adjusted_MIX <- inner_join(CV_RV_PRS_adjusted_MIX,CV_RV_PRS_adjusted_MIX_se)
+  colnames(CV_RV_PRS_adjusted_AMR) <- c("Common_Bin","Rare_Bin","Mean")
+  colnames(CV_RV_PRS_adjusted_AMR_se) <- c("Common_Bin","Rare_Bin","SE")
+  CV_RV_PRS_adjusted_AMR <- inner_join(CV_RV_PRS_adjusted_AMR,CV_RV_PRS_adjusted_AMR_se)
 
   CV_RV_PRS_adjusted_AFR_se <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_AFR,function(x){sd(x)/sqrt(length(x))})
   CV_RV_PRS_adjusted_AFR <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_AFR,mean)
@@ -182,16 +182,16 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
 
 
   colnames(CV_RV_PRS_adjusted_EUR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
-  colnames(CV_RV_PRS_adjusted_MIX) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
+  colnames(CV_RV_PRS_adjusted_AMR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
   colnames(CV_RV_PRS_adjusted_AFR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
   colnames(CV_RV_PRS_adjusted_SAS) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
 
-  ymin <- round(min(c(CV_RV_PRS_adjusted_EUR$Mean - CV_RV_PRS_adjusted_EUR$SE,CV_RV_PRS_adjusted_MIX$Mean - CV_RV_PRS_adjusted_MIX$SE,CV_RV_PRS_adjusted_AFR$Mean - CV_RV_PRS_adjusted_AFR$SE,CV_RV_PRS_adjusted_SAS$Mean - CV_RV_PRS_adjusted_SAS$SE)) - 0.05,2)
-  ymax <- round(max(c(CV_RV_PRS_adjusted_EUR$Mean + CV_RV_PRS_adjusted_EUR$SE,CV_RV_PRS_adjusted_MIX$Mean + CV_RV_PRS_adjusted_MIX$SE,CV_RV_PRS_adjusted_AFR$Mean + CV_RV_PRS_adjusted_AFR$SE,CV_RV_PRS_adjusted_SAS$Mean + CV_RV_PRS_adjusted_SAS$SE)) + 0.05,2)
+  ymin <- round(min(c(CV_RV_PRS_adjusted_EUR$Mean - CV_RV_PRS_adjusted_EUR$SE,CV_RV_PRS_adjusted_AMR$Mean - CV_RV_PRS_adjusted_AMR$SE,CV_RV_PRS_adjusted_AFR$Mean - CV_RV_PRS_adjusted_AFR$SE,CV_RV_PRS_adjusted_SAS$Mean - CV_RV_PRS_adjusted_SAS$SE)) - 0.05,2)
+  ymax <- round(max(c(CV_RV_PRS_adjusted_EUR$Mean + CV_RV_PRS_adjusted_EUR$SE,CV_RV_PRS_adjusted_AMR$Mean + CV_RV_PRS_adjusted_AMR$SE,CV_RV_PRS_adjusted_AFR$Mean + CV_RV_PRS_adjusted_AFR$SE,CV_RV_PRS_adjusted_SAS$Mean + CV_RV_PRS_adjusted_SAS$SE)) + 0.05,2)
 
   plot1 <- ggplot(data=CV_RV_PRS_adjusted_EUR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) +
     scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
-  plot2 <- ggplot(data=CV_RV_PRS_adjusted_MIX, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) +
+  plot2 <- ggplot(data=CV_RV_PRS_adjusted_AMR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) +
     scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
   plot3 <- ggplot(data=CV_RV_PRS_adjusted_AFR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) +
     scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
@@ -205,7 +205,7 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
     plot3 + theme(legend.position="none"),
     plot4 + theme(legend.position="none"),
     align = 'vh',
-    labels = c("EUR","MIX","AFR","SAS"),
+    labels = c("EUR","AMR","AFR","SAS"),
     hjust = -1,
     ncol = 2
   )
@@ -433,7 +433,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   load("Desktop/RareVariantPRS_Results/all_phenotypes.RData")
   
   CV_RV_PRS_adjusted_EUR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
-  # CV_RV_PRS_adjusted_MIX <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "MIX"],]
+  # CV_RV_PRS_adjusted_AMR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
   # CV_RV_PRS_adjusted_AFR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
   # CV_RV_PRS_adjusted_SAS <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
   # 
@@ -451,18 +451,18 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   
   CV_RV_PRS_adjusted_EUR$Rare_Bin <- factor(CV_RV_PRS_adjusted_EUR$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
   
-  # Rare_quants <- quantile(CV_RV_PRS_adjusted_MIX$RV_PRS,c(0,.05,.2,.3,.4,.6,.7,.8,.95))
+  # Rare_quants <- quantile(CV_RV_PRS_adjusted_AMR$RV_PRS,c(0,.05,.2,.3,.4,.6,.7,.8,.95))
   # for(i in 1:8){
-  #   CV_RV_PRS_adjusted_MIX$Rare_Bin[CV_RV_PRS_adjusted_MIX$RV_PRS < unname(Rare_quants[i + 1]) & CV_RV_PRS_adjusted_MIX$RV_PRS >= unname(Rare_quants[i])] <- i
+  #   CV_RV_PRS_adjusted_AMR$Rare_Bin[CV_RV_PRS_adjusted_AMR$RV_PRS < unname(Rare_quants[i + 1]) & CV_RV_PRS_adjusted_AMR$RV_PRS >= unname(Rare_quants[i])] <- i
   # }
   # 
-  # CV_RV_PRS_adjusted_MIX$Rare_Bin[CV_RV_PRS_adjusted_MIX$Rare_Bin == 1] <- "Below 5%"
-  # CV_RV_PRS_adjusted_MIX$Rare_Bin[CV_RV_PRS_adjusted_MIX$Rare_Bin %in% c("4","5","6")] <- "30% - 70%"
-  # CV_RV_PRS_adjusted_MIX$Rare_Bin[CV_RV_PRS_adjusted_MIX$Rare_Bin %in% c("9")] <- "Above 95%"
+  # CV_RV_PRS_adjusted_AMR$Rare_Bin[CV_RV_PRS_adjusted_AMR$Rare_Bin == 1] <- "Below 5%"
+  # CV_RV_PRS_adjusted_AMR$Rare_Bin[CV_RV_PRS_adjusted_AMR$Rare_Bin %in% c("4","5","6")] <- "30% - 70%"
+  # CV_RV_PRS_adjusted_AMR$Rare_Bin[CV_RV_PRS_adjusted_AMR$Rare_Bin %in% c("9")] <- "Above 95%"
   # 
-  # CV_RV_PRS_adjusted_MIX <- CV_RV_PRS_adjusted_MIX[CV_RV_PRS_adjusted_MIX$Rare_Bin %in% c("Below 5%","30% - 70%","Above 95%"),]
+  # CV_RV_PRS_adjusted_AMR <- CV_RV_PRS_adjusted_AMR[CV_RV_PRS_adjusted_AMR$Rare_Bin %in% c("Below 5%","30% - 70%","Above 95%"),]
   # 
-  # CV_RV_PRS_adjusted_MIX$Rare_Bin <- factor(CV_RV_PRS_adjusted_MIX$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
+  # CV_RV_PRS_adjusted_AMR$Rare_Bin <- factor(CV_RV_PRS_adjusted_AMR$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
   # 
   # Rare_quants <- quantile(CV_RV_PRS_adjusted_AFR$RV_PRS,c(0,.05,.2,.3,.4,.6,.7,.8,.95))
   # for(i in 1:8){
@@ -544,7 +544,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   #   }
   # }
   # 
-  # log_odds_ratio_MIX <- NULL
+  # log_odds_ratio_AMR <- NULL
   # for(rv_bin in c("Below 5%","30% - 70%","Above 95%")){
   #   for(cv_bin in 1:9){
   #     
@@ -553,21 +553,21 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   #       se_odds <- 0
   #     }
   #     
-  #     tmp <- data.frame(Group = c(rep("Control",sum(CV_RV_PRS_adjusted_MIX$Common_Bin == 5 & CV_RV_PRS_adjusted_MIX$Rare_Bin == "30% - 70%")),rep("Comparison",sum(CV_RV_PRS_adjusted_MIX$Common_Bin == cv_bin & CV_RV_PRS_adjusted_MIX$Rare_Bin == rv_bin))),Case_Control = c(CV_RV_PRS_adjusted_MIX$Y[CV_RV_PRS_adjusted_MIX$Common_Bin == 5 & CV_RV_PRS_adjusted_MIX$Rare_Bin == "30% - 70%"],CV_RV_PRS_adjusted_MIX$Y[CV_RV_PRS_adjusted_MIX$Common_Bin == cv_bin & CV_RV_PRS_adjusted_MIX$Rare_Bin == rv_bin]))
+  #     tmp <- data.frame(Group = c(rep("Control",sum(CV_RV_PRS_adjusted_AMR$Common_Bin == 5 & CV_RV_PRS_adjusted_AMR$Rare_Bin == "30% - 70%")),rep("Comparison",sum(CV_RV_PRS_adjusted_AMR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_AMR$Rare_Bin == rv_bin))),Case_Control = c(CV_RV_PRS_adjusted_AMR$Y[CV_RV_PRS_adjusted_AMR$Common_Bin == 5 & CV_RV_PRS_adjusted_AMR$Rare_Bin == "30% - 70%"],CV_RV_PRS_adjusted_AMR$Y[CV_RV_PRS_adjusted_AMR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_AMR$Rare_Bin == rv_bin]))
   #     
   #     print(table(tmp))
   #     
   #     log_odds_ratio <- log((table(tmp)[1,2]/table(tmp)[1,1])/(table(tmp)[2,2]/table(tmp)[2,1]))
   #     se_log_odds_ratio <- sqrt(1/table(tmp)[1,2] + 1/table(tmp)[1,1] + 1/table(tmp)[2,2] + 1/table(tmp)[2,1])
   #     
-  #     log_odds_ratio_MIX <- rbind(log_odds_ratio_MIX,data.frame(Common_Bin = cv_bin,Rare_Bin = rv_bin,log_odds_ratio = log_odds_ratio,se_log_odds_ratio = se_log_odds_ratio))
+  #     log_odds_ratio_AMR <- rbind(log_odds_ratio_AMR,data.frame(Common_Bin = cv_bin,Rare_Bin = rv_bin,log_odds_ratio = log_odds_ratio,se_log_odds_ratio = se_log_odds_ratio))
   #   }
   # }
   # 
   # 
   log_odds_ratio_EUR$Rare_Bin <- factor(log_odds_ratio_EUR$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
   colnames(log_odds_ratio_EUR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
-  # colnames(log_odds_ratio_MIX) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
+  # colnames(log_odds_ratio_AMR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
   # colnames(log_odds_ratio_SAS) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
   # colnames(log_odds_ratio_AFR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
    
@@ -576,7 +576,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   
   plot1 <- ggplot(data=log_odds_ratio_EUR, aes(x=Common_Bin, y=exp(Mean), color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=exp(Mean-SE), ymax=exp(Mean+SE))) + theme_Publication() + ylab(paste0(trait," Odds Ratio")) + ylim(c(ymin,ymax)) + 
     scale_x_continuous(breaks = c(1:5),labels = c("0-20%","20-40%","40-60%","60-80%","80-100%"))
-  # plot2 <- ggplot(data=log_odds_ratio_MIX, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) + 
+  # plot2 <- ggplot(data=log_odds_ratio_AMR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) + 
   #   scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
   # plot3 <- ggplot(data=log_odds_ratio_AFR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) + 
   #   scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))

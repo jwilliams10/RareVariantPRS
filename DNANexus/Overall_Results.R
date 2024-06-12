@@ -36,7 +36,7 @@ rm(list = ls())
 
 full_results <- read.csv("~/Desktop/RareVariantPRS_Results/WGS_Results_Continuous.csv")
 
-full_results <- full_results[full_results$ancestry %in% c("EUR","AFR","SAS","MIX"),]
+full_results <- full_results[full_results$ancestry %in% c("EUR","AFR","SAS","AMR"),]
 
 theme_Publication <- function(base_size=12) {
   library(grid)
@@ -83,7 +83,7 @@ library(ggplot2)
 CV_Coding_Noncoding <- full_results[full_results$Method %in% c("Coding","Noncoding","CV","RV"),]
 full_results <- full_results[!(full_results$Method %in% c("Coding","Noncoding","RV_SL")),]
 
-full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","AMR"),]
 full_results <- full_results[full_results$Method %in% c("CT","LASSOSum","LDPred","CV","RV"),]
 full_results$Method[full_results$Method == "CV"] <- "RICE-CV" 
 full_results$Method[full_results$Method == "RV"] <- "RICE-RV" 
