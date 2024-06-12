@@ -96,7 +96,7 @@ print("WES Coding STAARB Binary")
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
-  coding_sig <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricCoding/",trait,"_coding_sig.csv"))
+  coding_sig <- read.csv(paste0("Desktop/RareVariantPRS_Results/Binary_Coding_Sig_WES/",trait,"_coding_sig.csv"))
   
   coding_sig_plof <- coding_sig[coding_sig$Category == "plof",]
   coding_sig_plofds <- coding_sig[coding_sig$Category == "plof_ds",]
@@ -112,7 +112,7 @@ print("WES Coding STAARB Continuous")
 layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
-  coding_sig <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/GeneCentricCoding/",trait,"_coding_sig.csv"))
+  coding_sig <- read.csv(paste0("Desktop/RareVariantPRS_Results/Continuous_Coding_Sig_WES/",trait,"_coding_sig.csv"))
   
   coding_sig_plof <- coding_sig[coding_sig$Category == "plof",]
   coding_sig_plofds <- coding_sig[coding_sig$Category == "plof_ds",]
@@ -248,7 +248,7 @@ print("WGS Coding STAARB Continuous")
 layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
-  coding_sig <- read.csv(paste0("~/Downloads/coding_sig.csv"))
+  coding_sig <- read.csv(paste0("Desktop/RareVariantPRS_Results/Continuous_Coding_Sig_WGS/coding_sig.csv"))
   coding_sig <- coding_sig[coding_sig$Trait == trait,]
   
   coding_sig_plof <- coding_sig[coding_sig$Category == "plof",]
@@ -430,7 +430,7 @@ print("WGS Noncoding STAARB Continuous")
 layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
-  noncoding_sig <- read.csv(paste0("~/Downloads/noncoding_sig.csv"))
+  noncoding_sig <- read.csv(paste0("Desktop/RareVariantPRS_Results/Continuous_Noncoding_Sig_WGS/noncoding_sig.csv"))
   noncoding_sig <- noncoding_sig[noncoding_sig$Trait == trait,]
   
   noncoding_sig_UTR <- noncoding_sig[noncoding_sig$Category == "UTR",]
