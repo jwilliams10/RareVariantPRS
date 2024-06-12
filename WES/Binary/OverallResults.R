@@ -36,7 +36,7 @@ full_results$Method <- factor(full_results$Method,levels = c("CT","LDpred2","Las
 full_results$Method1[full_results$Method1 == "RICE-RV"] <- "RICE-CV"
 full_results$Method1 <- factor(full_results$Method1,levels = c("CT","LDpred2","Lassosum2","RICE-CV"))
 
-full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","AMR"),]
 
 theme_Publication <- function(base_size=12) {
   library(grid)
