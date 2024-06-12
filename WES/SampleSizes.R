@@ -89,7 +89,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate","BMI","TC","LDL","HDL","
   n_vad_AFR_control <- sum(y == 0,na.rm = TRUE)
   n_vad_AFR_cases <- sum(y == 1,na.rm = TRUE)
   
-  samps_temp <- data.frame(Trait = rep(trait,7),Ancestry = c("EUR","EAS","SAS","AMR","AFR"), Train_Total = c(n_train,0,0,0,0), Train_Controls = c(n_train_control,0,0,0,0), Train_Cases = c(n_train_cases,0,0,0,0),
+  samps_temp <- data.frame(Trait = rep(trait,5),Ancestry = c("EUR","EAS","SAS","AMR","AFR"), Train_Total = c(n_train,0,0,0,0), Train_Controls = c(n_train_control,0,0,0,0), Train_Cases = c(n_train_cases,0,0,0,0),
                            Tune_Total = c(n_tuning_EUR,n_tuning_EAS,n_tuning_SAS,n_tuning_AMR,n_tuning_AFR),
                            Tune_Controls = c(n_tuning_EUR_control,n_tuning_EAS_control,n_tuning_SAS_control,n_tuning_AMR_control,n_tuning_AFR_control), 
                            Tune_Cases = c(n_tuning_EUR_cases,n_tuning_EAS_cases,n_tuning_SAS_cases,n_tuning_AMR_cases,n_tuning_AFR_cases),

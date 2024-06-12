@@ -1,5 +1,5 @@
 rm(list = ls())
-set.seed(1330)
+set.seed(1335)
 gc()
 
 library(bigsnpr)
