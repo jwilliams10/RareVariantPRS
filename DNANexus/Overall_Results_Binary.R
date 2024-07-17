@@ -3,25 +3,25 @@ rm(list = ls())
 # full_results <- NULL
 # 
 # for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
-#   CT_Results <- read.csv(paste0("/Users/williamsjacr/Downloads/Results_Binary/",trait,"_Best_Betas_CT.csv"))
+#   CT_Results <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"_Best_Betas_CT.csv"))
 #   CT_Results$Method <- "CT"
-#   LDPred2_Results <- read.csv(paste0("/Users/williamsjacr/Downloads/Results_Binary/",trait,"Best_Betas_LDPred2.csv"))
+#   LDPred2_Results <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"Best_Betas_LDPred2.csv"))
 #   LDPred2_Results$Method <- "LDPred"
-#   LASSOSUM2_Results <- read.csv(paste0("/Users/williamsjacr/Downloads/Results_Binary/",trait,"Best_Betas_LASSOSum.csv"))
+#   LASSOSUM2_Results <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"Best_Betas_LASSOSum.csv"))
 #   LASSOSUM2_Results$Method <- "LASSOSum"
-#   CV_Results <- read.csv(paste0("/Users/williamsjacr/Downloads/Results_Binary/",trait,"_Best_Betas_CV_SL.csv"))
+#   CV_Results <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"_Best_Betas_CV_SL.csv"))
 #   CV_Results$Method <- "CV_SL"
-#   
-#   RV_Results_Coding <- read.csv(paste0("/Users/williamsjacr/Downloads/Results_Binary/",trait,"_Coding_Best_Betas.csv"))
+# 
+#   RV_Results_Coding <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"_Coding_Best_Betas.csv"))
 #   RV_Results_Coding$Method <- "Coding"
-#   
-#   RV_Results_Noncoding <- read.csv(paste0("/Users/williamsjacr/Downloads/Results_Binary/",trait,"_Noncoding_Best_Betas.csv"))
+# 
+#   RV_Results_Noncoding <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"_Noncoding_Best_Betas.csv"))
 #   RV_Results_Noncoding$Method <- "Noncoding"
-#   
-#   CV_RV_Results <- read.csv(paste0("/Users/williamsjacr/Downloads/Results_Binary/",trait,"_Best_Betas_CV_RV.csv"))
-#   
-#   
-#   
+# 
+#   CV_RV_Results <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"_Best_Betas_CV_RV.csv"))
+# 
+# 
+# 
 #   full_results <- rbind(full_results,rbind(CT_Results,LDPred2_Results,LASSOSUM2_Results,CV_Results,RV_Results_Coding,RV_Results_Noncoding,CV_RV_Results))
 # }
 # 
@@ -85,7 +85,7 @@ library(ggplot2)
 CV_Coding_Noncoding <- full_results[full_results$Method %in% c("Coding","Noncoding","CV","RV"),]
 full_results <- full_results[!(full_results$Method %in% c("Coding","Noncoding")),]
 
-full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","AMR"),]
 full_results <- full_results[full_results$Method %in% c("CT","LASSOSum","LDPred","CV","RV"),]
 full_results$Method[full_results$Method == "CV"] <- "RICE-CV" 
 full_results$Method[full_results$Method == "RV"] <- "RICE-RV" 
