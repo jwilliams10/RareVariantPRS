@@ -110,7 +110,7 @@ for(trait in 1:5){
     legendcol <- c(legendcol,allcols[f])
   }
   legendtext <- paste0("MAF=",fbin,"; N SNPs=",format(fN,big.mark=",",scientific=FALSE))
-  opt =  list(break.top = 15,
+  opt =  list(break.top = 12,
               top.size = 0.125)
   
   
@@ -118,9 +118,6 @@ for(trait in 1:5){
   xlim <- c(0,max(fx,na.rm=T))
   ylim <- c(0,max(fy,na.rm=T))
   maxY <- max(fy,na.rm=T)
-  print("okkkk2")
-  par(mar=c(5.1,5.1,4.1,1.1))
-  print("okkkk3")
   
   lab1 <- pretty(c(0,opt$break.top),n=ceiling(12 * (1-opt$top.size)))
   lab1 <- c(lab1[lab1 < opt$break.top],opt$break.top)
