@@ -2,7 +2,7 @@ rm(list = ls())
 
 load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/Y_n_140488_h2_common_0.05_h2_rare_0.0125.RData")
 
-set.seed(1335)
+set.seed(1340)
 
 sampleids_all <- Y[[1]]$IDs
 
@@ -15,9 +15,10 @@ ukb_pheno <- ukb_pheno[ukb_pheno$IID %in% sampleids_all,]
 i <- (1:length(sampleids_all))[ukb_pheno$ancestry == "EUR"]
 
 train_number <- round(length(sampleids_all)*0.7) + 1
-train <- sample(i, train_number)
+train_70 <- sample(i, train_number)
+train_35 <- sample(train_70, round(length(train_70)*0.5) + 1)
 
-i <- (1:length(sampleids_all))[!((1:length(sampleids_all)) %in% train)]
+i <- (1:length(sampleids_all))[!((1:length(sampleids_all)) %in% train_70)]
 i_EUR <- i[ukb_pheno$ancestry[i] == "EUR"]
 i_AFR <- i[ukb_pheno$ancestry[i] == "AFR"]
 i_SAS <- i[ukb_pheno$ancestry[i] == "SAS"]
@@ -32,7 +33,7 @@ tune <- c(sample(i_EUR,round(length(i_EUR)/2)),
 
 validation <- i[!(i %in% tune)]
 
-train <- sampleids_all[train]
+train <- sampleids_all[train_70]
 tune <- sampleids_all[tune]
 validation <- sampleids_all[validation]
 
@@ -73,45 +74,13 @@ snp_readBed("/data/williamsjacr/UKB_WES_Simulation/Simulation1/reference.bed",ba
 
 
 
+load("/data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/Y_n_140488_h2_common_0.05_h2_rare_0.0125.RData")
 
-
-rm(list = ls())
-
-load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/Y_n_140488_h2_common_0.05_h2_rare_0.0125.RData")
-
-set.seed(1335)
+set.seed(1340)
 
 sampleids_all <- Y[[1]]$IDs
 
-load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
-
-ukb_pheno <- ukb_pheno[ukb_pheno$IID %in% sampleids_all,]
-
-# sum(ukb_pheno$IID == sampleids_all) == nrow(ukb_pheno); TRUE
-
-i <- (1:length(sampleids_all))[ukb_pheno$ancestry == "EUR"]
-
-train_number <- round(length(sampleids_all)*0.35) + 1
-train <- sample(i, train_number)
-
-i <- (1:length(sampleids_all))[!((1:length(sampleids_all)) %in% train)]
-i_EUR <- i[ukb_pheno$ancestry[i] == "EUR"]
-i_AFR <- i[ukb_pheno$ancestry[i] == "AFR"]
-i_SAS <- i[ukb_pheno$ancestry[i] == "SAS"]
-i_EAS <- i[ukb_pheno$ancestry[i] == "EAS"]
-i_AMR <- i[ukb_pheno$ancestry[i] == "AMR"]
-
-tune <- c(sample(i_EUR,round(length(i_EUR)/2)),
-          sample(i_AFR,round(length(i_AFR)/2)),
-          sample(i_SAS,round(length(i_SAS)/2)),
-          sample(i_EAS,round(length(i_EAS)/2)),
-          sample(i_AMR,round(length(i_AMR)/2)))
-
-validation <- i[!(i %in% tune)]
-
-train <- sampleids_all[train]
-tune <- sampleids_all[tune]
-validation <- sampleids_all[validation]
+train <- sampleids_all[train_35]
 
 write.table(train,"/data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/train.txt",row.names = FALSE,col.names = FALSE)
 write.table(tune,"/data/williamsjacr/UKB_WES_Simulation/Simulation2/simulated_data/tune.txt",row.names = FALSE,col.names = FALSE)
@@ -146,4 +115,3 @@ if(file.exists("/data/williamsjacr/UKB_WES_Simulation/Simulation2/reference.rds"
 
 #### read in reference data, this should match as this is what the reference data was in CT
 snp_readBed("/data/williamsjacr/UKB_WES_Simulation/Simulation2/reference.bed",backingfile = "/data/williamsjacr/UKB_WES_Simulation/Simulation2/reference")
-

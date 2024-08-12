@@ -116,48 +116,68 @@ X_valid <- as.matrix(pheno_valid[,3:ncol(pheno_valid),drop = FALSE])
 model.null <- lm(Y~1,data=pheno_valid)
 y_valid <- model.null$residual
 
-lasso_train <- glmnet(X_train,y_train,family = "gaussian",alpha = 1)
-ridge_train <- glmnet(X_train,y_train,family = "gaussian",alpha = 0)
-lm_train <- lm.fit(cbind(1,X_train),y_train)
-lm_train$coefficients[is.na(lm_train$coefficients)] <- 0
+if(ncol(X_train) == 1){
+  lm_train <- lm.fit(cbind(1,X_train),y_train)
+  lm_train$coefficients[is.na(lm_train$coefficients)] <- 0
+  
+  lm_prs_tune <- as.numeric(cbind(1,X_tune)%*%matrix(lm_train$coefficients,ncol = 1))
+  
+  lm_prs_vad <- as.numeric(cbind(1,X_valid)%*%matrix(lm_train$coefficients,ncol = 1))
+  
+  lm_tune_dat <- data.frame(y = y_tune,lm_prs_tune)
+  colnames(lm_tune_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_tune_dat) - 1)))
+  lm_valid_dat <- data.frame(y = y_valid,lm_prs_vad)
+  colnames(lm_valid_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_valid_dat) - 1)))
+  
+  
+  all_prs_tune <- cbind(lm_prs_tune)
+  colnames(all_prs_tune) <- c("lm_prs")
+  all_prs_valid <- cbind(lm_prs_vad)
+  colnames(all_prs_valid) <- c("lm_prs")
+  
+}else{
+  
+  lasso_train <- glmnet(X_train,y_train,family = "gaussian",alpha = 1)
+  ridge_train <- glmnet(X_train,y_train,family = "gaussian",alpha = 0)
+  lm_train <- lm.fit(cbind(1,X_train),y_train)
+  lm_train$coefficients[is.na(lm_train$coefficients)] <- 0
+  
+  lasso_prs_tune <- predict(lasso_train,X_tune)
+  ridge_prs_tune <- predict(ridge_train,X_tune)
+  lm_prs_tune <- as.numeric(cbind(1,X_tune)%*%matrix(lm_train$coefficients,ncol = 1))
+  
+  lasso_prs_vad <- predict(lasso_train,X_valid)
+  ridge_prs_vad <- predict(ridge_train,X_valid)
+  lm_prs_vad <- as.numeric(cbind(1,X_valid)%*%matrix(lm_train$coefficients,ncol = 1))
+  
+  
+  
+  
+  
+  
+  lasso_tune_dat <- data.frame(y = y_tune,lasso_prs_tune)
+  colnames(lasso_tune_dat) <- c("y",paste0("lasso_prs",1:(ncol(lasso_tune_dat) - 1)))
+  lasso_valid_dat <- data.frame(y = y_valid,lasso_prs_vad)
+  colnames(lasso_valid_dat) <- c("y",paste0("lasso_prs",1:(ncol(lasso_valid_dat) - 1)))
+  
+  
+  ridge_tune_dat <- data.frame(y = y_tune,ridge_prs_tune)
+  colnames(ridge_tune_dat) <- c("y",paste0("ridge_prs",1:(ncol(ridge_tune_dat) - 1)))
+  ridge_valid_dat <- data.frame(y = y_valid,ridge_prs_vad)
+  colnames(ridge_valid_dat) <- c("y",paste0("ridge_prs",1:(ncol(ridge_valid_dat) - 1)))
+  
+  lm_tune_dat <- data.frame(y = y_tune,lm_prs_tune)
+  colnames(lm_tune_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_tune_dat) - 1)))
+  lm_valid_dat <- data.frame(y = y_valid,lm_prs_vad)
+  colnames(lm_valid_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_valid_dat) - 1)))
+  
+  all_prs_tune <- cbind(lasso_prs_tune,ridge_prs_tune,lm_prs_tune)
+  colnames(all_prs_tune) <- c(paste0("lasso_prs",1:ncol(lasso_prs_tune)),paste0("ridge_prs",1:ncol(ridge_prs_tune)),"lm_prs")
+  all_prs_valid <- cbind(lasso_prs_vad,ridge_prs_vad,lm_prs_vad)
+  colnames(all_prs_valid) <- c(paste0("lasso_prs",1:ncol(lasso_prs_vad)),paste0("ridge_prs",1:ncol(ridge_prs_vad)),"lm_prs")
+  
+}
 
-lasso_prs_tune <- predict(lasso_train,X_tune)
-ridge_prs_tune <- predict(ridge_train,X_tune)
-lm_prs_tune <- as.numeric(cbind(1,X_tune)%*%matrix(lm_train$coefficients,ncol = 1))
-
-lasso_prs_vad <- predict(lasso_train,X_valid)
-ridge_prs_vad <- predict(ridge_train,X_valid)
-lm_prs_vad <- as.numeric(cbind(1,X_valid)%*%matrix(lm_train$coefficients,ncol = 1))
-
-
-
-
-
-
-lasso_tune_dat <- data.frame(y = y_tune,lasso_prs_tune)
-colnames(lasso_tune_dat) <- c("y",paste0("lasso_prs",1:(ncol(lasso_tune_dat) - 1)))
-lasso_valid_dat <- data.frame(y = y_valid,lasso_prs_vad)
-colnames(lasso_valid_dat) <- c("y",paste0("lasso_prs",1:(ncol(lasso_valid_dat) - 1)))
-
-
-ridge_tune_dat <- data.frame(y = y_tune,ridge_prs_tune)
-colnames(ridge_tune_dat) <- c("y",paste0("ridge_prs",1:(ncol(ridge_tune_dat) - 1)))
-ridge_valid_dat <- data.frame(y = y_valid,ridge_prs_vad)
-colnames(ridge_valid_dat) <- c("y",paste0("ridge_prs",1:(ncol(ridge_valid_dat) - 1)))
-
-lm_tune_dat <- data.frame(y = y_tune,lm_prs_tune)
-colnames(lm_tune_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_tune_dat) - 1)))
-lm_valid_dat <- data.frame(y = y_valid,lm_prs_vad)
-colnames(lm_valid_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_valid_dat) - 1)))
-
-
-
-
-
-all_prs_tune <- cbind(lasso_prs_tune,ridge_prs_tune,lm_prs_tune)
-colnames(all_prs_tune) <- c(paste0("lasso_prs",1:ncol(lasso_prs_tune)),paste0("ridge_prs",1:ncol(ridge_prs_tune)),"lm_prs")
-all_prs_valid <- cbind(lasso_prs_vad,ridge_prs_vad,lm_prs_vad)
-colnames(all_prs_valid) <- c(paste0("lasso_prs",1:ncol(lasso_prs_vad)),paste0("ridge_prs",1:ncol(ridge_prs_vad)),"lm_prs")
 
 all_tune <- data.frame(y = y_tune,all_prs_tune)
 all_valid <- data.frame(y = y_valid,all_prs_valid)
@@ -177,24 +197,26 @@ r2_bestoverall_tune <- best_r2[which.max(best_r2)]
 all_prs_tune <- as.data.frame(all_prs_tune)
 all_prs_valid <- as.data.frame(all_prs_valid)
 
-mtx <- cor(all_prs_tune)
-drop <- names(all_prs_tune)[apply(mtx,2,function(x){sum(is.na(x))}) == (nrow(mtx) - 1)]
-
-all_prs_tune <- dplyr::select(all_prs_tune, -c(drop))
-all_prs_valid <- dplyr::select(all_prs_valid, -c(drop))
-
-mtx <- cor(all_prs_tune)
-drop <- findCorrelation(mtx,cutoff=0.98)
-drop <- names(all_prs_tune)[drop]
-
-all_prs_tune <- dplyr::select(all_prs_tune, -c(drop))
-all_prs_valid <- dplyr::select(all_prs_valid, -c(drop))
-
-drop <- findLinearCombos(all_prs_tune)$remove
-drop <- names(data.frame(all_prs_tune))[drop]
-
-all_prs_tune <- dplyr::select(all_prs_tune, -c(drop))
-all_prs_valid <- dplyr::select(all_prs_valid, -c(drop))
+if(ncol(all_prs_tune)!=1){
+  mtx <- cor(all_prs_tune)
+  drop <- names(all_prs_tune)[apply(mtx,2,function(x){sum(is.na(x))}) == (nrow(mtx) - 1)]
+  
+  all_prs_tune <- dplyr::select(all_prs_tune, -c(drop))
+  all_prs_valid <- dplyr::select(all_prs_valid, -c(drop))
+  
+  mtx <- cor(all_prs_tune)
+  drop <- findCorrelation(mtx,cutoff=0.98)
+  drop <- names(all_prs_tune)[drop]
+  
+  all_prs_tune <- dplyr::select(all_prs_tune, -c(drop))
+  all_prs_valid <- dplyr::select(all_prs_valid, -c(drop))
+  
+  drop <- findLinearCombos(all_prs_tune)$remove
+  drop <- names(data.frame(all_prs_tune))[drop]
+  
+  all_prs_tune <- dplyr::select(all_prs_tune, -c(drop))
+  all_prs_valid <- dplyr::select(all_prs_valid, -c(drop)) 
+}
 
 if(ncol(all_prs_tune) == 1){
   tmp_tune <- data.frame(y = y_tune,X = all_prs_tune[,1])

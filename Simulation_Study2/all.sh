@@ -2,7 +2,7 @@
 #SBATCH -n 1
 #SBATCH -N 1
 #SBATCH --time=48:00:00
-#SBATCH --array=1-200
+#SBATCH --array=1-1000
 #SBATCH --mem-per-cpu=10G
 
 # module purge

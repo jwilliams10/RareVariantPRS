@@ -1,5 +1,5 @@
 rm(list = ls())
-set.seed(1335)
+set.seed(1340)
 gc()
 
 library(bigsnpr)
@@ -88,7 +88,7 @@ for(j in 1:length(causalprop_vec)){
   beta_genes <- rnorm(number_causal_genes,mean = 0,sqrt(h2_rare/number_causal_genes))
   
   for(q in 1:length(scale)){
-    for(l in 1:20){
+    for(l in 1:100){
       
       
       if(scale[q] == 0){

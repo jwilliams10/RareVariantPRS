@@ -109,3 +109,5 @@ samps$Tune_Controls[samps$Trait %in% c("BMI","TC","LDL","HDL","logTG","Height")]
 samps$Tune_Cases[samps$Trait %in% c("BMI","TC","LDL","HDL","logTG","Height")] <- 0
 samps$Validation_Controls[samps$Trait %in% c("BMI","TC","LDL","HDL","logTG","Height")] <- 0
 samps$Validation_Cases[samps$Trait %in% c("BMI","TC","LDL","HDL","logTG","Height")] <- 0
+
+samps <- samps[samps$Ancestry != "EAS",]
