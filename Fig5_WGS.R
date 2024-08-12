@@ -54,8 +54,8 @@ scale_colour_Publication <- function(...){
 trait <- "Height"
 
 for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
-  RV_PRS <- read.csv(paste0("Desktop/RareVariantPRS_Results/Continuous_PRS_Validation/",trait,"_BestPRS.csv"))
-  CV_PRS <- read.delim(paste0("Desktop/RareVariantPRS_Results/Continuous_PRS_Validation/",trait,"_Best_Validation_All.txt"))
+  RV_PRS <- read.csv(paste0("~/Desktop/RareVariantPRS_Results/PRS_Validation/WGS/",trait,"_BestPRS.csv"))
+  CV_PRS <- read.delim(paste0("~/Desktop/RareVariantPRS_Results/PRS_Validation/WGS/",trait,"_Best_Validation_All.txt"))
   
   CV_RV_PRS <- inner_join(RV_PRS,CV_PRS)
   CV_RV_PRS_adjusted <- CV_RV_PRS
@@ -87,8 +87,8 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   for(i in 1:8){
     CV_RV_PRS_adjusted$Common_Bin[CV_RV_PRS_adjusted$prs < unname(Common_quants[i + 1]) & CV_RV_PRS_adjusted$prs >= unname(Common_quants[i])] <- i
   }
-   
-  load("Desktop/RareVariantPRS_Results/all_phenotypes.RData")
+  
+  load("~/Desktop/RareVariantPRS_Results/all_phenotypes.RData")
   
   CV_RV_PRS_adjusted_EUR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
   CV_RV_PRS_adjusted_AMR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
@@ -154,41 +154,41 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   
   CV_RV_PRS_adjusted_EUR_se <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_EUR,function(x){sd(x)/sqrt(length(x))})
   CV_RV_PRS_adjusted_EUR <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_EUR,mean)
-
+  
   colnames(CV_RV_PRS_adjusted_EUR) <- c("Common_Bin","Rare_Bin","Mean")
   colnames(CV_RV_PRS_adjusted_EUR_se) <- c("Common_Bin","Rare_Bin","SE")
   CV_RV_PRS_adjusted_EUR <- inner_join(CV_RV_PRS_adjusted_EUR,CV_RV_PRS_adjusted_EUR_se)
-
+  
   CV_RV_PRS_adjusted_AMR_se <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_AMR,function(x){sd(x)/sqrt(length(x))})
   CV_RV_PRS_adjusted_AMR <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_AMR,mean)
-
+  
   colnames(CV_RV_PRS_adjusted_AMR) <- c("Common_Bin","Rare_Bin","Mean")
   colnames(CV_RV_PRS_adjusted_AMR_se) <- c("Common_Bin","Rare_Bin","SE")
   CV_RV_PRS_adjusted_AMR <- inner_join(CV_RV_PRS_adjusted_AMR,CV_RV_PRS_adjusted_AMR_se)
-
+  
   CV_RV_PRS_adjusted_AFR_se <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_AFR,function(x){sd(x)/sqrt(length(x))})
   CV_RV_PRS_adjusted_AFR <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_AFR,mean)
-
+  
   colnames(CV_RV_PRS_adjusted_AFR) <- c("Common_Bin","Rare_Bin","Mean")
   colnames(CV_RV_PRS_adjusted_AFR_se) <- c("Common_Bin","Rare_Bin","SE")
   CV_RV_PRS_adjusted_AFR <- inner_join(CV_RV_PRS_adjusted_AFR,CV_RV_PRS_adjusted_AFR_se)
-
+  
   CV_RV_PRS_adjusted_SAS_se <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_SAS,function(x){sd(x)/sqrt(length(x))})
   CV_RV_PRS_adjusted_SAS <- aggregate(Y ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_SAS,mean)
-
+  
   colnames(CV_RV_PRS_adjusted_SAS) <- c("Common_Bin","Rare_Bin","Mean")
   colnames(CV_RV_PRS_adjusted_SAS_se) <- c("Common_Bin","Rare_Bin","SE")
   CV_RV_PRS_adjusted_SAS <- inner_join(CV_RV_PRS_adjusted_SAS,CV_RV_PRS_adjusted_SAS_se)
-
-
+  
+  
   colnames(CV_RV_PRS_adjusted_EUR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
   colnames(CV_RV_PRS_adjusted_AMR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
   colnames(CV_RV_PRS_adjusted_AFR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
   colnames(CV_RV_PRS_adjusted_SAS) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
-
+  
   ymin <- round(min(c(CV_RV_PRS_adjusted_EUR$Mean - CV_RV_PRS_adjusted_EUR$SE,CV_RV_PRS_adjusted_AMR$Mean - CV_RV_PRS_adjusted_AMR$SE,CV_RV_PRS_adjusted_AFR$Mean - CV_RV_PRS_adjusted_AFR$SE,CV_RV_PRS_adjusted_SAS$Mean - CV_RV_PRS_adjusted_SAS$SE)) - 0.05,2)
   ymax <- round(max(c(CV_RV_PRS_adjusted_EUR$Mean + CV_RV_PRS_adjusted_EUR$SE,CV_RV_PRS_adjusted_AMR$Mean + CV_RV_PRS_adjusted_AMR$SE,CV_RV_PRS_adjusted_AFR$Mean + CV_RV_PRS_adjusted_AFR$SE,CV_RV_PRS_adjusted_SAS$Mean + CV_RV_PRS_adjusted_SAS$SE)) + 0.05,2)
-
+  
   plot1 <- ggplot(data=CV_RV_PRS_adjusted_EUR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) +
     scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
   plot2 <- ggplot(data=CV_RV_PRS_adjusted_AMR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) +
@@ -197,7 +197,7 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
     scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
   plot4 <- ggplot(data=CV_RV_PRS_adjusted_SAS, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) +
     scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
-
+  
   
   prow <- plot_grid(
     plot1 + theme(legend.position="none"),
@@ -212,65 +212,13 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   
   legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
   
-  print(plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1)))
-}
-
-
-
-
-
-
-
-
-### Demo
-
-
-rm(list = ls())
-
-theme_Publication <- function(base_size=12) {
-  library(grid)
-  library(ggthemes)
-  (theme_foundation(base_size=base_size, )
-    + theme(plot.title = element_text(face = "bold",
-                                      size = rel(1.1), hjust = 0.5),
-            text = element_text(),
-            panel.background = element_rect(colour = NA),
-            plot.background = element_rect(colour = NA),
-            panel.border = element_rect(colour = NA),
-            axis.title = element_text(face = "bold",size = 24),
-            axis.title.y = element_text(angle=90,vjust =2),
-            axis.text.y = element_blank(),
-            axis.text.x = element_text(face = "bold",size = 18), 
-            axis.line = element_line(colour="black",size=2),
-            axis.ticks = element_line(),
-            # panel.grid.major = element_line(colour="#f0f0f0"),
-            # panel.grid.minor = element_line(colour="#f0f0f0"),
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank(),
-            legend.key = element_rect(colour = NA),
-            legend.position = "bottom",
-            #legend.direction = "horizontal",
-            #legend.key.size= unit(0.2, "cm"),
-            #legend.margin = unit(0, "cm"),
-            legend.title = element_text(face="bold.italic", size =24),
-            legend.text = element_text(face ="bold",size = 18),
-            plot.margin=unit(c(10,5,5,5),"mm"),
-            strip.background=element_rect(colour="#f0f0f0",fill="#f0f0f0"),
-            strip.text = element_text(face="bold")
-    ))
+  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_WGS_Fig5.pdf"), width=15, height=15)
   
+  print(plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1)))
+  
+  dev.off()
 }
 
-data <- data.frame(Common_Bin = rep(1:9,3), Mean = c(1:9 * .2 + .5,1:9 * .2 + 1,1:9 * .2 + 1.5),color = rep(c("Below 5%","30% - 70%","Above 95%"),each = 9))
-data$SE <- 0.1
-
-data$color <- factor(data$color,levels = c("Below 5%","30% - 70%","Above 95%"))
-
-ggplot(data=data, aes(x=Common_Bin, y=Mean, color = color)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(" Standardized")) +
-  scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) +
-  xlab("Common Variant Quantiles") +
-  ylab("Observed Value of Standardized Trait") + 
-  guides(color=guide_legend(title="Rare Variant Quantiles"))
 
 
 
@@ -396,8 +344,8 @@ scale_colour_Publication <- function(...){
 trait <- "T2D"
 
 for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
-  RV_PRS <- read.csv(paste0("Desktop/RareVariantPRS_Results/Binary_PRS_Validation/",trait,"_BestPRS.csv"))
-  CV_PRS <- read.delim(paste0("Desktop/RareVariantPRS_Results/Binary_PRS_Validation/",trait,"_Best_Validation_All.txt"))
+  RV_PRS <- read.csv(paste0("~/Desktop/RareVariantPRS_Results/PRS_Validation/WGS/",trait,"_BestPRS.csv"))
+  CV_PRS <- read.delim(paste0("~/Desktop/RareVariantPRS_Results/PRS_Validation/WGS/",trait,"_Best_Validation_All.txt"))
   
   CV_RV_PRS <- inner_join(RV_PRS,CV_PRS)
   CV_RV_PRS_adjusted <- CV_RV_PRS
@@ -430,7 +378,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
     CV_RV_PRS_adjusted$Common_Bin[CV_RV_PRS_adjusted$prs < unname(Common_quants[i + 1]) & CV_RV_PRS_adjusted$prs >= unname(Common_quants[i])] <- i
   }
   
-  load("Desktop/RareVariantPRS_Results/all_phenotypes.RData")
+  load("~/Desktop/RareVariantPRS_Results/all_phenotypes.RData")
   
   CV_RV_PRS_adjusted_EUR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
   # CV_RV_PRS_adjusted_AMR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
@@ -501,10 +449,10 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
       
       tmp <- data.frame(Group = c(rep("Control",sum(CV_RV_PRS_adjusted_EUR$Common_Bin == 3 & CV_RV_PRS_adjusted_EUR$Rare_Bin == "30% - 70%")),rep("Comparison",sum(CV_RV_PRS_adjusted_EUR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_EUR$Rare_Bin == rv_bin))),Case_Control = c(CV_RV_PRS_adjusted_EUR$Y[CV_RV_PRS_adjusted_EUR$Common_Bin == 3 & CV_RV_PRS_adjusted_EUR$Rare_Bin == "30% - 70%"],CV_RV_PRS_adjusted_EUR$Y[CV_RV_PRS_adjusted_EUR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_EUR$Rare_Bin == rv_bin]))
       
-     log_odds_ratio <- log((table(tmp)[1,2]/table(tmp)[1,1])/(table(tmp)[2,2]/table(tmp)[2,1]))
-     se_log_odds_ratio <- sqrt(1/table(tmp)[1,2] + 1/table(tmp)[1,1] + 1/table(tmp)[2,2] + 1/table(tmp)[2,1])
+      log_odds_ratio <- log((table(tmp)[1,2]/table(tmp)[1,1])/(table(tmp)[2,2]/table(tmp)[2,1]))
+      se_log_odds_ratio <- sqrt(1/table(tmp)[1,2] + 1/table(tmp)[1,1] + 1/table(tmp)[2,2] + 1/table(tmp)[2,1])
       
-     log_odds_ratio_EUR <- rbind(log_odds_ratio_EUR,data.frame(Common_Bin = cv_bin,Rare_Bin = rv_bin,log_odds_ratio = log_odds_ratio,se_log_odds_ratio = se_log_odds_ratio))
+      log_odds_ratio_EUR <- rbind(log_odds_ratio_EUR,data.frame(Common_Bin = cv_bin,Rare_Bin = rv_bin,log_odds_ratio = log_odds_ratio,se_log_odds_ratio = se_log_odds_ratio))
     }
   }
   
@@ -570,7 +518,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   # colnames(log_odds_ratio_AMR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
   # colnames(log_odds_ratio_SAS) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
   # colnames(log_odds_ratio_AFR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
-   
+  
   ymin <- round(min(exp(log_odds_ratio_EUR$Mean - log_odds_ratio_EUR$SE)) - 0.05,2)
   ymax <- round(max(exp(log_odds_ratio_EUR$Mean + log_odds_ratio_EUR$SE)) + 0.05,2)
   
@@ -597,5 +545,9 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   
   legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
   
+  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_WGS_Fig5.pdf"), width=15, height=15)
+  
   print(plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1)))
+  
+  dev.off()
 }
