@@ -98,6 +98,8 @@ full_results$Method <- factor(full_results$Method,levels = c("CT","LDpred2","Las
 full_results$Method1[full_results$Method1 == "RICE-RV"] <- "RICE-CV"
 full_results$Method1 <- factor(full_results$Method1,levels = c("CT","LDpred2","Lassosum2","RICE-CV"))
 
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_Raw_Beta.pdf"), width=15, height=15)
+
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
@@ -106,6 +108,10 @@ ggplot(full_results) +
   ylim(0,0.95) +
   theme_Publication() + 
   scale_fill_Publication()
+
+dev.off()
+
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_Adjusted_Beta.pdf"), width=15, height=15)
 
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
@@ -117,6 +123,7 @@ ggplot(full_results) +
   theme_Publication() + 
   scale_fill_Publication()
 
+dev.off()
 
 ggplot(CV_Coding_Noncoding) +
   geom_bar(aes(x=Method, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +

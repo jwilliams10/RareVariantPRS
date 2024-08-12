@@ -82,6 +82,8 @@ scale_fill_Publication <- function(...){
 
 library(ggplot2)
 
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Binary_Raw_Beta.pdf"), width=15, height=15)
+
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
@@ -90,6 +92,10 @@ ggplot(full_results) +
   ylim(0,0.95) +
   theme_Publication() + 
   scale_fill_Publication()
+
+dev.off()
+
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Binary_Adjusted_Beta.pdf"), width=15, height=15)
 
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
@@ -100,3 +106,5 @@ ggplot(full_results) +
   ylim(0,0.95) +
   theme_Publication() + 
   scale_fill_Publication()
+
+dev.off()

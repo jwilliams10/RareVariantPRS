@@ -79,15 +79,20 @@ full_results$Method <- factor(full_results$Method,levels = c("CT","LDpred2","Las
 full_results$Method1[full_results$Method1 == "RICE-RV"] <- "RICE-CV"
 full_results$Method1 <- factor(full_results$Method1,levels = c("CT","LDpred2","Lassosum2","RICE-CV"))
 
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Continuous_Raw_Beta.pdf"), width=15, height=15)
 
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WES Raw PRS Results") + 
   ylab("Beta of PRS per SD") + 
-  ylim(0,0.6) +
+  ylim(0,0.7) +
   theme_Publication() + 
   scale_fill_Publication()
+
+dev.off()
+
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Continuous_Adjusted_Beta.pdf"), width=15, height=15)
 
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
@@ -95,6 +100,8 @@ ggplot(full_results) +
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("WES Ancestry Adjusted PRS Results") + 
   ylab("Beta of PRS per SD") + 
-  ylim(0,0.6) +
+  ylim(0,0.7) +
   theme_Publication() + 
   scale_fill_Publication()
+
+dev.off()
