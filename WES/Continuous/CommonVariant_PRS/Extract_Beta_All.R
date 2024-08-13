@@ -7,20 +7,68 @@ library(bigsparser)
 library(readr)
 library(stringr)
 
-BMI_Final_Coefficients_CT <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/BMI_Final_Coefficients.csv")
+BMI_Final_Coefficients_CT <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/","BMI","_Final_Coefficients.csv"))
+prs.file <- BMI_Final_Coefficients_CT[,c("SNP","A1",paste0("CT_p_value_",1:9))]
+write.table(prs.file,file = "/data/williamsjacr/UKB_WES_Phenotypes/Continuous/BMI_Final_Score",col.names = T,row.names = F,quote=F)
+
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/BMI_Final_Score cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 3-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --threads 1 --out test_validation"))
+test_validation <- read.delim("test_validation.sscore", header=FALSE, comment.char="#")
+test_validation <- test_validation[,c(2,5:ncol(test_validation))]
+BMI_prs_all_validation <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/BMI_prs_all_validation.txt", sep="")
+BMI_prs_all_validation <- BMI_prs_all_validation[,-1]
+all.equal(test_validation,BMI_prs_all_validation)
+
 BMI_Final_Coefficients_LDPred <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/BMI_Final_Coefficients.csv")
+prs.file <- BMI_Final_Coefficients_LDPred[,c("SNP","A1",paste0("LDPred2_SCORE",1:255,"_SUM"))]
+write.table(prs.file,file = "/data/williamsjacr/UKB_WES_Phenotypes/Continuous/BMI_Final_Score",col.names = T,row.names = F,quote=F)
+
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/BMI_Final_Score cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 3-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --threads 1 --out test_validation"))
+test_validation <- read.delim("test_validation.sscore", header=FALSE, comment.char="#")
+test_validation <- test_validation[,c(2,5:ncol(test_validation))]
+BMI_prs_all_validation <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/BMI_prs_validation.sscore", sep="")
+BMI_prs_all_validation <- BMI_prs_all_validation[,c(2,5:ncol(BMI_prs_all_validation))]
+colnames(test_validation) <- colnames(BMI_prs_all_validation)
+all.equal(test_validation,BMI_prs_all_validation)
+
 BMI_Final_Coefficients_LASSOSUM <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/BMI_Final_Coefficients.csv")
+prs.file <- BMI_Final_Coefficients_LASSOSUM[,c("SNP","A1",paste0("LASSOSum2_SCORE",1:300,"_SUM"))]
+write.table(prs.file,file = "/data/williamsjacr/UKB_WES_Phenotypes/Continuous/BMI_Final_Score",col.names = T,row.names = F,quote=F)
+
+system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/BMI_Final_Score cols=+scoresums,-scoreavgs header no-mean-imputation --score-col-nums 3-",ncol(prs.file)," --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --threads 1 --out test_validation"))
+test_validation <- read.delim("test_validation.sscore", header=FALSE, comment.char="#")
+test_validation <- test_validation[,c(2,5:ncol(test_validation))]
+BMI_prs_all_validation <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/BMI_prs_validation.sscore", sep="")
+BMI_prs_all_validation <- BMI_prs_all_validation[,c(2,5:ncol(BMI_prs_all_validation))]
+colnames(test_validation) <- colnames(BMI_prs_all_validation)
+all.equal(test_validation,BMI_prs_all_validation)
+
 
 BMI_All <- cbind(BMI_Final_Coefficients_CT,BMI_Final_Coefficients_LDPred[,str_detect(colnames(BMI_Final_Coefficients_LDPred),"LDPred2")],BMI_Final_Coefficients_LASSOSUM[,str_detect(colnames(BMI_Final_Coefficients_LASSOSUM),"LASSOSum2")])
 
 BMI_Final_Coefficients_SL <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/BMI_final_coef.csv")
 
-CV_SL_Beta <- BMI_Final_Coefficients_CT[,c("CHR","SNP","REF","BP","A1","P")]
-CV_SL_Beta$Beta <- 0
+CV_SL_Beta <- BMI_Final_Coefficients_CT[,c("CHR","SNP","REF","BP","A1")]
+CV_SL_Beta$BETA <- 0
 
 for(i in 1:nrow(BMI_Final_Coefficients_SL)){
-  
+  name_i <- BMI_Final_Coefficients_SL$Coef[i]
+  if(name_i %in% colnames(BMI_All)){
+    CV_SL_Beta$BETA <- CV_SL_Beta$BETA + BMI_All[,name_i]*BMI_Final_Coefficients_SL$Beta[i] 
+  }
 }
+
+prs.file <- CV_SL_Beta[,c("SNP","A1","BETA")]
+write.table(prs.file,file = "/data/williamsjacr/UKB_WES_Phenotypes/Continuous/BMI_Final_Score",col.names = T,row.names = F,quote=F)
+
+system("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/BMI_Final_Score cols=+scoresums,-scoreavgs header no-mean-imputation --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --threads 1 --out test_validation")
+
+Best_Validation_All <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/BMI_Best_Validation_All.txt")
+test_validation <- read.delim("test_validation.sscore", header=FALSE, comment.char="#")
+
+all.equal(Best_Validation_All$IID,test_validation[,2])
+all.equal(Best_Validation_All$prs,test_validation[,5])
+cor(Best_Validation_All$prs,test_validation[,5])
+
 
 BMI_Final_Coefficients_RV <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/BMI_final_coef.csv")
 

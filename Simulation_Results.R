@@ -159,9 +159,10 @@ overall_results$Method[overall_results$Method == "LASSOSum"] <- "Lassosum2"
 
 
 overall_results$Method1 <- overall_results$Method
-overall_results$Method <- factor(overall_results$Method,levels = c("CT","LDpred2","Lassosum2","RICE-RV","RICE-CV"))
+overall_results$Method <- factor(overall_results$Method,levels = c("CT","Lassosum2","LDpred2","RICE-RV","RICE-CV"))
 overall_results$Method1[overall_results$Method1 == "RICE-RV"] <- "RICE-CV"
-overall_results$Method1 <- factor(overall_results$Method1,levels = c("CT","LDpred2","Lassosum2","RICE-CV"))
+overall_results$Method1 <- factor(overall_results$Method1,levels = c("CT","Lassosum2","LDpred2","RICE-CV"))
+overall_results$Ancestry <- factor(overall_results$Ancestry,levels = c("AFR","AMR","EUR","SAS"))
 
 
 ####################################################### Plots
@@ -210,14 +211,7 @@ scale_fill_Publication <- function(...){
 library(ggplot2)
 library(dplyr)
 
-ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 49,173") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
-  geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
-  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
-  ggtitle("Simulation Results; Scaled G, n = 49,173") + 
-  ylab("Beta of PRS per SD") + 
-  theme_Publication() + 
-  ylim(0,0.4) +
-  scale_fill_Publication()
+pdf(paste0("UKB_Simulation_Scaled_49173_Adjusted_Beta.pdf"), width=15, height=15)
 
 ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 49,173") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
@@ -228,6 +222,10 @@ ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Tr
   ylim(0,0.4)+
   scale_fill_Publication()
 
+dev.off()
+
+pdf(paste0("UKB_Simulation_Scaled_98343_Adjusted_Beta.pdf"), width=15, height=15)
+
 ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
@@ -236,6 +234,10 @@ ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Tr
   theme_Publication() + 
   ylim(0,0.4) +
   scale_fill_Publication()
+
+dev.off()
+
+pdf(paste0("UKB_Simulation_Unscaled_49173_Adjusted_Beta.pdf"), width=15, height=15)
 
 ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 49,173") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
@@ -246,6 +248,10 @@ ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$
   ylim(0,0.4) +
   scale_fill_Publication()
 
+dev.off()
+
+pdf(paste0("UKB_Simulation_Unscaled_98343_Adjusted_Beta.pdf"), width=15, height=15)
+
 ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
@@ -254,4 +260,6 @@ ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$
   theme_Publication() + 
   ylim(0,0.4) +
   scale_fill_Publication()
+
+dev.off()
 
