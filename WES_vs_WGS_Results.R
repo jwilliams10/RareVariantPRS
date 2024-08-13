@@ -59,7 +59,8 @@ full_results_Continuous$Method[full_results_Continuous$Method == "RV"] <- "RICE-
 full_results_Continuous <- full_results_Continuous[full_results_Continuous$Method %in% c("RICE-CV","RICE-RV"),]
 full_results_Continuous$Method_DataSource <- paste0(full_results_Continuous$Method,"/",full_results_Continuous$Data_Type)
 
-full_results_Continuous <- full_results_Continuous[full_results_Continuous$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+full_results_Continuous <- full_results_Continuous[full_results_Continuous$ancestry %in% c("AFR","EUR","SAS","AMR"),]
+full_results_Continuous$trait <- factor(full_results_Continuous$trait,levels = c("BMI","Height","HDL","LDL","logTG","TC"))
 
 full_results_Binary <- rbind(WES_Results_Binary,WGS_Results_Binary)
 full_results_Binary$Method[full_results_Binary$Method == "CV"] <- "RICE-CV"
@@ -67,13 +68,16 @@ full_results_Binary$Method[full_results_Binary$Method == "RV"] <- "RICE-RV"
 full_results_Binary <- full_results_Binary[full_results_Binary$Method %in% c("RICE-CV","RICE-RV"),]
 full_results_Binary$Method_DataSource <- paste0(full_results_Binary$Method,"/",full_results_Binary$Data_Type)
 
-full_results_Binary <- full_results_Binary[full_results_Binary$ancestry %in% c("AFR","EUR","SAS","MIX"),]
+full_results_Binary <- full_results_Binary[full_results_Binary$ancestry %in% c("AFR","EUR","SAS","AMR"),]
+full_results_Binary$trait <- factor(full_results_Binary$trait,levels = c("Asthma","Breast","CAD","Prostate","T2D"))
+
+pdf(paste0("Downloads/UKB_WES_vs_WGS_EUR.pdf"), width=15, height=15)
 
 plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "EUR",]) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
   facet_grid(cols = vars(trait)) +
   ylab("Beta of PRS per SD") +
-  ylim(0,0.6) +
+  ylim(0,0.7) +
   theme_Publication() +
   scale_fill_Publication() + guides(fill=guide_legend(title="Method/Data Type"))
 
@@ -81,12 +85,12 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "EUR",]) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
   facet_grid(cols = vars(trait)) +
   ylab("Beta of PRS per SD") +
-  ylim(0,0.6) +
+  ylim(0,0.95) +
   theme_Publication() +
   scale_fill_Publication() + guides(fill=guide_legend(title="Method/Data Type"))
 
 prow <- plot_grid(NULL,
-  plot1 + theme(legend.position="none") + ggtitle("WES vs WGS Ancestry Adjusted PRS Results"),
+  plot1 + theme(legend.position="none") + ggtitle("UKB WES vs WGS Ancestry Adjusted PRS Results"),
   NULL,
   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
   rel_heights = c(-.05, 1, -0.05, 1),
@@ -96,3 +100,101 @@ prow <- plot_grid(NULL,
 legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
 
 print(plot_grid(prow,NULL, legend_b, ncol = 1, rel_heights = c(1,-.05, .1)))
+
+dev.off()
+
+pdf(paste0("Downloads/UKB_WES_vs_WGS_AFR.pdf"), width=15, height=15)
+
+plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "AFR",]) +
+  geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
+  facet_grid(cols = vars(trait)) +
+  ylab("Beta of PRS per SD") +
+  ylim(0,0.7) +
+  theme_Publication() +
+  scale_fill_Publication() + guides(fill=guide_legend(title="Method/Data Type"))
+
+plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AFR",]) +
+  geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
+  facet_grid(cols = vars(trait)) +
+  ylab("Beta of PRS per SD") +
+  ylim(0,0.95) +
+  theme_Publication() +
+  scale_fill_Publication() + guides(fill=guide_legend(title="Method/Data Type"))
+
+prow <- plot_grid(NULL,
+                  plot1 + theme(legend.position="none") + ggtitle("UKB WES vs WGS Ancestry Adjusted PRS Results"),
+                  NULL,
+                  plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
+                  rel_heights = c(-.05, 1, -0.05, 1),
+                  ncol = 1
+)
+
+legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
+
+print(plot_grid(prow,NULL, legend_b, ncol = 1, rel_heights = c(1,-.05, .1)))
+
+dev.off()
+
+pdf(paste0("Downloads/UKB_WES_vs_WGS_AMR.pdf"), width=15, height=15)
+
+plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "AMR",]) +
+  geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
+  facet_grid(cols = vars(trait)) +
+  ylab("Beta of PRS per SD") +
+  ylim(0,0.7) +
+  theme_Publication() +
+  scale_fill_Publication() + guides(fill=guide_legend(title="Method/Data Type"))
+
+plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AMR",]) +
+  geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
+  facet_grid(cols = vars(trait)) +
+  ylab("Beta of PRS per SD") +
+  ylim(0,0.95) +
+  theme_Publication() +
+  scale_fill_Publication() + guides(fill=guide_legend(title="Method/Data Type"))
+
+prow <- plot_grid(NULL,
+                  plot1 + theme(legend.position="none") + ggtitle("UKB WES vs WGS Ancestry Adjusted PRS Results"),
+                  NULL,
+                  plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
+                  rel_heights = c(-.05, 1, -0.05, 1),
+                  ncol = 1
+)
+
+legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
+
+print(plot_grid(prow,NULL, legend_b, ncol = 1, rel_heights = c(1,-.05, .1)))
+
+dev.off()
+
+pdf(paste0("Downloads/UKB_WES_vs_WGS_SAS.pdf"), width=15, height=15)
+
+plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "SAS",]) +
+  geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
+  facet_grid(cols = vars(trait)) +
+  ylab("Beta of PRS per SD") +
+  ylim(0,0.7) +
+  theme_Publication() +
+  scale_fill_Publication() + guides(fill=guide_legend(title="Method/Data Type"))
+
+plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "SAS",]) +
+  geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
+  facet_grid(cols = vars(trait)) +
+  ylab("Beta of PRS per SD") +
+  ylim(0,0.95) +
+  theme_Publication() +
+  scale_fill_Publication() + guides(fill=guide_legend(title="Method/Data Type"))
+
+prow <- plot_grid(NULL,
+                  plot1 + theme(legend.position="none") + ggtitle("UKB WES vs WGS Ancestry Adjusted PRS Results"),
+                  NULL,
+                  plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
+                  rel_heights = c(-.05, 1, -0.05, 1),
+                  ncol = 1
+)
+
+legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
+
+print(plot_grid(prow,NULL, legend_b, ncol = 1, rel_heights = c(1,-.05, .1)))
+
+dev.off()
