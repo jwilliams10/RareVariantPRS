@@ -1,5 +1,10 @@
 rm(list = ls())
 
+# system("dx download UKB_PRS:JW/UKB_Phenotypes/Results/All_Train.txt")
+# system("dx download UKB_PRS:JW/UKB_Phenotypes/Results/All_Tune.txt")
+# system("dx download UKB_PRS:JW/UKB_Phenotypes/Results/All_Validation.txt")
+# system("dx download UKB_PRS:JW/UKB_Phenotypes/Results/all_phenotypes.RData")
+
 pheno_train <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Train.txt")
 pheno_tuning <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Tune.txt")
 pheno_vad <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
@@ -114,3 +119,4 @@ samps <- samps[samps$Ancestry != "EAS",]
 
 samps$Trait <- factor(samps$Trait,levels = c("Asthma","Breast","CAD","Prostate","T2D","BMI","Height","HDL","LDL","logTG","TC"))
 samps$Ancestry <- factor(samps$Ancestry,levels = c("AFR","AMR","EUR","SAS"))
+samps <- samps[order(samps$Trait,samps$Ancestry),]
