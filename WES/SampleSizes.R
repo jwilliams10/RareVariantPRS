@@ -111,3 +111,6 @@ samps$Validation_Controls[samps$Trait %in% c("BMI","TC","LDL","HDL","logTG","Hei
 samps$Validation_Cases[samps$Trait %in% c("BMI","TC","LDL","HDL","logTG","Height")] <- 0
 
 samps <- samps[samps$Ancestry != "EAS",]
+
+samps$Trait <- factor(samps$Trait,levels = c("Asthma","Breast","CAD","Prostate","T2D","BMI","Height","HDL","LDL","logTG","TC"))
+samps$Ancestry <- factor(samps$Ancestry,levels = c("AFR","AMR","EUR","SAS"))

@@ -55,6 +55,9 @@ full_results$Method <- factor(full_results$Method,levels = c("CT-SLEB","JointPRS
 full_results$Method1[full_results$Method1 == "RICE-RV"] <- "RICE-CV"
 full_results$Method1 <- factor(full_results$Method1,levels = c("CT-SLEB","JointPRS","PROSPER","RICE-CV"))
 
+full_results$beta_adjusted[full_results$beta_adjusted < 0] <- 0
+full_results$beta_raw[full_results$beta_raw < 0] <- 0
+
 pdf(paste0("Desktop/RareVariantPRS_Results/Figures/AoU_WES_Continuous_Raw_Beta.pdf"), width=15, height=15)
 
 ggplot(full_results) +

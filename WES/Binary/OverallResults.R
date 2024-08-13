@@ -32,11 +32,13 @@ full_results$Method[full_results$Method == "LDPred"] <- "LDpred2"
 full_results$Method[full_results$Method == "LASSOSum"] <- "Lassosum2"
 
 full_results$Method1 <- full_results$Method
-full_results$Method <- factor(full_results$Method,levels = c("CT","LDpred2","Lassosum2","RICE-RV","RICE-CV"))
+full_results$Method <- factor(full_results$Method,levels = c("CT","Lassosum2","LDpred2","RICE-RV","RICE-CV"))
 full_results$Method1[full_results$Method1 == "RICE-RV"] <- "RICE-CV"
-full_results$Method1 <- factor(full_results$Method1,levels = c("CT","LDpred2","Lassosum2","RICE-CV"))
+full_results$Method1 <- factor(full_results$Method1,levels = c("CT","Lassosum2","LDpred2","RICE-CV"))
 
 full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","AMR"),]
+full_results$trait <- factor(full_results$trait,levels = c("Asthma","Breast","CAD","Prostate","T2D"))
+full_results$ancestry <- factor(full_results$ancestry,levels = c("AFR","AMR","EUR","SAS"))
 
 theme_Publication <- function(base_size=12) {
   library(grid)

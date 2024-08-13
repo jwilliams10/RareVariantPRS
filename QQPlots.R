@@ -91,7 +91,7 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   
 }
 
-print("WES Coding STAARB Binary")
+print("WES Coding STAARB")
 
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
@@ -429,5 +429,117 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   
   pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Noncoding_QQplot.pdf"), width=15, height=15)
   noncoding_qqplot_STAARB(noncoding_sig = noncoding_sig, noncoding_sig_ncRNA = noncoding_sig_ncRNA, noncoding_sig_downstream = noncoding_sig_downstream, noncoding_sig_upstream = noncoding_sig_upstream, noncoding_sig_UTR = noncoding_sig_UTR,noncoding_sig_promoter_CAGE = noncoding_sig_promoter_CAGE, noncoding_sig_promoter_DHS = noncoding_sig_promoter_DHS,noncoding_sig_enhancer_CAGE = noncoding_sig_enhancer_CAGE,noncoding_sig_enhancer_DHS = noncoding_sig_enhancer_DHS,trait = trait) 
+  dev.off()
+}
+
+
+rm(list = ls())
+
+coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,coding_sig_missense,coding_sig_synonymous,coding_sig_disruptive_missense,trait){
+  coding_sig$STAARB[coding_sig$STAARB == 0] <- 10^(-250)
+  coding_minp <- min(coding_sig$STAARB)
+  min_y <- ceiling(-log10(coding_minp)) + 1
+  cex_point <- 1
+  
+  
+  observed <- sort(coding_sig_plof$STAARB)
+  lobs <- -(log10(observed))
+  
+  expected <- c(1:length(observed))
+  lexp <- -(log10(expected / (length(expected)+1)))
+  
+  # par(mar=c(5,6,4,4))
+  plot(lexp,lobs,pch=0, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
+       xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2,main = trait)
+  
+  abline(0, 1, col="red",lwd=1)
+  
+  observed <- sort(coding_sig_plofds$STAARB)
+  
+  lobs <- -(log10(observed))
+  
+  expected <- c(1:length(observed))
+  lexp <- -(log10(expected / (length(expected)+1)))
+  
+  par(new=T)
+  # par(mar=c(5,6,4,4))
+  plot(lexp,lobs,pch=1, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
+       xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2,main = trait)
+  
+  abline(0, 1, col="red",lwd=1)
+  
+  ### missense
+  ## remove unconverged p-values
+  observed <- sort(coding_sig_missense$STAARB)
+  
+  lobs <- -(log10(observed))
+  
+  expected <- c(1:length(observed))
+  lexp <- -(log10(expected / (length(expected)+1)))
+  
+  par(new=T)
+  # par(mar=c(5,6,4,4))
+  plot(lexp,lobs,pch=2, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
+       xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2,main = trait)
+  
+  abline(0, 1, col="red",lwd=1)
+  
+  ### disruptive_missense
+  ## remove unconverged p-values
+  observed <- sort(coding_sig_disruptive_missense$STAARB)
+  
+  
+  lobs <- -(log10(observed))
+  
+  expected <- c(1:length(observed))
+  lexp <- -(log10(expected / (length(expected)+1)))
+  
+  par(new=T)
+  # par(mar=c(5,6,4,4))
+  plot(lexp,lobs,pch=3, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
+       xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2,main = trait)
+  
+  abline(0, 1, col="red",lwd=1)
+  
+  ### synonymous
+  ## remove unconverged p-values
+  observed <- sort(coding_sig_synonymous$STAARB)
+  
+  lobs <- -(log10(observed))
+  
+  expected <- c(1:length(observed))
+  lexp <- -(log10(expected / (length(expected)+1)))
+  
+  par(new=T)
+  # par(mar=c(5,6,4,4))
+  plot(lexp,lobs,pch=4, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
+       xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2,main = trait)
+  
+  abline(0, 1, col="red",lwd=1)
+  
+  legend("topleft",legend=c("pLoF","pLoF+D","Missense","Disruptive Missense","Synonymous"),ncol=1,bty="o",box.lwd=1,pch=0:4,cex=1,text.font=2)
+  
+}
+
+print("AoU Coding STAARB Binary")
+
+layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
+
+for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
+  coding_sig <- read.csv(paste0("Desktop/RareVariantPRS_Results/Coding_Sig_AoU/",trait,"_coding_sig.csv"))
+  
+  coding_sig_plof <- coding_sig[coding_sig$Category == "plof",]
+  coding_sig_plofds <- coding_sig[coding_sig$Category == "plof_ds",]
+  coding_sig_missense <- coding_sig[coding_sig$Category == "missense",]
+  coding_sig_synonymous <- coding_sig[coding_sig$Category == "synonymous",]
+  coding_sig_disruptive_missense <- coding_sig[coding_sig$Category == "disruptive_missense",]
+  
+  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_AoU_WES_RV_QQplot.pdf"), width=15, height=15)
+  coding_qqplot_STAARB(coding_sig = coding_sig, coding_sig_plof = coding_sig_plof,coding_sig_plofds = coding_sig_plofds, coding_sig_missense = coding_sig_missense,coding_sig_synonymous = coding_sig_synonymous,coding_sig_disruptive_missense = coding_sig_disruptive_missense,trait = trait) 
   dev.off()
 }

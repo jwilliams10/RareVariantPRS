@@ -94,16 +94,19 @@ full_results$Method[full_results$Method == "LASSOSum"] <- "Lassosum2"
 
 
 full_results$Method1 <- full_results$Method
-full_results$Method <- factor(full_results$Method,levels = c("CT","LDpred2","Lassosum2","RICE-RV","RICE-CV"))
+full_results$Method <- factor(full_results$Method,levels = c("CT","Lassosum2","LDpred2","RICE-RV","RICE-CV"))
 full_results$Method1[full_results$Method1 == "RICE-RV"] <- "RICE-CV"
-full_results$Method1 <- factor(full_results$Method1,levels = c("CT","LDpred2","Lassosum2","RICE-CV"))
+full_results$Method1 <- factor(full_results$Method1,levels = c("CT","Lassosum2","LDpred2","RICE-CV"))
+
+full_results$trait <- factor(full_results$trait,levels = c("Asthma","Breast","CAD","Prostate","T2D"))
+full_results$ancestry <- factor(full_results$ancestry,levels = c("AFR","AMR","EUR","SAS"))
 
 pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_Raw_Beta.pdf"), width=15, height=15)
 
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("WGS Raw PRS Results") + 
+  ggtitle("UKB WGS Raw PRS Results") + 
   ylab("log(Odds Ratio) of PRS per SD") + 
   ylim(0,0.95) +
   theme_Publication() + 
@@ -117,7 +120,7 @@ ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("WGS Ancestry Adjusted PRS Results") + 
+  ggtitle("UKB WGS Ancestry Adjusted PRS Results") + 
   ylab("log(Odds Ratio) of PRS per SD") + 
   ylim(0,0.95) +
   theme_Publication() + 
@@ -125,11 +128,28 @@ ggplot(full_results) +
 
 dev.off()
 
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_Coding_vs_Noncoding_Raw_Beta.pdf"), width=15, height=15)
+
 ggplot(CV_Coding_Noncoding) +
   geom_bar(aes(x=Method, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("WGS Raw PRS Results") + 
-  ylab("log(Odds Ratio) of PRS per SD") + 
+  ggtitle("UKB WGS Raw PRS Results") + 
+  ylab("Beta of PRS per SD") + 
   ylim(0,0.95) +
   theme_Publication() + 
   scale_fill_Publication()
+
+dev.off()
+
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_Coding_vs_Noncoding_Ancestry_Adjusted_Beta.pdf"), width=15, height=15)
+
+ggplot(CV_Coding_Noncoding) +
+  geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(trait), vars(ancestry)) + 
+  ggtitle("UKB WGS Ancestry Adjusted PRS Results") + 
+  ylab("Beta of PRS per SD") + 
+  ylim(0,0.95) +
+  theme_Publication() + 
+  scale_fill_Publication()
+
+dev.off()
