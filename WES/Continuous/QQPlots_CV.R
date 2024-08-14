@@ -86,7 +86,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   
   # layout(matrix(c(1,2),ncol = 2),widths = c(2,1))
   
-  pdf(paste0(trait,"_UKB_WES_CV_Manhattan_Plot.pdf"), width=15, height=9)
+  png(paste0(trait,"_UKB_WES_CV_Manhattan_Plot.png"), width=15*72, height=9*72)
   
   p1 <- ggplot(dat, aes(x = BPcum, y = -log10(P), 
                               color = as.factor(CHR), size = -log10(P))) +

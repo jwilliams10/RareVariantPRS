@@ -106,7 +106,7 @@ for(trait in 1:5){
   
   # layout(matrix(c(1,2),ncol = 2),widths = c(2,1))
   
-  pdf(paste0(trait,"_UKB_WES_CV_Manhattan_Plot.pdf"), width=15, height=9)
+  png(paste0(trait,"_UKB_WGS_CV_Manhattan_Plot.pdf"), width=15*72, height=9*72)
   
   p1 <- ggplot(dat, aes(x = BPcum, y = -log10(P), 
                         color = as.factor(CHR), size = -log10(P))) +
@@ -136,7 +136,7 @@ for(trait in 1:5){
   
   dev.off()
   
-  pdf(paste0(trait,"_UKB_WES_CV_QQplot.pdf"), width=10, height=10)
+  pdf(paste0(trait,"_UKB_WGS_CV_QQplot.pdf"), width=10, height=10)
   
   qqplotdata <- function(logpvector){
     o = sort(logpvector,decreasing=T)

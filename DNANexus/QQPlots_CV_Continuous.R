@@ -1,7 +1,7 @@
 rm(list = ls())
 
-system("dx download -r UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GWAS_SummaryStats/")
-system("dx download UKB_PRS:JW/UKB_Phenotypes/Results/All_Train.txt")
+# system("dx download -r UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GWAS_SummaryStats/")
+# system("dx download UKB_PRS:JW/UKB_Phenotypes/Results/All_Train.txt")
 
 pheno_train <- read.delim("All_Train.txt")
 
@@ -88,7 +88,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   
   # layout(matrix(c(1,2),ncol = 2),widths = c(2,1))
   
-  pdf(paste0(trait,"_UKB_WES_CV_Manhattan_Plot.pdf"), width=15, height=9)
+  png(paste0(trait,"_UKB_WGS_CV_Manhattan_Plot.png"), width=15*72, height=9*72)
   
   p1 <- ggplot(dat, aes(x = BPcum, y = -log10(P), 
                         color = as.factor(CHR), size = -log10(P))) +
@@ -118,7 +118,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   
   dev.off()
   
-  pdf(paste0(trait,"_UKB_WES_CV_QQplot.pdf"), width=10, height=10)
+  pdf(paste0(trait,"_UKB_WGS_CV_QQplot.pdf"), width=10, height=10)
   
   qqplotdata <- function(logpvector){
     o = sort(logpvector,decreasing=T)
