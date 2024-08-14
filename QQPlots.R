@@ -93,7 +93,7 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
 
 print("WES Coding STAARB")
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WES_RV_QQplot.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_RV_QQplot.pdf"), width=15, height=9)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 for(trait in c("Asthma","CAD","T2D","Breast","Prostate","BMI","TC","HDL","LDL","logTG","Height")){
@@ -205,7 +205,7 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   
 }
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Coding_QQplot.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_RV_Coding_QQplot.pdf"), width=15, height=9)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 print("WGS Coding STAARB Binary")
@@ -226,7 +226,7 @@ dev.off()
 
 print("WGS Coding STAARB Continuous")
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Coding_QQplot.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_RV_Coding_QQplot.pdf"), width=15, height=9)
 layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
@@ -390,7 +390,7 @@ noncoding_qqplot_STAARB <- function(noncoding_sig,noncoding_sig_upstream,noncodi
 
 print("WGS Noncoding STAARB Binary")
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Noncoding_QQplot.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_RV_Noncoding_QQplot.pdf"), width=15, height=9)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
@@ -412,7 +412,7 @@ dev.off()
 
 print("WGS Noncoding STAARB Continuous")
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Noncoding_QQplot.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_RV_Noncoding_QQplot.pdf"), width=15, height=9)
 layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
@@ -527,7 +527,7 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
 }
 
 print("AoU Coding STAARB Binary")
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_AoU_WES_RV_QQplot.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/AoU_WES_RV_QQplot.pdf"), width=15, height=9)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){

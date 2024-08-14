@@ -212,7 +212,7 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   
   legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
   
-  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_WES_Fig5.pdf"), width=15, height=15)
+  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_WES_Fig5.pdf"), width=12, height=7.416564)
   
   print(plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1)))
   
@@ -270,7 +270,7 @@ data$SE <- 0.1
 
 data$color <- factor(data$color,levels = c("Below 5%","30% - 70%","Above 95%"))
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/Fig5_Demo.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/Fig5_Demo.pdf"), width=12, height=7.416564)
 
 ggplot(data=data, aes(x=Common_Bin, y=Mean, color = color)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(" Standardized")) +
   scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) +
@@ -605,7 +605,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   
   legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
   
-  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_WES_Fig5.pdf"), width=15, height=15)
+  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_WES_Fig5.pdf"), width=12, height=7.416564)
   
   print(plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1)))
   

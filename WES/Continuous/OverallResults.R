@@ -82,7 +82,7 @@ full_results$Method1 <- factor(full_results$Method1,levels = c("CT","Lassosum2",
 full_results$trait <- factor(full_results$trait,levels = c("BMI","Height","HDL","LDL","logTG","TC"))
 full_results$ancestry <- factor(full_results$ancestry,levels = c("AFR","AMR","EUR","SAS"))
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Continuous_Raw_Beta.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Continuous_Raw_Beta.pdf"), width=10, height=6.18047)
 
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
@@ -95,7 +95,7 @@ ggplot(full_results) +
 
 dev.off()
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Continuous_Adjusted_Beta.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Continuous_Adjusted_Beta.pdf"), width=10, height=6.18047)
 
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +

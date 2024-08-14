@@ -81,6 +81,13 @@ scale_fill_Publication <- function(...){
 
 library(ggplot2)
 CV_Coding_Noncoding <- full_results[full_results$Method %in% c("Coding","Noncoding","CV","RV"),]
+CV_Coding_Noncoding$Method[CV_Coding_Noncoding$Method == "CV"] <- "RICE-CV" 
+CV_Coding_Noncoding$Method[CV_Coding_Noncoding$Method == "RV"] <- "RICE-RV" 
+CV_Coding_Noncoding$Method <- factor(CV_Coding_Noncoding$Method,levels = c("Coding","Noncoding","RICE-RV","RICE-CV"))
+CV_Coding_Noncoding$trait <- factor(CV_Coding_Noncoding$trait,levels = c("BMI","Height","HDL","LDL","logTG","TC"))
+CV_Coding_Noncoding$ancestry <- factor(CV_Coding_Noncoding$ancestry,levels = c("AFR","AMR","EUR","SAS"))
+
+
 full_results <- full_results[!(full_results$Method %in% c("Coding","Noncoding","RV_SL")),]
 
 full_results <- full_results[full_results$ancestry %in% c("AFR","EUR","SAS","AMR"),]
@@ -99,7 +106,7 @@ full_results$Method1 <- factor(full_results$Method1,levels = c("CT","Lassosum2",
 full_results$trait <- factor(full_results$trait,levels = c("BMI","Height","HDL","LDL","logTG","TC"))
 full_results$ancestry <- factor(full_results$ancestry,levels = c("AFR","AMR","EUR","SAS"))
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Raw_Beta.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Raw_Beta.pdf"), width=10, height=6.18047)
 
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
@@ -112,7 +119,7 @@ ggplot(full_results) +
 
 dev.off()
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Adjusted_Beta.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Adjusted_Beta.pdf"), width=10, height=6.18047)
 
 ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
@@ -126,7 +133,7 @@ ggplot(full_results) +
 
 dev.off()
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Coding_vs_Noncoding_Raw_Beta.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Coding_vs_Noncoding_Raw_Beta.pdf"), width=10, height=6.18047)
 
 ggplot(CV_Coding_Noncoding) +
   geom_bar(aes(x=Method, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
@@ -139,7 +146,7 @@ ggplot(CV_Coding_Noncoding) +
 
 dev.off()
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Coding_vs_Noncoding_Ancestry_Adjusted_Beta.pdf"), width=15, height=15)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Coding_vs_Noncoding_Ancestry_Adjusted_Beta.pdf"), width=10, height=6.18047)
 
 ggplot(CV_Coding_Noncoding) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +

@@ -212,7 +212,7 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   
   legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
   
-  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_WGS_Fig5.pdf"), width=15, height=15)
+  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_WGS_Fig5.pdf"), width=12, height=7.416564)
   
   print(plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1)))
   
@@ -545,7 +545,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   
   legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
   
-  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_WGS_Fig5.pdf"), width=15, height=15)
+  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_WGS_Fig5.pdf"), width=12, height=7.416564)
   
   print(plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1)))
   
