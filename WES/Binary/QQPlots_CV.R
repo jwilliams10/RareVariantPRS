@@ -1,11 +1,51 @@
 rm(list = ls())
 
 pheno_train <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Train.txt")
+trait <- "Asthma"
 
-library("plotrix")
-library("data.table")
-library("RColorBrewer")
-library("optparse")
+theme_Publication <- function(base_size=12) {
+  library(grid)
+  library(ggthemes)
+  (theme_foundation(base_size=base_size, )
+    + theme(plot.title = element_text(face = "bold",
+                                      size = rel(1.1), hjust = 0.5),
+            text = element_text(),
+            panel.background = element_rect(colour = NA),
+            plot.background = element_rect(colour = NA),
+            panel.border = element_rect(colour = NA),
+            axis.title = element_text(face = "bold",size = 16),
+            axis.title.y = element_text(angle=90,vjust =2),
+            axis.title.x = element_blank(),
+            axis.text.x = element_blank(), 
+            axis.line = element_line(colour="black",size=2),
+            axis.ticks = element_line(),
+            # panel.grid.major = element_line(colour="#f0f0f0"),
+            # panel.grid.minor = element_line(colour="#f0f0f0"),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            legend.key = element_rect(colour = NA),
+            #legend.position = "bottom",
+            #legend.direction = "horizontal",
+            #legend.key.size= unit(0.2, "cm"),
+            #legend.margin = unit(0, "cm"),
+            legend.title = element_text(face="bold.italic", size =18),
+            #legend.text = element_text(face ="bold"),
+            plot.margin=unit(c(10,5,5,5),"mm"),
+            strip.background=element_rect(colour="#f0f0f0",fill="#f0f0f0"),
+            strip.text = element_text(face="bold")
+    ))
+  
+}
+
+library(plotrix)
+library(data.table)
+library(RColorBrewer)
+library(optparse)
+library(dplyr)
+library(ggplot2)
+library(cowplot)
+
+lambda_dat <- NULL
 
 for(trait in 1:5){
   
@@ -32,19 +72,68 @@ for(trait in 1:5){
   dat <- dat[,c("CHROM","ID","REF","POS","ALT","BETA","P","A1_FREQ")]
   colnames(dat) <- c("CHR","SNP","REF","BP","A1","BETA","P","A1_FREQ") 
   dat$MAF <- ifelse(dat$A1_FREQ <= 0.5, dat$A1_FREQ,1-dat$A1_FREQ)
+  dat <- dat[dat$MAF > 0.01,]
   
-  y <- pheno_train[,trait]
-  n_train_control <- sum(y == 0,na.rm = TRUE)
-  n_train_cases <- sum(y == 1,na.rm = TRUE)
-  
-  ff <- function(x,y){
-    x*y/(x+y)
-  }
   
   x <- dat$P
   z <- qnorm(x / 2)
   lambda <- round(median(z^2) / qchisq(0.5,1), 3)
-  lambda_1000 <- round(1+1000*(lambda-1)/ff(n_train_control,n_train_cases) ,3)
+  lambda_1000 <- round(1+1000*(lambda-1)/sum(!is.na(pheno_train[,trait])) ,3)
+  
+  lambda_dat <- rbind(lambda_dat,data.frame(Trait = trait,Ancestry_Group = "European",lambda = lambda, lambda_1000 = lambda_1000, datasource = "UKB WES"))
+  
+  p.pwas <- 5E-08
+  
+  nCHR <- length(unique(dat$CHR))
+  dat$BPcum <- NA
+  s <- 0
+  nbp <- c()
+  for (i in unique(dat$CHR)){
+    nbp[i] <- max(dat[dat$CHR == i,]$BP)
+    dat$BPcum[dat$CHR == i] <- dat$BP[dat$CHR == i] + s
+    s <- s + nbp[i]
+  }
+  axis.set <- dat %>% 
+    group_by(CHR) %>% 
+    summarize(center = (max(BPcum) + min(BPcum)) / 2)
+  ylim <- abs(floor(log10(min(dat$P)))) + 2 
+  sig1 <- p.pwas
+  
+  sigline <- data.frame(sig=c(-log10(sig1)),val=c(paste0("P=",signif(sig1,2))))
+  
+  # layout(matrix(c(1,2),ncol = 2),widths = c(2,1))
+  
+  pdf(paste0(trait,"_UKB_WES_CV_Manhattan_Plot.pdf"), width=15, height=9)
+  
+  p1 <- ggplot(dat, aes(x = BPcum, y = -log10(P), 
+                        color = as.factor(CHR), size = -log10(P))) +
+    geom_point(alpha = 0.8, size=0.8) + 
+    scale_x_continuous(label = axis.set$CHR, breaks = axis.set$center) +
+    scale_y_continuous(expand = c(0,0), limits = c(0, ylim)) +
+    scale_color_manual(values = rep(c("#08306b", "#4292c6"), nCHR)) +
+    scale_size_continuous(range = c(0.5,3)) +
+    geom_hline(data = sigline, aes(yintercept = sig), color= "red", linetype="dashed") +
+    guides(color = F) + 
+    labs(x = NULL, 
+         y = "-log10(p)", 
+         linetype = "",
+         title = paste0(trait," for Europeans"))+
+    theme_Publication()+
+    theme(
+      legend.position = "top",
+      panel.border = element_blank(),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.x = element_blank(),
+      axis.text.x = element_text(angle = 0, size = 16, vjust = 0.5),
+      axis.text.y = element_text(size = 16),
+      plot.subtitle = element_text(size = 8)
+    )
+  
+  print(p1)
+  
+  dev.off()
+  
+  pdf(paste0(trait,"_UKB_WES_CV_QQplot.pdf"), width=10, height=10)
   
   qqplotdata <- function(logpvector){
     o = sort(logpvector,decreasing=T)
@@ -75,13 +164,13 @@ for(trait in 1:5){
   }
   yLine <- c(-log10(5E-8))
   colLine <- c("red")
-  dat$log10P = -log10(dat$P)
-  gwas = as.data.frame(dat)
+  dat$log10P <- -log10(dat$P)
+  gwas <- as.data.frame(dat)
   # Determine frequency bins and create variable for binned QQ plot
   
   minMAF <- min(gwas$MAF)
   
-  freqbins <- c(c(0.5,0.05,0.005,0.001,0)[which(c(0.5,0.05,0.005,0.001,0) > floor(minMAF*1000000)/1000000)],floor(minMAF*1000000)/1000000)
+  freqbins <- c(c(0.5,0.05,0.01,0)[which(c(0.5,0.05,0.01,0) > floor(minMAF*1000000)/1000000)],floor(minMAF*1000000)/1000000)
   gwas$freqbin <- cut(gwas$MAF, freqbins,include.lowest=T)
   freqtable <- table(gwas$freqbin)
   freqtable <- freqtable[order(-as.numeric(gsub("[\\[\\(](.+),.+","\\1",names(freqtable))))]
@@ -110,14 +199,16 @@ for(trait in 1:5){
     legendcol <- c(legendcol,allcols[f])
   }
   legendtext <- paste0("MAF=",fbin,"; N SNPs=",format(fN,big.mark=",",scientific=FALSE))
-  opt =  list(break.top = 12,
-              top.size = 0.125)
+  opt <-  list(break.top = 15,
+               top.size = 0.125)
   
   
-  pdf(paste0(trait,"_UKB_WES_CV_QQplot.pdf"), width=15, height=15)
   xlim <- c(0,max(fx,na.rm=T))
   ylim <- c(0,max(fy,na.rm=T))
   maxY <- max(fy,na.rm=T)
+  print("okkkk2")
+  par(mar=c(5.1,5.1,4.1,1.1))
+  print("okkkk3")
   
   lab1 <- pretty(c(0,opt$break.top),n=ceiling(12 * (1-opt$top.size)))
   lab1 <- c(lab1[lab1 < opt$break.top],opt$break.top)
@@ -129,8 +220,8 @@ for(trait in 1:5){
   top.data = max(lab2)-opt$break.top
   
   # function to rescale the top part
-  rescale = function(y) { opt$break.top+(y-opt$break.top)/(top.data/top.range)}
-  rescaled.y = rescale(fy[fy>opt$break.top])
+  rescale <- function(y) { opt$break.top+(y-opt$break.top)/(top.data/top.range)}
+  rescaled.y <- rescale(fy[fy>opt$break.top])
   plot(0,0,
        ylim=c(min(fy),opt$break.top*(1+opt$top.size)),xlim=xlim,axes=FALSE,
        xlab=expression(plain(Expected)~~group("(",-log[10]*italic(P),")")),
@@ -168,8 +259,37 @@ for(trait in 1:5){
          col=colLine,lwd=1.5,lty=2)
   legend("topleft",legend=legendtext,col=legendcol,pch=15,bty="n")
   text(4,1,expression(paste(lambda[1000]," = ")),cex = 1.5)
-  text(4.3,1,paste(lambda_1000),cex = 1.5)
-  
+  text(4.5,1,paste(lambda_1000),cex = 1.5)
   title(paste0(trait," for European"))
+  
+  # p2 <- recordPlot()
+  # 
+  # title <- ggdraw() + 
+  #   draw_label(
+  #     paste0(trait," for Europeans"),
+  #     fontface = 'bold',
+  #     x = 0,
+  #     hjust = 0,
+  #     size = 30
+  #   ) +
+  #   theme(
+  #     # add margin on the left of the drawing canvas,
+  #     # so title is aligned with left edge of first plot
+  #     plot.margin = margin(0, 0, 0, 7)
+  #   )
+  
+  # plot_row <- plot_grid(p1, p2, align = "h", axis = "bt", rel_widths = c(6, 1))
+  # 
+  # p3 <- plot_grid(
+  #   title, plot_row,
+  #   ncol = 1,
+  #   # rel_heights values control vertical title margins
+  #   rel_heights = c(0.1, 1)
+  # )
+  # 
+  # cowplot::save_plot(filename = paste0(trait,"_UKB_WES_CV_QQplot.pdf"),plot = p3,nrow = 2,ncol = 2,base_width = c(24))
+  # 
   dev.off()
 }
+
+write.csv(lambda_dat,file = "UKB_WES_lambda.csv",row.names = FALSE)

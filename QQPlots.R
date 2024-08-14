@@ -93,6 +93,7 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
 
 print("WES Coding STAARB")
 
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WES_RV_QQplot.pdf"), width=15, height=15)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 for(trait in c("Asthma","CAD","T2D","Breast","Prostate","BMI","TC","HDL","LDL","logTG","Height")){
@@ -104,10 +105,9 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate","BMI","TC","HDL","LDL","
   coding_sig_synonymous <- coding_sig[coding_sig$Category == "synonymous",]
   coding_sig_disruptive_missense <- coding_sig[coding_sig$Category == "disruptive_missense",]
   
-  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WES_RV_QQplot.pdf"), width=15, height=15)
   coding_qqplot_STAARB(coding_sig = coding_sig, coding_sig_plof = coding_sig_plof,coding_sig_plofds = coding_sig_plofds, coding_sig_missense = coding_sig_missense,coding_sig_synonymous = coding_sig_synonymous,coding_sig_disruptive_missense = coding_sig_disruptive_missense,trait = trait) 
-  dev.off()
 }
+dev.off()
 
 
 
@@ -205,6 +205,7 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   
 }
 
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Coding_QQplot.pdf"), width=15, height=15)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 print("WGS Coding STAARB Binary")
@@ -218,14 +219,14 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   coding_sig_missense <- coding_sig[coding_sig$Category == "missense",]
   coding_sig_synonymous <- coding_sig[coding_sig$Category == "synonymous",]
   coding_sig_disruptive_missense <- coding_sig[coding_sig$Category == "disruptive_missense",]
-  
-  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Coding_QQplot.pdf"), width=15, height=15)
+
   coding_qqplot_STAARB(coding_sig = coding_sig, coding_sig_plof = coding_sig_plof,coding_sig_plofds = coding_sig_plofds, coding_sig_missense = coding_sig_missense,coding_sig_synonymous = coding_sig_synonymous,coding_sig_disruptive_missense = coding_sig_disruptive_missense,trait = trait) 
-  dev.off()
 }
+dev.off()
 
 print("WGS Coding STAARB Continuous")
 
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Coding_QQplot.pdf"), width=15, height=15)
 layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
@@ -238,10 +239,9 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   coding_sig_synonymous <- coding_sig[coding_sig$Category == "synonymous",]
   coding_sig_disruptive_missense <- coding_sig[coding_sig$Category == "disruptive_missense",]
   
-  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Coding_QQplot.pdf"), width=15, height=15)
   coding_qqplot_STAARB(coding_sig = coding_sig, coding_sig_plof = coding_sig_plof,coding_sig_plofds = coding_sig_plofds, coding_sig_missense = coding_sig_missense,coding_sig_synonymous = coding_sig_synonymous,coding_sig_disruptive_missense = coding_sig_disruptive_missense,trait = trait) 
-  dev.off()
 }
+dev.off()
 
 
 rm(list = ls())
@@ -390,6 +390,7 @@ noncoding_qqplot_STAARB <- function(noncoding_sig,noncoding_sig_upstream,noncodi
 
 print("WGS Noncoding STAARB Binary")
 
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Noncoding_QQplot.pdf"), width=15, height=15)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
@@ -405,13 +406,13 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   noncoding_sig_downstream <- noncoding_sig[noncoding_sig$Category == "downstream",]
   noncoding_sig_ncRNA <- noncoding_sig[noncoding_sig$Category == "ncRNA",]
   
-  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Noncoding_QQplot.pdf"), width=15, height=15)
   noncoding_qqplot_STAARB(noncoding_sig = noncoding_sig, noncoding_sig_ncRNA = noncoding_sig_ncRNA, noncoding_sig_downstream = noncoding_sig_downstream, noncoding_sig_upstream = noncoding_sig_upstream, noncoding_sig_UTR = noncoding_sig_UTR,noncoding_sig_promoter_CAGE = noncoding_sig_promoter_CAGE, noncoding_sig_promoter_DHS = noncoding_sig_promoter_DHS,noncoding_sig_enhancer_CAGE = noncoding_sig_enhancer_CAGE,noncoding_sig_enhancer_DHS = noncoding_sig_enhancer_DHS,trait = trait) 
-  dev.off()
 }
+dev.off()
 
 print("WGS Noncoding STAARB Continuous")
 
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Noncoding_QQplot.pdf"), width=15, height=15)
 layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
@@ -427,10 +428,9 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   noncoding_sig_downstream <- noncoding_sig[noncoding_sig$Category == "downstream",]
   noncoding_sig_ncRNA <- noncoding_sig[noncoding_sig$Category == "ncRNA",]
   
-  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_UKB_WGS_RV_Noncoding_QQplot.pdf"), width=15, height=15)
   noncoding_qqplot_STAARB(noncoding_sig = noncoding_sig, noncoding_sig_ncRNA = noncoding_sig_ncRNA, noncoding_sig_downstream = noncoding_sig_downstream, noncoding_sig_upstream = noncoding_sig_upstream, noncoding_sig_UTR = noncoding_sig_UTR,noncoding_sig_promoter_CAGE = noncoding_sig_promoter_CAGE, noncoding_sig_promoter_DHS = noncoding_sig_promoter_DHS,noncoding_sig_enhancer_CAGE = noncoding_sig_enhancer_CAGE,noncoding_sig_enhancer_DHS = noncoding_sig_enhancer_DHS,trait = trait) 
-  dev.off()
 }
+dev.off()
 
 
 rm(list = ls())
@@ -527,7 +527,7 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
 }
 
 print("AoU Coding STAARB Binary")
-
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_AoU_WES_RV_QQplot.pdf"), width=15, height=15)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
@@ -539,7 +539,6 @@ for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   coding_sig_synonymous <- coding_sig[coding_sig$Category == "synonymous",]
   coding_sig_disruptive_missense <- coding_sig[coding_sig$Category == "disruptive_missense",]
   
-  pdf(paste0("Desktop/RareVariantPRS_Results/Figures/",trait,"_AoU_WES_RV_QQplot.pdf"), width=15, height=15)
   coding_qqplot_STAARB(coding_sig = coding_sig, coding_sig_plof = coding_sig_plof,coding_sig_plofds = coding_sig_plofds, coding_sig_missense = coding_sig_missense,coding_sig_synonymous = coding_sig_synonymous,coding_sig_disruptive_missense = coding_sig_disruptive_missense,trait = trait) 
-  dev.off()
 }
+dev.off()
