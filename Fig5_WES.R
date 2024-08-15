@@ -16,8 +16,6 @@ theme_Publication <- function(base_size=12) {
             panel.border = element_rect(colour = NA),
             axis.title = element_text(face = "bold",size = 16),
             axis.title.y = element_text(angle=90,vjust =2),
-            axis.title.x = element_blank(),
-            # axis.text.x = element_blank(), 
             axis.line = element_line(colour="black",size=2),
             axis.ticks = element_line(),
             # panel.grid.major = element_line(colour="#f0f0f0"),
@@ -181,22 +179,22 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   CV_RV_PRS_adjusted_SAS <- inner_join(CV_RV_PRS_adjusted_SAS,CV_RV_PRS_adjusted_SAS_se)
 
 
-  colnames(CV_RV_PRS_adjusted_EUR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
-  colnames(CV_RV_PRS_adjusted_AMR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
-  colnames(CV_RV_PRS_adjusted_AFR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
-  colnames(CV_RV_PRS_adjusted_SAS) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
+  colnames(CV_RV_PRS_adjusted_EUR) <- c("Common_Bin","Rare Variant PRS Quantiles","Mean","SE")
+  colnames(CV_RV_PRS_adjusted_AMR) <- c("Common_Bin","Rare Variant PRS Quantiles","Mean","SE")
+  colnames(CV_RV_PRS_adjusted_AFR) <- c("Common_Bin","Rare Variant PRS Quantiles","Mean","SE")
+  colnames(CV_RV_PRS_adjusted_SAS) <- c("Common_Bin","Rare Variant PRS Quantiles","Mean","SE")
 
   ymin <- round(min(c(CV_RV_PRS_adjusted_EUR$Mean - CV_RV_PRS_adjusted_EUR$SE,CV_RV_PRS_adjusted_AMR$Mean - CV_RV_PRS_adjusted_AMR$SE,CV_RV_PRS_adjusted_AFR$Mean - CV_RV_PRS_adjusted_AFR$SE,CV_RV_PRS_adjusted_SAS$Mean - CV_RV_PRS_adjusted_SAS$SE)) - 0.05,2)
   ymax <- round(max(c(CV_RV_PRS_adjusted_EUR$Mean + CV_RV_PRS_adjusted_EUR$SE,CV_RV_PRS_adjusted_AMR$Mean + CV_RV_PRS_adjusted_AMR$SE,CV_RV_PRS_adjusted_AFR$Mean + CV_RV_PRS_adjusted_AFR$SE,CV_RV_PRS_adjusted_SAS$Mean + CV_RV_PRS_adjusted_SAS$SE)) + 0.05,2)
 
-  plot1 <- ggplot(data=CV_RV_PRS_adjusted_EUR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) +
-    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
-  plot2 <- ggplot(data=CV_RV_PRS_adjusted_AMR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) +
-    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
-  plot3 <- ggplot(data=CV_RV_PRS_adjusted_AFR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) +
-    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
-  plot4 <- ggplot(data=CV_RV_PRS_adjusted_SAS, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) +
-    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
+  plot1 <- ggplot(data=CV_RV_PRS_adjusted_EUR, aes(x=Common_Bin, y=Mean, color=`Rare Variant PRS Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
+    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "Common Variant PRS Quantiles")
+  plot2 <- ggplot(data=CV_RV_PRS_adjusted_AMR, aes(x=Common_Bin, y=Mean, color=`Rare Variant PRS Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
+    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "Common Variant PRS Quantiles")
+  plot3 <- ggplot(data=CV_RV_PRS_adjusted_AFR, aes(x=Common_Bin, y=Mean, color=`Rare Variant PRS Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
+    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "Common Variant PRS Quantiles")
+  plot4 <- ggplot(data=CV_RV_PRS_adjusted_SAS, aes(x=Common_Bin, y=Mean, color=`Rare Variant PRS Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
+    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "Common Variant PRS Quantiles")
 
   
   prow <- plot_grid(
@@ -274,9 +272,9 @@ pdf(paste0("Desktop/RareVariantPRS_Results/Figures/Fig5_Demo.pdf"), width=12, he
 
 ggplot(data=data, aes(x=Common_Bin, y=Mean, color = color)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(" Standardized")) +
   scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) +
-  xlab("Common Variant Quantiles") +
+  xlab("Common Variant PRS Quantiles") +
   ylab("Observed Value of Standardized Trait") + 
-  guides(color=guide_legend(title="Rare Variant Quantiles"))
+  guides(color=guide_legend(title="Rare Variant PRS Quantiles"))
 
 dev.off()
 
@@ -366,8 +364,6 @@ theme_Publication <- function(base_size=12) {
             panel.border = element_rect(colour = NA),
             axis.title = element_text(face = "bold",size = 16),
             axis.title.y = element_text(angle=90,vjust =2),
-            axis.title.x = element_blank(),
-            # axis.text.x = element_blank(), 
             axis.line = element_line(colour="black",size=2),
             axis.ticks = element_line(),
             # panel.grid.major = element_line(colour="#f0f0f0"),
@@ -574,21 +570,21 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   # 
   # 
   log_odds_ratio_EUR$Rare_Bin <- factor(log_odds_ratio_EUR$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
-  colnames(log_odds_ratio_EUR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
-  # colnames(log_odds_ratio_AMR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
-  # colnames(log_odds_ratio_SAS) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
-  # colnames(log_odds_ratio_AFR) <- c("Common_Bin","Rare Variant Quantiles","Mean","SE")
+  colnames(log_odds_ratio_EUR) <- c("Common_Bin","Rare Variant PRS Quantiles","Mean","SE")
+  # colnames(log_odds_ratio_AMR) <- c("Common_Bin","Rare Variant PRS Quantiles","Mean","SE")
+  # colnames(log_odds_ratio_SAS) <- c("Common_Bin","Rare Variant PRS Quantiles","Mean","SE")
+  # colnames(log_odds_ratio_AFR) <- c("Common_Bin","Rare Variant PRS Quantiles","Mean","SE")
    
   ymin <- round(min(exp(log_odds_ratio_EUR$Mean - log_odds_ratio_EUR$SE)) - 0.05,2)
   ymax <- round(max(exp(log_odds_ratio_EUR$Mean + log_odds_ratio_EUR$SE)) + 0.05,2)
   
-  plot1 <- ggplot(data=log_odds_ratio_EUR, aes(x=Common_Bin, y=exp(Mean), color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=exp(Mean-SE), ymax=exp(Mean+SE))) + theme_Publication() + ylab(paste0(trait," Odds Ratio")) + ylim(c(ymin,ymax)) + 
-    scale_x_continuous(breaks = c(1:5),labels = c("0-20%","20-40%","40-60%","60-80%","80-100%"))
-  # plot2 <- ggplot(data=log_odds_ratio_AMR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) + 
+  plot1 <- ggplot(data=log_odds_ratio_EUR, aes(x=Common_Bin, y=exp(Mean), color=`Rare Variant PRS Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=exp(Mean-SE), ymax=exp(Mean+SE))) + theme_Publication() + ylab(paste0(trait," Odds Ratio")) + ylim(c(ymin,ymax)) + 
+    scale_x_continuous(breaks = c(1:5),labels = c("0-20%","20-40%","40-60%","60-80%","80-100%")) + labs(x = "Common Variant PRS Quantiles")
+  # plot2 <- ggplot(data=log_odds_ratio_AMR, aes(x=Common_Bin, y=Mean, color=`Rare Variant PRS Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) + 
   #   scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
-  # plot3 <- ggplot(data=log_odds_ratio_AFR, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) + 
+  # plot3 <- ggplot(data=log_odds_ratio_AFR, aes(x=Common_Bin, y=Mean, color=`Rare Variant PRS Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) + 
   #   scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
-  # plot4 <- ggplot(data=log_odds_ratio_SAS, aes(x=Common_Bin, y=Mean, color=`Rare Variant Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) + 
+  # plot4 <- ggplot(data=log_odds_ratio_SAS, aes(x=Common_Bin, y=Mean, color=`Rare Variant PRS Quantiles`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) + 
   #   scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
   # 
   

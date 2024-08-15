@@ -1,7 +1,6 @@
 rm(list = ls())
 
-# system("dx download -r UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GWAS_SummaryStats/")
-# system("dx download UKB_PRS:JW/UKB_Phenotypes/Results/All_Train.txt")
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/QQPlots_CV_Continuous.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/QQPlots_CV_Continuous.sh -icmd="bash QQPlots_CV_Continuous.sh" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/ --priority low --instance-type mem3_ssd1_v2_x8
 
 pheno_train <- read.delim("All_Train.txt")
 
@@ -39,10 +38,10 @@ theme_Publication <- function(base_size=12) {
   
 }
 
+install.packages("plotrix")
 library(plotrix)
 library(data.table)
 library(RColorBrewer)
-library(optparse)
 library(dplyr)
 library(ggplot2)
 library(cowplot)
@@ -88,7 +87,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   
   # layout(matrix(c(1,2),ncol = 2),widths = c(2,1))
   
-  png(paste0(trait,"_UKB_WGS_CV_Manhattan_Plot.png"), width=15*72, height=9*72)
+  png(paste0(trait,"_UKB_WGS_CV_Manhattan_Plot.png"), width=15*72, height=9*72,res = 1200)
   
   p1 <- ggplot(dat, aes(x = BPcum, y = -log10(P), 
                         color = as.factor(CHR), size = -log10(P))) +
