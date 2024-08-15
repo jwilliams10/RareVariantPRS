@@ -217,7 +217,7 @@ pdf(paste0("UKB_Simulation_Scaled_49173_Adjusted_Beta.pdf"), width=10, height=6.
 ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 49,173") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
-  ggtitle("Simulation Results; Scaled G, n = 49,173") + 
+  ggtitle("Simulation using UKB WES with Sample Size of 49,173") + 
   ylab("Beta of PRS per SD") + 
   theme_Publication() + 
   ylim(0,0.4)+
@@ -230,7 +230,7 @@ pdf(paste0("UKB_Simulation_Scaled_98343_Adjusted_Beta.pdf"), width=10, height=6.
 ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
-  ggtitle("Simulation Results; Scaled G, n = 98,343") + 
+  ggtitle("Simulation using UKB WES with Sample Size of 98,343") + 
   ylab("Beta of PRS per SD") + 
   theme_Publication() + 
   ylim(0,0.4) +
@@ -243,7 +243,7 @@ pdf(paste0("UKB_Simulation_Unscaled_49173_Adjusted_Beta.pdf"), width=10, height=
 ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 49,173") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
-  ggtitle("Simulation Results; Unscaled G, n = 49,173") + 
+  ggtitle("Simulation using UKB WES with Sample Size of 49,173") + 
   ylab("Beta of PRS per SD") + 
   theme_Publication() + 
   ylim(0,0.4) +
@@ -256,7 +256,7 @@ pdf(paste0("UKB_Simulation_Unscaled_98343_Adjusted_Beta.pdf"), width=10, height=
 ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
-  ggtitle("Simulation Results; Unscaled G, n = 98,343") + 
+  ggtitle("Simulation using UKB WES with Sample Size of 98,343") + 
   ylab("Beta of PRS per SD") + 
   theme_Publication() + 
   ylim(0,0.4) +
