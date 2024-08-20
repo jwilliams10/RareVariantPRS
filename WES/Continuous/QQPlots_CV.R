@@ -56,6 +56,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   colnames(dat) <- c("CHR","SNP","REF","BP","A1","BETA","P","A1_FREQ") 
   dat$MAF <- ifelse(dat$A1_FREQ <= 0.5, dat$A1_FREQ,1-dat$A1_FREQ)
   dat <- dat[dat$MAF > 0.01,]
+  dat <- dat[dat$P != 0,]
   
   
   x <- dat$P
@@ -84,10 +85,6 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   
   sigline <- data.frame(sig=c(-log10(sig1)),val=c(paste0("P=",signif(sig1,2))))
   
-  # layout(matrix(c(1,2),ncol = 2),widths = c(2,1))
-  
-  png(paste0(trait,"_UKB_WES_CV_Manhattan_Plot.png"), width=15*72, height=9*72)
-  
   p1 <- ggplot(dat, aes(x = BPcum, y = -log10(P), 
                               color = as.factor(CHR), size = -log10(P))) +
     geom_point(alpha = 0.8, size=0.8) + 
@@ -112,9 +109,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
       plot.subtitle = element_text(size = 8)
     )
   
-  print(p1)
-  
-  dev.off()
+  ggsave(paste0(trait,"_UKB_WES_CV_Manhattan_Plot.png"),p1,width = 15,height = 9.27070457355,dpi = 600)
   
   pdf(paste0(trait,"_UKB_WES_CV_QQplot.pdf"), width=10, height=10)
   
