@@ -2,6 +2,8 @@ rm(list = ls())
 
 # dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/QQPlots_CV_Continuous.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/QQPlots_CV_Continuous.sh -icmd="bash QQPlots_CV_Continuous.sh" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/ --priority low --instance-type mem3_ssd1_v2_x8
 
+print(list.files())
+
 pheno_train <- read.delim("All_Train.txt")
 
 theme_Publication <- function(base_size=12) {
@@ -39,6 +41,7 @@ theme_Publication <- function(base_size=12) {
 }
 
 install.packages("plotrix")
+install.packages("ggthemes")
 library(plotrix)
 library(data.table)
 library(RColorBrewer)
@@ -49,7 +52,7 @@ library(cowplot)
 lambda_dat <- NULL
 
 for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
-  dat <- read.delim(paste0("GWAS_SummaryStats/",trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")
+  dat <- read.delim(paste0(trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")
   colnames(dat) <- c("CHROM","POS","ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","OBS_CT","BETA","SE","T_STAT","P","ERRCODE")
   dat <- dat[dat$TEST == "ADD",]
   
@@ -57,6 +60,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   colnames(dat) <- c("CHR","SNP","REF","BP","A1","BETA","P","A1_FREQ") 
   dat$MAF <- ifelse(dat$A1_FREQ <= 0.5, dat$A1_FREQ,1-dat$A1_FREQ)
   dat <- dat[dat$MAF > 0.01,]
+  dat <- dat[dat$P != 0,]
   
   
   x <- dat$P
@@ -64,7 +68,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   lambda <- round(median(z^2) / qchisq(0.5,1), 3)
   lambda_1000 <- round(1+1000*(lambda-1)/sum(!is.na(pheno_train[,trait])) ,3)
   
-  lambda_dat <- rbind(lambda_dat,data.frame(Trait = trait,Ancestry_Group = "European",lambda = lambda, lambda_1000 = lambda_1000, datasource = "UKB WES"))
+  lambda_dat <- rbind(lambda_dat,data.frame(Trait = trait,Ancestry_Group = "European",lambda = lambda, lambda_1000 = lambda_1000, datasource = "UKB WGS"))
   
   p.pwas <- 5E-08
   
@@ -84,10 +88,6 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   sig1 <- p.pwas
   
   sigline <- data.frame(sig=c(-log10(sig1)),val=c(paste0("P=",signif(sig1,2))))
-  
-  # layout(matrix(c(1,2),ncol = 2),widths = c(2,1))
-  
-  png(paste0(trait,"_UKB_WGS_CV_Manhattan_Plot.png"), width=15*72, height=9*72,res = 1200)
   
   p1 <- ggplot(dat, aes(x = BPcum, y = -log10(P), 
                         color = as.factor(CHR), size = -log10(P))) +
@@ -113,9 +113,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
       plot.subtitle = element_text(size = 8)
     )
   
-  print(p1)
-  
-  dev.off()
+  ggsave(paste0(trait,"_UKB_WGS_CV_Manhattan_Plot.png"),p1,width = 15,height = 9.27070457355,dpi = 600)
   
   pdf(paste0(trait,"_UKB_WGS_CV_QQplot.pdf"), width=10, height=10)
   
@@ -243,7 +241,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
          col=colLine,lwd=1.5,lty=2)
   legend("topleft",legend=legendtext,col=legendcol,pch=15,bty="n")
   text(4,1,expression(paste(lambda[1000]," = ")),cex = 1.5)
-  text(4.5,1,paste(lambda_1000),cex = 1.5)
+  text(4.7,1,paste(lambda_1000),cex = 1.5)
   title(paste0(trait," for European"))
   
   # p2 <- recordPlot()
