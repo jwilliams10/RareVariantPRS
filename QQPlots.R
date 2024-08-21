@@ -93,10 +93,27 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
 
 print("WES Coding STAARB")
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_RV_QQplot.pdf"), width=15, height=9)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Continuous_RV_QQplot.pdf"), width=15, height=9)
+layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
+
+for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
+  coding_sig <- read.csv(paste0("Desktop/RareVariantPRS_Results/Coding_Sig_WES/",trait,"_coding_sig.csv"))
+  
+  coding_sig_plof <- coding_sig[coding_sig$Category == "plof",]
+  coding_sig_plofds <- coding_sig[coding_sig$Category == "plof_ds",]
+  coding_sig_missense <- coding_sig[coding_sig$Category == "missense",]
+  coding_sig_synonymous <- coding_sig[coding_sig$Category == "synonymous",]
+  coding_sig_disruptive_missense <- coding_sig[coding_sig$Category == "disruptive_missense",]
+  
+  coding_qqplot_STAARB(coding_sig = coding_sig, coding_sig_plof = coding_sig_plof,coding_sig_plofds = coding_sig_plofds, coding_sig_missense = coding_sig_missense,coding_sig_synonymous = coding_sig_synonymous,coding_sig_disruptive_missense = coding_sig_disruptive_missense,trait = trait) 
+}
+
+dev.off()
+
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Binary_RV_QQplot.pdf"), width=15, height=9)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
-for(trait in c("Asthma","CAD","T2D","Breast","Prostate","BMI","TC","HDL","LDL","logTG","Height")){
+for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   coding_sig <- read.csv(paste0("Desktop/RareVariantPRS_Results/Coding_Sig_WES/",trait,"_coding_sig.csv"))
   
   coding_sig_plof <- coding_sig[coding_sig$Category == "plof",]
@@ -205,7 +222,7 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   
 }
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_RV_Coding_QQplot.pdf"), width=15, height=9)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_RV_Coding_QQplot.pdf"), width=15, height=9)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 print("WGS Coding STAARB Binary")
@@ -226,7 +243,7 @@ dev.off()
 
 print("WGS Coding STAARB Continuous")
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_RV_Coding_QQplot.pdf"), width=15, height=9)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_RV_Coding_QQplot.pdf"), width=15, height=9)
 layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
@@ -390,7 +407,7 @@ noncoding_qqplot_STAARB <- function(noncoding_sig,noncoding_sig_upstream,noncodi
 
 print("WGS Noncoding STAARB Binary")
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_RV_Noncoding_QQplot.pdf"), width=15, height=9)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_RV_Noncoding_QQplot.pdf"), width=15, height=9)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
 for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
@@ -412,7 +429,7 @@ dev.off()
 
 print("WGS Noncoding STAARB Continuous")
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_RV_Noncoding_QQplot.pdf"), width=15, height=9)
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_RV_Noncoding_QQplot.pdf"), width=15, height=9)
 layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
@@ -527,8 +544,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
 }
 
 print("AoU Coding STAARB Binary")
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/AoU_WES_RV_QQplot.pdf"), width=15, height=9)
-layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
+pdf(paste0("Desktop/RareVariantPRS_Results/Figures/AoU_WES_Continuous_RV_QQplot.pdf"), width=15, height=9)
+layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), 2, 6, byrow = TRUE))
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
   coding_sig <- read.csv(paste0("Desktop/RareVariantPRS_Results/Coding_Sig_AoU/",trait,"_coding_sig.csv"))
