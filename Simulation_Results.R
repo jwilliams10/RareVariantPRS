@@ -212,9 +212,7 @@ scale_fill_Publication <- function(...){
 library(ggplot2)
 library(dplyr)
 
-pdf(paste0("UKB_Simulation_Scaled_49173_Adjusted_Beta.pdf"), width=10, height=6.18047)
-
-ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 49,173") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+g1 <- ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 49,173") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
   ggtitle("Simulation using UKB WES with Training Sample Size of 49,173") + 
@@ -223,11 +221,9 @@ ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Tr
   ylim(0,0.4)+
   scale_fill_Publication()
 
-dev.off()
+ggsave(paste0("UKB_Simulation_Scaled_49173_Adjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
 
-pdf(paste0("UKB_Simulation_Scaled_98343_Adjusted_Beta.pdf"), width=10, height=6.18047)
-
-ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+g2 <- ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
   ggtitle("Simulation using UKB WES with Training Sample Size of 98,343") + 
@@ -236,11 +232,9 @@ ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Tr
   ylim(0,0.4) +
   scale_fill_Publication()
 
-dev.off()
+ggsave(paste0("UKB_Simulation_Scaled_98343_Adjusted_Beta.png"),g2,width=10, height=6.18047,dpi = 300)
 
-pdf(paste0("UKB_Simulation_Unscaled_49173_Adjusted_Beta.pdf"), width=10, height=6.18047)
-
-ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 49,173") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+g3 <- ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 49,173") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
   ggtitle("Simulation using UKB WES with Training Sample Size of 49,173") + 
@@ -249,11 +243,9 @@ ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$
   ylim(0,0.4) +
   scale_fill_Publication()
 
-dev.off()
+ggsave(paste0("UKB_Simulation_Unscaled_49173_Adjusted_Beta.png"),g3,width=10, height=6.18047,dpi = 300)
 
-pdf(paste0("UKB_Simulation_Unscaled_98343_Adjusted_Beta.pdf"), width=10, height=6.18047)
-
-ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+g4 <- ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$Train_Size == "n = 98,343") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
   ggtitle("Simulation using UKB WES with Training Sample Size of 98,343") + 
@@ -262,5 +254,5 @@ ggplot(overall_results[(overall_results$Scale == "Unscaled") & (overall_results$
   ylim(0,0.4) +
   scale_fill_Publication()
 
-dev.off()
+ggsave(paste0("UKB_Simulation_Unscaled_98343_Adjusted_Beta.png"),g4,width=10, height=6.18047,dpi = 300)
 

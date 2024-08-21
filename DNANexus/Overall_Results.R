@@ -108,55 +108,47 @@ full_results$trait[full_results$trait == "logTG"] <- "log(TG)"
 full_results$trait <- factor(full_results$trait,levels = c("BMI","Height","HDL","LDL","log(TG)","TC"))
 full_results$ancestry <- factor(full_results$ancestry,levels = c("AFR","AMR","EUR","SAS"))
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Raw_Beta.pdf"), width=10, height=6.18047)
-
-ggplot(full_results) +
+g1 <- ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("UKB WGS Raw PRS Results") + 
+  ggtitle("UKB WGS PRS Results") + 
   ylab("Beta of PRS per SD") + 
   ylim(0,0.7) +
   theme_Publication() + 
   scale_fill_Publication()
 
-dev.off()
+ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Raw_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Adjusted_Beta.pdf"), width=10, height=6.18047)
-
-ggplot(full_results) +
+g2 <- ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("UKB WGS Ancestry Adjusted PRS Results") + 
+  ggtitle("UKB WGS PRS Results") + 
   ylab("Beta of PRS per SD") + 
   ylim(0,0.7) +
   theme_Publication() + 
   scale_fill_Publication()
 
-dev.off()
+ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Adjusted_Beta.png"),g2,width=10, height=6.18047,dpi = 300)
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Coding_vs_Noncoding_Raw_Beta.pdf"), width=10, height=6.18047)
-
-ggplot(CV_Coding_Noncoding) +
+g3 <- ggplot(CV_Coding_Noncoding) +
   geom_bar(aes(x=Method, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("UKB WGS Raw PRS Results") + 
+  ggtitle("UKB WGS PRS Results") + 
   ylab("Beta of PRS per SD") + 
   ylim(0,0.7) +
   theme_Publication() + 
   scale_fill_Publication()
 
-dev.off()
+ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Coding_vs_Noncoding_Raw_Beta.png"),g3,width=10, height=6.18047,dpi = 300)
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Coding_vs_Noncoding_Ancestry_Adjusted_Beta.pdf"), width=10, height=6.18047)
-
-ggplot(CV_Coding_Noncoding) +
+g4 <- ggplot(CV_Coding_Noncoding) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("UKB WGS Ancestry Adjusted PRS Results") + 
+  ggtitle("UKB WGS PRS Results") + 
   ylab("Beta of PRS per SD") + 
   ylim(0,0.7) +
   theme_Publication() + 
   scale_fill_Publication()
 
-dev.off()
+ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Coding_vs_Noncoding_Ancestry_Adjusted_Beta.png"),g4,width=10, height=6.18047,dpi = 300)
