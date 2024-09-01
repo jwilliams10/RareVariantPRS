@@ -62,18 +62,16 @@ full_results$ancestry <- factor(full_results$ancestry,levels = c("AFR","AMR","EA
 full_results$beta_adjusted[full_results$beta_adjusted < 0] <- 0
 full_results$beta_raw[full_results$beta_raw < 0] <- 0
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/AoU_WES_Continuous_Raw_Beta.pdf"), width=10, height=6.18047)
-
-ggplot(full_results) +
+g1 <- ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) +
-  ggtitle("AoU WES Raw PRS Results") +
+  ggtitle("AoU PRS Results") +
   ylab("Beta of PRS per SD") +
   ylim(0,0.7) +
   theme_Publication() +
   scale_fill_Publication()
 
-dev.off()
+ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/AoU_WES_Continuous_Raw_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
 
 # ggplot(full_results) +
 #   geom_bar(aes(x=Method, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
@@ -84,19 +82,17 @@ dev.off()
 #   theme_Publication() + 
 #   scale_fill_Publication()
 
-pdf(paste0("Desktop/RareVariantPRS_Results/Figures/AoU_WES_Continuous_Adjusted_Beta.pdf"), width=10, height=6.18047)
-
-ggplot(full_results) +
+g2 <- ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +
   facet_grid(vars(trait), vars(ancestry)) +
-  ggtitle("AoU WES Ancestry Adjusted PRS Results") +
+  ggtitle("AoU PRS Results") +
   ylab("Beta of PRS per SD") +
   ylim(0,0.7) +
   theme_Publication() +
   scale_fill_Publication()
 
-dev.off()
+ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/AoU_WES_Continuous_Adjusted_Beta.png"),g2,width=10, height=6.18047,dpi = 300)
 
 # ggplot(full_results) +
 #   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +

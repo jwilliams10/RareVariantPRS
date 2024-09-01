@@ -85,7 +85,7 @@ CV_RV_PRS_adjusted[,trait] <- scale(CV_RV_PRS_adjusted[,trait])
 risk_cv <- quantile(CV_RV_PRS_adjusted$prs,c(.90))
 risk_rv <- quantile(CV_RV_PRS_adjusted$RV_PRS,c(.90))
 
-g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="prs", y=trait)) + geom_point() + 
+g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="prs", y=trait)) + geom_point(alpha = .3) + 
   theme_Publication() + xlab("Standardized RICE-CV PRS") + 
   ylab(paste0("Standardized Observed ",trait)) + geom_abline(intercept = 0, slope = beta1,col = "#973999",size = 1) +
   geom_vline(xintercept = as.numeric(risk_cv),color = "#5EBD3E",linetype = "dashed",size = 1.2) + 
@@ -94,7 +94,7 @@ ggExtra::ggMarginal(g, type = "histogram",
                     xparams = list(color="black", fill="#973999",bins = 100),
                     yparams = list(color="black", fill="white",bins = 100))
 
-g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="RV_PRS", y=trait)) + geom_point() + 
+g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="RV_PRS", y=trait)) + geom_point(alpha = .3) + 
   theme_Publication() + xlab("Standardized RICE-RV PRS") + 
   ylab(paste0("Standardized Observed ",trait)) + geom_abline(intercept = 0, slope = beta2,col = "#E23838",size = 1) +
   geom_vline(xintercept = as.numeric(risk_rv),color = "#5EBD3E",linetype = "dashed",size = 1.2) +
@@ -124,14 +124,14 @@ ggsave(p2,filename="Desktop/RareVariantPRS_Results/Figures/Fig2_RV.pdf",width = 
 
 overlap_data <- CV_RV_PRS_adjusted
 overlap_data$Final_PRS <- beta1*overlap_data$prs + beta2*overlap_data$RV_PRS
-overlap_data$Variable <- ifelse(overlap_data$RV_PRS > 0.1,"Positive",ifelse(overlap_data$RV_PRS < -0.1,"Negative","Not"))
-
+overlap_data$Variable <- ifelse(overlap_data$RV_PRS > 0.1,"0.1 < PRS",ifelse(overlap_data$RV_PRS < -0.1,"PRS < -0.1","-0.1 \u2264 PRS \u2264 0.1"))
+overlap_data$Variable <- factor(overlap_data$Variable,levels = c("PRS < -0.1","-0.1 \u2264 PRS \u2264 0.1","0.1 < PRS"))
 aggregate(Final_PRS~Variable,data = overlap_data,mean)
 
 # overlap_data <- data.frame(Final_PRS = c(overlap_data$prs,overlap_data$Final_PRS,overlap_data[,trait]),Variable = rep(c("RICE-CV","RICE","Trait"),each = nrow(overlap_data)))
 
-p3 <- ggplot(overlap_data,aes(x=Final_PRS, color=Variable)) + geom_density(alpha=0.25) + scale_color_manual(values = c("#973999","#E23838","#5EBD3E")) +
-  theme_Publication()
+p3 <- ggplot(overlap_data,aes(x=Final_PRS, color=Variable)) + geom_density(alpha=0.25) + scale_color_manual(values = c("#973999","#5EBD3E","#E23838")) +
+  theme_Publication() + guides(color=guide_legend(title="RICE-RV PRS")) + xlab("RICE PRS") + ylab(element_blank())
 p3
 # tmp <- inner_join(ukb_pheno[,c("IID",trait)],CV_RV_PRS_adjusted)
 # plot(tmp[,"RV_PRS"],tmp[,trait])

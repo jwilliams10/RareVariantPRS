@@ -113,7 +113,7 @@ dev.off()
 png(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Binary_RV_QQplot.png"), width=15, height=9,units = "in",res = 300)
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), 2, 6, byrow = TRUE))
 
-for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
+for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   coding_sig <- read.csv(paste0("Desktop/RareVariantPRS_Results/Coding_Sig_WES/",trait,"_coding_sig.csv"))
   
   coding_sig_plof <- coding_sig[coding_sig$Category == "plof",]

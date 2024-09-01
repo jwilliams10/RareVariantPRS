@@ -1,6 +1,6 @@
 rm(list = ls())
 
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/QQPlots_CV_Continuous.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/QQPlots_CV_Continuous.sh -icmd="bash QQPlots_CV_Continuous.sh" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/ --priority low --instance-type mem3_ssd1_v2_x8
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/QQPlots_CV_Continuous.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/QQPlots_CV_Continuous.sh -icmd="bash QQPlots_CV_Continuous.sh" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/ --priority high --instance-type mem3_ssd1_v2_x8
 
 print(list.files())
 
@@ -113,9 +113,9 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
       plot.subtitle = element_text(size = 8)
     )
   
-  ggsave(paste0(trait,"_UKB_WGS_CV_Manhattan_Plot.png"),p1,width = 15,height = 9.27070457355,dpi = 600)
+  ggsave(paste0(trait,"_UKB_WGS_CV_Manhattan_Plot.png"),p1,width = 15,height = 9.27070457355,dpi = 300)
   
-  pdf(paste0(trait,"_UKB_WGS_CV_QQplot.pdf"), width=10, height=10)
+  png(paste0(trait,"_UKB_WGS_CV_QQplot.png"), width=10, height=10,units = "in",res = 300)
   
   qqplotdata <- function(logpvector){
     o = sort(logpvector,decreasing=T)

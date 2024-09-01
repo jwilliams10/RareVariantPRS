@@ -89,7 +89,7 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "EUR",]) +
   scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
 
 prow <- plot_grid(NULL,
-  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS Ancestry Adjusted PRS Results for ","EUR")),
+  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS PRS Results for ","EUR")),
   NULL,
   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
   rel_heights = c(-.05, 1, -0.05, 1),
@@ -121,7 +121,7 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AFR",]) +
   scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
 
 prow <- plot_grid(NULL,
-                  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS Ancestry Adjusted PRS Results for ","AFR")),
+                  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS PRS Results for ","AFR")),
                   NULL,
                   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
                   rel_heights = c(-.05, 1, -0.05, 1),
@@ -153,7 +153,7 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AMR",]) +
   scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
 
 prow <- plot_grid(NULL,
-                  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS Ancestry Adjusted PRS Results for ","AMR")),
+                  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS PRS Results for ","AMR")),
                   NULL,
                   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
                   rel_heights = c(-.05, 1, -0.05, 1),
@@ -185,7 +185,7 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "SAS",]) +
   scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
 
 prow <- plot_grid(NULL,
-                  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS Ancestry Adjusted PRS Results for ","SAS")),
+                  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS PRS Results for ","SAS")),
                   NULL,
                   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
                   rel_heights = c(-.05, 1, -0.05, 1),
