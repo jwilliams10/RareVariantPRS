@@ -112,10 +112,10 @@ best_algorithm <- summary(cvsl)$Table$Algorithm[which.max(summary(cvsl)$Table$Av
 
 a <- predict(sl, prs_validation_all, onlySL = FALSE)
 
-prs_best_validation_sl <- a$pred
-prs_best_validation_glmnet <- a$library.predict[,1]
-prs_best_validation_ridge <- a$library.predict[,2]
-prs_best_validation_glm <- a$library.predict[,3]
+prs_best_validation_sl <- log(a$pred)/(1 - log(a$pred))
+prs_best_validation_glmnet <- log(a$library.predict[,1])/(1 - log(a$library.predict[,1]))
+prs_best_validation_ridge <- log(a$library.predict[,2])/(1 - log(a$library.predict[,2]))
+prs_best_validation_glm <- log(a$library.predict[,3])/(1 - log(a$library.predict[,3]))
 
 if(best_algorithm == "SL.glmnet_All"){
   #final
@@ -136,10 +136,10 @@ prs_best_validation <- data.frame(IID = pheno_validation$IID,prs = prs_best_vali
 
 a <- predict(sl, prs_train_all, onlySL = FALSE)
 
-prs_best_train_sl <- a$pred
-prs_best_train_glmnet <- a$library.predict[,1]
-prs_best_train_ridge <- a$library.predict[,2]
-prs_best_train_glm <- a$library.predict[,3]
+prs_best_train_sl <- log(a$pred)/(1 - log(a$pred))
+prs_best_train_glmnet <- log(a$library.predict[,1])/(1 - log(a$library.predict[,1]))
+prs_best_train_ridge <- log(a$library.predict[,2])/(1 - log(a$library.predict[,2]))
+prs_best_train_glm <- log(a$library.predict[,3])/(1 - log(a$library.predict[,3]))
 
 if(best_algorithm == "SL.glmnet_All"){
   #final
@@ -159,10 +159,10 @@ prs_best_train <- data.frame(IID = pheno_train$IID[!is.na(pheno_train[,trait])],
 
 a <- predict(sl, prs_tune_all, onlySL = FALSE)
 
-prs_best_tune_sl <- a$pred
-prs_best_tune_glmnet <- a$library.predict[,1]
-prs_best_tune_ridge <- a$library.predict[,2]
-prs_best_tune_glm <- a$library.predict[,3]
+prs_best_tune_sl <- log(a$pred)/(1 - log(a$pred))
+prs_best_tune_glmnet <- log(a$library.predict[,1])/(1 - log(a$library.predict[,1]))
+prs_best_tune_ridge <- log(a$library.predict[,2])/(1 - log(a$library.predict[,2]))
+prs_best_tune_glm <- log(a$library.predict[,3])/(1 - log(a$library.predict[,3]))
 
 if(best_algorithm == "SL.glmnet_All"){
   #final

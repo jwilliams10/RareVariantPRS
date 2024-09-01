@@ -111,7 +111,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   
   ggsave(paste0(trait,"_UKB_WES_CV_Manhattan_Plot.png"),p1,width = 15,height = 9.27070457355,dpi = 300)
   
-  png(paste0(trait,"_UKB_WES_CV_QQplot.png"), width=10*72, height=10*72,dpi = 300)
+  png(paste0(trait,"_UKB_WES_CV_QQplot.png"), width=10, height=10,units = "in",res = 300)
   
   qqplotdata <- function(logpvector){
     o = sort(logpvector,decreasing=T)
