@@ -13,6 +13,7 @@ trait <- "T2D"
 library(gdsfmt)
 library(SeqArray)
 library(SeqVarTools)
+library(GENESIS,lib.loc = "/usr/local/apps/R/4.3/site-library_4.3.2")
 library(STAAR)
 library(STAARpipeline)
 
