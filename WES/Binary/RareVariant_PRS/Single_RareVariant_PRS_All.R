@@ -2,6 +2,7 @@ rm(list = ls())
 library(gdsfmt)
 library(SeqArray)
 library(SeqVarTools)
+library(GENESIS,lib.loc = "/usr/local/apps/R/4.3/site-library_4.3.2")
 library(STAAR)
 library(STAARpipeline)
 library(STAARpipelineSummary)
@@ -227,15 +228,15 @@ best_algorithm <- summary(cvsl)$Table$Algorithm[which.min(summary(cvsl)$Table$Av
 a_tune <- predict(full_superlearner, all_prs_tune, onlySL = FALSE)
 a_vad <- predict(full_superlearner, all_prs_valid, onlySL = FALSE)
 
-prs_best_tune_sl <- a_tune$pred
-prs_best_tune_glmnet <- a_tune$library.predict[,1]
-prs_best_tune_glm <- a_tune$library.predict[,2]
-prs_best_tune_mean <- a_tune$library.predict[,3]
+prs_best_tune_sl <- log(a_tune$pred)/(1 - log(a_tune$pred))
+prs_best_tune_glmnet <- log(a_tune$library.predict[,1])/(1 - log(a_tune$library.predict[,1]))
+prs_best_tune_glm <- log(a_tune$library.predict[,2])/(1 - log(a_tune$library.predict[,2]))
+prs_best_tune_mean <- log(a_tune$library.predict[,3])/(1 - log(a_tune$library.predict[,3]))
 
-prs_best_vad_sl <- a_vad$pred
-prs_best_vad_glmnet <- a_vad$library.predict[,1]
-prs_best_vad_glm <- a_vad$library.predict[,2]
-prs_best_vad_mean <- a_vad$library.predict[,3]
+prs_best_vad_sl <- log(a_vad$pred)/(1 - log(a_vad$pred))
+prs_best_vad_glmnet <- log(a_vad$library.predict[,1])/(1 - log(a_vad$library.predict[,1]))
+prs_best_vad_glm <- log(a_vad$library.predict[,2])/(1 - log(a_vad$library.predict[,2]))
+prs_best_vad_mean <- log(a_vad$library.predict[,3])/(1 - log(a_vad$library.predict[,3]))
 
 if(best_algorithm == "SL.glmnet_All"){
   #final

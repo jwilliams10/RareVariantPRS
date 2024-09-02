@@ -96,12 +96,12 @@ rm(G_star_gene_centric_coding)
 
 X_valid <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_validation$id_include],G_star_gene_centric_coding_vad)
 RV_PRS <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_BestPRS.csv"))
-if(trait == "Breast"){
-  RV_PRS$RV_PRS <- exp(RV_PRS$RV_PRS)/(1 + exp(RV_PRS$RV_PRS))
-}
+# if(trait == "Breast"){
+#   RV_PRS$RV_PRS <- exp(RV_PRS$RV_PRS)/(1 + exp(RV_PRS$RV_PRS))
+# }
 tmp <- inner_join(RV_PRS[,c("IID","RV_PRS")],X_valid)
 tmp <- subset(tmp,select = -c(IID))
-Train_PVals_All$Beta <- coef(lm(log(RV_PRS/(1 - RV_PRS))~.,tmp))[-1]
+Train_PVals_All$Beta <- coef(lm(RV_PRS~.,tmp))[-1]
 Train_PVals_All$Beta[is.na(Train_PVals_All$Beta)] <- 0
 Train_PVals_All$Beta[abs(Train_PVals_All$Beta) < 1e-10] <- 0
 
