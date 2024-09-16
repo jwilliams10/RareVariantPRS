@@ -9,7 +9,7 @@ rm(list = ls())
 #   LDPred2_Results$Method <- "LDPred"
 #   LASSOSUM2_Results <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"Best_Betas_LASSOSum.csv"))
 #   LASSOSUM2_Results$Method <- "LASSOSum"
-#   CV_Results <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"_Best_Betas_CV_SL.csv"))
+#   CV_Results <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"Best_Betas_CV_SL.csv"))
 #   CV_Results$Method <- "CV_SL"
 # 
 #   RV_Results_Coding <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"_Coding_Best_Betas.csv"))
@@ -18,7 +18,7 @@ rm(list = ls())
 #   RV_Results_Noncoding <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"_Noncoding_Best_Betas.csv"))
 #   RV_Results_Noncoding$Method <- "Noncoding"
 # 
-#   CV_RV_Results <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"_Best_Betas_CV_RV.csv"))
+#   CV_RV_Results <- read.csv(paste0("/Users/williamsjacr/Desktop/RareVariantPRS_Results/Results_Binary/",trait,"Best_Betas_CV_RV.csv"))
 # 
 # 
 # 

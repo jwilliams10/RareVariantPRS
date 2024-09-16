@@ -50,8 +50,10 @@ theme_Publication <- function(base_size=12) {
             panel.background = element_rect(colour = NA),
             plot.background = element_rect(colour = NA),
             panel.border = element_rect(colour = NA),
-            axis.title = element_text(face = "bold",size = 16),
+            axis.title = element_text(face = "bold",size = 18),
             axis.title.y = element_text(angle=90,vjust =2),
+            axis.text.y = element_text(size = 16),
+            axis.text.x = element_text(size = 16),
             axis.line = element_line(colour="black",size=2),
             axis.ticks = element_line(),
             # panel.grid.major = element_line(colour="#f0f0f0"),
@@ -88,20 +90,24 @@ risk_rv <- quantile(CV_RV_PRS_adjusted$RV_PRS,c(.90))
 g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="prs", y=trait)) + geom_point(alpha = .3) + 
   theme_Publication() + xlab("Standardized RICE-CV PRS") + 
   ylab(paste0("Standardized Observed ",trait)) + geom_abline(intercept = 0, slope = beta1,col = "#973999",size = 1) +
-  geom_vline(xintercept = as.numeric(risk_cv),color = "#5EBD3E",linetype = "dashed",size = 1.2) + 
-  annotate("text", x=3, y=6, label= bquote(beta[1] == .(round(beta1,3))))
-ggExtra::ggMarginal(g, type = "histogram",
+  geom_vline(xintercept = as.numeric(risk_cv),color = "#5EBD3E",linetype = "dashed",size = 1.2) 
+  # annotate("text", x=3, y=6, label= bquote(beta[1] == .(round(beta1,3))),size = 16/.pt)
+p3 <- ggExtra::ggMarginal(g, type = "histogram",
                     xparams = list(color="black", fill="#973999",bins = 100),
                     yparams = list(color="black", fill="white",bins = 100))
+
+ggsave(p3,filename="Desktop/RareVariantPRS_Results/Figures/Fig2_CV.pdf",width = 10,height = 10)
 
 g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="RV_PRS", y=trait)) + geom_point(alpha = .3) + 
   theme_Publication() + xlab("Standardized RICE-RV PRS") + 
   ylab(paste0("Standardized Observed ",trait)) + geom_abline(intercept = 0, slope = beta2,col = "#E23838",size = 1) +
-  geom_vline(xintercept = as.numeric(risk_rv),color = "#5EBD3E",linetype = "dashed",size = 1.2) +
-  annotate("text", x=6, y=6, label= bquote(beta[2] == .(round(beta2,3))))
-ggExtra::ggMarginal(g, type = "histogram",
+  geom_vline(xintercept = as.numeric(risk_rv),color = "#5EBD3E",linetype = "dashed",size = 1.2)
+  # annotate("text", x=6, y=6, label= bquote(beta[2] == .(round(beta2,3))),size = 16/.pt)
+p4 <- ggExtra::ggMarginal(g, type = "histogram",
                     xparams = list(color="black", fill="#E23838",bins = 100),
                     yparams = list(color="black", fill="white",bins = 100))
+
+ggsave(p4,filename="Desktop/RareVariantPRS_Results/Figures/Fig2_RV.pdf",width = 10,height = 10)
 
 
 p1 <- ggplot(CV_RV_PRS_adjusted, aes(x=prs)) +
@@ -111,7 +117,7 @@ p1 <- ggplot(CV_RV_PRS_adjusted, aes(x=prs)) +
   geom_vline(xintercept = as.numeric(risk_cv),color = "#5EBD3E",linetype = "dashed",size = 1.2)
 
 p1
-ggsave(p1,filename="Desktop/RareVariantPRS_Results/Figures/Fig2_CV.pdf",width = 10,height = 6.1804697157)
+# ggsave(p1,filename="Desktop/RareVariantPRS_Results/Figures/Fig2_CV.pdf",width = 10,height = 6.1804697157)
 
 p2 <- ggplot(CV_RV_PRS_adjusted[abs(CV_RV_PRS_adjusted$RV_PRS) > 0.05 & abs(CV_RV_PRS_adjusted$RV_PRS) < 7,], aes(x=RV_PRS)) +
   geom_histogram(color="black", fill="#E23838",aes(y=..density..),bins = 100) +
@@ -120,7 +126,7 @@ p2 <- ggplot(CV_RV_PRS_adjusted[abs(CV_RV_PRS_adjusted$RV_PRS) > 0.05 & abs(CV_R
   geom_vline(xintercept = as.numeric(risk_rv),color = "#5EBD3E",linetype = "dashed",size = 1.2)
 
 p2
-ggsave(p2,filename="Desktop/RareVariantPRS_Results/Figures/Fig2_RV.pdf",width = 10,height = 6.1804697157)
+# ggsave(p2,filename="Desktop/RareVariantPRS_Results/Figures/Fig2_RV.pdf",width = 10,height = 6.1804697157)
 
 overlap_data <- CV_RV_PRS_adjusted
 overlap_data$Final_PRS <- beta1*overlap_data$prs + beta2*overlap_data$RV_PRS
