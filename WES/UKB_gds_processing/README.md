@@ -1,3 +1,3 @@
+## UKB_gds_processing
 
-Full Data vcf
-all.sh -> Association_Analysis_Prestep.R
+Creates a set of annotated gds files following the steps outlined in https://github.com/xihaoli/STAARpipeline-Tutorial. 

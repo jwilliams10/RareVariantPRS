@@ -1,10 +1,10 @@
-## Continuous
+## Binary
 
-This folder contains all files to perform RICE on the 6 continuous traits for UKB WES. Also contains code to create Figures ....
+This folder contains all files to perform RICE on the 5 binary traits for UKB WES. Also contains code to create Figures .... 
 
-### GWAS_SumStats.R/.sh
+### REGENIE_Reorganize.R/GWAS_SumStats_REGENIE.sh
 
-Runs GWAS analysis with plink for the 6 traits.
+REGENIE requires a different format of the phenotype file then plink, so REGENIE_Reorganize reorganizes the phenotypes and GWAS_SumStats_REGENIE computes summary statistics for the common variants.
 
 ### CommonVariantPRS
 
