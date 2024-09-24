@@ -51,6 +51,7 @@ theme_Publication <- function(base_size=12) {
             axis.title.y = element_text(angle=90,vjust =2),
             axis.title.x = element_blank(),
             axis.text.x = element_blank(), 
+            axis.text.y = element_text(size = 10), 
             axis.line = element_line(colour="black",size=2),
             axis.ticks = element_line(),
             # panel.grid.major = element_line(colour="#f0f0f0"),
@@ -110,7 +111,7 @@ full_results$ancestry <- factor(full_results$ancestry,levels = c("AFR","AMR","EU
 g1 <- ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("UKB WGS PRS Results") + 
+  ggtitle("UKB WGS PRS Results for Five Binary Traits") + 
   ylab("log(Odds Ratio) of PRS per SD") + 
   ylim(0,0.95) +
   theme_Publication() + 
@@ -122,7 +123,7 @@ g2 <- ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("UKB WGS PRS Results") + 
+  ggtitle("UKB WGS Ancestry Adjusted PRS Results for Five Binary Traits") + 
   ylab("log(Odds Ratio) of PRS per SD") + 
   ylim(0,0.95) +
   theme_Publication() + 
@@ -133,7 +134,7 @@ ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_Adjusted_Be
 g3 <- ggplot(CV_Coding_Noncoding) +
   geom_bar(aes(x=Method, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("UKB WGS PRS Results") + 
+  ggtitle("UKB WGS PRS Coding vs Noncoding for Five Binary Traits") + 
   ylab("Beta of PRS per SD") + 
   ylim(0,0.95) +
   theme_Publication() + 
@@ -144,7 +145,7 @@ ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_Coding_vs_N
 g4 <- ggplot(CV_Coding_Noncoding) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("UKB WGS PRS Results") + 
+  ggtitle("UKB WGS Ancestry Adjusted PRS Coding vs Noncoding for Five Binary Traits") + 
   ylab("Beta of PRS per SD") + 
   ylim(0,0.95) +
   theme_Publication() + 

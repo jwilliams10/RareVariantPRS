@@ -191,13 +191,13 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   ymax <- round(max(c(CV_RV_PRS_adjusted_EUR$Mean + CV_RV_PRS_adjusted_EUR$SE,CV_RV_PRS_adjusted_AMR$Mean + CV_RV_PRS_adjusted_AMR$SE,CV_RV_PRS_adjusted_AFR$Mean + CV_RV_PRS_adjusted_AFR$SE,CV_RV_PRS_adjusted_SAS$Mean + CV_RV_PRS_adjusted_SAS$SE)) + 0.05,2)
 
   plot1 <- ggplot(data=CV_RV_PRS_adjusted_EUR, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
-    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV quantiles (Common Variants)")
+    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV Quantiles (Common Variants)")
   plot2 <- ggplot(data=CV_RV_PRS_adjusted_AMR, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
-    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV quantiles (Common Variants)")
+    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV Quantiles (Common Variants)")
   plot3 <- ggplot(data=CV_RV_PRS_adjusted_AFR, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
-    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV quantiles (Common Variants)")
+    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV Quantiles (Common Variants)")
   plot4 <- ggplot(data=CV_RV_PRS_adjusted_SAS, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
-    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV quantiles (Common Variants)")
+    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV Quantiles (Common Variants)")
 
   
   prow <- plot_grid(
@@ -208,7 +208,7 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
     align = 'vh',
     labels = c("EUR","AMR","AFR","SAS"),
     hjust = -1,
-    ncol = 2
+    ncol = 2,label_size = 16
   )
   
   legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
@@ -276,7 +276,7 @@ pdf(paste0("Desktop/RareVariantPRS_Results/Figures/Fig5_Demo.pdf"), width=12, he
 
 ggplot(data=data, aes(x=Common_Bin, y=Mean, color = color)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(" Standardized")) +
   scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) +
-  xlab("RICE-CV quantiles (Common Variants)") +
+  xlab("RICE-CV Quantiles (Common Variants)") +
   ylab("Observed Value of Standardized Trait") + 
   guides(color=guide_legend(title="RICE-RV Quantiles (Rare Variants)"))
 
@@ -586,7 +586,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   ymax <- round(max(exp(log_odds_ratio_EUR$Mean + log_odds_ratio_EUR$SE)) + 0.05,2)
   
   plot1 <- ggplot(data=log_odds_ratio_EUR, aes(x=Common_Bin, y=exp(Mean), color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=exp(Mean-SE), ymax=exp(Mean+SE))) + theme_Publication() + ylab(paste0(trait," Odds Ratio")) + ylim(c(ymin,ymax)) + 
-    scale_x_continuous(breaks = c(1:5),labels = c("0-20%","20-40%","40-60%","60-80%","80-100%")) + labs(x = "RICE-CV quantiles (Common Variants)")
+    scale_x_continuous(breaks = c(1:5),labels = c("0-20%","20-40%","40-60%","60-80%","80-100%")) + labs(x = "RICE-CV Quantiles (Common Variants)")
   # plot2 <- ggplot(data=log_odds_ratio_AMR, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) + 
   #   scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%"))
   # plot3 <- ggplot(data=log_odds_ratio_AFR, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(trait," Standardized")) + ylim(c(ymin,ymax)) + 
@@ -603,7 +603,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
     align = 'vh',
     labels = c("EUR"),
     hjust = -1,
-    ncol = 1
+    ncol = 1,label_size = 16
   )
   
   legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]

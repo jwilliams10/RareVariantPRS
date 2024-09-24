@@ -86,7 +86,7 @@ g2 <- ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +
   facet_grid(vars(trait), vars(ancestry)) +
-  ggtitle("AoU PRS results for Continuous Traits Across Six Ancestral Groups") +
+  ggtitle("AoU Ancestry Adjusted PRS results for Continuous Traits Across Six Ancestral Groups") +
   ylab("Beta of PRS per SD") +
   ylim(0,0.7) +
   theme_Publication() +
