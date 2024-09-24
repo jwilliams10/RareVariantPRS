@@ -57,7 +57,7 @@ full_results_Continuous <- rbind(WES_Results_Continuous,WGS_Results_Continuous)
 full_results_Continuous$Method[full_results_Continuous$Method == "CV"] <- "RICE-CV"
 full_results_Continuous$Method[full_results_Continuous$Method == "RV"] <- "RICE-RV"
 full_results_Continuous <- full_results_Continuous[full_results_Continuous$Method %in% c("RICE-CV","RICE-RV"),]
-full_results_Continuous$Method_DataSource <- paste0(full_results_Continuous$Method," / ",full_results_Continuous$Data_Type)
+full_results_Continuous$Method_DataSource <- paste0(full_results_Continuous$Method," & ",full_results_Continuous$Data_Type)
 
 full_results_Continuous <- full_results_Continuous[full_results_Continuous$ancestry %in% c("AFR","EUR","SAS","AMR"),]
 full_results_Continuous$trait[full_results_Continuous$trait == "logTG"] <- "log(TG)"
@@ -67,7 +67,7 @@ full_results_Binary <- rbind(WES_Results_Binary,WGS_Results_Binary)
 full_results_Binary$Method[full_results_Binary$Method == "CV"] <- "RICE-CV"
 full_results_Binary$Method[full_results_Binary$Method == "RV"] <- "RICE-RV"
 full_results_Binary <- full_results_Binary[full_results_Binary$Method %in% c("RICE-CV","RICE-RV"),]
-full_results_Binary$Method_DataSource <- paste0(full_results_Binary$Method," / ",full_results_Binary$Data_Type)
+full_results_Binary$Method_DataSource <- paste0(full_results_Binary$Method," & ",full_results_Binary$Data_Type)
 
 full_results_Binary <- full_results_Binary[full_results_Binary$ancestry %in% c("AFR","EUR","SAS","AMR"),]
 full_results_Binary$trait <- factor(full_results_Binary$trait,levels = c("Asthma","Breast","CAD","Prostate","T2D"))
@@ -78,7 +78,7 @@ plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "EUR
   ylab("Beta of PRS per SD") +
   ylim(0,0.7) +
   theme_Publication() +
-  scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
+  scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "EUR",]) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
@@ -86,10 +86,10 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "EUR",]) +
   ylab("Beta of PRS per SD") +
   ylim(0,0.95) +
   theme_Publication() +
-  scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
+  scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 prow <- plot_grid(NULL,
-  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS PRS Results for ","EUR")),
+  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE-CV and RICE-RV PRS Results Using WES and WGS Data for European Ancestry"),
   NULL,
   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
   rel_heights = c(-.05, 1, -0.05, 1),
@@ -110,7 +110,7 @@ plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "AFR
   ylab("Beta of PRS per SD") +
   ylim(0,0.7) +
   theme_Publication() +
-  scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
+  scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AFR",]) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
@@ -118,10 +118,10 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AFR",]) +
   ylab("Beta of PRS per SD") +
   ylim(0,0.95) +
   theme_Publication() +
-  scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
+  scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 prow <- plot_grid(NULL,
-                  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS PRS Results for ","AFR")),
+                  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE-CV and RICE-RV PRS Results Using WES and WGS Data for African Ancestry"),
                   NULL,
                   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
                   rel_heights = c(-.05, 1, -0.05, 1),
@@ -142,7 +142,7 @@ plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "AMR
   ylab("Beta of PRS per SD") +
   ylim(0,0.7) +
   theme_Publication() +
-  scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
+  scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AMR",]) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
@@ -150,10 +150,10 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AMR",]) +
   ylab("Beta of PRS per SD") +
   ylim(0,0.95) +
   theme_Publication() +
-  scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
+  scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 prow <- plot_grid(NULL,
-                  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS PRS Results for ","AMR")),
+                  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE-CV and RICE-RV PRS Results Using WES and WGS Data for Admixed American Ancestry"),
                   NULL,
                   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
                   rel_heights = c(-.05, 1, -0.05, 1),
@@ -174,7 +174,7 @@ plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "SAS
   ylab("Beta of PRS per SD") +
   ylim(0,0.7) +
   theme_Publication() +
-  scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
+  scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "SAS",]) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
@@ -182,10 +182,10 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "SAS",]) +
   ylab("Beta of PRS per SD") +
   ylim(0,0.95) +
   theme_Publication() +
-  scale_fill_Publication() + guides(fill=guide_legend(title="Method / Dataset"))
+  scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 prow <- plot_grid(NULL,
-                  plot1 + theme(legend.position="none") + ggtitle(paste0("UKB WES vs WGS PRS Results for ","SAS")),
+                  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE-CV and RICE-RV PRS Results Using WES and WGS Data for South Asian Ancestry"),
                   NULL,
                   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
                   rel_heights = c(-.05, 1, -0.05, 1),

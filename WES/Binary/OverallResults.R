@@ -54,6 +54,7 @@ theme_Publication <- function(base_size=12) {
             axis.title.y = element_text(angle=90,vjust =2),
             axis.title.x = element_blank(),
             axis.text.x = element_blank(), 
+            axis.text.y = element_text(size = 10), 
             axis.line = element_line(colour="black",size=2),
             axis.ticks = element_line(),
             # panel.grid.major = element_line(colour="#f0f0f0"),
@@ -87,7 +88,7 @@ library(ggplot2)
 g1 <- ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_raw),fill=Method), stat="identity", alpha=0.7) +
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("WES PRS Results") + 
+  ggtitle("UKB WES PRS Results for Five Binary Traits") + 
   ylab("log(Odds Ratio) of PRS per SD") +
   ylim(0,0.95) +
   theme_Publication() + 
@@ -99,7 +100,7 @@ g2 <- ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("WES PRS Results") + 
+  ggtitle("UKB WES Ancestry Adjusted PRS Results for Five Binary Traits") + 
   ylab("log(Odds Ratio) of PRS per SD") + 
   ylim(0,0.95) +
   theme_Publication() + 
