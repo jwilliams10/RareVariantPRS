@@ -182,7 +182,7 @@ theme_Publication <- function(base_size=12) {
             axis.title.y = element_text(angle=90,vjust =2),
             axis.title.x = element_blank(),
             axis.text.x = element_blank(), 
-            axis.text.y = element_text(size = 12), 
+            axis.text.y = element_text(size = 10), 
             axis.line = element_line(colour="black",size=2),
             axis.ticks = element_line(),
             # panel.grid.major = element_line(colour="#f0f0f0"),

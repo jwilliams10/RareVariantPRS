@@ -57,6 +57,18 @@ h2_common_SAS <- vector()
 h2_common_AMR <- vector()
 h2_common_AFR <- vector()
 
+MAF_common_EUR <- vector()
+MAF_common_EAS <- vector()
+MAF_common_SAS <- vector()
+MAF_common_AMR <- vector()
+MAF_common_AFR <- vector()
+
+Average_Burden_rare_EUR <- vector()
+Average_Burden_rare_EAS <- vector()
+Average_Burden_rare_SAS <- vector()
+Average_Burden_rare_AMR <- vector()
+Average_Burden_rare_AFR <- vector()
+
 h2_rare_EUR <- vector()
 h2_rare_EAS <- vector()
 h2_rare_SAS <- vector()
@@ -132,6 +144,18 @@ for(j in 1:length(causalprop_vec)){
       h2_rare_AMR[count] <- var(Y_hat$Y_hat_Rare[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"]])
       h2_rare_EAS[count] <- var(Y_hat$Y_hat_Rare[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"]])
       
+      MAF_common_EUR[count] <- mean(apply(g_snps[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],],2,function(x){sum(x)/(2*length(x))}))
+      MAF_common_SAS[count] <- mean(apply(g_snps[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],],2,function(x){sum(x)/(2*length(x))}))
+      MAF_common_AFR[count] <- mean(apply(g_snps[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],],2,function(x){sum(x)/(2*length(x))}))
+      MAF_common_AMR[count] <- mean(apply(g_snps[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],],2,function(x){sum(x)/(2*length(x))}))
+      MAF_common_EAS[count] <- mean(apply(g_snps[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],],2,function(x){sum(x)/(2*length(x))}))
+      
+      Average_Burden_rare_EUR[count] <- mean(colMeans(G_star_gene_centric_coding[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],causal_genes,drop = FALSE]))
+      Average_Burden_rare_SAS[count] <- mean(colMeans(G_star_gene_centric_coding[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],causal_genes,drop = FALSE]))
+      Average_Burden_rare_AFR[count] <- mean(colMeans(G_star_gene_centric_coding[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],causal_genes,drop = FALSE]))
+      Average_Burden_rare_AMR[count] <- mean(colMeans(G_star_gene_centric_coding[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],causal_genes,drop = FALSE]))
+      Average_Burden_rare_EAS[count] <- mean(colMeans(G_star_gene_centric_coding[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],causal_genes,drop = FALSE]))
+      
       h2_overall_EUR[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"]])
       h2_overall_SAS[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"]])
       h2_overall_AFR[count] <- var(Y_raw[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]])/var(Y_tmp[Y_hat$IDs %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"]])
@@ -146,6 +170,11 @@ for(j in 1:length(causalprop_vec)){
     }
   }
 }
+
+h2_dat <- data.frame(causal_prop = rep(causalprop_vec,each = 200),scaled = rep(rep(c("No","Yes"),each = 100),5),
+  h2_common_EUR,h2_common_SAS,h2_common_AFR,h2_common_AMR,h2_common_EAS,h2_rare_EUR,h2_rare_SAS,h2_rare_AFR,h2_rare_AMR,h2_rare_EAS,h2_overall_EUR,h2_overall_SAS,h2_overall_AFR,h2_overall_AMR,h2_overall_EAS,
+  MAF_common_EUR,MAF_common_SAS,MAF_common_AFR,MAF_common_AMR,MAF_common_EAS,
+  Average_Burden_rare_EUR,Average_Burden_rare_SAS,Average_Burden_rare_AFR,Average_Burden_rare_AMR,Average_Burden_rare_EAS)
 
 lapply(Y,function(x){var(x$Y)})
 summary(unlist(lapply(Y,function(x){var(x$Y)})))
