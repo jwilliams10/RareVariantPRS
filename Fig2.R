@@ -50,10 +50,10 @@ theme_Publication <- function(base_size=12) {
             panel.background = element_rect(colour = NA),
             plot.background = element_rect(colour = NA),
             panel.border = element_rect(colour = NA),
-            axis.title = element_text(face = "bold",size = 18),
+            axis.title = element_text(face = "bold",size = 24),
             axis.title.y = element_text(angle=90,vjust =2),
-            axis.text.y = element_text(size = 16),
-            axis.text.x = element_text(size = 16),
+            axis.text.y = element_text(size = 20),
+            axis.text.x = element_text(size = 20),
             axis.line = element_line(colour="black",size=2),
             axis.ticks = element_line(),
             # panel.grid.major = element_line(colour="#f0f0f0"),
@@ -89,8 +89,8 @@ risk_rv <- quantile(CV_RV_PRS_adjusted$RV_PRS,c(.90))
 
 g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="prs", y=trait)) + geom_point(alpha = .3) + 
   theme_Publication() + xlab("Standardized RICE-CV PRS") + 
-  ylab(paste0("Standardized Observed ",trait)) + geom_abline(intercept = 0, slope = beta1,col = "#973999",size = 1) +
-  geom_vline(xintercept = as.numeric(risk_cv),color = "#5EBD3E",linetype = "dashed",size = 1.2) 
+  ylab(paste0("Standardized ",trait)) + geom_abline(intercept = 0, slope = beta1,col = "#973999",size = 1) +
+  geom_vline(xintercept = as.numeric(risk_cv),color = "#5EBD3E",linetype = "dashed",size = 1.5) 
   # annotate("text", x=3, y=6, label= bquote(beta[1] == .(round(beta1,3))),size = 16/.pt)
 p3 <- ggExtra::ggMarginal(g, type = "histogram",
                     xparams = list(color="black", fill="#973999",bins = 100),
@@ -100,8 +100,8 @@ ggsave(p3,filename="Desktop/RareVariantPRS_Results/Figures/Fig2_CV.pdf",width = 
 
 g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="RV_PRS", y=trait)) + geom_point(alpha = .3) + 
   theme_Publication() + xlab("Standardized RICE-RV PRS") + 
-  ylab(paste0("Standardized Observed ",trait)) + geom_abline(intercept = 0, slope = beta2,col = "#E23838",size = 1) +
-  geom_vline(xintercept = as.numeric(risk_rv),color = "#5EBD3E",linetype = "dashed",size = 1.2)
+  ylab(paste0("Standardized ",trait)) + geom_abline(intercept = 0, slope = beta2,col = "#E23838",size = 1) +
+  geom_vline(xintercept = as.numeric(risk_rv),color = "#5EBD3E",linetype = "dashed",size = 1.5)
   # annotate("text", x=6, y=6, label= bquote(beta[2] == .(round(beta2,3))),size = 16/.pt)
 p4 <- ggExtra::ggMarginal(g, type = "histogram",
                     xparams = list(color="black", fill="#E23838",bins = 100),
