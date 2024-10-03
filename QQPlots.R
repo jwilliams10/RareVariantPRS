@@ -16,7 +16,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=0, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -31,7 +32,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=1, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -48,7 +50,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=2, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -66,7 +69,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=3, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -83,11 +87,12 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=4, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
-  legend("topleft",legend=c("pLoF","pLoF+D","Missense","Disruptive Missense","Synonymous"),ncol=1,bty="o",box.lwd=1,pch=0:4,cex=1,text.font=2)
+  legend("topleft",legend=c("pLoF","pLoF+D","Missense","Disruptive Missense","Synonymous"),ncol=1,bty="o",box.lwd=1,pch=0:4,cex=1.3,text.font=2)
   
 }
 
@@ -147,7 +152,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=0, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -162,7 +168,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=1, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -179,7 +186,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=2, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -197,7 +205,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=3, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -214,11 +223,12 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=4, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
-  legend("topleft",legend=c("pLoF","pLoF+D","Missense","Disruptive Missense","Synonymous"),ncol=1,bty="o",box.lwd=1,pch=0:4,cex=1,text.font=2)
+  legend("topleft",legend=c("pLoF","pLoF+D","Missense","Disruptive Missense","Synonymous"),ncol=1,bty="o",box.lwd=1,pch=0:4,cex=1.3,text.font=2)
   
 }
 
@@ -278,7 +288,8 @@ noncoding_qqplot_STAARB <- function(noncoding_sig,noncoding_sig_upstream,noncodi
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=0, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -294,7 +305,8 @@ noncoding_qqplot_STAARB <- function(noncoding_sig,noncoding_sig_upstream,noncodi
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=1, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -311,7 +323,8 @@ noncoding_qqplot_STAARB <- function(noncoding_sig,noncoding_sig_upstream,noncodi
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=2, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -329,7 +342,8 @@ noncoding_qqplot_STAARB <- function(noncoding_sig,noncoding_sig_upstream,noncodi
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=3, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -346,7 +360,8 @@ noncoding_qqplot_STAARB <- function(noncoding_sig,noncoding_sig_upstream,noncodi
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=4, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -363,7 +378,8 @@ noncoding_qqplot_STAARB <- function(noncoding_sig,noncoding_sig_upstream,noncodi
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=5, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -380,7 +396,8 @@ noncoding_qqplot_STAARB <- function(noncoding_sig,noncoding_sig_upstream,noncodi
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=6, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -397,7 +414,8 @@ noncoding_qqplot_STAARB <- function(noncoding_sig,noncoding_sig_upstream,noncodi
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=7, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -468,7 +486,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=0, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -483,7 +502,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=1, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -500,7 +520,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=2, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -518,7 +539,8 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=3, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
@@ -535,11 +557,12 @@ coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,co
   # par(mar=c(5,6,4,4))
   plot(lexp,lobs,pch=4, cex=cex_point, xlim = c(0, 5), ylim = c(0, min_y),
        xlab = expression(Expected ~ ~-log[10](italic(p))), ylab = expression(Observed ~ ~-log[10](italic(p))),
-       font.lab=2,cex.lab=1.5,cex.axis=1,font.axis=2,main = trait)
+       font.lab=2,cex.lab=1,cex.axis=1,font.axis=2)
+  title(main = trait,cex.main = 2)
   
   abline(0, 1, col="red",lwd=1)
   
-  legend("topleft",legend=c("pLoF","pLoF+D","Missense","Disruptive Missense","Synonymous"),ncol=1,bty="o",box.lwd=1,pch=0:4,cex=1,text.font=2)
+  legend("topleft",legend=c("pLoF","pLoF+D","Missense","Disruptive Missense","Synonymous"),ncol=1,bty="o",box.lwd=1,pch=0:4,cex=1.3,text.font=2)
   
 }
 
