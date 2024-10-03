@@ -23,6 +23,7 @@ theme_Publication <- function(base_size=12) {
             axis.text.x = element_blank(), 
             axis.line = element_line(colour="black",size=2),
             axis.ticks = element_line(),
+            title = element_text(face = "bold",size = 20),
             # panel.grid.major = element_line(colour="#f0f0f0"),
             # panel.grid.minor = element_line(colour="#f0f0f0"),
             panel.grid.major = element_blank(),
@@ -121,7 +122,7 @@ for(trait in 1:5){
     labs(x = NULL, 
          y = "-log10(p)", 
          linetype = "",
-         title = paste0(trait," for Europeans"))+
+         title = paste0(ifelse(trait %in% c("Breast","Prostate"),paste0(trait, " Cancer"),trait)," (EUR)"))+
     theme_Publication()+
     theme(
       legend.position = "top",
@@ -262,7 +263,7 @@ for(trait in 1:5){
   legend("topleft",legend=legendtext,col=legendcol,pch=15,bty="n")
   text(4,1,expression(paste(lambda[1000]," = ")),cex = 1.5)
   text(4.7,1,paste(lambda_1000),cex = 1.5)
-  title(paste0(trait," for European"))
+  title(paste0(ifelse(trait %in% c("Breast","Prostate"),paste0(trait, " Cancer"),trait)," (EUR)"),cex.main = 1.5)
   
   # p2 <- recordPlot()
   # 
