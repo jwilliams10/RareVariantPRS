@@ -87,25 +87,27 @@ CV_RV_PRS_adjusted[,trait] <- scale(CV_RV_PRS_adjusted[,trait])
 risk_cv <- quantile(CV_RV_PRS_adjusted$prs,c(.90))
 risk_rv <- quantile(CV_RV_PRS_adjusted$RV_PRS,c(.90))
 
-g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="prs", y=trait)) + geom_point(alpha = .3) + 
+g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="prs", y=trait)) + geom_point(alpha = .2) + 
   theme_Publication() + xlab("Standardized RICE-CV PRS") + 
-  ylab(paste0("Standardized ",trait)) + geom_abline(intercept = 0, slope = beta1,col = "#973999",size = 1) +
-  geom_vline(xintercept = as.numeric(risk_cv),color = "#5EBD3E",linetype = "dashed",size = 1.5) 
+  ylab(paste0("Standardized ",trait)) + geom_abline(intercept = 0, slope = beta1,col = "#973999",size = 1.5) +
+  geom_vline(xintercept = as.numeric(risk_cv),color = "#306FBB",linetype = "dashed",size = 1.5) 
   # annotate("text", x=3, y=6, label= bquote(beta[1] == .(round(beta1,3))),size = 16/.pt)
 p3 <- ggExtra::ggMarginal(g, type = "histogram",
                     xparams = list(color="black", fill="#973999",bins = 100),
                     yparams = list(color="black", fill="white",bins = 100))
+p3
 
 ggsave(p3,filename="Desktop/RareVariantPRS_Results/Figures/Fig2_CV.pdf",width = 10,height = 10)
 
-g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="RV_PRS", y=trait)) + geom_point(alpha = .3) + 
+g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="RV_PRS", y=trait)) + geom_point(alpha = .2) + 
   theme_Publication() + xlab("Standardized RICE-RV PRS") + 
-  ylab(paste0("Standardized ",trait)) + geom_abline(intercept = 0, slope = beta2,col = "#E23838",size = 1) +
-  geom_vline(xintercept = as.numeric(risk_rv),color = "#5EBD3E",linetype = "dashed",size = 1.5)
+  ylab(paste0("Standardized ",trait)) + geom_abline(intercept = 0, slope = beta2,col = "#E23838",size = 1.5) +
+  geom_vline(xintercept = as.numeric(risk_rv),color = "#306FBB",linetype = "dashed",size = 1.5)
   # annotate("text", x=6, y=6, label= bquote(beta[2] == .(round(beta2,3))),size = 16/.pt)
 p4 <- ggExtra::ggMarginal(g, type = "histogram",
                     xparams = list(color="black", fill="#E23838",bins = 100),
                     yparams = list(color="black", fill="white",bins = 100))
+p4
 
 ggsave(p4,filename="Desktop/RareVariantPRS_Results/Figures/Fig2_RV.pdf",width = 10,height = 10)
 
