@@ -240,7 +240,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
                   yLine,
                   rescale(yLine)),
          col=colLine,lwd=1.5,lty=2)
-  legend("topleft",legend=legendtext,col=legendcol,pch=15,bty="n")
+  legend("topleft",legend=legendtext,col=legendcol,pch=15,bty="n",cex=1.5)
   text(4,1,expression(paste(lambda[1000]," = ")),cex = 1.5)
   text(4.7,1,paste(lambda_1000),cex = 1.5)
   title(paste0(trait," (EUR)"),cex.main = 1.5)

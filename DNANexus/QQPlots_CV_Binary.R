@@ -260,7 +260,7 @@ for(trait in 1:5){
                   yLine,
                   rescale(yLine)),
          col=colLine,lwd=1.5,lty=2)
-  legend("topleft",legend=legendtext,col=legendcol,pch=15,bty="n")
+  legend("topleft",legend=legendtext,col=legendcol,pch=15,bty="n",cex=1.5)
   text(4,1,expression(paste(lambda[1000]," = ")),cex = 1.5)
   text(4.7,1,paste(lambda_1000),cex = 1.5)
   title(paste0(ifelse(trait %in% c("Breast","Prostate"),paste0(trait, " Cancer"),trait)," (EUR)"),cex.main = 1.5)
