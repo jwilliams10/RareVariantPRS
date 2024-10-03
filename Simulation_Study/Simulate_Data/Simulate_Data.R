@@ -205,6 +205,8 @@ h2_dat <- data.frame(causal_prop = rep(rep(causalprop_vec,each = 200),5),scaled 
   Average_Burden_rare = c(Average_Burden_rare_EUR,Average_Burden_rare_SAS,Average_Burden_rare_AFR,Average_Burden_rare_AMR,Average_Burden_rare_EAS),
   Var_Burden_rare = c(Var_Burden_rare_EUR,Var_Burden_rare_SAS,Var_Burden_rare_AFR,Var_Burden_rare_AMR,Var_Burden_rare_EAS))
 
+write.csv(h2_dat,file = "/data/williamsjacr/UKB_WES_Simulation/Sim_Characteristics.csv",row.names = FALSE)
+
 lapply(Y,function(x){var(x$Y)})
 summary(unlist(lapply(Y,function(x){var(x$Y)})))
 
