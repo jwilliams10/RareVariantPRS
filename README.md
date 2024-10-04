@@ -20,4 +20,4 @@ Code to simulate the data and to conduct the simulations were split over two fol
 
 ### Remaining Scripts
 
-The remaining scripts are to generate figures and tables for the manuscript. Simulation_Results.R creates figures ... Beta_Figure.R creates ... Beta_Table creates Table ... Fig2.R creates ..., Fig5_WES.R creates ... Fig5_WGS.R creates ... QQPlots.R create ... WES_vs_WGS_Results.R creates ... WGS_Ancestry_Adjusted_Plot.R creates ...
+The remaining scripts are to generate figures and tables for the manuscript. Simulation_Results.R creates Figure 1 and Supplementary Figure 1; Beta_Table creates Table ...; Fig2.R creates Figure 2; Fig5_WES.R creates Supplementary Figures 3 and 4; Fig5_WGS.R creates Figure 5 and Supplementary Figures 9 and 10; QQPlots.R creates Supplementary Figures 7, 15, 16, and 20; WES_vs_WGS_Results.R creates Figure 6 and Supplementary Figure 11.
