@@ -1,6 +1,6 @@
 ## Binary
 
-This folder contains all files to perform RICE on the 5 binary traits for UKB WES. Also contains code to create Figures .... 
+This folder contains all files to perform RICE on the 5 binary traits for UKB WES. Also contains code to create Supplementary Figure 3, 4, and 7. 
 
 ### REGENIE_Reorganize.R/GWAS_SumStats_REGENIE.sh
 
@@ -24,4 +24,4 @@ Performs RICE with RICE-CV and RICE-RV.
 
 ### Overall_Results.R and QQPlots_CV.R
 
-Creates Figures ... and Figures ..., respectively.
+Creates Supplementary Figure 3-4 and Supplementary Figure 7, respectively.

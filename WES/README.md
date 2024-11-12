@@ -16,12 +16,12 @@ These files create a set of common variants only plink files/merge them into one
 
 ### Binary
 
-Contains all files to perform RICE on the 5 binary traits for UKB WES. Also contains code to create Figures ....
+Contains all files to perform RICE on the 5 binary traits for UKB WES. Also contains code to create Supplementary Figures 3, 4, and 7.
 
 ### Continuous 
 
-Contains all files to perform RICE on the 6 continuous traits for UKB WES. Also contains code to create Figures ....
+Contains all files to perform RICE on the 6 continuous traits for UKB WES. Also contains code to create Figure 4 and Supplementary Figures 4 and 8.
 
 ### Remaining Scripts (SampleSizes.R/.sh and RareVariantEffectSizes.R)
 
-The remaining scripts are used to create Tables ...
+The remaining scripts are used to create Supplementary Table 2 and Supplementary Data tables 1-11.

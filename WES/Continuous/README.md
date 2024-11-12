@@ -1,6 +1,6 @@
 ## Continuous
 
-This folder contains all files to perform RICE on the 6 continuous traits for UKB WES. Also contains code to create Figures ....
+This folder contains all files to perform RICE on the 6 continuous traits for UKB WES. Also contains code to create Figure 4 and Supplementary Figures 4 and 8.
 
 ### GWAS_SumStats.R/.sh
 
@@ -24,4 +24,4 @@ Performs RICE with RICE-CV and RICE-RV.
 
 ### Overall_Results.R and QQPlots_CV.R
 
-Creates Figures ... and Figures ..., respectively.
+Creates Figure 4/Supplementary Figure 4 and Supplementary Figure 8, respectively.
