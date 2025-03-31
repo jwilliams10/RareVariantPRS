@@ -2,7 +2,7 @@ rm(list=ls())
 
 # for array in 1 2 3 4 5 6;
 # do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/CommonVariant_PRS/LDPred_LASSOSum.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/CommonVariant_PRS/LDPred_LASSOSum.sh -icmd="bash LDPred_LASSOSum.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/LDPred2_LASSOSum2/ --priority low --instance-type mem1_ssd1_v2_x36
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/CommonVariant_PRS/LDPred_LASSOSum.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/CommonVariant_PRS/LDPred_LASSOSum.sh -icmd="bash LDPred_LASSOSum.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/LDPred2_LASSOSum2/ --priority high --instance-type mem3_ssd1_v2_x16 
 # done
 
 if(!("data.table" %in% rownames(installed.packages()))){
@@ -99,16 +99,22 @@ trait <- as.numeric(commandArgs(TRUE)[1])
 
 if(trait == 1){
   trait <- "BMI"
+  dat <- read.csv("regenie_step2_continuous_BMI.regenie", sep="")
 }else if(trait == 2){
   trait <- "TC"
+  dat <- read.csv("regenie_step2_continuous_TC.regenie", sep="")
 }else if(trait == 3){
   trait <- "HDL"
+  dat <- read.csv("regenie_step2_continuous_HDL.regenie", sep="")
 }else if(trait == 4){
   trait <- "LDL"
+  dat <- read.csv("regenie_step2_continuous_LDL.regenie", sep="")
 }else if(trait == 5){
   trait <- "logTG"
+  dat <- read.csv("regenie_step2_continuous_logTG.regenie", sep="")
 }else{
   trait <- "Height"
+  dat <- read.csv("regenie_step2_continuous_Height.regenie", sep="")
 }
 
 map <- NULL
@@ -116,17 +122,16 @@ map <- NULL
 ldr <- 3/1000
 ncores <- 1
 
-dat <- fread(paste0(trait,"_sumstats.",trait,".glm.linear"))
-colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","N","BETA","SE","T_STAT","P","ERRCODE")
-dat <- dat[dat$TEST == "ADD",]
+colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
+dat$PVAL <- 10^(-1*dat$LOG10P)
 
 dat <- as.data.frame(dat)
 
-sumstats <- dat[,c('CHR', 'SNP_ID', 'POS', 'REF', 'ALT', 'BETA', 'SE', 'P', 'N',"SNP_ID")]
+sumstats <- dat[,c('CHR', 'SNP_ID', 'POS', 'REF', 'ALT', 'BETA', 'SE', 'PVAL', 'N',"SNP_ID")]
 names(sumstats) <- c("chr", "rsid", "pos", "a0", "a1", "beta", "beta_se", "p", "n_eff","SNP_ID")
+rm(dat)
 
 set.seed(2020)
-rm(dat)
 
 w_hm3 <- read.delim("w_hm3.snplist")
 
@@ -408,17 +413,30 @@ all_betas <- read.csv(paste0(trait,"_ldpred2.txt"), sep="")
 colnames(all_betas) <- c("SNP","ALT","REF",paste0("LDPred2_SCORE",1:nrow(sets),"_SUM"))
 system(paste("rm ",paste0(trait,"_ldpred2.txt")))
 
-dat <- fread(paste0(trait,"_sumstats.",trait,".glm.linear"))
-colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","N","BETA","SE","T_STAT","P","ERRCODE")
-dat <- dat[dat$TEST == "ADD",]
+if(trait == "BMI"){
+  dat <- read.csv("regenie_step2_continuous_BMI.regenie", sep="")
+}else if(trait == "TC"){
+  dat <- read.csv("regenie_step2_continuous_TC.regenie", sep="")
+}else if(trait == "HDL"){
+  dat <- read.csv("regenie_step2_continuous_HDL.regenie", sep="")
+}else if(trait == "LDL"){
+  dat <- read.csv("regenie_step2_continuous_LDL.regenie", sep="")
+}else if(trait == "logTG"){
+  dat <- read.csv("regenie_step2_continuous_logTG.regenie", sep="")
+}else{
+  dat <- read.csv("regenie_step2_continuous_Height.regenie", sep="")
+}
 
-dat <- as.data.frame(dat)
+colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
 
-dat <- dat[,c("CHR","SNP_ID","REF","POS","A1")]
+dat <- dat[,c("CHROM","ID","REF","POS","ALT")]
 colnames(dat) <- c("CHR","SNP","REF","BP","A1")
 
 dat <- left_join(dat,all_betas)
 dat[is.na(dat)] <- 0
+
+rm(all_betas)
+gc()
 
 write.csv(dat,file = paste0(trait,"_Final_Coefficients_LDPred2.csv"),row.names = FALSE)
 
@@ -477,33 +495,175 @@ pheno_validation_adjusted_AMR$y_validation <- scale(pheno_validation_adjusted_AM
 pheno_validation_adjusted_AFR$y_validation <- scale(pheno_validation_adjusted_AFR$y_validation)
 pheno_validation_adjusted_EAS$y_validation <- scale(pheno_validation_adjusted_EAS$y_validation)
 
+Beta_Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  result <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = boot_data))[2]
+  return(c(result))
+}
+
+R2_Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  result <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = boot_data))$r.squared
+  return(c(result))
+}
+
 beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EUR))[2]
-se_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EUR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_raw_EUR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_EUR <- sd(boot_beta$t)
+beta_lower_validation_raw_EUR <- beta_ci$basic[4]
+beta_upper_validation_raw_EUR <- beta_ci$basic[5]
+
+R2_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EUR))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_EUR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_EUR <- sd(boot_R2$t)
+R2_lower_validation_raw_EUR <- R2_ci$basic[4]
+R2_upper_validation_raw_EUR <- R2_ci$basic[5]
+
 beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_SAS))[2]
-se_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_SAS))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_raw_SAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_SAS <- sd(boot_beta$t)
+beta_lower_validation_raw_SAS <- beta_ci$basic[4]
+beta_upper_validation_raw_SAS <- beta_ci$basic[5]
+
+R2_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_SAS))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_SAS, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_SAS <- sd(boot_R2$t)
+R2_lower_validation_raw_SAS <- R2_ci$basic[4]
+R2_upper_validation_raw_SAS <- R2_ci$basic[5]
+
 beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AMR))[2]
-se_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AMR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_raw_AMR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_AMR <- sd(boot_beta$t)
+beta_lower_validation_raw_AMR <- beta_ci$basic[4]
+beta_upper_validation_raw_AMR <- beta_ci$basic[5]
+
+R2_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AMR))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_AMR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_AMR <- sd(boot_R2$t)
+R2_lower_validation_raw_AMR <- R2_ci$basic[4]
+R2_upper_validation_raw_AMR <- R2_ci$basic[5]
+
 beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AFR))[2]
-se_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AFR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_raw_AFR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_AFR <- sd(boot_beta$t)
+beta_lower_validation_raw_AFR <- beta_ci$basic[4]
+beta_upper_validation_raw_AFR <- beta_ci$basic[5]
+
+R2_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AFR))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_AFR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_AFR <- sd(boot_R2$t)
+R2_lower_validation_raw_AFR <- R2_ci$basic[4]
+R2_upper_validation_raw_AFR <- R2_ci$basic[5]
+
 beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EAS))[2]
-se_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EAS))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_raw_EAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_EAS <- sd(boot_beta$t)
+beta_lower_validation_raw_EAS <- beta_ci$basic[4]
+beta_upper_validation_raw_EAS <- beta_ci$basic[5]
+
+R2_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EAS))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_EAS, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_EAS <- sd(boot_R2$t)
+R2_lower_validation_raw_EAS <- R2_ci$basic[4]
+R2_upper_validation_raw_EAS <- R2_ci$basic[5]
 
 beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EUR))[2]
-se_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EUR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_adjusted_EUR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_EUR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_EUR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_EUR <- beta_ci$basic[5]
+
+R2_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EUR))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_EUR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_EUR <- sd(boot_R2$t)
+R2_lower_validation_adjusted_EUR <- R2_ci$basic[4]
+R2_upper_validation_adjusted_EUR <- R2_ci$basic[5]
+
 beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_SAS))[2]
-se_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_SAS))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_adjusted_SAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_SAS <- sd(boot_beta$t)
+beta_lower_validation_adjusted_SAS <- beta_ci$basic[4]
+beta_upper_validation_adjusted_SAS <- beta_ci$basic[5]
+
+R2_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_SAS))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_SAS, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_SAS <- sd(boot_R2$t)
+R2_lower_validation_adjusted_SAS <- R2_ci$basic[4]
+R2_upper_validation_adjusted_SAS <- R2_ci$basic[5]
+
 beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AMR))[2]
-se_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AMR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_adjusted_AMR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_AMR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_AMR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_AMR <- beta_ci$basic[5]
+
+R2_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AMR))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_AMR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_AMR <- sd(boot_R2$t)
+R2_lower_validation_adjusted_AMR <- R2_ci$basic[4]
+R2_upper_validation_adjusted_AMR <- R2_ci$basic[5]
+
 beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AFR))[2]
-se_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AFR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_adjusted_AFR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_AFR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_AFR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_AFR <- beta_ci$basic[5]
+
+R2_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AFR))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_AFR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_AFR <- sd(boot_R2$t)
+R2_lower_validation_adjusted_AFR <- R2_ci$basic[4]
+R2_upper_validation_adjusted_AFR <- R2_ci$basic[5]
+
 beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EAS))[2]
-se_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EAS))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_adjusted_EAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_EAS <- sd(boot_beta$t)
+beta_lower_validation_adjusted_EAS <- beta_ci$basic[4]
+beta_upper_validation_adjusted_EAS <- beta_ci$basic[5]
+
+R2_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EAS))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_EAS, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_EAS <- sd(boot_R2$t)
+R2_lower_validation_adjusted_EAS <- R2_ci$basic[4]
+R2_upper_validation_adjusted_EAS <- R2_ci$basic[5]
 
 ldpred2_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
                               beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_SAS,beta_validation_raw_AMR,beta_validation_raw_AFR,beta_validation_raw_EAS), 
-                              se_raw = c(se_validation_raw_EUR,se_validation_raw_SAS,se_validation_raw_AMR,se_validation_raw_AFR,se_validation_raw_EAS), 
+                              beta_se_raw = c(beta_se_validation_raw_EUR,beta_se_validation_raw_SAS,beta_se_validation_raw_AMR,beta_se_validation_raw_AFR,beta_se_validation_raw_EAS), 
+                              beta_lower_raw = c(beta_lower_validation_raw_EUR,beta_lower_validation_raw_SAS,beta_lower_validation_raw_AMR,beta_lower_validation_raw_AFR,beta_lower_validation_raw_EAS), 
+                              beta_upper_raw = c(beta_upper_validation_raw_EUR,beta_upper_validation_raw_SAS,beta_upper_validation_raw_AMR,beta_upper_validation_raw_AFR,beta_upper_validation_raw_EAS), 
+                              R2_raw = c(R2_validation_raw_EUR,R2_validation_raw_SAS,R2_validation_raw_AMR,R2_validation_raw_AFR,R2_validation_raw_EAS),
+                              R2_se_raw = c(R2_se_validation_raw_EUR,R2_se_validation_raw_SAS,R2_se_validation_raw_AMR,R2_se_validation_raw_AFR,R2_se_validation_raw_EAS),
+                              R2_lower_raw = c(R2_lower_validation_raw_EUR,R2_lower_validation_raw_SAS,R2_lower_validation_raw_AMR,R2_lower_validation_raw_AFR,R2_lower_validation_raw_EAS),
+                              R2_upper_raw = c(R2_upper_validation_raw_EUR,R2_upper_validation_raw_SAS,R2_upper_validation_raw_AMR,R2_upper_validation_raw_AFR,R2_upper_validation_raw_EAS),
                               beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_SAS,beta_validation_adjusted_AMR,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
-                              se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_SAS,se_validation_adjusted_AMR,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
+                              beta_se_adjusted = c(beta_se_validation_adjusted_EUR,beta_se_validation_adjusted_SAS,beta_se_validation_adjusted_AMR,beta_se_validation_adjusted_AFR,beta_se_validation_adjusted_EAS), 
+                              beta_lower_adjusted = c(beta_lower_validation_adjusted_EUR,beta_lower_validation_adjusted_SAS,beta_lower_validation_adjusted_AMR,beta_lower_validation_adjusted_AFR,beta_lower_validation_adjusted_EAS), 
+                              beta_upper_adjusted = c(beta_upper_validation_adjusted_EUR,beta_upper_validation_adjusted_SAS,beta_upper_validation_adjusted_AMR,beta_upper_validation_adjusted_AFR,beta_upper_validation_adjusted_EAS), 
+                              R2_adjusted = c(R2_validation_adjusted_EUR,R2_validation_adjusted_SAS,R2_validation_adjusted_AMR,R2_validation_adjusted_AFR,R2_validation_adjusted_EAS),
+                              R2_se_adjusted = c(R2_se_validation_adjusted_EUR,R2_se_validation_adjusted_SAS,R2_se_validation_adjusted_AMR,R2_se_validation_adjusted_AFR,R2_se_validation_adjusted_EAS),
+                              R2_lower_adjusted = c(R2_lower_validation_adjusted_EUR,R2_lower_validation_adjusted_SAS,R2_lower_validation_adjusted_AMR,R2_lower_validation_adjusted_AFR,R2_lower_validation_adjusted_EAS),
+                              R2_upper_adjusted = c(R2_upper_validation_adjusted_EUR,R2_upper_validation_adjusted_SAS,R2_upper_validation_adjusted_AMR,R2_upper_validation_adjusted_AFR,R2_upper_validation_adjusted_EAS))
 
 write.csv(ldpred2_Results,file = paste0(trait,"Best_Betas_LDPred2.csv"),row.names = FALSE)
 
@@ -555,17 +715,36 @@ all_betas <- read.csv(paste0(trait,"_lassosum2.txt"), sep="")
 colnames(all_betas) <- c("SNP","ALT","REF",paste0("LASSOSum2_SCORE",1:300,"_SUM"))
 system(paste("rm ",paste0(trait,"_lassosum2.txt")))
 
-dat <- fread(paste0(trait,"_sumstats.",trait,".glm.linear"))
-colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","N","BETA","SE","T_STAT","P","ERRCODE")
-dat <- dat[dat$TEST == "ADD",]
+if(trait == "BMI"){
+  dat <- read.csv("regenie_step2_continuous_BMI.regenie", sep="")
+  system("rm regenie_step2_continuous_BMI.regenie")
+}else if(trait == "TC"){
+  dat <- read.csv("regenie_step2_continuous_TC.regenie", sep="")
+  system("rm regenie_step2_continuous_TC.regenie")
+}else if(trait == "HDL"){
+  dat <- read.csv("regenie_step2_continuous_HDL.regenie", sep="")
+  system("rm regenie_step2_continuous_HDL.regenie")
+}else if(trait == "LDL"){
+  dat <- read.csv("regenie_step2_continuous_LDL.regenie", sep="")
+  system("rm regenie_step2_continuous_LDL.regenie")
+}else if(trait == "logTG"){
+  dat <- read.csv("regenie_step2_continuous_logTG.regenie", sep="")
+  system("rm regenie_step2_continuous_logTG.regenie")
+}else{
+  dat <- read.csv("regenie_step2_continuous_Height.regenie", sep="")
+  system("rm regenie_step2_continuous_Height.regenie")
+}
 
-dat <- as.data.frame(dat)
+colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
 
-dat <- dat[,c("CHR","SNP_ID","REF","POS","A1")]
+dat <- dat[,c("CHROM","ID","REF","POS","ALT")]
 colnames(dat) <- c("CHR","SNP","REF","BP","A1")
 
 dat <- left_join(dat,all_betas)
 dat[is.na(dat)] <- 0
+
+rm(all_betas)
+gc()
 
 write.csv(dat,file = paste0(trait,"_Final_Coefficients_LASSOSum.csv"),row.names = FALSE)
 
@@ -621,37 +800,178 @@ pheno_validation_adjusted_AMR$y_validation <- scale(pheno_validation_adjusted_AM
 pheno_validation_adjusted_AFR$y_validation <- scale(pheno_validation_adjusted_AFR$y_validation)
 pheno_validation_adjusted_EAS$y_validation <- scale(pheno_validation_adjusted_EAS$y_validation)
 
+Beta_Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  result <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = boot_data))[2]
+  return(c(result))
+}
+
+R2_Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  result <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = boot_data))$r.squared
+  return(c(result))
+}
+
 beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EUR))[2]
-se_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EUR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_raw_EUR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_EUR <- sd(boot_beta$t)
+beta_lower_validation_raw_EUR <- beta_ci$basic[4]
+beta_upper_validation_raw_EUR <- beta_ci$basic[5]
+
+R2_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EUR))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_EUR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_EUR <- sd(boot_R2$t)
+R2_lower_validation_raw_EUR <- R2_ci$basic[4]
+R2_upper_validation_raw_EUR <- R2_ci$basic[5]
+
 beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_SAS))[2]
-se_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_SAS))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_raw_SAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_SAS <- sd(boot_beta$t)
+beta_lower_validation_raw_SAS <- beta_ci$basic[4]
+beta_upper_validation_raw_SAS <- beta_ci$basic[5]
+
+R2_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_SAS))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_SAS, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_SAS <- sd(boot_R2$t)
+R2_lower_validation_raw_SAS <- R2_ci$basic[4]
+R2_upper_validation_raw_SAS <- R2_ci$basic[5]
+
 beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AMR))[2]
-se_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AMR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_raw_AMR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_AMR <- sd(boot_beta$t)
+beta_lower_validation_raw_AMR <- beta_ci$basic[4]
+beta_upper_validation_raw_AMR <- beta_ci$basic[5]
+
+R2_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AMR))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_AMR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_AMR <- sd(boot_R2$t)
+R2_lower_validation_raw_AMR <- R2_ci$basic[4]
+R2_upper_validation_raw_AMR <- R2_ci$basic[5]
+
 beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AFR))[2]
-se_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AFR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_raw_AFR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_AFR <- sd(boot_beta$t)
+beta_lower_validation_raw_AFR <- beta_ci$basic[4]
+beta_upper_validation_raw_AFR <- beta_ci$basic[5]
+
+R2_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_AFR))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_AFR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_AFR <- sd(boot_R2$t)
+R2_lower_validation_raw_AFR <- R2_ci$basic[4]
+R2_upper_validation_raw_AFR <- R2_ci$basic[5]
+
 beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EAS))[2]
-se_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EAS))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_raw_EAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_EAS <- sd(boot_beta$t)
+beta_lower_validation_raw_EAS <- beta_ci$basic[4]
+beta_upper_validation_raw_EAS <- beta_ci$basic[5]
+
+R2_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_raw_EAS))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_EAS, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_EAS <- sd(boot_R2$t)
+R2_lower_validation_raw_EAS <- R2_ci$basic[4]
+R2_upper_validation_raw_EAS <- R2_ci$basic[5]
 
 beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EUR))[2]
-se_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EUR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_adjusted_EUR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_EUR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_EUR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_EUR <- beta_ci$basic[5]
+
+R2_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EUR))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_EUR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_EUR <- sd(boot_R2$t)
+R2_lower_validation_adjusted_EUR <- R2_ci$basic[4]
+R2_upper_validation_adjusted_EUR <- R2_ci$basic[5]
+
 beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_SAS))[2]
-se_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_SAS))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_adjusted_SAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_SAS <- sd(boot_beta$t)
+beta_lower_validation_adjusted_SAS <- beta_ci$basic[4]
+beta_upper_validation_adjusted_SAS <- beta_ci$basic[5]
+
+R2_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_SAS))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_SAS, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_SAS <- sd(boot_R2$t)
+R2_lower_validation_adjusted_SAS <- R2_ci$basic[4]
+R2_upper_validation_adjusted_SAS <- R2_ci$basic[5]
+
 beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AMR))[2]
-se_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AMR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_adjusted_AMR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_AMR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_AMR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_AMR <- beta_ci$basic[5]
+
+R2_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AMR))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_AMR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_AMR <- sd(boot_R2$t)
+R2_lower_validation_adjusted_AMR <- R2_ci$basic[4]
+R2_upper_validation_adjusted_AMR <- R2_ci$basic[5]
+
 beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AFR))[2]
-se_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AFR))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_adjusted_AFR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_AFR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_AFR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_AFR <- beta_ci$basic[5]
+
+R2_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_AFR))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_AFR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_AFR <- sd(boot_R2$t)
+R2_lower_validation_adjusted_AFR <- R2_ci$basic[4]
+R2_upper_validation_adjusted_AFR <- R2_ci$basic[5]
+
 beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EAS))[2]
-se_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EAS))$coefficients[2,2]
+boot_beta <- boot(data = pheno_validation_adjusted_EAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_EAS <- sd(boot_beta$t)
+beta_lower_validation_adjusted_EAS <- beta_ci$basic[4]
+beta_upper_validation_adjusted_EAS <- beta_ci$basic[5]
+
+R2_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~",paste0("SCORE",idx,"_SUM"))),data = pheno_validation_adjusted_EAS))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_EAS, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_EAS <- sd(boot_R2$t)
+R2_lower_validation_adjusted_EAS <- R2_ci$basic[4]
+R2_upper_validation_adjusted_EAS <- R2_ci$basic[5]
 
 lassosum2_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
                                 beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_SAS,beta_validation_raw_AMR,beta_validation_raw_AFR,beta_validation_raw_EAS), 
-                                se_raw = c(se_validation_raw_EUR,se_validation_raw_SAS,se_validation_raw_AMR,se_validation_raw_AFR,se_validation_raw_EAS), 
+                                beta_se_raw = c(beta_se_validation_raw_EUR,beta_se_validation_raw_SAS,beta_se_validation_raw_AMR,beta_se_validation_raw_AFR,beta_se_validation_raw_EAS), 
+                                beta_lower_raw = c(beta_lower_validation_raw_EUR,beta_lower_validation_raw_SAS,beta_lower_validation_raw_AMR,beta_lower_validation_raw_AFR,beta_lower_validation_raw_EAS), 
+                                beta_upper_raw = c(beta_upper_validation_raw_EUR,beta_upper_validation_raw_SAS,beta_upper_validation_raw_AMR,beta_upper_validation_raw_AFR,beta_upper_validation_raw_EAS), 
+                                R2_raw = c(R2_validation_raw_EUR,R2_validation_raw_SAS,R2_validation_raw_AMR,R2_validation_raw_AFR,R2_validation_raw_EAS),
+                                R2_se_raw = c(R2_se_validation_raw_EUR,R2_se_validation_raw_SAS,R2_se_validation_raw_AMR,R2_se_validation_raw_AFR,R2_se_validation_raw_EAS),
+                                R2_lower_raw = c(R2_lower_validation_raw_EUR,R2_lower_validation_raw_SAS,R2_lower_validation_raw_AMR,R2_lower_validation_raw_AFR,R2_lower_validation_raw_EAS),
+                                R2_upper_raw = c(R2_upper_validation_raw_EUR,R2_upper_validation_raw_SAS,R2_upper_validation_raw_AMR,R2_upper_validation_raw_AFR,R2_upper_validation_raw_EAS),
                                 beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_SAS,beta_validation_adjusted_AMR,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
-                                se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_SAS,se_validation_adjusted_AMR,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
+                                beta_se_adjusted = c(beta_se_validation_adjusted_EUR,beta_se_validation_adjusted_SAS,beta_se_validation_adjusted_AMR,beta_se_validation_adjusted_AFR,beta_se_validation_adjusted_EAS), 
+                                beta_lower_adjusted = c(beta_lower_validation_adjusted_EUR,beta_lower_validation_adjusted_SAS,beta_lower_validation_adjusted_AMR,beta_lower_validation_adjusted_AFR,beta_lower_validation_adjusted_EAS), 
+                                beta_upper_adjusted = c(beta_upper_validation_adjusted_EUR,beta_upper_validation_adjusted_SAS,beta_upper_validation_adjusted_AMR,beta_upper_validation_adjusted_AFR,beta_upper_validation_adjusted_EAS), 
+                                R2_adjusted = c(R2_validation_adjusted_EUR,R2_validation_adjusted_SAS,R2_validation_adjusted_AMR,R2_validation_adjusted_AFR,R2_validation_adjusted_EAS),
+                                R2_se_adjusted = c(R2_se_validation_adjusted_EUR,R2_se_validation_adjusted_SAS,R2_se_validation_adjusted_AMR,R2_se_validation_adjusted_AFR,R2_se_validation_adjusted_EAS),
+                                R2_lower_adjusted = c(R2_lower_validation_adjusted_EUR,R2_lower_validation_adjusted_SAS,R2_lower_validation_adjusted_AMR,R2_lower_validation_adjusted_AFR,R2_lower_validation_adjusted_EAS),
+                                R2_upper_adjusted = c(R2_upper_validation_adjusted_EUR,R2_upper_validation_adjusted_SAS,R2_upper_validation_adjusted_AMR,R2_upper_validation_adjusted_AFR,R2_upper_validation_adjusted_EAS))
 
 write.csv(lassosum2_Results,file = paste0(trait,"Best_Betas_LASSOSum.csv"),row.names = FALSE)
 
-system(paste0("rm ",trait,"_sumstats.",trait,".glm.linear"))
 system(paste0("rm All_Train.txt"))
 system(paste0("rm All_Tune.txt"))
 system(paste0("rm All_Validation.txt"))
