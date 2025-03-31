@@ -11,7 +11,7 @@ count <- 1
 
 for(j in 1:length(causalprop_vec)){
   for(q in 1:length(scale)){
-    for(l in 1:20){
+    for(l in 1:100){
       index_mat <- rbind(index_mat,data.frame(i = count,Causal_Prop = causalprop_vec[j],Scale = scale[q]))
       count <- count + 1
     }

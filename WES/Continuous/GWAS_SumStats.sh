@@ -5,6 +5,6 @@
 #SBATCH --mem-per-cpu=40G
 
 # module purge
-module load R/4.3.0
+module load R/4.4.1
 
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/WES/Continuous/GWAS_SumStats.R > GWAS_SumStats.Rout

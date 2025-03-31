@@ -8,8 +8,8 @@ ukb_covariate <- fread("/data/BB_Bioinformatics/ProjectData/UKB/Processed_phenot
 
 ukb_ancestries <- readRDS("/data/williamsjacr/UKB_WES_Phenotypes/ukb_multi_anc.RDS")
 
-ukb_covariate <- ukb_covariate[,c("FID","IID","ancestry","female","age",paste0("pc",1:10))]
-colnames(ukb_covariate) <- c(colnames(ukb_covariate)[1:3],"sex",colnames(ukb_covariate)[5:15])
+ukb_covariate <- ukb_covariate[,c("FID","IID","ancestry","female","age",paste0("pc",1:40))]
+colnames(ukb_covariate) <- c(colnames(ukb_covariate)[1:3],"sex",colnames(ukb_covariate)[5:45])
 
 ukb_pheno <- inner_join(ukb_pheno,ukb_covariate)
 

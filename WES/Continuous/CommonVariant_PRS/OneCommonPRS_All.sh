@@ -1,9 +1,9 @@
 #!/bin/bash --login
 #SBATCH -n 1
 #SBATCH -N 1
-#SBATCH --time=144:00:00
+#SBATCH --time=4:00:00
 #SBATCH --array=1-6
-#SBATCH --mem-per-cpu=50G
+#SBATCH --mem-per-cpu=10G
 
 module load R/4.3.2
 

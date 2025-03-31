@@ -34,6 +34,12 @@ if(trait == 1){
   trait <- "Prostate"
 }
 
+if(trait %in% c("Breast","Prostate")){
+  confounders <- paste0("~age+age2+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")
+}else{
+  confounders <-  paste0("~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")
+}
+
 Train_PVals_All <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricCoding/",trait,"_coding_sig.csv"))
 Train_PVals_All <- Train_PVals_All[Train_PVals_All$STAARB <= 1e-03,]
 
@@ -92,100 +98,61 @@ G_star_gene_centric_coding_train <- G_star_gene_centric_coding[ids_gstar %in% ob
 G_star_gene_centric_coding_tune <- G_star_gene_centric_coding[ids_gstar %in% obj_nullmodel_tune$id_include,]
 G_star_gene_centric_coding_vad <- G_star_gene_centric_coding[ids_gstar %in% obj_nullmodel_validation$id_include,]
 
+
 X_train <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_train$id_include],G_star_gene_centric_coding_train)
 pheno_train <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Train.txt")
 pheno_train <- inner_join(pheno_train,X_train)
 X_train <- as.matrix(pheno_train[,27:ncol(pheno_train),drop = FALSE])
-y_train <- pheno_train[,trait]
 
 X_tune <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_tune$id_include],G_star_gene_centric_coding_tune)
 pheno_tune <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Tune.txt")
 pheno_tune <- inner_join(pheno_tune,X_tune)
 X_tune <- as.matrix(pheno_tune[,27:ncol(pheno_tune),drop = FALSE])
-y_tune <- pheno_tune[,trait]
 
 X_valid <- data.frame(IID = ids_gstar[ids_gstar %in% obj_nullmodel_validation$id_include],G_star_gene_centric_coding_vad)
 pheno_valid <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
 pheno_valid <- inner_join(pheno_valid,X_valid)
 X_valid <- as.matrix(pheno_valid[,27:ncol(pheno_valid),drop = FALSE])
-y_valid <- pheno_valid[,trait]
-
-lasso_train <- glmnet(X_train,y_train,family = "binomial",alpha = 1)
-ridge_train <- glmnet(X_train,y_train,family = "binomial",alpha = 0)
-lm_tmp <- data.frame(y = y_train, X_train)
-lm_train <- glm(y~.,data = lm_tmp,family = binomial())
 
 
-beta_matrix <- cbind(as.matrix(lasso_train$beta),as.matrix(ridge_train$beta),lm_train$coefficients[-1])
-beta_matrix <- as.data.frame(beta_matrix)
+lasso_train <- glmnet(X_train,pheno_train[,trait],family = "binomial",alpha = 1)
+ridge_train <- glmnet(X_train,pheno_train[,trait],family = "binomial",alpha = 0)
+lm_train <- glm(y~.,data = data.frame(y = pheno_train[,trait], X_train),family = binomial())
+
+beta_matrix <- as.data.frame(cbind(as.matrix(lasso_train$beta),as.matrix(ridge_train$beta),lm_train$coefficients[-1]))
 colnames(beta_matrix) <- c(paste0("lasso_prs",1:ncol(as.matrix(lasso_train$beta))),paste0("ridge_prs",1:ncol(as.matrix(ridge_train$beta))),paste0("lm_prs",1))
-
 beta_matrix <- cbind(Train_PVals_All[,c(1:4)],beta_matrix)
 
 
-lasso_prs_tune <- predict(lasso_train,X_tune)
-ridge_prs_tune <- predict(ridge_train,X_tune)
-lm_tmp <- data.frame(X_tune)
-lm_prs_tune <- predict(lm_train,lm_tmp)
+lasso_prs_tune <- predict(lasso_train,X_tune,type = "link")
+ridge_prs_tune <- predict(ridge_train,X_tune,type = "link")
+lm_prs_tune <- predict(lm_train,data.frame(X_tune),type = "link")
 
-lasso_prs_vad <- predict(lasso_train,X_valid)
-ridge_prs_vad <- predict(ridge_train,X_valid)
-lm_tmp <- data.frame(X_valid)
-lm_prs_vad <- predict(lm_train,lm_tmp)
+lasso_prs_vad <- predict(lasso_train,X_valid,type = "link")
+ridge_prs_vad <- predict(ridge_train,X_valid,type = "link")
+lm_prs_vad <- predict(lm_train,data.frame(X_valid),type = "link")
 
-
-
-
-
-
-lasso_tune_dat <- data.frame(y = y_tune,lasso_prs_tune)
+lasso_tune_dat <- data.frame(y = pheno_tune[,trait],lasso_prs_tune)
 colnames(lasso_tune_dat) <- c("y",paste0("lasso_prs",1:(ncol(lasso_tune_dat) - 1)))
-lasso_valid_dat <- data.frame(y = y_valid,lasso_prs_vad)
+lasso_valid_dat <- data.frame(y = pheno_valid[,trait],lasso_prs_vad)
 colnames(lasso_valid_dat) <- c("y",paste0("lasso_prs",1:(ncol(lasso_valid_dat) - 1)))
 
-ridge_tune_dat <- data.frame(y = y_tune,ridge_prs_tune)
+ridge_tune_dat <- data.frame(y = pheno_tune[,trait],ridge_prs_tune)
 colnames(ridge_tune_dat) <- c("y",paste0("ridge_prs",1:(ncol(ridge_tune_dat) - 1)))
-ridge_valid_dat <- data.frame(y = y_valid,ridge_prs_vad)
+ridge_valid_dat <- data.frame(y = pheno_valid[,trait],ridge_prs_vad)
 colnames(ridge_valid_dat) <- c("y",paste0("ridge_prs",1:(ncol(ridge_valid_dat) - 1)))
 
-lm_tune_dat <- data.frame(y = y_tune,lm_prs_tune)
+lm_tune_dat <- data.frame(y = pheno_tune[,trait],lm_prs_tune)
 colnames(lm_tune_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_tune_dat) - 1)))
-lm_valid_dat <- data.frame(y = y_valid,lm_prs_vad)
+lm_valid_dat <- data.frame(y = pheno_valid[,trait],lm_prs_vad)
 colnames(lm_valid_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_valid_dat) - 1)))
 
 
-
-
-
-
-all_prs_tune <- cbind(lasso_prs_tune,ridge_prs_tune,lm_prs_tune)
+all_prs_tune <- as.data.frame(cbind(lasso_prs_tune,ridge_prs_tune,lm_prs_tune))
 colnames(all_prs_tune) <- c(paste0("lasso_prs",1:ncol(lasso_prs_tune)),paste0("ridge_prs",1:ncol(ridge_prs_tune)),"lm_prs1")
-all_prs_valid <- cbind(lasso_prs_vad,ridge_prs_vad,lm_prs_vad)
+all_prs_valid <- as.data.frame(cbind(lasso_prs_vad,ridge_prs_vad,lm_prs_vad))
 colnames(all_prs_valid) <- c(paste0("lasso_prs",1:ncol(lasso_prs_vad)),paste0("ridge_prs",1:ncol(ridge_prs_vad)),"lm_prs1")
 
-all_tune <- data.frame(y = y_tune,all_prs_tune,pheno_tune[,c("age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")])
-all_valid <- data.frame(y = y_valid,all_prs_valid,pheno_valid[,c("age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")])
-
-if(trait %in% c("Breast","Prostate")){
-  confounders <- paste0("~age+age2+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")
-}else{
-  confounders <-  paste0("~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")
-}
-
-auc_tune <- vector()
-for(i in 1:length(colnames(all_prs_tune))){
-  auc_tune[i] <- roc.binary(status = "y",
-                            variable = colnames(all_prs_tune)[i],
-                            confounders = as.formula(confounders),
-                            data = all_tune[!is.na(all_tune[,"y"]),],
-                            precision=seq(0.05,0.95, by=0.05))$auc
-}
-
-best_thresh <- colnames(all_prs_tune)[which.max(auc_tune)]
-
-
-all_prs_tune <- as.data.frame(all_prs_tune)
-all_prs_valid <- as.data.frame(all_prs_valid)
 
 mtx <- cor(all_prs_tune)
 drop <- names(all_prs_tune)[apply(mtx,2,function(x){sum(is.na(x))}) == (nrow(mtx) - 1)]
@@ -207,128 +174,68 @@ all_prs_tune <- dplyr::select(all_prs_tune, -c(drop))
 all_prs_valid <- dplyr::select(all_prs_valid, -c(drop))
 
 
-
-SL.library <- c(
-  "SL.glmnet",
-  "SL.glm",
-  "SL.mean"
-)
-
-full_superlearner <- SuperLearner(Y = y_tune, X = all_prs_tune, family = binomial(), method = "method.AUC",
-                                  # For a real analysis we would use V = 10.
-                                  # V = 3,
-                                  SL.library = SL.library,cvControl = list(V = 20,stratifyCV = TRUE))
-cvsl <- CV.SuperLearner(Y = y_tune, X = all_prs_tune, family = binomial(), method = "method.AUC",
-                        # For a real analysis we would use V = 10.
-                        # V = 3,
-                        SL.library = SL.library,cvControl = list(V = 20,stratifyCV = TRUE))
-
-best_algorithm <- summary(cvsl)$Table$Algorithm[which.min(summary(cvsl)$Table$Ave)]
-
-a_tune <- predict(full_superlearner, all_prs_tune, onlySL = FALSE)
-a_vad <- predict(full_superlearner, all_prs_valid, onlySL = FALSE)
-
-prs_best_tune_sl <- log(a_tune$pred)/(1 - log(a_tune$pred))
-prs_best_tune_glmnet <- log(a_tune$library.predict[,1])/(1 - log(a_tune$library.predict[,1]))
-prs_best_tune_glm <- log(a_tune$library.predict[,2])/(1 - log(a_tune$library.predict[,2]))
-prs_best_tune_mean <- log(a_tune$library.predict[,3])/(1 - log(a_tune$library.predict[,3]))
-
-prs_best_vad_sl <- log(a_vad$pred)/(1 - log(a_vad$pred))
-prs_best_vad_glmnet <- log(a_vad$library.predict[,1])/(1 - log(a_vad$library.predict[,1]))
-prs_best_vad_glm <- log(a_vad$library.predict[,2])/(1 - log(a_vad$library.predict[,2]))
-prs_best_vad_mean <- log(a_vad$library.predict[,3])/(1 - log(a_vad$library.predict[,3]))
-
-if(best_algorithm == "SL.glmnet_All"){
-  #final
-  prs_best_tune <- prs_best_tune_glmnet
-  prs_best_vad <- prs_best_vad_glmnet
-}else if(best_algorithm == "SL.glm_All"){
-  #final
-  prs_best_tune <- prs_best_tune_glm
-  prs_best_vad <- prs_best_vad_glm
-}else if(best_algorithm == "SL.mean_All"){
-  #final
-  prs_best_tune <- prs_best_tune_mean
-  prs_best_vad <- prs_best_vad_mean
-}else{
-  #final
-  prs_best_tune <- prs_best_tune_sl
-  prs_best_vad <- prs_best_vad_sl
-}
-
-tune_dat_sl_AUC <- data.frame(y = y_tune,x = prs_best_tune_sl,pheno_tune[,c("age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")])
-valid_dat_sl_AUC <- data.frame(y = y_valid,x = prs_best_vad_sl,pheno_valid[,c("age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")])
-
-AUC_sl_tune <- roc.binary(status = "y",
-                          variable = "x",
-                          confounders = as.formula(confounders),
-                          data = tune_dat_sl_AUC[!is.na(tune_dat_sl_AUC[,"y"]),],
-                          precision=seq(0.05,0.95, by=0.05))$auc
-
-if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
-  prs_best_tune_sl <- all_tune[,best_thresh]
-  prs_best_vad_sl <- all_valid[,best_thresh] 
+Ensemble_Function_Continuous <- function(x,y){
+  x <- as.matrix(x[!is.na(y),])
+  y <- y[!is.na(y)]
   
-  tune_dat_sl_AUC <- data.frame(y = y_tune,x = prs_best_tune_sl,pheno_tune[,c("age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")])
-  valid_dat_sl_AUC <- data.frame(y = y_valid,x = prs_best_vad_sl,pheno_valid[,c("age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")])
+  lasso_mod <- cv.glmnet(x,y,family = "gaussian",alpha = 1,type.measure = "mse",nfold = 10)
+  ridge_mod <- cv.glmnet(x,y,family = "gaussian",alpha = 0,type.measure = "mse",nfold = 10)
+  
+  lasso_prediction_x <- predict(lasso_mod, x)
+  ridge_prediction_x <- predict(ridge_mod, x)
+  
+  ensemble_mod <- lm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x))
+  
+  ensemble_prediction_x <- ensemble_mod$fitted
+  
+  coefficients_x <- coef(lm(y~.,data.frame(y = ensemble_prediction_x,x)))
+  return(list(Coefficients = coefficients_x))
 }
-
-
-
-if(AUC_sl_tune < auc_tune[which.max(auc_tune)]){
-  beta_matrix$Beta_Final <- beta_matrix[,best_thresh]
-  write.csv(beta_matrix[,c("Gene","Chr","Category","Number_SNV","Beta_Final")],file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_final_coef.csv"),row.names = FALSE)
-}else{
-  if(best_algorithm == "SL.glmnet_All"){
-    beta_full_superlearner <- data.frame(Coef = row.names(coef(full_superlearner$fitLibrary$SL.glmnet_All$object)),Beta = as.numeric(coef(full_superlearner$fitLibrary$SL.glmnet_All$object)))
-  }else if(best_algorithm == "SL.glm_All"){
-    beta_full_superlearner <- data.frame(Coef = names(coef(full_superlearner$fitLibrary$SL.glm_All$object)),Beta = as.numeric(coef(full_superlearner$fitLibrary$SL.glm_All$object)))
+Ensemble_Function_Binary<- function(x,y){
+  x <- as.matrix(x[!is.na(y),])
+  y <- y[!is.na(y)]
+  
+  lasso_mod <- cv.glmnet(x,y,family = "binomial",alpha = 1,type.measure = "auc")
+  ridge_mod <- cv.glmnet(x,y,family = "binomial",alpha = 0,type.measure = "auc")
+  
+  lasso_prediction_x <- predict(lasso_mod, x,type = "link")
+  ridge_prediction_x <- predict(ridge_mod, x,type = "link")
+  
+  ensemble_mod <- glm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x),family = binomial())
+  ensemble_prediction_x <- predict(ensemble_mod,data.frame(lasso_prediction_x,ridge_prediction_x),type = "link")
+  
+  coefficients_x <- coef(lm(y~.,data.frame(y = ensemble_prediction_x,x)))
+  return(list(Coefficients = coefficients_x))
+}
+Ensemble_Function <- function(x,y,family = c("continuous","binary")){
+  if(family == "continuous"){
+    return(Ensemble_Function_Continuous(x,y))
   }else{
-    beta_lasso <- data.frame(Coef = row.names(coef(full_superlearner$fitLibrary$SL.glmnet_All$object)),Beta = as.numeric(coef(full_superlearner$fitLibrary$SL.glmnet_All$object)))
-    beta_glm <- data.frame(Coef = names(coef(full_superlearner$fitLibrary$SL.glm_All$object)),Beta = as.numeric(coef(full_superlearner$fitLibrary$SL.glm_All$object)))
-    beta_mean <- data.frame(Coef = names(coef(full_superlearner$fitLibrary$SL.glm_All$object)), Beta = 0)
-    beta_mean$Beta[1] <- full_superlearner$fitLibrary$SL.mean_All$object
-    
-    beta_full_superlearner <- data.frame(Coef = names(coef(full_superlearner$fitLibrary$SL.glm_All$object)), Beta = 0)
-    beta_full_superlearner$Beta <- as.numeric(full_superlearner$coef[names(full_superlearner$coef) == "SL.glmnet_All"]) * beta_lasso$Beta + 
-      as.numeric(full_superlearner$coef[names(full_superlearner$coef) == "SL.glm_All"]) * beta_glm$Beta + 
-      as.numeric(full_superlearner$coef[names(full_superlearner$coef) == "SL.mean_All"]) * beta_mean$Beta 
+    return(Ensemble_Function_Binary(x,y))
   }
-  
-  beta_full_superlearner <- beta_full_superlearner[-1,]
-  
-  beta_matrix$Beta_Final <- 0
-  for(i in 1:nrow(beta_full_superlearner)){
-    beta_matrix$Beta_Final <- beta_matrix[,beta_full_superlearner$Coef[i]]*beta_full_superlearner$Beta[i]
-  }
-  write.csv(beta_matrix[,c("Gene","Chr","Category","Number_SNV","Beta_Final")],file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_final_coef.csv"),row.names = FALSE)
 }
 
+Results <- Ensemble_Function(x = all_prs_tune,y = pheno_tune[,trait],family = "binary")
+Results$Coefficients[is.na(Results$Coefficients)] <- 0
+Final_Coefficients <- data.frame(beta_matrix[,1:4],BETA = as.matrix(beta_matrix[,names(Results$Coefficients)[-1]]) %*% matrix(Results$Coefficients[-1],ncol = 1))
+write.csv(Final_Coefficients,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_final_coef.csv"),row.names = FALSE)
+PRS_Tune <- as.matrix(all_prs_tune[,names(Results$Coefficients)[-1]]) %*% matrix(Results$Coefficients[-1],ncol = 1)
+PRS_Validation <- as.matrix(all_prs_valid[,names(Results$Coefficients)[-1]]) %*% matrix(Results$Coefficients[-1],ncol = 1)
 
+PRS_Tune <- data.frame(IID = pheno_tune$IID, PRS = PRS_Tune)
+PRS_Validation <- data.frame(IID = pheno_valid$IID, PRS = PRS_Validation)
 
-
-
-
-
-
-
-
-
-
-
-
+write.csv(PRS_Tune,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_BestPRS_Tune.csv"),row.names = FALSE)
+write.csv(PRS_Validation,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_BestPRS_Validation.csv"),row.names = FALSE)
 
 load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
-RV_PRS <- data.frame(IID = pheno_valid$IID,Y = valid_dat_sl_AUC[,1],RV_PRS = valid_dat_sl_AUC[,2],pheno_valid[,c("age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")])
-
-write.csv(RV_PRS,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_BestPRS.csv"),row.names = FALSE)
+RV_PRS <- inner_join(pheno_valid[,c("IID",trait,"age","age2","sex","pc1","pc2","pc3","pc4","pc5","pc6","pc7","pc8","pc9","pc10")],PRS_Validation)
 
 RV_PRS_raw <- RV_PRS
 RV_PRS_adjusted <- RV_PRS
 
-
-tmp <- data.frame(y = RV_PRS_adjusted[,"RV_PRS"],RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+tmp <- data.frame(y = RV_PRS_adjusted[,"PRS"],RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
 mod <- lm(y~.,data = tmp)
 R <- mod$residuals
 tmp <- data.frame(y = R^2,RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
@@ -339,9 +246,9 @@ if(sum(y_hat < 0) > 0){
   y_hat <- predict(mod,tmp)
 }
 if(sum(sqrt(y_hat)) == 0){
-  RV_PRS_adjusted[,"RV_PRS"] <- 0
+  RV_PRS_adjusted[,"PRS"] <- 0
 }else{
-  RV_PRS_adjusted[,"RV_PRS"] <- R/sqrt(y_hat)
+  RV_PRS_adjusted[,"PRS"] <- R/sqrt(y_hat)
 }
 
 
@@ -357,40 +264,181 @@ RV_PRS_adjusted_AMR <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[uk
 RV_PRS_adjusted_AFR <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
 RV_PRS_adjusted_EAS <- RV_PRS_adjusted[RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
-RV_PRS_raw_EUR$RV_PRS <- scale(RV_PRS_raw_EUR$RV_PRS)
-RV_PRS_raw_SAS$RV_PRS <- scale(RV_PRS_raw_SAS$RV_PRS)
-RV_PRS_raw_AMR$RV_PRS <- scale(RV_PRS_raw_AMR$RV_PRS)
-RV_PRS_raw_AFR$RV_PRS <- scale(RV_PRS_raw_AFR$RV_PRS)
-RV_PRS_raw_EAS$RV_PRS <- scale(RV_PRS_raw_EAS$RV_PRS)
+RV_PRS_raw_EUR$PRS <- scale(RV_PRS_raw_EUR$PRS)
+RV_PRS_raw_SAS$PRS <- scale(RV_PRS_raw_SAS$PRS)
+RV_PRS_raw_AMR$PRS <- scale(RV_PRS_raw_AMR$PRS)
+RV_PRS_raw_AFR$PRS <- scale(RV_PRS_raw_AFR$PRS)
+RV_PRS_raw_EAS$PRS <- scale(RV_PRS_raw_EAS$PRS)
 
 
-beta_validation_raw_EUR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EUR,family = binomial()))[2]
-se_validation_raw_EUR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EUR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_SAS <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_SAS,family = binomial()))[2]
-se_validation_raw_SAS <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_SAS,family = binomial()))$coefficients[2,2]
-beta_validation_raw_AMR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AMR,family = binomial()))[2]
-se_validation_raw_AMR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AMR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_AFR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AFR,family = binomial()))[2]
-se_validation_raw_AFR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AFR,family = binomial()))$coefficients[2,2]
-beta_validation_raw_EAS <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EAS,family = binomial()))[2]
-se_validation_raw_EAS <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EAS,family = binomial()))$coefficients[2,2]
+Beta_Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  result <- coef(glm(as.formula(paste0(trait,"~","PRS","+",gsub("~","",confounders))),data = boot_data,family = binomial()))[2]
+  return(c(result))
+}
 
+AUC_Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  result <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = boot_data[!is.na(boot_data[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
+  return(c(result))
+}
 
-beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EUR,family = binomial()))[2]
-se_validation_adjusted_EUR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EUR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_SAS,family = binomial()))[2]
-se_validation_adjusted_SAS <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_SAS,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_AMR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AMR,family = binomial()))[2]
-se_validation_adjusted_AMR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AMR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AFR,family = binomial()))[2]
-se_validation_adjusted_AFR <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AFR,family = binomial()))$coefficients[2,2]
-beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EAS,family = binomial()))[2]
-se_validation_adjusted_EAS <- summary(glm(as.formula(paste0("Y~","RV_PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EAS,family = binomial()))$coefficients[2,2]
+beta_validation_raw_EUR <- coef(glm(as.formula(paste0(trait,"~","PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EUR,family = binomial()))[2]
+boot_beta <- boot(data = RV_PRS_raw_EUR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_EUR <- sd(boot_beta$t)
+beta_lower_validation_raw_EUR <- beta_ci$basic[4]
+beta_upper_validation_raw_EUR <- beta_ci$basic[5]
+
+auc_validation_raw_EUR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = RV_PRS_raw_EUR[!is.na(RV_PRS_raw_EUR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
+boot_auc <- boot(data = RV_PRS_raw_EUR, statistic = AUC_Boot, R = 1000)
+auc_ci <- boot.ci(boot_auc, type = "basic")
+auc_se_validation_raw_EUR <- sd(boot_auc$t)
+auc_lower_validation_raw_EUR <- auc_ci$basic[4]
+auc_upper_validation_raw_EUR <- auc_ci$basic[5]
+
+beta_validation_raw_SAS <- coef(glm(as.formula(paste0(trait,"~","PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_SAS,family = binomial()))[2]
+boot_beta <- boot(data = RV_PRS_raw_SAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_SAS <- sd(boot_beta$t)
+beta_lower_validation_raw_SAS <- beta_ci$basic[4]
+beta_upper_validation_raw_SAS <- beta_ci$basic[5]
+
+auc_validation_raw_SAS <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = RV_PRS_raw_SAS[!is.na(RV_PRS_raw_SAS[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
+boot_auc <- boot(data = RV_PRS_raw_SAS, statistic = AUC_Boot, R = 1000)
+auc_ci <- boot.ci(boot_auc, type = "basic")
+auc_se_validation_raw_SAS <- sd(boot_auc$t)
+auc_lower_validation_raw_SAS <- auc_ci$basic[4]
+auc_upper_validation_raw_SAS <- auc_ci$basic[5]
+
+beta_validation_raw_AMR <- coef(glm(as.formula(paste0(trait,"~","PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AMR,family = binomial()))[2]
+boot_beta <- boot(data = RV_PRS_raw_AMR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_AMR <- sd(boot_beta$t)
+beta_lower_validation_raw_AMR <- beta_ci$basic[4]
+beta_upper_validation_raw_AMR <- beta_ci$basic[5]
+
+auc_validation_raw_AMR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = RV_PRS_raw_AMR[!is.na(RV_PRS_raw_AMR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
+boot_auc <- boot(data = RV_PRS_raw_AMR, statistic = AUC_Boot, R = 1000)
+auc_ci <- boot.ci(boot_auc, type = "basic")
+auc_se_validation_raw_AMR <- sd(boot_auc$t)
+auc_lower_validation_raw_AMR <- auc_ci$basic[4]
+auc_upper_validation_raw_AMR <- auc_ci$basic[5]
+
+beta_validation_raw_AFR <- coef(glm(as.formula(paste0(trait,"~","PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_AFR,family = binomial()))[2]
+boot_beta <- boot(data = RV_PRS_raw_AFR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_AFR <- sd(boot_beta$t)
+beta_lower_validation_raw_AFR <- beta_ci$basic[4]
+beta_upper_validation_raw_AFR <- beta_ci$basic[5]
+
+auc_validation_raw_AFR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = RV_PRS_raw_AFR[!is.na(RV_PRS_raw_AFR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
+boot_auc <- boot(data = RV_PRS_raw_AFR, statistic = AUC_Boot, R = 1000)
+auc_ci <- boot.ci(boot_auc, type = "basic")
+auc_se_validation_raw_AFR <- sd(boot_auc$t)
+auc_lower_validation_raw_AFR <- auc_ci$basic[4]
+auc_upper_validation_raw_AFR <- auc_ci$basic[5]
+
+beta_validation_raw_EAS <- coef(glm(as.formula(paste0(trait,"~","PRS","+",gsub("~","",confounders))),data = RV_PRS_raw_EAS,family = binomial()))[2]
+boot_beta <- boot(data = RV_PRS_raw_EAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_EAS <- sd(boot_beta$t)
+beta_lower_validation_raw_EAS <- beta_ci$basic[4]
+beta_upper_validation_raw_EAS <- beta_ci$basic[5]
+
+auc_validation_raw_EAS <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = RV_PRS_raw_EAS[!is.na(RV_PRS_raw_EAS[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
+boot_auc <- boot(data = RV_PRS_raw_EAS, statistic = AUC_Boot, R = 1000)
+auc_ci <- boot.ci(boot_auc, type = "basic")
+auc_se_validation_raw_EAS <- sd(boot_auc$t)
+auc_lower_validation_raw_EAS <- auc_ci$basic[4]
+auc_upper_validation_raw_EAS <- auc_ci$basic[5]
+
+beta_validation_adjusted_EUR <- coef(glm(as.formula(paste0(trait,"~","PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EUR,family = binomial()))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_EUR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_EUR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_EUR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_EUR <- beta_ci$basic[5]
+
+auc_validation_adjusted_EUR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = RV_PRS_adjusted_EUR[!is.na(RV_PRS_adjusted_EUR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
+boot_auc <- boot(data = RV_PRS_adjusted_EUR, statistic = AUC_Boot, R = 1000)
+auc_ci <- boot.ci(boot_auc, type = "basic")
+auc_se_validation_adjusted_EUR <- sd(boot_auc$t)
+auc_lower_validation_adjusted_EUR <- auc_ci$basic[4]
+auc_upper_validation_adjusted_EUR <- auc_ci$basic[5]
+
+beta_validation_adjusted_SAS <- coef(glm(as.formula(paste0(trait,"~","PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_SAS,family = binomial()))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_SAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_SAS <- sd(boot_beta$t)
+beta_lower_validation_adjusted_SAS <- beta_ci$basic[4]
+beta_upper_validation_adjusted_SAS <- beta_ci$basic[5]
+
+auc_validation_adjusted_SAS <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = RV_PRS_adjusted_SAS[!is.na(RV_PRS_adjusted_SAS[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
+boot_auc <- boot(data = RV_PRS_adjusted_SAS, statistic = AUC_Boot, R = 1000)
+auc_ci <- boot.ci(boot_auc, type = "basic")
+auc_se_validation_adjusted_SAS <- sd(boot_auc$t)
+auc_lower_validation_adjusted_SAS <- auc_ci$basic[4]
+auc_upper_validation_adjusted_SAS <- auc_ci$basic[5]
+
+beta_validation_adjusted_AMR <- coef(glm(as.formula(paste0(trait,"~","PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AMR,family = binomial()))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_AMR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_AMR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_AMR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_AMR <- beta_ci$basic[5]
+
+auc_validation_adjusted_AMR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = RV_PRS_adjusted_AMR[!is.na(RV_PRS_adjusted_AMR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
+boot_auc <- boot(data = RV_PRS_adjusted_AMR, statistic = AUC_Boot, R = 1000)
+auc_ci <- boot.ci(boot_auc, type = "basic")
+auc_se_validation_adjusted_AMR <- sd(boot_auc$t)
+auc_lower_validation_adjusted_AMR <- auc_ci$basic[4]
+auc_upper_validation_adjusted_AMR <- auc_ci$basic[5]
+
+beta_validation_adjusted_AFR <- coef(glm(as.formula(paste0(trait,"~","PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_AFR,family = binomial()))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_AFR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_AFR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_AFR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_AFR <- beta_ci$basic[5]
+
+auc_validation_adjusted_AFR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = RV_PRS_adjusted_AFR[!is.na(RV_PRS_adjusted_AFR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
+boot_auc <- boot(data = RV_PRS_adjusted_AFR, statistic = AUC_Boot, R = 1000)
+auc_ci <- boot.ci(boot_auc, type = "basic")
+auc_se_validation_adjusted_AFR <- sd(boot_auc$t)
+auc_lower_validation_adjusted_AFR <- auc_ci$basic[4]
+auc_upper_validation_adjusted_AFR <- auc_ci$basic[5]
+
+beta_validation_adjusted_EAS <- coef(glm(as.formula(paste0(trait,"~","PRS","+",gsub("~","",confounders))),data = RV_PRS_adjusted_EAS,family = binomial()))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_EAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_EAS <- sd(boot_beta$t)
+beta_lower_validation_adjusted_EAS <- beta_ci$basic[4]
+beta_upper_validation_adjusted_EAS <- beta_ci$basic[5]
+
+auc_validation_adjusted_EAS <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = RV_PRS_adjusted_EAS[!is.na(RV_PRS_adjusted_EAS[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
+boot_auc <- boot(data = RV_PRS_adjusted_EAS, statistic = AUC_Boot, R = 1000)
+auc_ci <- boot.ci(boot_auc, type = "basic")
+auc_se_validation_adjusted_EAS <- sd(boot_auc$t)
+auc_lower_validation_adjusted_EAS <- auc_ci$basic[4]
+auc_upper_validation_adjusted_EAS <- auc_ci$basic[5]
 
 RV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
-                             beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_SAS,beta_validation_raw_AMR,beta_validation_raw_AFR,beta_validation_raw_EAS), 
-                             se_raw = c(se_validation_raw_EUR,se_validation_raw_SAS,se_validation_raw_AMR,se_validation_raw_AFR,se_validation_raw_EAS), 
-                             beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_SAS,beta_validation_adjusted_AMR,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
-                             se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_SAS,se_validation_adjusted_AMR,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
+                         beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_SAS,beta_validation_raw_AMR,beta_validation_raw_AFR,beta_validation_raw_EAS), 
+                         beta_se_raw = c(beta_se_validation_raw_EUR,beta_se_validation_raw_SAS,beta_se_validation_raw_AMR,beta_se_validation_raw_AFR,beta_se_validation_raw_EAS), 
+                         beta_lower_raw = c(beta_lower_validation_raw_EUR,beta_lower_validation_raw_SAS,beta_lower_validation_raw_AMR,beta_lower_validation_raw_AFR,beta_lower_validation_raw_EAS), 
+                         beta_upper_raw = c(beta_upper_validation_raw_EUR,beta_upper_validation_raw_SAS,beta_upper_validation_raw_AMR,beta_upper_validation_raw_AFR,beta_upper_validation_raw_EAS), 
+                         AUC_raw = c(auc_validation_raw_EUR,auc_validation_raw_SAS,auc_validation_raw_AMR,auc_validation_raw_AFR,auc_validation_raw_EAS),
+                         AUC_se_raw = c(auc_se_validation_raw_EUR,auc_se_validation_raw_SAS,auc_se_validation_raw_AMR,auc_se_validation_raw_AFR,auc_se_validation_raw_EAS),
+                         AUC_lower_raw = c(auc_lower_validation_raw_EUR,auc_lower_validation_raw_SAS,auc_lower_validation_raw_AMR,auc_lower_validation_raw_AFR,auc_lower_validation_raw_EAS),
+                         AUC_upper_raw = c(auc_upper_validation_raw_EUR,auc_upper_validation_raw_SAS,auc_upper_validation_raw_AMR,auc_upper_validation_raw_AFR,auc_upper_validation_raw_EAS),
+                         beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_SAS,beta_validation_adjusted_AMR,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
+                         beta_se_adjusted = c(beta_se_validation_adjusted_EUR,beta_se_validation_adjusted_SAS,beta_se_validation_adjusted_AMR,beta_se_validation_adjusted_AFR,beta_se_validation_adjusted_EAS), 
+                         beta_lower_adjusted = c(beta_lower_validation_adjusted_EUR,beta_lower_validation_adjusted_SAS,beta_lower_validation_adjusted_AMR,beta_lower_validation_adjusted_AFR,beta_lower_validation_adjusted_EAS), 
+                         beta_upper_adjusted = c(beta_upper_validation_adjusted_EUR,beta_upper_validation_adjusted_SAS,beta_upper_validation_adjusted_AMR,beta_upper_validation_adjusted_AFR,beta_upper_validation_adjusted_EAS), 
+                         AUC_adjusted = c(auc_validation_adjusted_EUR,auc_validation_adjusted_SAS,auc_validation_adjusted_AMR,auc_validation_adjusted_AFR,auc_validation_adjusted_EAS),
+                         AUC_se_adjusted = c(auc_se_validation_adjusted_EUR,auc_se_validation_adjusted_SAS,auc_se_validation_adjusted_AMR,auc_se_validation_adjusted_AFR,auc_se_validation_adjusted_EAS),
+                         AUC_lower_adjusted = c(auc_lower_validation_adjusted_EUR,auc_lower_validation_adjusted_SAS,auc_lower_validation_adjusted_AMR,auc_lower_validation_adjusted_AFR,auc_lower_validation_adjusted_EAS),
+                         AUC_upper_adjusted = c(auc_upper_validation_adjusted_EUR,auc_upper_validation_adjusted_SAS,auc_upper_validation_adjusted_AMR,auc_upper_validation_adjusted_AFR,auc_upper_validation_adjusted_EAS))
 
 write.csv(RV_PRS_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"Best_Betas.csv"),row.names = FALSE)
