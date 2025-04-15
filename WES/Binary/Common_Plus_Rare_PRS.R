@@ -118,250 +118,188 @@ AUC_Boot <- function(data,indices){
 }
 
 beta_CV_validation_raw_EUR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_raw_EUR,family = binomial()))[2]
-boot_beta <- boot(data = CV_RV_PRS_raw_EUR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_raw_EUR, statistic = Beta_CV_Boot, R = 10000)
+beta_CV_raw_EUR_boot <- boot_beta$t
 beta_CV_se_validation_raw_EUR <- sd(boot_beta$t)
-beta_CV_lower_validation_raw_EUR <- beta_ci$basic[4]
-beta_CV_upper_validation_raw_EUR <- beta_ci$basic[5]
 
 beta_RV_validation_raw_EUR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_raw_EUR,family = binomial()))[3]
-boot_beta <- boot(data = CV_RV_PRS_raw_EUR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_raw_EUR, statistic = Beta_RV_Boot, R = 10000)
+beta_RV_raw_EUR_boot <- boot_beta$t
 beta_RV_se_validation_raw_EUR <- sd(boot_beta$t)
-beta_RV_lower_validation_raw_EUR <- beta_ci$basic[4]
-beta_RV_upper_validation_raw_EUR <- beta_ci$basic[5]
 
 auc_validation_raw_EUR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = CV_RV_PRS_raw_EUR[!is.na(CV_RV_PRS_raw_EUR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
-boot_auc <- boot(data = CV_RV_PRS_raw_EUR, statistic = AUC_Boot, R = 1000)
-auc_ci <- boot.ci(boot_auc, type = "basic")
+boot_auc <- boot(data = CV_RV_PRS_raw_EUR, statistic = AUC_Boot, R = 10000)
+AUC_raw_EUR_boot <- boot_auc$t
 auc_se_validation_raw_EUR <- sd(boot_auc$t)
-auc_lower_validation_raw_EUR <- auc_ci$basic[4]
-auc_upper_validation_raw_EUR <- auc_ci$basic[5]
 
 beta_CV_validation_raw_SAS <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_raw_SAS,family = binomial()))[2]
-boot_beta <- boot(data = CV_RV_PRS_raw_SAS, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_raw_SAS, statistic = Beta_CV_Boot, R = 10000)
+beta_CV_raw_SAS_boot <- boot_beta$t
 beta_CV_se_validation_raw_SAS <- sd(boot_beta$t)
-beta_CV_lower_validation_raw_SAS <- beta_ci$basic[4]
-beta_CV_upper_validation_raw_SAS <- beta_ci$basic[5]
 
 beta_RV_validation_raw_SAS <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_raw_SAS,family = binomial()))[3]
-boot_beta <- boot(data = CV_RV_PRS_raw_SAS, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_raw_SAS, statistic = Beta_RV_Boot, R = 10000)
+beta_RV_raw_SAS_boot <- boot_beta$t
 beta_RV_se_validation_raw_SAS <- sd(boot_beta$t)
-beta_RV_lower_validation_raw_SAS <- beta_ci$basic[4]
-beta_RV_upper_validation_raw_SAS <- beta_ci$basic[5]
 
 auc_validation_raw_SAS <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = CV_RV_PRS_raw_SAS[!is.na(CV_RV_PRS_raw_SAS[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
-boot_auc <- boot(data = CV_RV_PRS_raw_SAS, statistic = AUC_Boot, R = 1000)
-auc_ci <- boot.ci(boot_auc, type = "basic")
+boot_auc <- boot(data = CV_RV_PRS_raw_SAS, statistic = AUC_Boot, R = 10000)
+AUC_raw_SAS_boot <- boot_auc$t
 auc_se_validation_raw_SAS <- sd(boot_auc$t)
-auc_lower_validation_raw_SAS <- auc_ci$basic[4]
-auc_upper_validation_raw_SAS <- auc_ci$basic[5]
 
 beta_CV_validation_raw_AMR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_raw_AMR,family = binomial()))[2]
-boot_beta <- boot(data = CV_RV_PRS_raw_AMR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_raw_AMR, statistic = Beta_CV_Boot, R = 10000)
+beta_CV_raw_AMR_boot <- boot_beta$t
 beta_CV_se_validation_raw_AMR <- sd(boot_beta$t)
-beta_CV_lower_validation_raw_AMR <- beta_ci$basic[4]
-beta_CV_upper_validation_raw_AMR <- beta_ci$basic[5]
 
 beta_RV_validation_raw_AMR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_raw_AMR,family = binomial()))[3]
-boot_beta <- boot(data = CV_RV_PRS_raw_AMR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_raw_AMR, statistic = Beta_RV_Boot, R = 10000)
+beta_RV_raw_AMR_boot <- boot_beta$t
 beta_RV_se_validation_raw_AMR <- sd(boot_beta$t)
-beta_RV_lower_validation_raw_AMR <- beta_ci$basic[4]
-beta_RV_upper_validation_raw_AMR <- beta_ci$basic[5]
 
 auc_validation_raw_AMR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = CV_RV_PRS_raw_AMR[!is.na(CV_RV_PRS_raw_AMR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
-boot_auc <- boot(data = CV_RV_PRS_raw_AMR, statistic = AUC_Boot, R = 1000)
-auc_ci <- boot.ci(boot_auc, type = "basic")
+boot_auc <- boot(data = CV_RV_PRS_raw_AMR, statistic = AUC_Boot, R = 10000)
+AUC_raw_AMR_boot <- boot_auc$t
 auc_se_validation_raw_AMR <- sd(boot_auc$t)
-auc_lower_validation_raw_AMR <- auc_ci$basic[4]
-auc_upper_validation_raw_AMR <- auc_ci$basic[5]
 
 beta_CV_validation_raw_AFR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_raw_AFR,family = binomial()))[2]
-boot_beta <- boot(data = CV_RV_PRS_raw_AFR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_raw_AFR, statistic = Beta_CV_Boot, R = 10000)
+beta_CV_raw_AFR_boot <- boot_beta$t
 beta_CV_se_validation_raw_AFR <- sd(boot_beta$t)
-beta_CV_lower_validation_raw_AFR <- beta_ci$basic[4]
-beta_CV_upper_validation_raw_AFR <- beta_ci$basic[5]
 
 beta_RV_validation_raw_AFR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_raw_AFR,family = binomial()))[3]
-boot_beta <- boot(data = CV_RV_PRS_raw_AFR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_raw_AFR, statistic = Beta_RV_Boot, R = 10000)
+beta_RV_raw_AFR_boot <- boot_beta$t
 beta_RV_se_validation_raw_AFR <- sd(boot_beta$t)
-beta_RV_lower_validation_raw_AFR <- beta_ci$basic[4]
-beta_RV_upper_validation_raw_AFR <- beta_ci$basic[5]
 
 auc_validation_raw_AFR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = CV_RV_PRS_raw_AFR[!is.na(CV_RV_PRS_raw_AFR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
-boot_auc <- boot(data = CV_RV_PRS_raw_AFR, statistic = AUC_Boot, R = 1000)
-auc_ci <- boot.ci(boot_auc, type = "basic")
+boot_auc <- boot(data = CV_RV_PRS_raw_AFR, statistic = AUC_Boot, R = 10000)
+AUC_raw_AFR_boot <- boot_auc$t
 auc_se_validation_raw_AFR <- sd(boot_auc$t)
-auc_lower_validation_raw_AFR <- auc_ci$basic[4]
-auc_upper_validation_raw_AFR <- auc_ci$basic[5]
 
 beta_CV_validation_raw_EAS <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_raw_EAS,family = binomial()))[2]
-boot_beta <- boot(data = CV_RV_PRS_raw_EAS, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_raw_EAS, statistic = Beta_CV_Boot, R = 10000)
+beta_CV_raw_EAS_boot <- boot_beta$t
 beta_CV_se_validation_raw_EAS <- sd(boot_beta$t)
-beta_CV_lower_validation_raw_EAS <- beta_ci$basic[4]
-beta_CV_upper_validation_raw_EAS <- beta_ci$basic[5]
 
 beta_RV_validation_raw_EAS <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_raw_EAS,family = binomial()))[3]
-boot_beta <- boot(data = CV_RV_PRS_raw_EAS, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_raw_EAS, statistic = Beta_RV_Boot, R = 10000)
+beta_RV_raw_EAS_boot <- boot_beta$t
 beta_RV_se_validation_raw_EAS <- sd(boot_beta$t)
-beta_RV_lower_validation_raw_EAS <- beta_ci$basic[4]
-beta_RV_upper_validation_raw_EAS <- beta_ci$basic[5]
 
 auc_validation_raw_EAS <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = CV_RV_PRS_raw_EAS[!is.na(CV_RV_PRS_raw_EAS[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
-boot_auc <- boot(data = CV_RV_PRS_raw_EAS, statistic = AUC_Boot, R = 1000)
-auc_ci <- boot.ci(boot_auc, type = "basic")
+boot_auc <- boot(data = CV_RV_PRS_raw_EAS, statistic = AUC_Boot, R = 10000)
+AUC_raw_EAS_boot <- boot_auc$t
 auc_se_validation_raw_EAS <- sd(boot_auc$t)
-auc_lower_validation_raw_EAS <- auc_ci$basic[4]
-auc_upper_validation_raw_EAS <- auc_ci$basic[5]
 
 beta_CV_validation_adjusted_EUR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_adjusted_EUR,family = binomial()))[2]
-boot_beta <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = Beta_CV_Boot, R = 10000)
+beta_CV_adjusted_EUR_boot <- boot_beta$t
 beta_CV_se_validation_adjusted_EUR <- sd(boot_beta$t)
-beta_CV_lower_validation_adjusted_EUR <- beta_ci$basic[4]
-beta_CV_upper_validation_adjusted_EUR <- beta_ci$basic[5]
 
 beta_RV_validation_adjusted_EUR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_adjusted_EUR,family = binomial()))[3]
-boot_beta <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = Beta_RV_Boot, R = 10000)
+beta_RV_adjusted_EUR_boot <- boot_beta$t
 beta_RV_se_validation_adjusted_EUR <- sd(boot_beta$t)
-beta_RV_lower_validation_adjusted_EUR <- beta_ci$basic[4]
-beta_RV_upper_validation_adjusted_EUR <- beta_ci$basic[5]
 
 auc_validation_adjusted_EUR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = CV_RV_PRS_adjusted_EUR[!is.na(CV_RV_PRS_adjusted_EUR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
-boot_auc <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = AUC_Boot, R = 1000)
-auc_ci <- boot.ci(boot_auc, type = "basic")
+boot_auc <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = AUC_Boot, R = 10000)
+AUC_adjusted_EUR_boot <- boot_auc$t
 auc_se_validation_adjusted_EUR <- sd(boot_auc$t)
-auc_lower_validation_adjusted_EUR <- auc_ci$basic[4]
-auc_upper_validation_adjusted_EUR <- auc_ci$basic[5]
 
 beta_CV_validation_adjusted_SAS <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_adjusted_SAS,family = binomial()))[2]
-boot_beta <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = Beta_CV_Boot, R = 10000)
+beta_CV_adjusted_SAS_boot <- boot_beta$t
 beta_CV_se_validation_adjusted_SAS <- sd(boot_beta$t)
-beta_CV_lower_validation_adjusted_SAS <- beta_ci$basic[4]
-beta_CV_upper_validation_adjusted_SAS <- beta_ci$basic[5]
 
 beta_RV_validation_adjusted_SAS <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_adjusted_SAS,family = binomial()))[3]
-boot_beta <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = Beta_RV_Boot, R = 10000)
+beta_RV_adjusted_SAS_boot <- boot_beta$t
 beta_RV_se_validation_adjusted_SAS <- sd(boot_beta$t)
-beta_RV_lower_validation_adjusted_SAS <- beta_ci$basic[4]
-beta_RV_upper_validation_adjusted_SAS <- beta_ci$basic[5]
 
 auc_validation_adjusted_SAS <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = CV_RV_PRS_adjusted_SAS[!is.na(CV_RV_PRS_adjusted_SAS[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
-boot_auc <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = AUC_Boot, R = 1000)
-auc_ci <- boot.ci(boot_auc, type = "basic")
+boot_auc <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = AUC_Boot, R = 10000)
+AUC_adjusted_SAS_boot <- boot_auc$t
 auc_se_validation_adjusted_SAS <- sd(boot_auc$t)
-auc_lower_validation_adjusted_SAS <- auc_ci$basic[4]
-auc_upper_validation_adjusted_SAS <- auc_ci$basic[5]
 
 beta_CV_validation_adjusted_AMR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_adjusted_AMR,family = binomial()))[2]
-boot_beta <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = Beta_CV_Boot, R = 10000)
+beta_CV_adjusted_AMR_boot <- boot_beta$t
 beta_CV_se_validation_adjusted_AMR <- sd(boot_beta$t)
-beta_CV_lower_validation_adjusted_AMR <- beta_ci$basic[4]
-beta_CV_upper_validation_adjusted_AMR <- beta_ci$basic[5]
 
 beta_RV_validation_adjusted_AMR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_adjusted_AMR,family = binomial()))[3]
-boot_beta <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = Beta_RV_Boot, R = 10000)
+beta_RV_adjusted_AMR_boot <- boot_beta$t
 beta_RV_se_validation_adjusted_AMR <- sd(boot_beta$t)
-beta_RV_lower_validation_adjusted_AMR <- beta_ci$basic[4]
-beta_RV_upper_validation_adjusted_AMR <- beta_ci$basic[5]
 
 auc_validation_adjusted_AMR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = CV_RV_PRS_adjusted_AMR[!is.na(CV_RV_PRS_adjusted_AMR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
-boot_auc <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = AUC_Boot, R = 1000)
-auc_ci <- boot.ci(boot_auc, type = "basic")
+boot_auc <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = AUC_Boot, R = 10000)
+AUC_adjusted_AMR_boot <- boot_auc$t
 auc_se_validation_adjusted_AMR <- sd(boot_auc$t)
-auc_lower_validation_adjusted_AMR <- auc_ci$basic[4]
-auc_upper_validation_adjusted_AMR <- auc_ci$basic[5]
 
 beta_CV_validation_adjusted_AFR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_adjusted_AFR,family = binomial()))[2]
-boot_beta <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = Beta_CV_Boot, R = 10000)
+beta_CV_adjusted_AFR_boot <- boot_beta$t
 beta_CV_se_validation_adjusted_AFR <- sd(boot_beta$t)
-beta_CV_lower_validation_adjusted_AFR <- beta_ci$basic[4]
-beta_CV_upper_validation_adjusted_AFR <- beta_ci$basic[5]
 
 beta_RV_validation_adjusted_AFR <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_adjusted_AFR,family = binomial()))[3]
-boot_beta <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = Beta_RV_Boot, R = 10000)
+beta_RV_adjusted_AFR_boot <- boot_beta$t
 beta_RV_se_validation_adjusted_AFR <- sd(boot_beta$t)
-beta_RV_lower_validation_adjusted_AFR <- beta_ci$basic[4]
-beta_RV_upper_validation_adjusted_AFR <- beta_ci$basic[5]
 
 auc_validation_adjusted_AFR <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = CV_RV_PRS_adjusted_AFR[!is.na(CV_RV_PRS_adjusted_AFR[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
-boot_auc <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = AUC_Boot, R = 1000)
-auc_ci <- boot.ci(boot_auc, type = "basic")
+boot_auc <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = AUC_Boot, R = 10000)
+AUC_adjusted_AFR_boot <- boot_auc$t
 auc_se_validation_adjusted_AFR <- sd(boot_auc$t)
-auc_lower_validation_adjusted_AFR <- auc_ci$basic[4]
-auc_upper_validation_adjusted_AFR <- auc_ci$basic[5]
 
 beta_CV_validation_adjusted_EAS <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_adjusted_EAS,family = binomial()))[2]
-boot_beta <- boot(data = CV_RV_PRS_adjusted_EAS, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_adjusted_EAS, statistic = Beta_CV_Boot, R = 10000)
+beta_CV_adjusted_EAS_boot <- boot_beta$t
 beta_CV_se_validation_adjusted_EAS <- sd(boot_beta$t)
-beta_CV_lower_validation_adjusted_EAS <- beta_ci$basic[4]
-beta_CV_upper_validation_adjusted_EAS <- beta_ci$basic[5]
 
 beta_RV_validation_adjusted_EAS <- coef(glm(as.formula(paste0(trait,"~","CV_PRS + RV_PRS","+",gsub("~","",confounders))),data = CV_RV_PRS_adjusted_EAS,family = binomial()))[3]
-boot_beta <- boot(data = CV_RV_PRS_adjusted_EAS, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+boot_beta <- boot(data = CV_RV_PRS_adjusted_EAS, statistic = Beta_RV_Boot, R = 10000)
+beta_RV_adjusted_EAS_boot <- boot_beta$t
 beta_RV_se_validation_adjusted_EAS <- sd(boot_beta$t)
-beta_RV_lower_validation_adjusted_EAS <- beta_ci$basic[4]
-beta_RV_upper_validation_adjusted_EAS <- beta_ci$basic[5]
 
 auc_validation_adjusted_EAS <- roc.binary(status = trait,variable = "PRS",confounders = as.formula(confounders),data = CV_RV_PRS_adjusted_EAS[!is.na(CV_RV_PRS_adjusted_EAS[,trait]),],precision=seq(0.05,0.95, by=0.05))$auc
-boot_auc <- boot(data = CV_RV_PRS_adjusted_EAS, statistic = AUC_Boot, R = 1000)
-auc_ci <- boot.ci(boot_auc, type = "basic")
+boot_auc <- boot(data = CV_RV_PRS_adjusted_EAS, statistic = AUC_Boot, R = 10000)
+AUC_adjusted_EAS_boot <- boot_auc$t
 auc_se_validation_adjusted_EAS <- sd(boot_auc$t)
-auc_lower_validation_adjusted_EAS <- auc_ci$basic[4]
-auc_upper_validation_adjusted_EAS <- auc_ci$basic[5]
 
 CV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
                          beta_raw = c(beta_CV_validation_raw_EUR,beta_CV_validation_raw_SAS,beta_CV_validation_raw_AMR,beta_CV_validation_raw_AFR,beta_CV_validation_raw_EAS), 
                          beta_se_raw = c(beta_CV_se_validation_raw_EUR,beta_CV_se_validation_raw_SAS,beta_CV_se_validation_raw_AMR,beta_CV_se_validation_raw_AFR,beta_CV_se_validation_raw_EAS), 
-                         beta_lower_raw = c(beta_CV_lower_validation_raw_EUR,beta_CV_lower_validation_raw_SAS,beta_CV_lower_validation_raw_AMR,beta_CV_lower_validation_raw_AFR,beta_CV_lower_validation_raw_EAS), 
-                         beta_upper_raw = c(beta_CV_upper_validation_raw_EUR,beta_CV_upper_validation_raw_SAS,beta_CV_upper_validation_raw_AMR,beta_CV_upper_validation_raw_AFR,beta_CV_upper_validation_raw_EAS), 
                          AUC_raw = c(auc_validation_raw_EUR,auc_validation_raw_SAS,auc_validation_raw_AMR,auc_validation_raw_AFR,auc_validation_raw_EAS),
                          AUC_se_raw = c(auc_se_validation_raw_EUR,auc_se_validation_raw_SAS,auc_se_validation_raw_AMR,auc_se_validation_raw_AFR,auc_se_validation_raw_EAS),
-                         AUC_lower_raw = c(auc_lower_validation_raw_EUR,auc_lower_validation_raw_SAS,auc_lower_validation_raw_AMR,auc_lower_validation_raw_AFR,auc_lower_validation_raw_EAS),
-                         AUC_upper_raw = c(auc_upper_validation_raw_EUR,auc_upper_validation_raw_SAS,auc_upper_validation_raw_AMR,auc_upper_validation_raw_AFR,auc_upper_validation_raw_EAS),
                          beta_adjusted = c(beta_CV_validation_adjusted_EUR,beta_CV_validation_adjusted_SAS,beta_CV_validation_adjusted_AMR,beta_CV_validation_adjusted_AFR,beta_CV_validation_adjusted_EAS), 
                          beta_se_adjusted = c(beta_CV_se_validation_adjusted_EUR,beta_CV_se_validation_adjusted_SAS,beta_CV_se_validation_adjusted_AMR,beta_CV_se_validation_adjusted_AFR,beta_CV_se_validation_adjusted_EAS), 
-                         beta_lower_adjusted = c(beta_CV_lower_validation_adjusted_EUR,beta_CV_lower_validation_adjusted_SAS,beta_CV_lower_validation_adjusted_AMR,beta_CV_lower_validation_adjusted_AFR,beta_CV_lower_validation_adjusted_EAS), 
-                         beta_upper_adjusted = c(beta_CV_upper_validation_adjusted_EUR,beta_CV_upper_validation_adjusted_SAS,beta_CV_upper_validation_adjusted_AMR,beta_CV_upper_validation_adjusted_AFR,beta_CV_upper_validation_adjusted_EAS), 
                          AUC_adjusted = c(auc_validation_adjusted_EUR,auc_validation_adjusted_SAS,auc_validation_adjusted_AMR,auc_validation_adjusted_AFR,auc_validation_adjusted_EAS),
-                         AUC_se_adjusted = c(auc_se_validation_adjusted_EUR,auc_se_validation_adjusted_SAS,auc_se_validation_adjusted_AMR,auc_se_validation_adjusted_AFR,auc_se_validation_adjusted_EAS),
-                         AUC_lower_adjusted = c(auc_lower_validation_adjusted_EUR,auc_lower_validation_adjusted_SAS,auc_lower_validation_adjusted_AMR,auc_lower_validation_adjusted_AFR,auc_lower_validation_adjusted_EAS),
-                         AUC_upper_adjusted = c(auc_upper_validation_adjusted_EUR,auc_upper_validation_adjusted_SAS,auc_upper_validation_adjusted_AMR,auc_upper_validation_adjusted_AFR,auc_upper_validation_adjusted_EAS))
+                         AUC_se_adjusted = c(auc_se_validation_adjusted_EUR,auc_se_validation_adjusted_SAS,auc_se_validation_adjusted_AMR,auc_se_validation_adjusted_AFR,auc_se_validation_adjusted_EAS))
+
+CV_Boot_Results <- data.frame(trait = trait,beta_CV_raw_EUR_boot,AUC_raw_EUR_boot,beta_CV_raw_SAS_boot,AUC_raw_SAS_boot,
+                              beta_CV_raw_AMR_boot,AUC_raw_AMR_boot,beta_CV_raw_AFR_boot,AUC_raw_AFR_boot,
+                              beta_CV_raw_EAS_boot,AUC_raw_EAS_boot,beta_CV_adjusted_EUR_boot,AUC_adjusted_EUR_boot,
+                              beta_CV_adjusted_SAS_boot,AUC_adjusted_SAS_boot,beta_CV_adjusted_AMR_boot,AUC_adjusted_AMR_boot,
+                              beta_CV_adjusted_AFR_boot,AUC_adjusted_AFR_boot,beta_CV_adjusted_EAS_boot,AUC_adjusted_EAS_boot)
 
 RV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
                          beta_raw = c(beta_RV_validation_raw_EUR,beta_RV_validation_raw_SAS,beta_RV_validation_raw_AMR,beta_RV_validation_raw_AFR,beta_RV_validation_raw_EAS), 
                          beta_se_raw = c(beta_RV_se_validation_raw_EUR,beta_RV_se_validation_raw_SAS,beta_RV_se_validation_raw_AMR,beta_RV_se_validation_raw_AFR,beta_RV_se_validation_raw_EAS), 
-                         beta_lower_raw = c(beta_RV_lower_validation_raw_EUR,beta_RV_lower_validation_raw_SAS,beta_RV_lower_validation_raw_AMR,beta_RV_lower_validation_raw_AFR,beta_RV_lower_validation_raw_EAS), 
-                         beta_upper_raw = c(beta_RV_upper_validation_raw_EUR,beta_RV_upper_validation_raw_SAS,beta_RV_upper_validation_raw_AMR,beta_RV_upper_validation_raw_AFR,beta_RV_upper_validation_raw_EAS), 
                          AUC_raw = c(auc_validation_raw_EUR,auc_validation_raw_SAS,auc_validation_raw_AMR,auc_validation_raw_AFR,auc_validation_raw_EAS),
                          AUC_se_raw = c(auc_se_validation_raw_EUR,auc_se_validation_raw_SAS,auc_se_validation_raw_AMR,auc_se_validation_raw_AFR,auc_se_validation_raw_EAS),
-                         AUC_lower_raw = c(auc_lower_validation_raw_EUR,auc_lower_validation_raw_SAS,auc_lower_validation_raw_AMR,auc_lower_validation_raw_AFR,auc_lower_validation_raw_EAS),
-                         AUC_upper_raw = c(auc_upper_validation_raw_EUR,auc_upper_validation_raw_SAS,auc_upper_validation_raw_AMR,auc_upper_validation_raw_AFR,auc_upper_validation_raw_EAS),
                          beta_adjusted = c(beta_RV_validation_adjusted_EUR,beta_RV_validation_adjusted_SAS,beta_RV_validation_adjusted_AMR,beta_RV_validation_adjusted_AFR,beta_RV_validation_adjusted_EAS), 
                          beta_se_adjusted = c(beta_RV_se_validation_adjusted_EUR,beta_RV_se_validation_adjusted_SAS,beta_RV_se_validation_adjusted_AMR,beta_RV_se_validation_adjusted_AFR,beta_RV_se_validation_adjusted_EAS), 
-                         beta_lower_adjusted = c(beta_RV_lower_validation_adjusted_EUR,beta_RV_lower_validation_adjusted_SAS,beta_RV_lower_validation_adjusted_AMR,beta_RV_lower_validation_adjusted_AFR,beta_RV_lower_validation_adjusted_EAS), 
-                         beta_upper_adjusted = c(beta_RV_upper_validation_adjusted_EUR,beta_RV_upper_validation_adjusted_SAS,beta_RV_upper_validation_adjusted_AMR,beta_RV_upper_validation_adjusted_AFR,beta_RV_upper_validation_adjusted_EAS), 
                          AUC_adjusted = c(auc_validation_adjusted_EUR,auc_validation_adjusted_SAS,auc_validation_adjusted_AMR,auc_validation_adjusted_AFR,auc_validation_adjusted_EAS),
-                         AUC_se_adjusted = c(auc_se_validation_adjusted_EUR,auc_se_validation_adjusted_SAS,auc_se_validation_adjusted_AMR,auc_se_validation_adjusted_AFR,auc_se_validation_adjusted_EAS),
-                         AUC_lower_adjusted = c(auc_lower_validation_adjusted_EUR,auc_lower_validation_adjusted_SAS,auc_lower_validation_adjusted_AMR,auc_lower_validation_adjusted_AFR,auc_lower_validation_adjusted_EAS),
-                         AUC_upper_adjusted = c(auc_upper_validation_adjusted_EUR,auc_upper_validation_adjusted_SAS,auc_upper_validation_adjusted_AMR,auc_upper_validation_adjusted_AFR,auc_upper_validation_adjusted_EAS))
+                         AUC_se_adjusted = c(auc_se_validation_adjusted_EUR,auc_se_validation_adjusted_SAS,auc_se_validation_adjusted_AMR,auc_se_validation_adjusted_AFR,auc_se_validation_adjusted_EAS))
+
+RV_Boot_Results <- data.frame(trait = trait,beta_RV_raw_EUR_boot,AUC_raw_EUR_boot,beta_RV_raw_SAS_boot,AUC_raw_SAS_boot,
+                              beta_RV_raw_AMR_boot,AUC_raw_AMR_boot,beta_RV_raw_AFR_boot,AUC_raw_AFR_boot,
+                              beta_RV_raw_EAS_boot,AUC_raw_EAS_boot,beta_RV_adjusted_EUR_boot,AUC_adjusted_EUR_boot,
+                              beta_RV_adjusted_SAS_boot,AUC_adjusted_SAS_boot,beta_RV_adjusted_AMR_boot,AUC_adjusted_AMR_boot,
+                              beta_RV_adjusted_AFR_boot,AUC_adjusted_AFR_boot,beta_RV_adjusted_EAS_boot,AUC_adjusted_EAS_boot)
 
 write.csv(CV_PRS_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Common_plus_RareVariants/CV_",trait,"Best_Betas.csv"),row.names = FALSE)
+write.csv(CV_Boot_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Common_plus_RareVariants/CV_",trait,"_Bootstraps.csv"),row.names = FALSE)
 write.csv(RV_PRS_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Common_plus_RareVariants/RV_",trait,"Best_Betas.csv"),row.names = FALSE)
+write.csv(RV_Boot_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Common_plus_RareVariants/RV_",trait,"_Bootstraps.csv"),row.names = FALSE)

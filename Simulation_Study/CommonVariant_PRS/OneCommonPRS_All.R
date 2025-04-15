@@ -5,6 +5,7 @@ library(SuperLearner)
 library(dplyr)
 library(boot)
 library(stringr)
+library(glmnet)
 
 load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/phenotypes/Y_Tune.RData")
 
@@ -108,135 +109,82 @@ pheno_tune$y_tune <- y_tune
 pheno_validation$y_validation <- NA
 pheno_validation$y_validation <- y_validation
 
+
+Ensemble_Function_Continuous <- function(x,y){
+  x <- as.matrix(x[!is.na(y),])
+  y <- y[!is.na(y)]
+  
+  lasso_mod <- cv.glmnet(x,y,family = "gaussian",alpha = 1,type.measure = "mse",nfold = 10)
+  ridge_mod <- cv.glmnet(x,y,family = "gaussian",alpha = 0,type.measure = "mse",nfold = 10)
+  
+  lasso_prediction_x <- predict(lasso_mod, x)
+  ridge_prediction_x <- predict(ridge_mod, x)
+  
+  ensemble_mod <- lm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x))
+  
+  ensemble_prediction_x <- ensemble_mod$fitted
+  
+  coefficients_x <- coef(lm(y~.,data.frame(y = ensemble_prediction_x,x)))
+  return(list(Coefficients = coefficients_x))
+}
+Ensemble_Function_Binary<- function(x,y){
+  x <- as.matrix(x[!is.na(y),])
+  y <- y[!is.na(y)]
+  
+  lasso_mod <- cv.glmnet(x,y,family = "binomial",alpha = 1,type.measure = "auc")
+  ridge_mod <- cv.glmnet(x,y,family = "binomial",alpha = 0,type.measure = "auc")
+  
+  lasso_prediction_x <- predict(lasso_mod, x,type = "link")
+  ridge_prediction_x <- predict(ridge_mod, x,type = "link")
+  
+  ensemble_mod <- glm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x),family = binomial())
+  ensemble_prediction_x <- predict(ensemble_mod,data.frame(lasso_prediction_x,ridge_prediction_x),type = "link")
+  
+  coefficients_x <- coef(lm(y~.,data.frame(y = ensemble_prediction_x,x)))
+  return(list(Coefficients = coefficients_x))
+}
+Ensemble_Function <- function(x,y,family = c("continuous","binary")){
+  if(family == "continuous"){
+    return(Ensemble_Function_Continuous(x,y))
+  }else{
+    return(Ensemble_Function_Binary(x,y))
+  }
+}
+
 ## SL
 
-SL.library <- c(
-  "SL.glmnet",
-  "SL.ridge",
-  "SL.glm",
-  "SL.mean"
-)
-sl <- SuperLearner(Y = y_tune, X = prs_tune_all, family = gaussian(),
-                   # For a real analysis we would use V = 10.
-                   # V = 3,
-                   SL.library = SL.library,cvControl = list(V = 20))
-cvsl <- CV.SuperLearner(Y = y_tune, X = prs_tune_all, family = gaussian(),
-                        # For a real analysis we would use V = 10.
-                        # V = 3,
-                        SL.library = SL.library,cvControl = list(V = 20))
+Results <- Ensemble_Function(x = prs_tune_all,y = pheno_tune[,"y_tune"],family = "continuous")
+Results$Coefficients[is.na(Results$Coefficients)] <- 0
 
-best_algorithm <- summary(cvsl)$Table$Algorithm[which.min(summary(cvsl)$Table$Ave)]
+PRS_Train <- as.matrix(pheno_train[,names(Results$Coefficients)[-1]]) %*% matrix(Results$Coefficients[-1],ncol = 1)
+PRS_Tune <- as.matrix(pheno_tune[,names(Results$Coefficients)[-1]]) %*% matrix(Results$Coefficients[-1],ncol = 1)
+PRS_Validation <- as.matrix(pheno_validation[,names(Results$Coefficients)[-1]]) %*% matrix(Results$Coefficients[-1],ncol = 1)
 
-a <- predict(sl, prs_validation_all, onlySL = FALSE)
+PRS_Train <- data.frame(IID = pheno_train$IID,PRS = PRS_Train)
+PRS_Tune <- data.frame(IID = pheno_tune$IID,PRS = PRS_Tune)
+PRS_Validation <- data.frame(IID = pheno_validation$IID,PRS = PRS_Validation)
 
-prs_best_validation_sl <- a$pred
-prs_best_validation_glmnet <- a$library.predict[,1]
-prs_best_validation_ridge <- a$library.predict[,2]
-prs_best_validation_glm <- a$library.predict[,3]
-
-if(best_algorithm == "SL.glmnet_All"){
-  #final
-  prs_best_validation <- prs_best_validation_glmnet
-}else if(best_algorithm == "SL.ridge_All"){
-  #final
-  prs_best_validation <- prs_best_validation_ridge
-}else if(best_algorithm == "SL.glm_All"){
-  #final
-  prs_best_validation <- prs_best_validation_glm
-}else{
-  #final
-  prs_best_validation <- prs_best_validation_sl
-}
-
-prs_best_validation <- data.frame(IID = pheno_validation$IID,prs = prs_best_validation)
-
-
-a <- predict(sl, prs_train_all, onlySL = FALSE)
-
-prs_best_train_sl <- a$pred
-prs_best_train_glmnet <- a$library.predict[,1]
-prs_best_train_ridge <- a$library.predict[,2]
-prs_best_train_glm <- a$library.predict[,3]
-
-if(best_algorithm == "SL.glmnet_All"){
-  #final
-  prs_best_train <- prs_best_train_glmnet
-}else if(best_algorithm == "SL.ridge_All"){
-  #final
-  prs_best_train <- prs_best_train_ridge
-}else if(best_algorithm == "SL.glm_All"){
-  #final
-  prs_best_train <- prs_best_train_glm
-}else{
-  #final
-  prs_best_train <- prs_best_train_sl
-}
-prs_best_train <- data.frame(IID = pheno_train$IID,prs = prs_best_train)
-
-
-a <- predict(sl, prs_tune_all, onlySL = FALSE)
-
-prs_best_tune_sl <- a$pred
-prs_best_tune_glmnet <- a$library.predict[,1]
-prs_best_tune_ridge <- a$library.predict[,2]
-prs_best_tune_glm <- a$library.predict[,3]
-
-if(best_algorithm == "SL.glmnet_All"){
-  #final
-  prs_best_tune <- prs_best_tune_glmnet
-}else if(best_algorithm == "SL.ridge_All"){
-  #final
-  prs_best_tune <- prs_best_tune_ridge
-}else if(best_algorithm == "SL.glm_All"){
-  #final
-  prs_best_tune <- prs_best_tune_glm
-}else{
-  #final
-  prs_best_tune <- prs_best_tune_sl
-}
-prs_best_tune <- data.frame(IID = pheno_tune$IID,prs = prs_best_tune)
-
-pheno_train <- left_join(pheno_train,prs_best_train)
-pheno_validation <- left_join(pheno_validation,prs_best_validation)
-pheno_tune <- left_join(pheno_tune,prs_best_tune)
-
-prs_columns <- c(which(str_detect(colnames(pheno_tune),"CT_")),which(str_detect(colnames(pheno_tune),"LDPred2_")),which(str_detect(colnames(pheno_tune),"LASSOSum2_")),which(str_detect(colnames(pheno_tune),"prs")))
-
-r2_tune <- vector()
-for(j in 1:length(prs_columns)){
-  r2_tune[j] <- summary(lm(as.formula(paste0("y_tune ~",colnames(pheno_tune)[prs_columns[j]])),data = pheno_tune))$r.squared
-}
-
-
-
-prs_best_train <- data.frame(IID = pheno_train$IID,prs = pheno_train[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
-
-prs_best_tune <- data.frame(IID = pheno_tune$IID,prs = pheno_tune[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
-
-prs_best_validation <- data.frame(IID = pheno_validation$IID,prs = pheno_validation[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
-
-write.table(prs_best_train,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Train_All",i,".txt"),sep = "\t",row.names = FALSE)
-write.table(prs_best_tune,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Tune_All",i,".txt"),sep = "\t",row.names = FALSE)
-write.table(prs_best_validation,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Validation_All",i,".txt"),sep = "\t",row.names = FALSE)
+write.table(PRS_Train,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Train_All",i,".txt"),sep = "\t",row.names = FALSE)
+write.table(PRS_Tune,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Tune_All",i,".txt"),sep = "\t",row.names = FALSE)
+write.table(PRS_Validation,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Validation_All",i,".txt"),sep = "\t",row.names = FALSE)
 
 load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
 
-pheno_validation_raw <- pheno_validation
-pheno_validation_adjusted <- pheno_validation
+pheno_validation_raw <- inner_join(pheno_validation[,c("IID","y_validation")],PRS_Validation)
+pheno_validation_adjusted <- pheno_validation_raw
 pheno_validation_adjusted <- inner_join(pheno_validation_adjusted,ukb_pheno[,c("IID","pc1","pc2","pc3","pc4","pc5")])
 
-
-tmp <- data.frame(y = pheno_validation_adjusted[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]],pheno_validation_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
+tmp <- data.frame(y = pheno_validation_adjusted[,"PRS"],pheno_validation_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
 mod <- lm(y~.,data = tmp)
 R <- mod$residuals
 tmp <- data.frame(y = R^2,pheno_validation_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
 mod <- lm(y~.,data = tmp)
 y_hat <- predict(mod,tmp)
 if(sum(sqrt(y_hat)) == 0){
-  pheno_validation_adjusted[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- 0
+  pheno_validation_adjusted[,"PRS"] <- 0
 }else{
-  pheno_validation_adjusted[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- R/sqrt(y_hat)
+  pheno_validation_adjusted[,"PRS"] <- R/sqrt(y_hat)
 }
 
 
@@ -244,59 +192,169 @@ pheno_validation_raw_EUR <- pheno_validation_raw[pheno_validation_raw$IID %in% u
 pheno_validation_raw_SAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
 pheno_validation_raw_AMR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 pheno_validation_raw_AFR <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
-pheno_validation_raw_EAS <- pheno_validation_raw[pheno_validation_raw$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 pheno_validation_adjusted_EUR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
 pheno_validation_adjusted_SAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "SAS"],]
 pheno_validation_adjusted_AMR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
 pheno_validation_adjusted_AFR <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AFR"],]
-pheno_validation_adjusted_EAS <- pheno_validation_adjusted[pheno_validation_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EAS"],]
 
 pheno_validation_raw_EUR$y_validation <- scale(pheno_validation_raw_EUR$y_validation)
 pheno_validation_raw_SAS$y_validation <- scale(pheno_validation_raw_SAS$y_validation)
 pheno_validation_raw_AMR$y_validation <- scale(pheno_validation_raw_AMR$y_validation)
 pheno_validation_raw_AFR$y_validation <- scale(pheno_validation_raw_AFR$y_validation)
-pheno_validation_raw_EAS$y_validation <- scale(pheno_validation_raw_EAS$y_validation)
 
 pheno_validation_adjusted_EUR$y_validation <- scale(pheno_validation_adjusted_EUR$y_validation)
 pheno_validation_adjusted_SAS$y_validation <- scale(pheno_validation_adjusted_SAS$y_validation)
 pheno_validation_adjusted_AMR$y_validation <- scale(pheno_validation_adjusted_AMR$y_validation)
 pheno_validation_adjusted_AFR$y_validation <- scale(pheno_validation_adjusted_AFR$y_validation)
-pheno_validation_adjusted_EAS$y_validation <- scale(pheno_validation_adjusted_EAS$y_validation)
 
 
-pheno_validation_raw_EUR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_EUR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
-pheno_validation_raw_SAS[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_SAS[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
-pheno_validation_raw_AMR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_AMR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
-pheno_validation_raw_AFR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_AFR[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
-pheno_validation_raw_EAS[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]] <- scale(pheno_validation_raw_EAS[,colnames(pheno_tune)[prs_columns[which.max(r2_tune)]]])
+pheno_validation_raw_EUR[,"PRS"] <- scale(pheno_validation_raw_EUR[,"PRS"])
+pheno_validation_raw_SAS[,"PRS"] <- scale(pheno_validation_raw_SAS[,"PRS"])
+pheno_validation_raw_AMR[,"PRS"] <- scale(pheno_validation_raw_AMR[,"PRS"])
+pheno_validation_raw_AFR[,"PRS"] <- scale(pheno_validation_raw_AFR[,"PRS"])
 
-beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EUR))[2]
-se_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EUR))$coefficients[2,2]
-beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_SAS))[2]
-se_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_SAS))$coefficients[2,2]
-beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_AMR))[2]
-se_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_AMR))$coefficients[2,2]
-beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_AFR))[2]
-se_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_AFR))$coefficients[2,2]
-beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EAS))[2]
-se_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_raw_EAS))$coefficients[2,2]
+Beta_Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  result <- coef(lm(as.formula(paste0("y_validation~","PRS")),data = boot_data))[2]
+  return(c(result))
+}
 
-beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EUR))[2]
-se_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EUR))$coefficients[2,2]
-beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_SAS))[2]
-se_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_SAS))$coefficients[2,2]
-beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_AMR))[2]
-se_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_AMR))$coefficients[2,2]
-beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_AFR))[2]
-se_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_AFR))$coefficients[2,2]
-beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EAS))[2]
-se_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~",colnames(pheno_tune)[prs_columns[which.max(r2_tune)]])),data = pheno_validation_adjusted_EAS))$coefficients[2,2]
+R2_Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  result <- summary(lm(as.formula(paste0("y_validation~","PRS")),data = boot_data))$r.squared
+  return(c(result))
+}
 
-CV_Results <- data.frame(i = i,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
-                         beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_SAS,beta_validation_raw_AMR,beta_validation_raw_AFR,beta_validation_raw_EAS), 
-                         se_raw = c(se_validation_raw_EUR,se_validation_raw_SAS,se_validation_raw_AMR,se_validation_raw_AFR,se_validation_raw_EAS), 
-                         beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_SAS,beta_validation_adjusted_AMR,beta_validation_adjusted_AFR,beta_validation_adjusted_EAS), 
-                         se_adjusted = c(se_validation_adjusted_EUR,se_validation_adjusted_SAS,se_validation_adjusted_AMR,se_validation_adjusted_AFR,se_validation_adjusted_EAS))
+beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_raw_EUR))[2]
+boot_beta <- boot(data = pheno_validation_raw_EUR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_EUR <- sd(boot_beta$t)
+beta_lower_validation_raw_EUR <- beta_ci$basic[4]
+beta_upper_validation_raw_EUR <- beta_ci$basic[5]
 
-write.csv(CV_Results,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Betas",i,".csv"),row.names = FALSE)
+R2_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_raw_EUR))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_EUR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_EUR <- sd(boot_R2$t)
+R2_lower_validation_raw_EUR <- R2_ci$basic[4]
+R2_upper_validation_raw_EUR <- R2_ci$basic[5]
+
+beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_raw_SAS))[2]
+boot_beta <- boot(data = pheno_validation_raw_SAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_SAS <- sd(boot_beta$t)
+beta_lower_validation_raw_SAS <- beta_ci$basic[4]
+beta_upper_validation_raw_SAS <- beta_ci$basic[5]
+
+R2_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_raw_SAS))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_SAS, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_SAS <- sd(boot_R2$t)
+R2_lower_validation_raw_SAS <- R2_ci$basic[4]
+R2_upper_validation_raw_SAS <- R2_ci$basic[5]
+
+beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_raw_AMR))[2]
+boot_beta <- boot(data = pheno_validation_raw_AMR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_AMR <- sd(boot_beta$t)
+beta_lower_validation_raw_AMR <- beta_ci$basic[4]
+beta_upper_validation_raw_AMR <- beta_ci$basic[5]
+
+R2_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_raw_AMR))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_AMR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_AMR <- sd(boot_R2$t)
+R2_lower_validation_raw_AMR <- R2_ci$basic[4]
+R2_upper_validation_raw_AMR <- R2_ci$basic[5]
+
+beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_raw_AFR))[2]
+boot_beta <- boot(data = pheno_validation_raw_AFR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_raw_AFR <- sd(boot_beta$t)
+beta_lower_validation_raw_AFR <- beta_ci$basic[4]
+beta_upper_validation_raw_AFR <- beta_ci$basic[5]
+
+R2_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_raw_AFR))$r.squared
+boot_R2 <- boot(data = pheno_validation_raw_AFR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_raw_AFR <- sd(boot_R2$t)
+R2_lower_validation_raw_AFR <- R2_ci$basic[4]
+R2_upper_validation_raw_AFR <- R2_ci$basic[5]
+
+beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_adjusted_EUR))[2]
+boot_beta <- boot(data = pheno_validation_adjusted_EUR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_EUR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_EUR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_EUR <- beta_ci$basic[5]
+
+R2_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_adjusted_EUR))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_EUR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_EUR <- sd(boot_R2$t)
+R2_lower_validation_adjusted_EUR <- R2_ci$basic[4]
+R2_upper_validation_adjusted_EUR <- R2_ci$basic[5]
+
+beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_adjusted_SAS))[2]
+boot_beta <- boot(data = pheno_validation_adjusted_SAS, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_SAS <- sd(boot_beta$t)
+beta_lower_validation_adjusted_SAS <- beta_ci$basic[4]
+beta_upper_validation_adjusted_SAS <- beta_ci$basic[5]
+
+R2_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_adjusted_SAS))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_SAS, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_SAS <- sd(boot_R2$t)
+R2_lower_validation_adjusted_SAS <- R2_ci$basic[4]
+R2_upper_validation_adjusted_SAS <- R2_ci$basic[5]
+
+beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_adjusted_AMR))[2]
+boot_beta <- boot(data = pheno_validation_adjusted_AMR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_AMR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_AMR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_AMR <- beta_ci$basic[5]
+
+R2_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_adjusted_AMR))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_AMR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_AMR <- sd(boot_R2$t)
+R2_lower_validation_adjusted_AMR <- R2_ci$basic[4]
+R2_upper_validation_adjusted_AMR <- R2_ci$basic[5]
+
+beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_adjusted_AFR))[2]
+boot_beta <- boot(data = pheno_validation_adjusted_AFR, statistic = Beta_Boot, R = 1000)
+beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_se_validation_adjusted_AFR <- sd(boot_beta$t)
+beta_lower_validation_adjusted_AFR <- beta_ci$basic[4]
+beta_upper_validation_adjusted_AFR <- beta_ci$basic[5]
+
+R2_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~","PRS")),data = pheno_validation_adjusted_AFR))$r.squared
+boot_R2 <- boot(data = pheno_validation_adjusted_AFR, statistic = R2_Boot, R = 1000)
+R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_se_validation_adjusted_AFR <- sd(boot_R2$t)
+R2_lower_validation_adjusted_AFR <- R2_ci$basic[4]
+R2_upper_validation_adjusted_AFR <- R2_ci$basic[5]
+
+RICE_CV <- data.frame(i = i,ancestry = c("EUR","SAS","AMR","AFR"), 
+                      beta_raw = c(beta_validation_raw_EUR,beta_validation_raw_SAS,beta_validation_raw_AMR,beta_validation_raw_AFR), 
+                      beta_se_raw = c(beta_se_validation_raw_EUR,beta_se_validation_raw_SAS,beta_se_validation_raw_AMR,beta_se_validation_raw_AFR), 
+                      beta_lower_raw = c(beta_lower_validation_raw_EUR,beta_lower_validation_raw_SAS,beta_lower_validation_raw_AMR,beta_lower_validation_raw_AFR), 
+                      beta_upper_raw = c(beta_upper_validation_raw_EUR,beta_upper_validation_raw_SAS,beta_upper_validation_raw_AMR,beta_upper_validation_raw_AFR), 
+                      R2_raw = c(R2_validation_raw_EUR,R2_validation_raw_SAS,R2_validation_raw_AMR,R2_validation_raw_AFR),
+                      R2_se_raw = c(R2_se_validation_raw_EUR,R2_se_validation_raw_SAS,R2_se_validation_raw_AMR,R2_se_validation_raw_AFR),
+                      R2_lower_raw = c(R2_lower_validation_raw_EUR,R2_lower_validation_raw_SAS,R2_lower_validation_raw_AMR,R2_lower_validation_raw_AFR),
+                      R2_upper_raw = c(R2_upper_validation_raw_EUR,R2_upper_validation_raw_SAS,R2_upper_validation_raw_AMR,R2_upper_validation_raw_AFR),
+                      beta_adjusted = c(beta_validation_adjusted_EUR,beta_validation_adjusted_SAS,beta_validation_adjusted_AMR,beta_validation_adjusted_AFR), 
+                      beta_se_adjusted = c(beta_se_validation_adjusted_EUR,beta_se_validation_adjusted_SAS,beta_se_validation_adjusted_AMR,beta_se_validation_adjusted_AFR), 
+                      beta_lower_adjusted = c(beta_lower_validation_adjusted_EUR,beta_lower_validation_adjusted_SAS,beta_lower_validation_adjusted_AMR,beta_lower_validation_adjusted_AFR), 
+                      beta_upper_adjusted = c(beta_upper_validation_adjusted_EUR,beta_upper_validation_adjusted_SAS,beta_upper_validation_adjusted_AMR,beta_upper_validation_adjusted_AFR), 
+                      R2_adjusted = c(R2_validation_adjusted_EUR,R2_validation_adjusted_SAS,R2_validation_adjusted_AMR,R2_validation_adjusted_AFR),
+                      R2_se_adjusted = c(R2_se_validation_adjusted_EUR,R2_se_validation_adjusted_SAS,R2_se_validation_adjusted_AMR,R2_se_validation_adjusted_AFR),
+                      R2_lower_adjusted = c(R2_lower_validation_adjusted_EUR,R2_lower_validation_adjusted_SAS,R2_lower_validation_adjusted_AMR,R2_lower_validation_adjusted_AFR),
+                      R2_upper_adjusted = c(R2_upper_validation_adjusted_EUR,R2_upper_validation_adjusted_SAS,R2_upper_validation_adjusted_AMR,R2_upper_validation_adjusted_AFR))
+
+
+write.csv(RICE_CV,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Betas",i,".csv"),row.names = FALSE)

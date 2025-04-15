@@ -3,6 +3,7 @@ rm(list = ls())
 library(gdsfmt)
 library(SeqArray)
 library(SeqVarTools)
+library(GENESIS,lib.loc = "/usr/local/apps/R/4.3/site-library_4.3.2")
 library(dplyr)
 library(STAAR)
 library(TxDb.Hsapiens.UCSC.hg38.knownGene)
@@ -22,7 +23,7 @@ system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Re
 
 pheno_train <- inner_join(pheno_train,common_prs,by = "IID")
 
-obj.STAAR.UKB.LDL <- fit_nullmodel(Y~prs, data = pheno_train,id = "IID",kins = NULL,family = gaussian(link = "identity"))
+obj.STAAR.UKB.LDL <- fit_nullmodel(Y~PRS, data = pheno_train,id = "IID",kins = NULL,family = gaussian(link = "identity"))
 
 save(obj.STAAR.UKB.LDL,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/nullmodels_staar/Train_Null_Model",i,".RData"))
 
@@ -35,11 +36,9 @@ colnames(pheno_tune) <- c("IID","Y")
 
 common_prs <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_Common_PRS/Best_Tune_All",i,".txt"))
 
-system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_Common_PRS/Best_Tune_All",i,".txt")))
-
 pheno_tune <- inner_join(pheno_tune,common_prs,by = "IID")
 
-obj.STAAR.UKB.LDL <- fit_nullmodel(Y~prs, data = pheno_tune,id = "IID",kins = NULL,family = gaussian(link = "identity"))
+obj.STAAR.UKB.LDL <- fit_nullmodel(Y~PRS, data = pheno_tune,id = "IID",kins = NULL,family = gaussian(link = "identity"))
 
 save(obj.STAAR.UKB.LDL,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/nullmodels_staar/Tune_Null_Model",i,".RData"))
 
@@ -54,7 +53,7 @@ common_prs <- read.delim(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulatio
 
 pheno_vad <- inner_join(pheno_vad,common_prs,by = "IID")
 
-obj.STAAR.UKB.LDL <- fit_nullmodel(Y~prs, data = pheno_vad,id = "IID",kins = NULL,family = gaussian(link = "identity"))
+obj.STAAR.UKB.LDL <- fit_nullmodel(Y~PRS, data = pheno_vad,id = "IID",kins = NULL,family = gaussian(link = "identity"))
 
 save(obj.STAAR.UKB.LDL,file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/nullmodels_staar/Validation_Null_Model",i,".RData"))
-
+  

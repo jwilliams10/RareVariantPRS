@@ -56,38 +56,7 @@ colnames(test_validation) <- colnames(prs_all_validation)
 all.equal(test_validation,prs_all_validation)
 
 
-
-# ### Coefficient Way
-# BMI_All <- cbind(BMI_Final_Coefficients_CT,BMI_Final_Coefficients_LDPred[,str_detect(colnames(BMI_Final_Coefficients_LDPred),"LDPred2")],BMI_Final_Coefficients_LASSOSUM[,str_detect(colnames(BMI_Final_Coefficients_LASSOSUM),"LASSOSum2")])
-# 
-# BMI_Final_Coefficients_SL <- read.csv("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/BMI_final_coef.csv")
-# 
-# CV_SL_Beta <- BMI_Final_Coefficients_CT[,c("CHR","SNP","REF","BP","A1")]
-# CV_SL_Beta$BETA <- 0
-# 
-# for(i in 1:nrow(BMI_Final_Coefficients_SL)){
-#   name_i <- BMI_Final_Coefficients_SL$Coef[i]
-#   if(name_i %in% colnames(BMI_All)){
-#     CV_SL_Beta$BETA <- CV_SL_Beta$BETA + BMI_All[,name_i]*BMI_Final_Coefficients_SL$Beta[i] 
-#   }
-# }
-# 
-# prs.file <- CV_SL_Beta[,c("SNP","A1","BETA")]
-# write.table(prs.file,file = "/data/williamsjacr/UKB_WES_Phenotypes/Continuous/BMI_Final_Score",col.names = T,row.names = F,quote=F)
-# 
-# system("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Continuous/BMI_Final_Score cols=+scoresums,-scoreavgs header no-mean-imputation --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --threads 1 --out /data/williamsjacr/UKB_WES_Phenotypes/Continuous/test_validation")
-# 
-# Best_Validation_All <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/BMI_Best_Validation_All.txt")
-# test_validation <- read.delim("test_validation.sscore", header=FALSE, comment.char="#")
-# 
-# all.equal(Best_Validation_All$IID,test_validation[,2])
-# all.equal(Best_Validation_All$prs,test_validation[,5])
-# cor(Best_Validation_All$prs,test_validation[,5])
-
-
 #### Linear Model Way
-Final_Coefficients_SL <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_final_coef.csv"))
-
 prs_tune_CT <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_all_tune.txt"), sep="")
 prs_tune_LDPred2 <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_prs_tune.sscore"))
 prs_tune_LASSOSum2 <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_prs_tune.sscore"))
@@ -99,10 +68,11 @@ rm(prs_tune_CT);rm(prs_tune_LDPred2);rm(prs_tune_LASSOSum2)
 ## Merge covariates and y for tuning with the prs_mat
 Best_Tune_All <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_Best_Tune_All.txt"))
 Best_Tune_All <- left_join(Best_Tune_All,prs_tune_all,by = "IID")
-Best_Tune_All <- Best_Tune_All[,colnames(Best_Tune_All) %in% c("prs",Final_Coefficients_SL$Coef)]
+Best_Tune_All <- subset(Best_Tune_All,select = -c(IID,X.FID))
 
 Beta_Star <- matrix(unname(coef(lm(prs ~.,data = Best_Tune_All))),ncol = 1)
 Beta_Star <- Beta_Star[-1,,drop = FALSE]
+Beta_Star[is.na(Beta_Star),1] <- 0
 
 All <- cbind(Final_Coefficients_CT,Final_Coefficients_LDPred[,str_detect(colnames(Final_Coefficients_LDPred),"LDPred2")],Final_Coefficients_LASSOSUM[,str_detect(colnames(Final_Coefficients_LASSOSUM),"LASSOSum2")])
 score_full <- All[,colnames(All) %in% names(coef(lm(prs ~.,data = Best_Tune_All)))[-1]]

@@ -25,8 +25,6 @@ i <- 1
 results_70 <- NULL
 
 for(i in 1:length(Y_train)){
-  Best_Betas_CV_SL <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_Common_PRS/Best_Betas",i,".csv"))
-  Best_Betas_CV_SL$Method <- "CV_SL"
 
   Best_Betas_CT <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/CT/Best_Betas",i,".csv"))
   Best_Betas_CT$Method <- "CT"
@@ -37,22 +35,13 @@ for(i in 1:length(Y_train)){
   Best_Betas_LASSOSum <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/LASSOSUM2/Best_Betas",i,".csv"))
   Best_Betas_LASSOSum$Method <- "LASSOSum"
 
-  Best_Betas_RV_SL <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Combined_RareVariants_PRS/Best_Betas",i,".csv"))
-  Best_Betas_RV_SL$Method <- "RV_SL"
+  Best_Betas_RICECV <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Common_plus_RareVariants/CV_Best_Betas",i,".csv"))
+  Best_Betas_RICECV$Method <- "RICE-CV"
+  
+  Best_Betas_RICERV <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Common_plus_RareVariants/RV_Best_Betas",i,".csv"))
+  Best_Betas_RICERV$Method <- "RICE-RV"
 
-  Best_Betas_lm <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation1/Results/Common_plus_RareVariants/Best_Betas",i,".csv"))
-
-  if(sum(Best_Betas_CV_SL$beta_raw == Best_Betas_LDPred$beta_raw) == 7){
-    Best_Betas_CV_SL$beta_raw <- -1*Best_Betas_CV_SL$beta_raw
-    Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"]
-  }
-
-  if(sum(Best_Betas_CV_SL$beta_raw == Best_Betas_LASSOSum$beta_raw) == 7){
-    Best_Betas_CV_SL$beta_raw <- -1*Best_Betas_CV_SL$beta_raw
-    Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"]
-  }
-
-  betas_tmp <- rbind(Best_Betas_CV_SL,Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RV_SL,Best_Betas_lm)
+  betas_tmp <- rbind(Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RICECV,Best_Betas_RICERV)
 
   results_70 <- rbind(results_70,betas_tmp)
 
@@ -68,7 +57,9 @@ results_70$Scale <- as.character(results_70$Scale)
 results_70$Scale[results_70$Scale == "0"] <- "Unscaled"
 results_70$Scale[results_70$Scale == "1"] <- "Scaled"
 
-results_70 <- data.frame(Scale = results_70$Scale, Causal_Prop = results_70$Causal_Prop, Method = results_70$Method,Ancestry = results_70$ancestry,Beta = results_70$beta_raw,SE_Beta = results_70$se_raw)
+results_70 <- data.frame(Scale = results_70$Scale, Causal_Prop = results_70$Causal_Prop, Method = results_70$Method,Ancestry = results_70$ancestry,
+                         Beta = results_70$beta_adjusted,SE_Beta = results_70$beta_se_adjusted,Lower_Beta = results_70$beta_lower_adjusted,Upper_Beta_Beta = results_70$beta_upper_adjusted,
+                         R2 = results_70$R2_adjusted,SE_Beta = results_70$R2_se_adjusted,Lower_Beta = results_70$R2_lower_adjusted,Upper_Beta_Beta = results_70$R2_upper_adjusted)
 results_70$Train_Size <- nrow(Y_train[[1]])
 
 
@@ -84,34 +75,22 @@ i <- 1
 results_35 <- NULL
 
 for(i in 1:length(Y_train)){
-  Best_Betas_CV_SL <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_Common_PRS/Best_Betas",i,".csv"))
-  Best_Betas_CV_SL$Method <- "CV_SL"
-
   Best_Betas_CT <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/Best_Betas",i,".csv"))
   Best_Betas_CT$Method <- "CT"
-
+  
   Best_Betas_LDPred <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LDPred2/Best_Betas",i,".csv"))
   Best_Betas_LDPred$Method <- "LDPred"
-
+  
   Best_Betas_LASSOSum <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/LASSOSUM2/Best_Betas",i,".csv"))
   Best_Betas_LASSOSum$Method <- "LASSOSum"
-
-  Best_Betas_RV_SL <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Combined_RareVariants_PRS/Best_Betas",i,".csv"))
-  Best_Betas_RV_SL$Method <- "RV_SL"
-
-  Best_Betas_lm <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Common_plus_RareVariants/Best_Betas",i,".csv"))
-
-  if(sum(Best_Betas_CV_SL$beta_raw == Best_Betas_LDPred$beta_raw) == 7){
-    Best_Betas_CV_SL$beta_raw <- -1*Best_Betas_CV_SL$beta_raw
-    Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"]
-  }
-
-  if(sum(Best_Betas_CV_SL$beta_raw == Best_Betas_LASSOSum$beta_raw) == 7){
-    Best_Betas_CV_SL$beta_raw <- -1*Best_Betas_CV_SL$beta_raw
-    Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"] <- -1*Best_Betas_lm$beta_raw[Best_Betas_lm$Method == "CV"]
-  }
-
-  betas_tmp <- rbind(Best_Betas_CV_SL,Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RV_SL,Best_Betas_lm)
+  
+  Best_Betas_RICECV <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Common_plus_RareVariants/CV_Best_Betas",i,".csv"))
+  Best_Betas_RICECV$Method <- "RICE-CV"
+  
+  Best_Betas_RICERV <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/Common_plus_RareVariants/RV_Best_Betas",i,".csv"))
+  Best_Betas_RICERV$Method <- "RICE-RV"
+  
+  betas_tmp <- rbind(Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RICECV,Best_Betas_RICERV)
   results_35 <- rbind(results_35,betas_tmp)
 
   rm(list=setdiff(ls(), c("results_70","results_35","i","Y_train","index_mat")))
@@ -126,8 +105,106 @@ results_35$Scale <- as.character(results_35$Scale)
 results_35$Scale[results_35$Scale == "0"] <- "Unscaled"
 results_35$Scale[results_35$Scale == "1"] <- "Scaled"
 
-results_35 <- data.frame(Scale = results_35$Scale, Causal_Prop = results_35$Causal_Prop, Method = results_35$Method,Ancestry = results_35$ancestry,Beta = results_35$beta_raw,SE_Beta = results_35$se_raw)
+results_35 <- data.frame(Scale = results_35$Scale, Causal_Prop = results_35$Causal_Prop, Method = results_35$Method,Ancestry = results_35$ancestry,
+                        Beta = results_35$beta_adjusted,SE_Beta = results_35$beta_se_adjusted,Lower_Beta = results_35$beta_lower_adjusted,Upper_Beta_Beta = results_35$beta_upper_adjusted,
+                        R2 = results_35$R2_adjusted,SE_Beta = results_35$R2_se_adjusted,Lower_Beta = results_35$R2_lower_adjusted,Upper_Beta_Beta = results_35$R2_upper_adjusted)
 results_35$Train_Size <- nrow(Y_train[[1]])
+
+
+
+
+
+load("/data/williamsjacr/UKB_WES_Simulation/Simulation3/simulated_data/phenotypes/Y_Train.RData")
+
+i <- 1
+
+results_rareprop_70 <- NULL
+
+for(i in 1:length(Y_train)){
+  Best_Betas_CT <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation3/Results/CT/Best_Betas",i,".csv"))
+  Best_Betas_CT$Method <- "CT"
+  
+  Best_Betas_LDPred <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation3/Results/LDPred2/Best_Betas",i,".csv"))
+  Best_Betas_LDPred$Method <- "LDPred"
+  
+  Best_Betas_LASSOSum <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation3/Results/LASSOSUM2/Best_Betas",i,".csv"))
+  Best_Betas_LASSOSum$Method <- "LASSOSum"
+  
+  Best_Betas_RICECV <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation3/Results/Common_plus_RareVariants/CV_Best_Betas",i,".csv"))
+  Best_Betas_RICECV$Method <- "RICE-CV"
+  
+  Best_Betas_RICERV <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation3/Results/Common_plus_RareVariants/RV_Best_Betas",i,".csv"))
+  Best_Betas_RICERV$Method <- "RICE-RV"
+  
+  betas_tmp <- rbind(Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RICECV,Best_Betas_RICERV)
+  
+  results_rareprop_70 <- rbind(results_rareprop_70,betas_tmp)
+  
+  rm(list=setdiff(ls(), c("results_rareprop_70","results_70","results_35","i","Y_train","index_mat")))
+}
+
+results_rareprop_70 <- inner_join(results_rareprop_70,index_mat)
+results_rareprop_70$Causal_Prop <- as.character(results_rareprop_70$Causal_Prop)
+results_rareprop_70$Causal_Prop[results_rareprop_70$Causal_Prop == "5e-04"] <- "0.0005"
+results_rareprop_70$Causal_Prop <- paste0("Causal Prop. ",results_rareprop_70$Causal_Prop)
+
+results_rareprop_70$Scale <- as.character(results_rareprop_70$Scale)
+results_rareprop_70$Scale[results_rareprop_70$Scale == "0"] <- "Unscaled"
+results_rareprop_70$Scale[results_rareprop_70$Scale == "1"] <- "Scaled"
+
+results_rareprop_70 <- data.frame(Scale = results_rareprop_70$Scale, Causal_Prop = results_rareprop_70$Causal_Prop, Method = results_rareprop_70$Method,Ancestry = results_rareprop_70$ancestry,
+                                  Beta = results_rareprop_70$beta_adjusted,SE_Beta = results_rareprop_70$beta_se_adjusted,Lower_Beta = results_rareprop_70$beta_lower_adjusted,Upper_Beta_Beta = results_rareprop_70$beta_upper_adjusted,
+                                  R2 = results_rareprop_70$R2_adjusted,SE_Beta = results_rareprop_70$R2_se_adjusted,Lower_Beta = results_rareprop_70$R2_lower_adjusted,Upper_Beta_Beta = results_rareprop_70$R2_upper_adjusted)
+results_rareprop_70$Train_Size <- nrow(Y_train[[1]])
+
+
+
+
+
+
+
+load("/data/williamsjacr/UKB_WES_Simulation/Simulation4/simulated_data/phenotypes/Y_Train.RData")
+
+i <- 1
+
+results_rareprop_35 <- NULL
+
+for(i in 1:length(Y_train)){
+  Best_Betas_CT <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation4/Results/CT/Best_Betas",i,".csv"))
+  Best_Betas_CT$Method <- "CT"
+  
+  Best_Betas_LDPred <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation4/Results/LDPred2/Best_Betas",i,".csv"))
+  Best_Betas_LDPred$Method <- "LDPred"
+  
+  Best_Betas_LASSOSum <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation4/Results/LASSOSUM2/Best_Betas",i,".csv"))
+  Best_Betas_LASSOSum$Method <- "LASSOSum"
+  
+  Best_Betas_RICECV <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation4/Results/Common_plus_RareVariants/CV_Best_Betas",i,".csv"))
+  Best_Betas_RICECV$Method <- "RICE-CV"
+  
+  Best_Betas_RICERV <- read.csv(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation4/Results/Common_plus_RareVariants/RV_Best_Betas",i,".csv"))
+  Best_Betas_RICERV$Method <- "RICE-RV"
+  
+  betas_tmp <- rbind(Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RICECV,Best_Betas_RICERV)
+  results_rareprop_35 <- rbind(results_rareprop_35,betas_tmp)
+  
+  rm(list=setdiff(ls(), c("results_rareprop_35","results_rareprop_70","results_70","results_35","i","Y_train","index_mat")))
+}
+
+results_rareprop_35 <- inner_join(results_rareprop_35,index_mat)
+results_rareprop_35$Causal_Prop <- as.character(results_rareprop_35$Causal_Prop)
+results_rareprop_35$Causal_Prop[results_rareprop_35$Causal_Prop == "5e-04"] <- "0.0005"
+results_rareprop_35$Causal_Prop <- paste0("Causal Prop. ",results_rareprop_35$Causal_Prop)
+
+results_rareprop_35$Scale <- as.character(results_rareprop_35$Scale)
+results_rareprop_35$Scale[results_rareprop_35$Scale == "0"] <- "Unscaled"
+results_rareprop_35$Scale[results_rareprop_35$Scale == "1"] <- "Scaled"
+
+results_rareprop_35 <- data.frame(Scale = results_rareprop_35$Scale, Causal_Prop = results_rareprop_35$Causal_Prop, Method = results_rareprop_35$Method,Ancestry = results_rareprop_35$ancestry,
+                                  Beta = results_rareprop_35$beta_adjusted,SE_Beta = results_rareprop_35$beta_se_adjusted,Lower_Beta = results_rareprop_35$beta_lower_adjusted,Upper_Beta_Beta = results_rareprop_35$beta_upper_adjusted,
+                                  R2 = results_rareprop_35$R2_adjusted,SE_Beta = results_rareprop_35$R2_se_adjusted,Lower_Beta = results_rareprop_35$R2_lower_adjusted,Upper_Beta_Beta = results_rareprop_35$R2_upper_adjusted)
+results_rareprop_35$Train_Size <- nrow(Y_train[[1]])
+
 
 
 
