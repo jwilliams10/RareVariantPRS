@@ -273,103 +273,103 @@ R2_Boot <- function(data,indices){
   return(c(result))
 }
 
-beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_raw_EUR))[2]
-boot_beta <- boot(data = pheno_validation_raw_EUR, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_raw_EUR))[2]
+boot_beta <- boot(data = RV_PRS_raw_EUR, statistic = Beta_Boot, R = 10000)
 beta_raw_EUR_boot <- boot_beta$t
 beta_se_validation_raw_EUR <- sd(boot_beta$t)
 
-R2_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_raw_EUR))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_EUR, statistic = R2_Boot, R = 10000)
+R2_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_raw_EUR))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_EUR, statistic = R2_Boot, R = 10000)
 R2_raw_EUR_boot <- boot_R2$t
 R2_se_validation_raw_EUR <- sd(boot_R2$t)
 
-beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_raw_SAS))[2]
-boot_beta <- boot(data = pheno_validation_raw_SAS, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_raw_SAS))[2]
+boot_beta <- boot(data = RV_PRS_raw_SAS, statistic = Beta_Boot, R = 10000)
 beta_raw_SAS_boot <- boot_beta$t
 beta_se_validation_raw_SAS <- sd(boot_beta$t)
 
-R2_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_raw_SAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_SAS, statistic = R2_Boot, R = 10000)
+R2_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_raw_SAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_SAS, statistic = R2_Boot, R = 10000)
 R2_raw_SAS_boot <- boot_R2$t
 R2_se_validation_raw_SAS <- sd(boot_R2$t)
 
-beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_raw_AMR))[2]
-boot_beta <- boot(data = pheno_validation_raw_AMR, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_raw_AMR))[2]
+boot_beta <- boot(data = RV_PRS_raw_AMR, statistic = Beta_Boot, R = 10000)
 beta_raw_AMR_boot <- boot_beta$t
 beta_se_validation_raw_AMR <- sd(boot_beta$t)
 
-R2_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_raw_AMR))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_AMR, statistic = R2_Boot, R = 10000)
+R2_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_raw_AMR))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_AMR, statistic = R2_Boot, R = 10000)
 R2_raw_AMR_boot <- boot_R2$t
 R2_se_validation_raw_AMR <- sd(boot_R2$t)
 
-beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_raw_AFR))[2]
-boot_beta <- boot(data = pheno_validation_raw_AFR, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_raw_AFR))[2]
+boot_beta <- boot(data = RV_PRS_raw_AFR, statistic = Beta_Boot, R = 10000)
 beta_raw_AFR_boot <- boot_beta$t
 beta_se_validation_raw_AFR <- sd(boot_beta$t)
 
-R2_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_raw_AFR))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_AFR, statistic = R2_Boot, R = 10000)
+R2_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_raw_AFR))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_AFR, statistic = R2_Boot, R = 10000)
 R2_raw_AFR_boot <- boot_R2$t
 R2_se_validation_raw_AFR <- sd(boot_R2$t)
 
-beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_raw_EAS))[2]
-boot_beta <- boot(data = pheno_validation_raw_EAS, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_raw_EAS))[2]
+boot_beta <- boot(data = RV_PRS_raw_EAS, statistic = Beta_Boot, R = 10000)
 beta_raw_EAS_boot <- boot_beta$t
 beta_se_validation_raw_EAS <- sd(boot_beta$t)
 
-R2_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_raw_EAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_EAS, statistic = R2_Boot, R = 10000)
+R2_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_raw_EAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_EAS, statistic = R2_Boot, R = 10000)
 R2_raw_EAS_boot <- boot_R2$t
 R2_se_validation_raw_EAS <- sd(boot_R2$t)
 
-beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_adjusted_EUR))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_EUR, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_adjusted_EUR))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_EUR, statistic = Beta_Boot, R = 10000)
 beta_adjusted_EUR_boot <- boot_beta$t
 beta_se_validation_adjusted_EUR <- sd(boot_beta$t)
 
-R2_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_adjusted_EUR))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_EUR, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_adjusted_EUR))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_EUR, statistic = R2_Boot, R = 10000)
 R2_adjusted_EUR_boot <- boot_R2$t
 R2_se_validation_adjusted_EUR <- sd(boot_R2$t)
 
-beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_adjusted_SAS))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_SAS, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_adjusted_SAS))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_SAS, statistic = Beta_Boot, R = 10000)
 beta_adjusted_SAS_boot <- boot_beta$t
 beta_se_validation_adjusted_SAS <- sd(boot_beta$t)
 
-R2_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_adjusted_SAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_SAS, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_adjusted_SAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_SAS, statistic = R2_Boot, R = 10000)
 R2_adjusted_SAS_boot <- boot_R2$t
 R2_se_validation_adjusted_SAS <- sd(boot_R2$t)
 
-beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_adjusted_AMR))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_AMR, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_adjusted_AMR))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_AMR, statistic = Beta_Boot, R = 10000)
 beta_adjusted_AMR_boot <- boot_beta$t
 beta_se_validation_adjusted_AMR <- sd(boot_beta$t)
 
-R2_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_adjusted_AMR))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_AMR, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_adjusted_AMR))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_AMR, statistic = R2_Boot, R = 10000)
 R2_adjusted_AMR_boot <- boot_R2$t
 R2_se_validation_adjusted_AMR <- sd(boot_R2$t)
 
-beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_adjusted_AFR))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_AFR, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_adjusted_AFR))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_AFR, statistic = Beta_Boot, R = 10000)
 beta_adjusted_AFR_boot <- boot_beta$t
 beta_se_validation_adjusted_AFR <- sd(boot_beta$t)
 
-R2_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_adjusted_AFR))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_AFR, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_adjusted_AFR))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_AFR, statistic = R2_Boot, R = 10000)
 R2_adjusted_AFR_boot <- boot_R2$t
 R2_se_validation_adjusted_AFR <- sd(boot_R2$t)
 
-beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_adjusted_EAS))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_EAS, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_adjusted_EAS))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_EAS, statistic = Beta_Boot, R = 10000)
 beta_adjusted_EAS_boot <- boot_beta$t
 beta_se_validation_adjusted_EAS <- sd(boot_beta$t)
 
-R2_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = pheno_validation_adjusted_EAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_EAS, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_Coding_PRS")),data = RV_PRS_adjusted_EAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_EAS, statistic = R2_Boot, R = 10000)
 R2_adjusted_EAS_boot <- boot_R2$t
 R2_se_validation_adjusted_EAS <- sd(boot_R2$t)
 
@@ -732,103 +732,103 @@ R2_Boot <- function(data,indices){
   return(c(result))
 }
 
-beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_raw_EUR))[2]
-boot_beta <- boot(data = pheno_validation_raw_EUR, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_raw_EUR))[2]
+boot_beta <- boot(data = RV_PRS_raw_EUR, statistic = Beta_Boot, R = 10000)
 beta_raw_EUR_boot <- boot_beta$t
 beta_se_validation_raw_EUR <- sd(boot_beta$t)
 
-R2_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_raw_EUR))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_EUR, statistic = R2_Boot, R = 10000)
+R2_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_raw_EUR))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_EUR, statistic = R2_Boot, R = 10000)
 R2_raw_EUR_boot <- boot_R2$t
 R2_se_validation_raw_EUR <- sd(boot_R2$t)
 
-beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_raw_SAS))[2]
-boot_beta <- boot(data = pheno_validation_raw_SAS, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_raw_SAS))[2]
+boot_beta <- boot(data = RV_PRS_raw_SAS, statistic = Beta_Boot, R = 10000)
 beta_raw_SAS_boot <- boot_beta$t
 beta_se_validation_raw_SAS <- sd(boot_beta$t)
 
-R2_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_raw_SAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_SAS, statistic = R2_Boot, R = 10000)
+R2_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_raw_SAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_SAS, statistic = R2_Boot, R = 10000)
 R2_raw_SAS_boot <- boot_R2$t
 R2_se_validation_raw_SAS <- sd(boot_R2$t)
 
-beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_raw_AMR))[2]
-boot_beta <- boot(data = pheno_validation_raw_AMR, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_raw_AMR))[2]
+boot_beta <- boot(data = RV_PRS_raw_AMR, statistic = Beta_Boot, R = 10000)
 beta_raw_AMR_boot <- boot_beta$t
 beta_se_validation_raw_AMR <- sd(boot_beta$t)
 
-R2_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_raw_AMR))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_AMR, statistic = R2_Boot, R = 10000)
+R2_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_raw_AMR))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_AMR, statistic = R2_Boot, R = 10000)
 R2_raw_AMR_boot <- boot_R2$t
 R2_se_validation_raw_AMR <- sd(boot_R2$t)
 
-beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_raw_AFR))[2]
-boot_beta <- boot(data = pheno_validation_raw_AFR, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_raw_AFR))[2]
+boot_beta <- boot(data = RV_PRS_raw_AFR, statistic = Beta_Boot, R = 10000)
 beta_raw_AFR_boot <- boot_beta$t
 beta_se_validation_raw_AFR <- sd(boot_beta$t)
 
-R2_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_raw_AFR))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_AFR, statistic = R2_Boot, R = 10000)
+R2_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_raw_AFR))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_AFR, statistic = R2_Boot, R = 10000)
 R2_raw_AFR_boot <- boot_R2$t
 R2_se_validation_raw_AFR <- sd(boot_R2$t)
 
-beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_raw_EAS))[2]
-boot_beta <- boot(data = pheno_validation_raw_EAS, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_raw_EAS))[2]
+boot_beta <- boot(data = RV_PRS_raw_EAS, statistic = Beta_Boot, R = 10000)
 beta_raw_EAS_boot <- boot_beta$t
 beta_se_validation_raw_EAS <- sd(boot_beta$t)
 
-R2_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_raw_EAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_EAS, statistic = R2_Boot, R = 10000)
+R2_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_raw_EAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_EAS, statistic = R2_Boot, R = 10000)
 R2_raw_EAS_boot <- boot_R2$t
 R2_se_validation_raw_EAS <- sd(boot_R2$t)
 
-beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_adjusted_EUR))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_EUR, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_adjusted_EUR))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_EUR, statistic = Beta_Boot, R = 10000)
 beta_adjusted_EUR_boot <- boot_beta$t
 beta_se_validation_adjusted_EUR <- sd(boot_beta$t)
 
-R2_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_adjusted_EUR))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_EUR, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_adjusted_EUR))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_EUR, statistic = R2_Boot, R = 10000)
 R2_adjusted_EUR_boot <- boot_R2$t
 R2_se_validation_adjusted_EUR <- sd(boot_R2$t)
 
-beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_adjusted_SAS))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_SAS, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_adjusted_SAS))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_SAS, statistic = Beta_Boot, R = 10000)
 beta_adjusted_SAS_boot <- boot_beta$t
 beta_se_validation_adjusted_SAS <- sd(boot_beta$t)
 
-R2_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_adjusted_SAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_SAS, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_adjusted_SAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_SAS, statistic = R2_Boot, R = 10000)
 R2_adjusted_SAS_boot <- boot_R2$t
 R2_se_validation_adjusted_SAS <- sd(boot_R2$t)
 
-beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_adjusted_AMR))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_AMR, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_adjusted_AMR))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_AMR, statistic = Beta_Boot, R = 10000)
 beta_adjusted_AMR_boot <- boot_beta$t
 beta_se_validation_adjusted_AMR <- sd(boot_beta$t)
 
-R2_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_adjusted_AMR))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_AMR, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_adjusted_AMR))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_AMR, statistic = R2_Boot, R = 10000)
 R2_adjusted_AMR_boot <- boot_R2$t
 R2_se_validation_adjusted_AMR <- sd(boot_R2$t)
 
-beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_adjusted_AFR))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_AFR, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_adjusted_AFR))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_AFR, statistic = Beta_Boot, R = 10000)
 beta_adjusted_AFR_boot <- boot_beta$t
 beta_se_validation_adjusted_AFR <- sd(boot_beta$t)
 
-R2_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_adjusted_AFR))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_AFR, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_adjusted_AFR))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_AFR, statistic = R2_Boot, R = 10000)
 R2_adjusted_AFR_boot <- boot_R2$t
 R2_se_validation_adjusted_AFR <- sd(boot_R2$t)
 
-beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_adjusted_EAS))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_EAS, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_adjusted_EAS))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_EAS, statistic = Beta_Boot, R = 10000)
 beta_adjusted_EAS_boot <- boot_beta$t
 beta_se_validation_adjusted_EAS <- sd(boot_beta$t)
 
-R2_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = pheno_validation_adjusted_EAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_EAS, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_Noncoding_PRS")),data = RV_PRS_adjusted_EAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_EAS, statistic = R2_Boot, R = 10000)
 R2_adjusted_EAS_boot <- boot_R2$t
 R2_se_validation_adjusted_EAS <- sd(boot_R2$t)
 
@@ -997,103 +997,103 @@ R2_Boot <- function(data,indices){
   return(c(result))
 }
 
-beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_raw_EUR))[2]
-boot_beta <- boot(data = pheno_validation_raw_EUR, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_raw_EUR))[2]
+boot_beta <- boot(data = RV_PRS_raw_EUR, statistic = Beta_Boot, R = 10000)
 beta_raw_EUR_boot <- boot_beta$t
 beta_se_validation_raw_EUR <- sd(boot_beta$t)
 
-R2_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_raw_EUR))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_EUR, statistic = R2_Boot, R = 10000)
+R2_validation_raw_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_raw_EUR))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_EUR, statistic = R2_Boot, R = 10000)
 R2_raw_EUR_boot <- boot_R2$t
 R2_se_validation_raw_EUR <- sd(boot_R2$t)
 
-beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_raw_SAS))[2]
-boot_beta <- boot(data = pheno_validation_raw_SAS, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_raw_SAS))[2]
+boot_beta <- boot(data = RV_PRS_raw_SAS, statistic = Beta_Boot, R = 10000)
 beta_raw_SAS_boot <- boot_beta$t
 beta_se_validation_raw_SAS <- sd(boot_beta$t)
 
-R2_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_raw_SAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_SAS, statistic = R2_Boot, R = 10000)
+R2_validation_raw_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_raw_SAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_SAS, statistic = R2_Boot, R = 10000)
 R2_raw_SAS_boot <- boot_R2$t
 R2_se_validation_raw_SAS <- sd(boot_R2$t)
 
-beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_raw_AMR))[2]
-boot_beta <- boot(data = pheno_validation_raw_AMR, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_raw_AMR))[2]
+boot_beta <- boot(data = RV_PRS_raw_AMR, statistic = Beta_Boot, R = 10000)
 beta_raw_AMR_boot <- boot_beta$t
 beta_se_validation_raw_AMR <- sd(boot_beta$t)
 
-R2_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_raw_AMR))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_AMR, statistic = R2_Boot, R = 10000)
+R2_validation_raw_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_raw_AMR))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_AMR, statistic = R2_Boot, R = 10000)
 R2_raw_AMR_boot <- boot_R2$t
 R2_se_validation_raw_AMR <- sd(boot_R2$t)
 
-beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_raw_AFR))[2]
-boot_beta <- boot(data = pheno_validation_raw_AFR, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_raw_AFR))[2]
+boot_beta <- boot(data = RV_PRS_raw_AFR, statistic = Beta_Boot, R = 10000)
 beta_raw_AFR_boot <- boot_beta$t
 beta_se_validation_raw_AFR <- sd(boot_beta$t)
 
-R2_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_raw_AFR))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_AFR, statistic = R2_Boot, R = 10000)
+R2_validation_raw_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_raw_AFR))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_AFR, statistic = R2_Boot, R = 10000)
 R2_raw_AFR_boot <- boot_R2$t
 R2_se_validation_raw_AFR <- sd(boot_R2$t)
 
-beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_raw_EAS))[2]
-boot_beta <- boot(data = pheno_validation_raw_EAS, statistic = Beta_Boot, R = 10000)
+beta_validation_raw_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_raw_EAS))[2]
+boot_beta <- boot(data = RV_PRS_raw_EAS, statistic = Beta_Boot, R = 10000)
 beta_raw_EAS_boot <- boot_beta$t
 beta_se_validation_raw_EAS <- sd(boot_beta$t)
 
-R2_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_raw_EAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_raw_EAS, statistic = R2_Boot, R = 10000)
+R2_validation_raw_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_raw_EAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_raw_EAS, statistic = R2_Boot, R = 10000)
 R2_raw_EAS_boot <- boot_R2$t
 R2_se_validation_raw_EAS <- sd(boot_R2$t)
 
-beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_adjusted_EUR))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_EUR, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_EUR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_adjusted_EUR))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_EUR, statistic = Beta_Boot, R = 10000)
 beta_adjusted_EUR_boot <- boot_beta$t
 beta_se_validation_adjusted_EUR <- sd(boot_beta$t)
 
-R2_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_adjusted_EUR))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_EUR, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_EUR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_adjusted_EUR))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_EUR, statistic = R2_Boot, R = 10000)
 R2_adjusted_EUR_boot <- boot_R2$t
 R2_se_validation_adjusted_EUR <- sd(boot_R2$t)
 
-beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_adjusted_SAS))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_SAS, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_SAS <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_adjusted_SAS))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_SAS, statistic = Beta_Boot, R = 10000)
 beta_adjusted_SAS_boot <- boot_beta$t
 beta_se_validation_adjusted_SAS <- sd(boot_beta$t)
 
-R2_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_adjusted_SAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_SAS, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_SAS <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_adjusted_SAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_SAS, statistic = R2_Boot, R = 10000)
 R2_adjusted_SAS_boot <- boot_R2$t
 R2_se_validation_adjusted_SAS <- sd(boot_R2$t)
 
-beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_adjusted_AMR))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_AMR, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_AMR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_adjusted_AMR))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_AMR, statistic = Beta_Boot, R = 10000)
 beta_adjusted_AMR_boot <- boot_beta$t
 beta_se_validation_adjusted_AMR <- sd(boot_beta$t)
 
-R2_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_adjusted_AMR))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_AMR, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_AMR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_adjusted_AMR))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_AMR, statistic = R2_Boot, R = 10000)
 R2_adjusted_AMR_boot <- boot_R2$t
 R2_se_validation_adjusted_AMR <- sd(boot_R2$t)
 
-beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_adjusted_AFR))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_AFR, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_AFR <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_adjusted_AFR))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_AFR, statistic = Beta_Boot, R = 10000)
 beta_adjusted_AFR_boot <- boot_beta$t
 beta_se_validation_adjusted_AFR <- sd(boot_beta$t)
 
-R2_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_adjusted_AFR))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_AFR, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_AFR <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_adjusted_AFR))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_AFR, statistic = R2_Boot, R = 10000)
 R2_adjusted_AFR_boot <- boot_R2$t
 R2_se_validation_adjusted_AFR <- sd(boot_R2$t)
 
-beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_adjusted_EAS))[2]
-boot_beta <- boot(data = pheno_validation_adjusted_EAS, statistic = Beta_Boot, R = 10000)
+beta_validation_adjusted_EAS <- coef(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_adjusted_EAS))[2]
+boot_beta <- boot(data = RV_PRS_adjusted_EAS, statistic = Beta_Boot, R = 10000)
 beta_adjusted_EAS_boot <- boot_beta$t
 beta_se_validation_adjusted_EAS <- sd(boot_beta$t)
 
-R2_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = pheno_validation_adjusted_EAS))$r.squared
-boot_R2 <- boot(data = pheno_validation_adjusted_EAS, statistic = R2_Boot, R = 10000)
+R2_validation_adjusted_EAS <- summary(lm(as.formula(paste0("y_validation~","RV_PRS")),data = RV_PRS_adjusted_EAS))$r.squared
+boot_R2 <- boot(data = RV_PRS_adjusted_EAS, statistic = R2_Boot, R = 10000)
 R2_adjusted_EAS_boot <- boot_R2$t
 R2_se_validation_adjusted_EAS <- sd(boot_R2$t)
 
