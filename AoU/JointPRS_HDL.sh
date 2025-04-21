@@ -18,7 +18,7 @@ chr=${SLURM_ARRAY_TASK_ID}
 pop1=EUR; pop2=AMR; pop3=AFR
 r1=1; r2=1; r3=1
 sst1=/data/williamsjacr/AoU_JointPRS/GWASSumStats/EUR_HDL_GWAS_SumStats_Cleaned.txt; sst2=/data/williamsjacr/AoU_JointPRS/GWASSumStats/AMR_HDL_GWAS_SumStats_Cleaned.txt; sst3=/data/williamsjacr/AoU_JointPRS/GWASSumStats/AFR_HDL_GWAS_SumStats_Cleaned.txt
-sample_size1=43926; sample_size2=9628; sample_size3=12537
+sample_size1=43927; sample_size2=9628; sample_size3=12537
 
 python /data/williamsjacr/software/JointPRS/JointPRS.py \
 --ref_dir=${reference_path} \

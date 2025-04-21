@@ -2,7 +2,7 @@
 #SBATCH -n 1
 #SBATCH -N 1
 #SBATCH --time=16:00:00
-#SBATCH --mem-per-cpu=30G
+#SBATCH --mem-per-cpu=80G
 
 # module purge
 module load R/4.3.2

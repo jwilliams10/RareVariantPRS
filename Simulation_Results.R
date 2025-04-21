@@ -212,29 +212,35 @@ results_rareprop_35$Train_Size <- nrow(Y_train[[1]])
 
 
 results <- rbind(results_35,results_70)
+results_rareprop <- rbind(results_rareprop_35,results_rareprop_70)
+
 results$Train_Size <- format(results$Train_Size,big.mark=",", trim=TRUE)
+results_rareprop$Train_Size <- format(results_rareprop$Train_Size,big.mark=",", trim=TRUE)
 
 results$Train_Size <- paste0("n = ",results$Train_Size)
+results_rareprop$Train_Size <- paste0("n = ",results_rareprop$Train_Size)
 
-rm(list=setdiff(ls(), c("results")))
+rm(list=setdiff(ls(), c("results","results_rareprop")))
 
 results$Beta[results$Beta < 0 & results$Method %in% c("LDPred","LASSOSum")] <- -1*results$Beta[results$Beta < 0 & results$Method %in% c("LDPred","LASSOSum")]
 results$Beta[results$Beta < 0] <- 0
 
-results <- aggregate(.~Method + Scale + Causal_Prop + Train_Size + Ancestry,data = results,mean)
+results_rareprop$Beta[results_rareprop$Beta < 0 & results_rareprop$Method %in% c("LDPred","LASSOSum")] <- -1*results_rareprop$Beta[results_rareprop$Beta < 0 & results_rareprop$Method %in% c("LDPred","LASSOSum")]
+results_rareprop$Beta[results_rareprop$Beta < 0] <- 0
 
-overall_results <- results[results$Method %in% c("CT","LASSOSum","LDPred","CV_SL","CV","RV"),]
+results <- aggregate(.~Method + Scale + Causal_Prop + Train_Size + Ancestry,data = results,mean)
+results_rareprop <- aggregate(.~Method + Scale + Causal_Prop + Train_Size + Ancestry,data = results_rareprop,mean)
+
+overall_results <- results[results$Method %in% c("CT","LASSOSum","LDPred","RICE-CV","RICE-RV"),]
+overall_results_rareprop <- results_rareprop[results_rareprop$Method %in% c("CT","LASSOSum","LDPred","RICE-CV","RICE-RV"),]
 
 # overall_results <- read.csv("Desktop/RareVariantPRS_Results/Overall_Results_SimStudy.csv")
 
-overall_results <- overall_results[overall_results$Ancestry %in% c("AFR","EUR","SAS","AMR","EAS"),]
-overall_results <- overall_results[overall_results$Method %in% c("CT","LASSOSum","LDPred","CV","RV"),]
-overall_results$Method[overall_results$Method == "CV"] <- "RICE-CV" 
-overall_results$Method[overall_results$Method == "RV"] <- "RICE-RV" 
+overall_results <- overall_results[overall_results$Ancestry %in% c("AFR","EUR","SAS","AMR"),]
+overall_results$Method[overall_results$Method == "RICE-CV"] <- "RICE-CV" 
+overall_results$Method[overall_results$Method == "RICE-RV"] <- "RICE-RV" 
 overall_results$Method[overall_results$Method == "LDPred"] <- "LDpred2"
 overall_results$Method[overall_results$Method == "LASSOSum"] <- "Lassosum2"
-
-overall_results <- overall_results[overall_results$Ancestry %in% c("AFR","AMR","EUR","SAS"),]
 
 overall_results$Method1 <- overall_results$Method
 overall_results$Method <- factor(overall_results$Method,levels = c("CT","Lassosum2","LDpred2","RICE-RV","RICE-CV"))

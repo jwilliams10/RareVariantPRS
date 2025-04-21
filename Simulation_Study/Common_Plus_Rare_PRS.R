@@ -128,168 +128,168 @@ R2_Boot <- function(data,indices){
 
 beta_CV_validation_raw_EUR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_EUR))[2],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_raw_EUR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_CV_se_validation_raw_EUR <- sd(boot_beta$t)
 beta_CV_lower_validation_raw_EUR <- beta_ci$basic[4]
 beta_CV_upper_validation_raw_EUR <- beta_ci$basic[5]
 
 beta_RV_validation_raw_EUR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_EUR))[3],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_raw_EUR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_RV_se_validation_raw_EUR <- sd(boot_beta$t)
 beta_RV_lower_validation_raw_EUR <- beta_ci$basic[4]
 beta_RV_upper_validation_raw_EUR <- beta_ci$basic[5]
 
 R2_validation_raw_EUR <- tryCatch(summary(lm(y_validation~PRS,data = CV_RV_PRS_raw_EUR))$r.squared,error = function(e){return(0)})
 boot_R2 <- boot(data = CV_RV_PRS_raw_EUR, statistic = R2_Boot, R = 1000)
-R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_ci <- tryCatch(boot.ci(boot_R2, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 R2_se_validation_raw_EUR <- sd(boot_R2$t)
 R2_lower_validation_raw_EUR <- R2_ci$basic[4]
 R2_upper_validation_raw_EUR <- R2_ci$basic[5]
 
 beta_CV_validation_raw_SAS <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_SAS))[2],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_raw_SAS, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_CV_se_validation_raw_SAS <- sd(boot_beta$t)
 beta_CV_lower_validation_raw_SAS <- beta_ci$basic[4]
 beta_CV_upper_validation_raw_SAS <- beta_ci$basic[5]
 
 beta_RV_validation_raw_SAS <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_SAS))[3],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_raw_SAS, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_RV_se_validation_raw_SAS <- sd(boot_beta$t)
 beta_RV_lower_validation_raw_SAS <- beta_ci$basic[4]
 beta_RV_upper_validation_raw_SAS <- beta_ci$basic[5]
 
 R2_validation_raw_SAS <- tryCatch(summary(lm(y_validation~PRS,data = CV_RV_PRS_raw_SAS))$r.squared,error = function(e){return(0)})
 boot_R2 <- boot(data = CV_RV_PRS_raw_SAS, statistic = R2_Boot, R = 1000)
-R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_ci <- tryCatch(boot.ci(boot_R2, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 R2_se_validation_raw_SAS <- sd(boot_R2$t)
 R2_lower_validation_raw_SAS <- R2_ci$basic[4]
 R2_upper_validation_raw_SAS <- R2_ci$basic[5]
 
 beta_CV_validation_raw_AMR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_AMR))[2],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_raw_AMR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_CV_se_validation_raw_AMR <- sd(boot_beta$t)
 beta_CV_lower_validation_raw_AMR <- beta_ci$basic[4]
 beta_CV_upper_validation_raw_AMR <- beta_ci$basic[5]
 
 beta_RV_validation_raw_AMR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_AMR))[3],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_raw_AMR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_RV_se_validation_raw_AMR <- sd(boot_beta$t)
 beta_RV_lower_validation_raw_AMR <- beta_ci$basic[4]
 beta_RV_upper_validation_raw_AMR <- beta_ci$basic[5]
 
 R2_validation_raw_AMR <- tryCatch(summary(lm(y_validation~PRS,data = CV_RV_PRS_raw_AMR))$r.squared,error = function(e){return(0)})
 boot_R2 <- boot(data = CV_RV_PRS_raw_AMR, statistic = R2_Boot, R = 1000)
-R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_ci <- tryCatch(boot.ci(boot_R2, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 R2_se_validation_raw_AMR <- sd(boot_R2$t)
 R2_lower_validation_raw_AMR <- R2_ci$basic[4]
 R2_upper_validation_raw_AMR <- R2_ci$basic[5]
 
 beta_CV_validation_raw_AFR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_AFR))[2],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_raw_AFR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_CV_se_validation_raw_AFR <- sd(boot_beta$t)
 beta_CV_lower_validation_raw_AFR <- beta_ci$basic[4]
 beta_CV_upper_validation_raw_AFR <- beta_ci$basic[5]
 
 beta_RV_validation_raw_AFR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_AFR))[3],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_raw_AFR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_RV_se_validation_raw_AFR <- sd(boot_beta$t)
 beta_RV_lower_validation_raw_AFR <- beta_ci$basic[4]
 beta_RV_upper_validation_raw_AFR <- beta_ci$basic[5]
 
 R2_validation_raw_AFR <- tryCatch(summary(lm(y_validation~PRS,data = CV_RV_PRS_raw_AFR))$r.squared,error = function(e){return(0)})
 boot_R2 <- boot(data = CV_RV_PRS_raw_AFR, statistic = R2_Boot, R = 1000)
-R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_ci <- tryCatch(boot.ci(boot_R2, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 R2_se_validation_raw_AFR <- sd(boot_R2$t)
 R2_lower_validation_raw_AFR <- R2_ci$basic[4]
 R2_upper_validation_raw_AFR <- R2_ci$basic[5]
 
 beta_CV_validation_adjusted_EUR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_EUR))[2],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_CV_se_validation_adjusted_EUR <- sd(boot_beta$t)
 beta_CV_lower_validation_adjusted_EUR <- beta_ci$basic[4]
 beta_CV_upper_validation_adjusted_EUR <- beta_ci$basic[5]
 
 beta_RV_validation_adjusted_EUR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_EUR))[3],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_RV_se_validation_adjusted_EUR <- sd(boot_beta$t)
 beta_RV_lower_validation_adjusted_EUR <- beta_ci$basic[4]
 beta_RV_upper_validation_adjusted_EUR <- beta_ci$basic[5]
 
 R2_validation_adjusted_EUR <- tryCatch(summary(lm(y_validation~PRS,data = CV_RV_PRS_adjusted_EUR))$r.squared,error = function(e){return(0)})
 boot_R2 <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = R2_Boot, R = 1000)
-R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_ci <- tryCatch(boot.ci(boot_R2, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 R2_se_validation_adjusted_EUR <- sd(boot_R2$t)
 R2_lower_validation_adjusted_EUR <- R2_ci$basic[4]
 R2_upper_validation_adjusted_EUR <- R2_ci$basic[5]
 
 beta_CV_validation_adjusted_SAS <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_SAS))[2],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_CV_se_validation_adjusted_SAS <- sd(boot_beta$t)
 beta_CV_lower_validation_adjusted_SAS <- beta_ci$basic[4]
 beta_CV_upper_validation_adjusted_SAS <- beta_ci$basic[5]
 
 beta_RV_validation_adjusted_SAS <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_SAS))[3],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_RV_se_validation_adjusted_SAS <- sd(boot_beta$t)
 beta_RV_lower_validation_adjusted_SAS <- beta_ci$basic[4]
 beta_RV_upper_validation_adjusted_SAS <- beta_ci$basic[5]
 
 R2_validation_adjusted_SAS <- tryCatch(summary(lm(y_validation~PRS,data = CV_RV_PRS_adjusted_SAS))$r.squared,error = function(e){return(0)})
 boot_R2 <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = R2_Boot, R = 1000)
-R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_ci <- tryCatch(boot.ci(boot_R2, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 R2_se_validation_adjusted_SAS <- sd(boot_R2$t)
 R2_lower_validation_adjusted_SAS <- R2_ci$basic[4]
 R2_upper_validation_adjusted_SAS <- R2_ci$basic[5]
 
 beta_CV_validation_adjusted_AMR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_AMR))[2],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_CV_se_validation_adjusted_AMR <- sd(boot_beta$t)
 beta_CV_lower_validation_adjusted_AMR <- beta_ci$basic[4]
 beta_CV_upper_validation_adjusted_AMR <- beta_ci$basic[5]
 
 beta_RV_validation_adjusted_AMR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_AMR))[3],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_RV_se_validation_adjusted_AMR <- sd(boot_beta$t)
 beta_RV_lower_validation_adjusted_AMR <- beta_ci$basic[4]
 beta_RV_upper_validation_adjusted_AMR <- beta_ci$basic[5]
 
 R2_validation_adjusted_AMR <- tryCatch(summary(lm(y_validation~PRS,data = CV_RV_PRS_adjusted_AMR))$r.squared,error = function(e){return(0)})
 boot_R2 <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = R2_Boot, R = 1000)
-R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_ci <- tryCatch(boot.ci(boot_R2, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 R2_se_validation_adjusted_AMR <- sd(boot_R2$t)
 R2_lower_validation_adjusted_AMR <- R2_ci$basic[4]
 R2_upper_validation_adjusted_AMR <- R2_ci$basic[5]
 
 beta_CV_validation_adjusted_AFR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_AFR))[2],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = Beta_CV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_CV_se_validation_adjusted_AFR <- sd(boot_beta$t)
 beta_CV_lower_validation_adjusted_AFR <- beta_ci$basic[4]
 beta_CV_upper_validation_adjusted_AFR <- beta_ci$basic[5]
 
 beta_RV_validation_adjusted_AFR <- tryCatch(coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_AFR))[3],error = function(e){return(0)})
 boot_beta <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = Beta_RV_Boot, R = 1000)
-beta_ci <- boot.ci(boot_beta, type = "basic")
+beta_ci <- tryCatch(boot.ci(boot_beta, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 beta_RV_se_validation_adjusted_AFR <- sd(boot_beta$t)
 beta_RV_lower_validation_adjusted_AFR <- beta_ci$basic[4]
 beta_RV_upper_validation_adjusted_AFR <- beta_ci$basic[5]
 
 R2_validation_adjusted_AFR <- tryCatch(summary(lm(y_validation~PRS,data = CV_RV_PRS_adjusted_AFR))$r.squared,error = function(e){return(0)})
 boot_R2 <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = R2_Boot, R = 1000)
-R2_ci <- boot.ci(boot_R2, type = "basic")
+R2_ci <- tryCatch(boot.ci(boot_R2, type = "basic"),error = function(e){return(list(basic = c(0,0,0,0,0)))})
 R2_se_validation_adjusted_AFR <- sd(boot_R2$t)
 R2_lower_validation_adjusted_AFR <- R2_ci$basic[4]
 R2_upper_validation_adjusted_AFR <- R2_ci$basic[5]
