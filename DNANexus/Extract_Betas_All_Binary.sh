@@ -30,7 +30,6 @@ dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/LDPred2_LASSOSum2/${trait}_
 
 dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/Combined_Common_PRS/${trait}_Best_Tune_All.txt
 dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/Combined_Common_PRS/${trait}_Best_Validation_All.txt
-dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/Combined_Common_PRS/${trait}_Final_Coefficients_SL.csv
 
 dx download UKB_PRS:JW/UKB_Phenotypes/Results/validation.txt
 dx download UKB_PRS:JW/Clean_Data/all_chr.bed
