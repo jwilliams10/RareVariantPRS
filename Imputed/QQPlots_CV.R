@@ -48,14 +48,19 @@ library(cowplot)
 
 lambda_dat <- NULL
 
-for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
-  dat <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/",trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")
-  colnames(dat) <- c("CHROM","POS","ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","OBS_CT","BETA","SE","T_STAT","P","ERRCODE")
-  dat <- dat[dat$TEST == "ADD",]
-  
-  dat <- dat[,c("CHROM","ID","REF","POS","A1","BETA","P","A1_FREQ")]
-  colnames(dat) <- c("CHR","SNP","REF","BP","A1","BETA","P","A1_FREQ") 
+for(trait in c("Asthma","CAD","T2D","Breast","Prostate","BMI","LDL","HDL","logTG","TC","Height")){
+  if(trait %in% c("BMI","LDL","HDL","logTG","TC","Height")){
+    fill <- "/data/williamsjacr/UKB_WES_Phenotypes/Imputed/GWAS_Summary_Statistics/regenie_step2_continuous_"
+  }else if(trait %in% c("Breast","Prostate")){
+    fill <- "/data/williamsjacr/UKB_WES_Phenotypes/Imputed/GWAS_Summary_Statistics/regenie_step2_bp_"
+  }else{
+    fill <- "/data/williamsjacr/UKB_WES_Phenotypes/Imputed/GWAS_Summary_Statistics/regenie_step2_act_"
+  }
+  dat <- read.csv(paste0(fill,trait,".regenie"), sep="")
+  colnames(dat) <- c("CHR","BP","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
+  dat$P <- 10^(-1*dat$LOG10P)
   dat$MAF <- ifelse(dat$A1_FREQ <= 0.5, dat$A1_FREQ,1-dat$A1_FREQ)
+  
   dat <- dat[dat$MAF > 0.01,]
   dat <- dat[dat$P != 0,]
   
@@ -65,7 +70,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   lambda <- round(median(z^2) / qchisq(0.5,1), 3)
   lambda_1000 <- round(1+1000*(lambda-1)/sum(!is.na(pheno_train[,trait])) ,3)
   
-  lambda_dat <- rbind(lambda_dat,data.frame(Trait = trait,Ancestry_Group = "European",lambda = lambda, lambda_1000 = lambda_1000, datasource = "UKB WES"))
+  lambda_dat <- rbind(lambda_dat,data.frame(Trait = trait,Ancestry_Group = "European",lambda = lambda, lambda_1000 = lambda_1000, datasource = "UKB Imputed"))
   
   p.pwas <- 5E-08
   
@@ -87,7 +92,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   sigline <- data.frame(sig=c(-log10(sig1)),val=c(paste0("P=",signif(sig1,2))))
   
   p1 <- ggplot(dat, aes(x = BPcum, y = -log10(P), 
-                              color = as.factor(CHR), size = -log10(P))) +
+                        color = as.factor(CHR), size = -log10(P))) +
     geom_point(alpha = 0.8, size=0.8) + 
     scale_x_continuous(label = axis.set$CHR, breaks = axis.set$center) +
     scale_y_continuous(expand = c(0,0), limits = c(0, ylim)) +
@@ -110,9 +115,9 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
       plot.subtitle = element_text(size = 8)
     )
   
-  ggsave(paste0(trait,"_UKB_WES_CV_Manhattan_Plot.png"),p1,width = 15,height = 9.27070457355,dpi = 300)
+  ggsave(paste0(trait,"_UKB_Imputed_CV_Manhattan_Plot.png"),p1,width = 15,height = 9.27070457355,dpi = 300)
   
-  png(paste0(trait,"_UKB_WES_CV_QQplot.png"), width=10, height=10,units = "in",res = 300)
+  png(paste0(trait,"_UKB_Imputed_CV_QQplot.png"), width=10, height=10,units = "in",res = 300)
   
   qqplotdata <- function(logpvector){
     o = sort(logpvector,decreasing=T)
@@ -179,7 +184,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   }
   legendtext <- paste0("MAF=",fbin,"; N SNPs=",format(fN,big.mark=",",scientific=FALSE))
   opt <-  list(break.top = 15,
-              top.size = 0.125)
+               top.size = 0.125)
   
   
   xlim <- c(0,max(fx,na.rm=T))
@@ -266,9 +271,9 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   #   rel_heights = c(0.1, 1)
   # )
   # 
-  # cowplot::save_plot(filename = paste0(trait,"_UKB_WES_CV_QQplot.pdf"),plot = p3,nrow = 2,ncol = 2,base_width = c(24))
+  # cowplot::save_plot(filename = paste0(trait,"_UKB_Imputed_CV_QQplot.pdf"),plot = p3,nrow = 2,ncol = 2,base_width = c(24))
   # 
   dev.off()
 }
 
-write.csv(lambda_dat,file = "UKB_WES_lambda.csv",row.names = FALSE)
+write.csv(lambda_dat,file = "UKB_Imputed_lambda.csv",row.names = FALSE)

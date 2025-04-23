@@ -7,10 +7,10 @@ NRI_Data_Continuous <- NULL
 for(trait in continuous_traits){
   
   pheno_validation <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
-  CV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble/",trait,"_PRS_Validation.csv"))
+  CV_PRS_Validation <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_Common_PRS/",trait,"_Best_Validation_All.txt"))
   colnames(CV_PRS_Validation) <- c("IID","CV_PRS")
   pheno_validation <- inner_join(pheno_validation,CV_PRS_Validation)
-  RV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble_RV/",trait,"_PRS_Validation.csv"))
+  RV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/Combined_RareVariants_PRS/",trait,"_BestPRS_Validation.csv"))
   colnames(RV_PRS_Validation) <- c("IID","RV_PRS")
   pheno_validation <- inner_join(pheno_validation,RV_PRS_Validation)
   
@@ -52,10 +52,10 @@ NRI_Data_Binary <- NULL
 for(trait in binary_traits){
   
   pheno_validation <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
-  CV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble/",trait,"_PRS_Validation.csv"))
+  CV_PRS_Validation <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_Common_PRS/",trait,"_Best_Validation_All.txt"))
   colnames(CV_PRS_Validation) <- c("IID","CV_PRS")
   pheno_validation <- inner_join(pheno_validation,CV_PRS_Validation)
-  RV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble_RV/",trait,"_PRS_Validation.csv"))
+  RV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/Combined_RareVariants_PRS/",trait,"_BestPRS_Validation.csv"))
   colnames(RV_PRS_Validation) <- c("IID","RV_PRS")
   pheno_validation <- inner_join(pheno_validation,RV_PRS_Validation)
   
