@@ -125,6 +125,7 @@ theme_Publication <- function(base_size=12) {
             #legend.key.size= unit(0.2, "cm"),
             #legend.margin = unit(0, "cm"),
             legend.title = element_text(face="bold.italic", size =18),
+            legend.text=element_text(size=8),
             #legend.text = element_text(face ="bold"),
             plot.margin=unit(c(10,5,5,5),"mm"),
             strip.background=element_rect(colour="#f0f0f0",fill="#f0f0f0"),
@@ -163,6 +164,9 @@ full_results_Binary$trait <- factor(full_results_Binary$trait,levels = c("Asthma
 full_results_Continuous$Method_DataSource <- factor(full_results_Continuous$Method_DataSource,levels = c("RICE-CV & WES","RICE-CV & Imputed + WES","RICE-CV & WGS","RICE-RV & WES","RICE-RV & Imputed + WES","RICE-RV & WGS"))
 full_results_Binary$Method_DataSource <- factor(full_results_Binary$Method_DataSource,levels = c("RICE-CV & WES","RICE-CV & Imputed + WES","RICE-CV & WGS","RICE-RV & WES","RICE-RV & Imputed + WES","RICE-RV & WGS"))
 
+full_results_Continuous$beta_adjusted[full_results_Continuous$beta_adjusted < 0] <- 0
+full_results_Binary$beta_adjusted[full_results_Binary$beta_adjusted < 0] <- 0
+
 ylim_continuous <- max(full_results_Continuous$beta_adjusted) + 0.03
 ylim_binary <- max(full_results_Binary$beta_adjusted) + 0.03
 
@@ -183,10 +187,10 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "EUR",]) +
   scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 prow <- plot_grid(NULL,
-  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE-CV and RICE-RV PRS Results Using WES, Imputed, and WGS for European Ancestry"),
+  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE PRS Results Using WES, Imputed, and WGS for European Ancestry"),
   NULL,
   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
-  rel_heights = c(-.05, 1, -0.05, 1),
+  rel_heights = c(-.05, 1, -0.03, 1),
   ncol = 1
 )
 
@@ -194,7 +198,7 @@ legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, funct
 
 pdf(paste0("UKB_WES_vs_WGS_EUR.pdf"), width=10, height=6.18047)
 
-print(plot_grid(prow,NULL, legend_b, ncol = 1, rel_heights = c(1,0, .1)))
+print(plot_grid(prow,NULL, legend_b,NULL, ncol = 1, rel_heights = c(1,-0.02, .1,0.01)))
 
 dev.off()
 
@@ -215,10 +219,10 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AFR",]) +
   scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 prow <- plot_grid(NULL,
-                  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE-CV and RICE-RV PRS Results Using WES, Imputed, and WGS for African Ancestry"),
+                  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE PRS Results Using WES, Imputed, and WGS for African Ancestry"),
                   NULL,
                   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
-                  rel_heights = c(-.05, 1, -0.05, 1),
+                  rel_heights = c(-.05, 1, -0.03, 1),
                   ncol = 1
 )
 
@@ -226,7 +230,7 @@ legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, funct
 
 pdf(paste0("UKB_WES_vs_WGS_AFR.pdf"), width=10, height=6.18047)
 
-print(plot_grid(prow,NULL, legend_b, ncol = 1, rel_heights = c(1,0, .1)))
+print(plot_grid(prow,NULL, legend_b,NULL, ncol = 1, rel_heights = c(1,-0.02, .1,0.01)))
 
 dev.off()
 
@@ -247,10 +251,10 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AMR",]) +
   scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 prow <- plot_grid(NULL,
-                  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE-CV and RICE-RV PRS Results Using WES, Imputed, and WGS for Admixed American Ancestry"),
+                  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE PRS Results Using WES, Imputed, and WGS for Admixed American Ancestry"),
                   NULL,
                   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
-                  rel_heights = c(-.05, 1, -0.05, 1),
+                  rel_heights = c(-.05, 1, -0.03, 1),
                   ncol = 1
 )
 
@@ -258,7 +262,7 @@ legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, funct
 
 pdf(paste0("UKB_WES_vs_WGS_AMR.pdf"), width=10, height=6.18047)
 
-print(plot_grid(prow,NULL, legend_b, ncol = 1, rel_heights = c(1,0, .1)))
+print(plot_grid(prow,NULL, legend_b,NULL, ncol = 1, rel_heights = c(1,-0.02, .1,0.01)))
 
 dev.off()
 
@@ -279,10 +283,10 @@ plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "SAS",]) +
   scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
 
 prow <- plot_grid(NULL,
-                  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE-CV and RICE-RV PRS Results Using WES, Imputed, and WGS for South Asian Ancestry"),
+                  plot1 + theme(legend.position="none") + ggtitle("Comparison of RICE PRS Results Using WES, Imputed, and WGS for South Asian Ancestry"),
                   NULL,
                   plot2 + theme(legend.position="none") + theme(plot.title =element_blank()),
-                  rel_heights = c(-.05, 1, -0.05, 1),
+                  rel_heights = c(-.05, 1, -0.03, 1),
                   ncol = 1
 )
 
@@ -290,6 +294,6 @@ legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, funct
 
 pdf(paste0("UKB_WES_vs_WGS_SAS.pdf"), width=10, height=6.18047)
 
-print(plot_grid(prow,NULL, legend_b, ncol = 1, rel_heights = c(1,0, .1)))
+print(plot_grid(prow,NULL, legend_b,NULL, ncol = 1, rel_heights = c(1,-0.02, .1,0.01)))
 
 dev.off()

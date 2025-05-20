@@ -176,9 +176,6 @@ full_results <- left_join(full_results,CI_99)
 full_results_stacked <- rbind(data.frame(trait = full_results$trait, ancestry = full_results$ancestry,beta = full_results$beta_raw, lower_95 = full_results$beta_raw_Lower_95, upper_95 = full_results$beta_raw_Upper_95,method = full_results$Method,Standardization = "Within Genetically-Inferred Ancestries"),
                               data.frame(trait = full_results$trait, ancestry = full_results$ancestry,beta = full_results$beta_adjusted, lower_95 = full_results$beta_adjusted_Lower_95, upper_95 = full_results$beta_adjusted_Upper_95,method = full_results$Method,Standardization = "Using PCs 1-5"))
 
-full_results_stacked$lower_95[full_results_stacked$lower_95 < -1] <- 0
-full_results_stacked$upper_95[full_results_stacked$upper_95 > 1] <- 0
-
 g1 <- ggplot(data=full_results_stacked[full_results_stacked$trait %in% c("Breast","Prostate"),], aes(x=method, y=beta, ymin=lower_95, ymax=upper_95,color = Standardization)) +
   geom_pointrange(position=position_dodge(width=.25),size = 0.2) + 
   facet_grid(vars(trait), vars(ancestry), scales="free") + 
@@ -192,12 +189,12 @@ ggsave(paste0("UKB_Imputed_Binary_","A","_Raw_vs_AncestryAdjusted_Beta.png"),g1,
 g1 <- ggplot(data=full_results_stacked[full_results_stacked$trait %in% c("CAD","T2D"),], aes(x=method, y=beta, ymin=lower_95, ymax=upper_95,color = Standardization)) +
   geom_pointrange(position=position_dodge(width=.25),size = 0.2) + 
   facet_grid(vars(trait), vars(ancestry), scales="free") + 
-  coord_flip() +  # flip coordinates (puts labels on y axis)
+  coord_flip(ylim = c(-1,1)) +  # flip coordinates (puts labels on y axis)
   xlab("Method") + ylab("Beta of PRS per SD") +
   theme_Publication() + 
   scale_fill_Publication()
 # ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_Imputed_Binary_","B","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
-ggsave(paste0("UKB_Imputed_Binary_","B","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
+ggsave(paste0("UKB_Imputed_Binary_","B","_Raw_vs_AncestryAdjusted_Beta.png"),plot = g1,width=10, height=6.18047,dpi = 300)
 
 g1 <- ggplot(data=full_results_stacked[full_results_stacked$trait %in% c("Asthma"),], aes(x=method, y=beta, ymin=lower_95, ymax=upper_95,color = Standardization)) +
   geom_pointrange(position=position_dodge(width=.25),size = 0.2) + 
