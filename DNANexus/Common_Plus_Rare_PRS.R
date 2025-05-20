@@ -50,6 +50,19 @@ RV_PRS_Validation <- read.csv(paste0(trait,"Validation_BestPRS.csv"))
 system(paste0("rm ",paste0(trait,"Validation_BestPRS.csv")))
 colnames(RV_PRS_Validation) <- c("IID","RV_PRS")
 pheno_validation <- inner_join(pheno_validation,RV_PRS_Validation)
+CT_PRS_Validation <- read.delim(paste0(trait,"_prs_validation_best.txt"),sep = " ",header = TRUE)
+system(paste0("rm ",paste0(trait,"_prs_validation_best.txt")))
+colnames(CT_PRS_Validation) <- c("IID","FID","CT_PRS")
+CT_PRS_Validation <- CT_PRS_Validation[,c("IID","CT_PRS")]
+pheno_validation <- inner_join(pheno_validation,CT_PRS_Validation)
+LDpred2_PRS_Validation <- read.delim(paste0(trait,"_ldpred2_validation_prs_best.txt"),sep = "\t",header = TRUE)
+system(paste0("rm ",paste0(trait,"_ldpred2_validation_prs_best.txt")))
+colnames(LDpred2_PRS_Validation) <- c("IID","LDpred2_PRS")
+pheno_validation <- inner_join(pheno_validation,LDpred2_PRS_Validation)
+Lassosum2_PRS_Validation <- read.delim(paste0(trait,"_lassosum2_validation_prs_best.txt"),sep = "\t",header = TRUE)
+system(paste0("rm ",paste0(trait,"_lassosum2_validation_prs_best.txt")))
+colnames(Lassosum2_PRS_Validation) <- c("IID","Lassosum2_PRS")
+pheno_validation <- inner_join(pheno_validation,Lassosum2_PRS_Validation)
 
 model.null <- lm(as.formula(paste0(trait,"~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")),data=pheno_tune)
 pheno_tune$y_tune <- NA
@@ -65,7 +78,7 @@ pheno_validation$PRS <- predict(RICE_Model,pheno_validation)
 CV_RV_PRS_raw <- pheno_validation
 CV_RV_PRS_adjusted <- pheno_validation
 
-for(i in c("CV_PRS","RV_PRS","PRS")){
+for(i in c("CV_PRS","RV_PRS","PRS","CT_PRS","LDpred2_PRS","Lassosum2_PRS")){
   tmp <- data.frame(y = CV_RV_PRS_adjusted[,i],CV_RV_PRS_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
   mod <- lm(y~.,data = tmp)
   R <- mod$residuals
@@ -128,6 +141,24 @@ CV_RV_PRS_raw_AMR$PRS <- scale(CV_RV_PRS_raw_AMR$PRS)
 CV_RV_PRS_raw_AFR$PRS <- scale(CV_RV_PRS_raw_AFR$PRS)
 CV_RV_PRS_raw_EAS$PRS <- scale(CV_RV_PRS_raw_EAS$PRS)
 
+CV_RV_PRS_raw_EUR$CT_PRS <- scale(CV_RV_PRS_raw_EUR$CT_PRS)
+CV_RV_PRS_raw_SAS$CT_PRS <- scale(CV_RV_PRS_raw_SAS$CT_PRS)
+CV_RV_PRS_raw_AMR$CT_PRS <- scale(CV_RV_PRS_raw_AMR$CT_PRS)
+CV_RV_PRS_raw_AFR$CT_PRS <- scale(CV_RV_PRS_raw_AFR$CT_PRS)
+CV_RV_PRS_raw_EAS$CT_PRS <- scale(CV_RV_PRS_raw_EAS$CT_PRS)
+
+CV_RV_PRS_raw_EUR$LDpred2_PRS <- scale(CV_RV_PRS_raw_EUR$LDpred2_PRS)
+CV_RV_PRS_raw_SAS$LDpred2_PRS <- scale(CV_RV_PRS_raw_SAS$LDpred2_PRS)
+CV_RV_PRS_raw_AMR$LDpred2_PRS <- scale(CV_RV_PRS_raw_AMR$LDpred2_PRS)
+CV_RV_PRS_raw_AFR$LDpred2_PRS <- scale(CV_RV_PRS_raw_AFR$LDpred2_PRS)
+CV_RV_PRS_raw_EAS$LDpred2_PRS <- scale(CV_RV_PRS_raw_EAS$LDpred2_PRS)
+
+CV_RV_PRS_raw_EUR$Lassosum2_PRS <- scale(CV_RV_PRS_raw_EUR$Lassosum2_PRS)
+CV_RV_PRS_raw_SAS$Lassosum2_PRS <- scale(CV_RV_PRS_raw_SAS$Lassosum2_PRS)
+CV_RV_PRS_raw_AMR$Lassosum2_PRS <- scale(CV_RV_PRS_raw_AMR$Lassosum2_PRS)
+CV_RV_PRS_raw_AFR$Lassosum2_PRS <- scale(CV_RV_PRS_raw_AFR$Lassosum2_PRS)
+CV_RV_PRS_raw_EAS$Lassosum2_PRS <- scale(CV_RV_PRS_raw_EAS$Lassosum2_PRS)
+
 
 Beta_CV_Boot <- function(data,indices){
   boot_data <- data[indices, ]
@@ -147,6 +178,15 @@ R2_Boot <- function(data,indices){
   return(c(result))
 }
 
+R2_Comparison_Boot <- function(data,indices){
+  boot_data <- data[indices, ]
+  RICE_R2 <- summary(lm(y_validation~PRS,data = boot_data))$r.squared
+  CT_R2 <- summary(lm(y_validation~CT_PRS,data = boot_data))$r.squared
+  LDpred2_R2 <- summary(lm(y_validation~LDpred2_PRS,data = boot_data))$r.squared
+  Lassosum2_R2 <- summary(lm(y_validation~Lassosum2_PRS,data = boot_data))$r.squared
+  return(c(RICE_R2 - CT_R2,RICE_R2 - LDpred2_R2,RICE_R2 - Lassosum2_R2))
+}
+
 beta_CV_validation_raw_EUR <- coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_EUR))[2]
 boot_beta <- boot(data = CV_RV_PRS_raw_EUR, statistic = Beta_CV_Boot, R = 10000)
 beta_CV_raw_EUR_boot <- boot_beta$t
@@ -161,6 +201,10 @@ R2_validation_raw_EUR <- summary(lm(y_validation~PRS,data = CV_RV_PRS_raw_EUR))$
 boot_R2 <- boot(data = CV_RV_PRS_raw_EUR, statistic = R2_Boot, R = 10000)
 R2_raw_EUR_boot <- boot_R2$t
 R2_se_validation_raw_EUR <- sd(boot_R2$t)
+
+boot_R2 <- boot(data = CV_RV_PRS_raw_EUR, statistic = R2_Comparison_Boot, R = 10000)
+R2_comparison_raw_EUR_boot <- as.data.frame(boot_R2$t)
+colnames(R2_comparison_raw_EUR_boot) <- c("R2_raw_EUR_RICE_vs_CT","R2_raw_EUR_RICE_vs_LDpred2","R2_raw_EUR_RICE_vs_Lassosum2")
 
 beta_CV_validation_raw_SAS <- coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_SAS))[2]
 boot_beta <- boot(data = CV_RV_PRS_raw_SAS, statistic = Beta_CV_Boot, R = 10000)
@@ -177,6 +221,10 @@ boot_R2 <- boot(data = CV_RV_PRS_raw_SAS, statistic = R2_Boot, R = 10000)
 R2_raw_SAS_boot <- boot_R2$t
 R2_se_validation_raw_SAS <- sd(boot_R2$t)
 
+boot_R2 <- boot(data = CV_RV_PRS_raw_SAS, statistic = R2_Comparison_Boot, R = 10000)
+R2_comparison_raw_SAS_boot <- as.data.frame(boot_R2$t)
+colnames(R2_comparison_raw_SAS_boot) <- c("R2_raw_SAS_RICE_vs_CT","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_Lassosum2")
+
 beta_CV_validation_raw_AMR <- coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_AMR))[2]
 boot_beta <- boot(data = CV_RV_PRS_raw_AMR, statistic = Beta_CV_Boot, R = 10000)
 beta_CV_raw_AMR_boot <- boot_beta$t
@@ -191,6 +239,10 @@ R2_validation_raw_AMR <- summary(lm(y_validation~PRS,data = CV_RV_PRS_raw_AMR))$
 boot_R2 <- boot(data = CV_RV_PRS_raw_AMR, statistic = R2_Boot, R = 10000)
 R2_raw_AMR_boot <- boot_R2$t
 R2_se_validation_raw_AMR <- sd(boot_R2$t)
+
+boot_R2 <- boot(data = CV_RV_PRS_raw_AMR, statistic = R2_Comparison_Boot, R = 10000)
+R2_comparison_raw_AMR_boot <- as.data.frame(boot_R2$t)
+colnames(R2_comparison_raw_AMR_boot) <- c("R2_raw_AMR_RICE_vs_CT","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_Lassosum2")
 
 beta_CV_validation_raw_AFR <- coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_AFR))[2]
 boot_beta <- boot(data = CV_RV_PRS_raw_AFR, statistic = Beta_CV_Boot, R = 10000)
@@ -207,6 +259,10 @@ boot_R2 <- boot(data = CV_RV_PRS_raw_AFR, statistic = R2_Boot, R = 10000)
 R2_raw_AFR_boot <- boot_R2$t
 R2_se_validation_raw_AFR <- sd(boot_R2$t)
 
+boot_R2 <- boot(data = CV_RV_PRS_raw_AFR, statistic = R2_Comparison_Boot, R = 10000)
+R2_comparison_raw_AFR_boot <- as.data.frame(boot_R2$t)
+colnames(R2_comparison_raw_AFR_boot) <- c("R2_raw_AFR_RICE_vs_CT","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_Lassosum2")
+
 beta_CV_validation_raw_EAS <- coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_raw_EAS))[2]
 boot_beta <- boot(data = CV_RV_PRS_raw_EAS, statistic = Beta_CV_Boot, R = 10000)
 beta_CV_raw_EAS_boot <- boot_beta$t
@@ -221,6 +277,10 @@ R2_validation_raw_EAS <- summary(lm(y_validation~PRS,data = CV_RV_PRS_raw_EAS))$
 boot_R2 <- boot(data = CV_RV_PRS_raw_EAS, statistic = R2_Boot, R = 10000)
 R2_raw_EAS_boot <- boot_R2$t
 R2_se_validation_raw_EAS <- sd(boot_R2$t)
+
+boot_R2 <- boot(data = CV_RV_PRS_raw_EAS, statistic = R2_Comparison_Boot, R = 10000)
+R2_comparison_raw_EAS_boot <- as.data.frame(boot_R2$t)
+colnames(R2_comparison_raw_EAS_boot) <- c("R2_raw_EAS_RICE_vs_CT","R2_raw_EAS_RICE_vs_LDpred2","R2_raw_EAS_RICE_vs_Lassosum2")
 
 beta_CV_validation_adjusted_EUR <- coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_EUR))[2]
 boot_beta <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = Beta_CV_Boot, R = 10000)
@@ -237,6 +297,10 @@ boot_R2 <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = R2_Boot, R = 10000)
 R2_adjusted_EUR_boot <- boot_R2$t
 R2_se_validation_adjusted_EUR <- sd(boot_R2$t)
 
+boot_R2 <- boot(data = CV_RV_PRS_adjusted_EUR, statistic = R2_Comparison_Boot, R = 10000)
+R2_comparison_adjusted_EUR_boot <- as.data.frame(boot_R2$t)
+colnames(R2_comparison_adjusted_EUR_boot) <- c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_EUR_RICE_vs_Lassosum2")
+
 beta_CV_validation_adjusted_SAS <- coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_SAS))[2]
 boot_beta <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = Beta_CV_Boot, R = 10000)
 beta_CV_adjusted_SAS_boot <- boot_beta$t
@@ -251,6 +315,10 @@ R2_validation_adjusted_SAS <- summary(lm(y_validation~PRS,data = CV_RV_PRS_adjus
 boot_R2 <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = R2_Boot, R = 10000)
 R2_adjusted_SAS_boot <- boot_R2$t
 R2_se_validation_adjusted_SAS <- sd(boot_R2$t)
+
+boot_R2 <- boot(data = CV_RV_PRS_adjusted_SAS, statistic = R2_Comparison_Boot, R = 10000)
+R2_comparison_adjusted_SAS_boot <- as.data.frame(boot_R2$t)
+colnames(R2_comparison_adjusted_SAS_boot) <- c("R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_Lassosum2")
 
 beta_CV_validation_adjusted_AMR <- coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_AMR))[2]
 boot_beta <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = Beta_CV_Boot, R = 10000)
@@ -267,6 +335,10 @@ boot_R2 <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = R2_Boot, R = 10000)
 R2_adjusted_AMR_boot <- boot_R2$t
 R2_se_validation_adjusted_AMR <- sd(boot_R2$t)
 
+boot_R2 <- boot(data = CV_RV_PRS_adjusted_AMR, statistic = R2_Comparison_Boot, R = 10000)
+R2_comparison_adjusted_AMR_boot <- as.data.frame(boot_R2$t)
+colnames(R2_comparison_adjusted_AMR_boot) <- c("R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_Lassosum2")
+
 beta_CV_validation_adjusted_AFR <- coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_AFR))[2]
 boot_beta <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = Beta_CV_Boot, R = 10000)
 beta_CV_adjusted_AFR_boot <- boot_beta$t
@@ -282,6 +354,10 @@ boot_R2 <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = R2_Boot, R = 10000)
 R2_adjusted_AFR_boot <- boot_R2$t
 R2_se_validation_adjusted_AFR <- sd(boot_R2$t)
 
+boot_R2 <- boot(data = CV_RV_PRS_adjusted_AFR, statistic = R2_Comparison_Boot, R = 10000)
+R2_comparison_adjusted_AFR_boot <- as.data.frame(boot_R2$t)
+colnames(R2_comparison_adjusted_AFR_boot) <- c("R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_Lassosum2")
+
 beta_CV_validation_adjusted_EAS <- coef(lm(y_validation~CV_PRS + RV_PRS,data = CV_RV_PRS_adjusted_EAS))[2]
 boot_beta <- boot(data = CV_RV_PRS_adjusted_EAS, statistic = Beta_CV_Boot, R = 10000)
 beta_CV_adjusted_EAS_boot <- boot_beta$t
@@ -296,6 +372,10 @@ R2_validation_adjusted_EAS <- summary(lm(y_validation~PRS,data = CV_RV_PRS_adjus
 boot_R2 <- boot(data = CV_RV_PRS_adjusted_EAS, statistic = R2_Boot, R = 10000)
 R2_adjusted_EAS_boot <- boot_R2$t
 R2_se_validation_adjusted_EAS <- sd(boot_R2$t)
+
+boot_R2 <- boot(data = CV_RV_PRS_adjusted_EAS, statistic = R2_Comparison_Boot, R = 10000)
+R2_comparison_adjusted_EAS_boot <- as.data.frame(boot_R2$t)
+colnames(R2_comparison_adjusted_EAS_boot) <- c("R2_adjusted_EAS_RICE_vs_CT","R2_adjusted_EAS_RICE_vs_LDpred2","R2_adjusted_EAS_RICE_vs_Lassosum2")
 
 CV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
                              beta_raw = c(beta_CV_validation_raw_EUR,beta_CV_validation_raw_SAS,beta_CV_validation_raw_AMR,beta_CV_validation_raw_AFR,beta_CV_validation_raw_EAS), 
@@ -313,6 +393,9 @@ CV_Boot_Results <- data.frame(trait = trait,beta_CV_raw_EUR_boot,R2_raw_EUR_boot
                               beta_CV_adjusted_SAS_boot,R2_adjusted_SAS_boot,beta_CV_adjusted_AMR_boot,R2_adjusted_AMR_boot,
                               beta_CV_adjusted_AFR_boot,R2_adjusted_AFR_boot,beta_CV_adjusted_EAS_boot,R2_adjusted_EAS_boot)
 
+Comparison_Boot_Results <- data.frame(trait = trait,R2_comparison_raw_EUR_boot,R2_comparison_raw_SAS_boot,R2_comparison_raw_AMR_boot,R2_comparison_raw_AFR_boot,R2_comparison_raw_EAS_boot,
+                                      R2_comparison_adjusted_EUR_boot,R2_comparison_adjusted_SAS_boot,R2_comparison_adjusted_AMR_boot,R2_comparison_adjusted_AFR_boot,R2_comparison_adjusted_EAS_boot)
+
 RV_PRS_Results <- data.frame(trait = trait,ancestry = c("EUR","SAS","AMR","AFR","EAS"), 
                              beta_raw = c(beta_RV_validation_raw_EUR,beta_RV_validation_raw_SAS,beta_RV_validation_raw_AMR,beta_RV_validation_raw_AFR,beta_RV_validation_raw_EAS), 
                              beta_se_raw = c(beta_RV_se_validation_raw_EUR,beta_RV_se_validation_raw_SAS,beta_RV_se_validation_raw_AMR,beta_RV_se_validation_raw_AFR,beta_RV_se_validation_raw_EAS), 
@@ -329,6 +412,7 @@ RV_Boot_Results <- data.frame(trait = trait,beta_RV_raw_EUR_boot,R2_raw_EUR_boot
                               beta_RV_adjusted_SAS_boot,R2_adjusted_SAS_boot,beta_RV_adjusted_AMR_boot,R2_adjusted_AMR_boot,
                               beta_RV_adjusted_AFR_boot,R2_adjusted_AFR_boot,beta_RV_adjusted_EAS_boot,R2_adjusted_EAS_boot)
 
+write.csv(Comparison_Boot_Results,file = paste0(trait,"_Comparison_Bootstraps.csv"),row.names = FALSE)   
 write.csv(CV_PRS_Results,file = paste0("CV_",trait,"Best_Betas.csv"),row.names = FALSE)
 write.csv(CV_Boot_Results,file = paste0("CV_",trait,"_Bootstraps.csv"),row.names = FALSE)
 write.csv(RV_PRS_Results,file = paste0("RV_",trait,"Best_Betas.csv"),row.names = FALSE)

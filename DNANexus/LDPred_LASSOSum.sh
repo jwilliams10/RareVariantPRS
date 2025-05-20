@@ -20,7 +20,7 @@ else
        trait=Height
 fi
 
-dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GWAS_SummaryStats/regenie_step2_continuous_${trait}.regenie
+dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/GWAS_SummaryStats/regenie_step2_${trait}.regenie
 dx download UKB_PRS:JW/Clean_Data/w_hm3.snplist
 dx download UKB_PRS:JW/Clean_Data/SNP_GRCh37_38_match_update.rds
 dx download UKB_PRS:JW/UKB_Phenotypes/Data/all_chr_reference.rds

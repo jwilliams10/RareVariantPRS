@@ -165,19 +165,10 @@ Ensemble_Function_Continuous <- function(x,y){
   lasso_mod <- cv.glmnet(x,y,family = "gaussian",alpha = 1,type.measure = "mse",nfold = 10)
   ridge_mod <- cv.glmnet(x,y,family = "gaussian",alpha = 0,type.measure = "mse",nfold = 10)
   
-  tmp <- NULL
-  for(a in seq(0.1, 0.9, 0.05)){
-    tmp_mod <- cv.glmnet(x, y, family = "gaussian", nfold = 10, type.measure = "mse", alpha = a)
-    tmp <- rbind(tmp,data.frame(cvm = tmp_mod$cvm[tmp_mod$lambda == tmp_mod$lambda.1se], lambda.1se = tmp_mod$lambda.1se, alpha = a))
-  }
-  tmp <- tmp[tmp$cvm == min(tmp$cvm), ]
-  elasticnet_mod <- glmnet(x, y, family = "gaussian", lambda = tmp$lambda.1se, alpha = tmp$alpha)
-  
   lasso_prediction_x <- predict(lasso_mod, x)
   ridge_prediction_x <- predict(ridge_mod, x)
-  elasticnet_prediction_x <- predict(elasticnet_mod, x)
   
-  ensemble_mod <- lm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x,elasticnet_prediction_x))
+  ensemble_mod <- lm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x))
   
   ensemble_prediction_x <- ensemble_mod$fitted
   
@@ -191,20 +182,11 @@ Ensemble_Function_Binary<- function(x,y){
   lasso_mod <- cv.glmnet(x,y,family = "binomial",alpha = 1,type.measure = "auc")
   ridge_mod <- cv.glmnet(x,y,family = "binomial",alpha = 0,type.measure = "auc")
   
-  tmp <- NULL
-  for(a in seq(0.1, 0.9, 0.05)){
-    tmp_mod <- cv.glmnet(x, y, family = "binomial", nfold = 10, type.measure = "auc", alpha = a)
-    tmp <- rbind(tmp,data.frame(cvm = tmp_mod$cvm[tmp_mod$lambda == tmp_mod$lambda.1se], lambda.1se = tmp_mod$lambda.1se, alpha = a))
-  }
-  tmp <- tmp[tmp$cvm == min(tmp$cvm), ]
-  elasticnet_mod <- glmnet(x, y, family = "binomial", lambda = tmp$lambda.1se, alpha = tmp$alpha)
-  
   lasso_prediction_x <- predict(lasso_mod, x,type = "link")
   ridge_prediction_x <- predict(ridge_mod, x,type = "link")
-  elasticnet_prediction_x <- predict(elasticnet_mod, x,type = "link")
   
-  ensemble_mod <- glm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x,elasticnet_prediction_x),family = binomial())
-  ensemble_prediction_x <- predict(ensemble_mod,data.frame(lasso_prediction_x,ridge_prediction_x,elasticnet_prediction_x),type = "link")
+  ensemble_mod <- glm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x),family = binomial())
+  ensemble_prediction_x <- predict(ensemble_mod,data.frame(lasso_prediction_x,ridge_prediction_x),type = "link")
   
   coefficients_x <- coef(lm(y~.,data.frame(y = ensemble_prediction_x,x)))
   return(list(Coefficients = coefficients_x))

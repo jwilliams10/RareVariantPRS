@@ -27,22 +27,22 @@ trait <- as.numeric(commandArgs(TRUE)[1])
 
 if(trait == 1){
   trait <- "BMI"
-  dat <- read.csv("regenie_step2_continuous_BMI.regenie", sep="")
+  dat <- read.csv("regenie_step2_BMI.regenie", sep="")
 }else if(trait == 2){
   trait <- "TC"
-  dat <- read.csv("regenie_step2_continuous_TC.regenie", sep="")
+  dat <- read.csv("regenie_step2_TC.regenie", sep="")
 }else if(trait == 3){
   trait <- "HDL"
-  dat <- read.csv("regenie_step2_continuous_HDL.regenie", sep="")
+  dat <- read.csv("regenie_step2_HDL.regenie", sep="")
 }else if(trait == 4){
   trait <- "LDL"
-  dat <- read.csv("regenie_step2_continuous_LDL.regenie", sep="")
+  dat <- read.csv("regenie_step2_LDL.regenie", sep="")
 }else if(trait == 5){
   trait <- "logTG"
-  dat <- read.csv("regenie_step2_continuous_logTG.regenie", sep="")
+  dat <- read.csv("regenie_step2_logTG.regenie", sep="")
 }else{
   trait <- "Height"
-  dat <- read.csv("regenie_step2_continuous_Height.regenie", sep="")
+  dat <- read.csv("regenie_step2_Height.regenie", sep="")
 }
 
 colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
@@ -213,23 +213,23 @@ write.table(prs_vad_max, file = paste0("",trait,"_prs_validation_best.txt"),row.
 
 ##### Final Coefficients
 if(trait == "BMI"){
-  dat <- read.csv("regenie_step2_continuous_BMI.regenie", sep="")
-  system("rm regenie_step2_continuous_BMI.regenie")
+  dat <- read.csv("regenie_step2_BMI.regenie", sep="")
+  system("rm regenie_step2_BMI.regenie")
 }else if(trait == "TC"){
-  dat <- read.csv("regenie_step2_continuous_TC.regenie", sep="")
-  system("rm regenie_step2_continuous_TC.regenie")
+  dat <- read.csv("regenie_step2_TC.regenie", sep="")
+  system("rm regenie_step2_TC.regenie")
 }else if(trait == "HDL"){
-  dat <- read.csv("regenie_step2_continuous_HDL.regenie", sep="")
-  system("rm regenie_step2_continuous_HDL.regenie")
+  dat <- read.csv("regenie_step2_HDL.regenie", sep="")
+  system("rm regenie_step2_HDL.regenie")
 }else if(trait == "LDL"){
-  dat <- read.csv("regenie_step2_continuous_LDL.regenie", sep="")
-  system("rm regenie_step2_continuous_LDL.regenie")
+  dat <- read.csv("regenie_step2_LDL.regenie", sep="")
+  system("rm regenie_step2_LDL.regenie")
 }else if(trait == "logTG"){
-  dat <- read.csv("regenie_step2_continuous_logTG.regenie", sep="")
-  system("rm regenie_step2_continuous_logTG.regenie")
+  dat <- read.csv("regenie_step2_logTG.regenie", sep="")
+  system("rm regenie_step2_logTG.regenie")
 }else{
-  dat <- read.csv("regenie_step2_continuous_Height.regenie", sep="")
-  system("rm regenie_step2_continuous_Height.regenie")
+  dat <- read.csv("regenie_step2_Height.regenie", sep="")
+  system("rm regenie_step2_Height.regenie")
 }
 
 colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")

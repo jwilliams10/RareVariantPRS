@@ -3,22 +3,22 @@ docker load -i r_with_plink.tar.gz
 if [ $1 = 1 ]
 then
        trait=Asthma
-       dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GWAS_SummaryStats/regenie_step2_act_Asthma.regenie
+       dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GWAS_SummaryStats/regenie_step2_Asthma.regenie
  elif [ $1 = 2 ]
 then
        trait=CAD
-       dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GWAS_SummaryStats/regenie_step2_act_CAD.regenie
+       dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GWAS_SummaryStats/regenie_step2_CAD.regenie
  elif [ $1 = 3 ]
 then
        trait=T2D
-       dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GWAS_SummaryStats/regenie_step2_act_T2D.regenie
+       dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GWAS_SummaryStats/regenie_step2_T2D.regenie
  elif [ $1 = 4 ]
 then 
        trait=Breast
-       dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GWAS_SummaryStats/regenie_step2_bp_Breast.regenie
+       dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GWAS_SummaryStats/regenie_step2_Breast.regenie
 else
        trait=Prostate
-       dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GWAS_SummaryStats/regenie_step2_bp_Prostate.regenie
+       dx download UKB_PRS:JW/UKB_Phenotypes/Results/Binary/GWAS_SummaryStats/regenie_step2_Prostate.regenie
 fi
 
 dx download UKB_PRS:JW/Clean_Data/w_hm3.snplist

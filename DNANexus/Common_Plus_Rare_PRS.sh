@@ -26,6 +26,10 @@ dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/Combined_Common_PRS/${t
 dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/Combined_Common_PRS/${trait}_Best_Validation_All.txt
 dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/${trait}Tune_BestPRS.csv
 dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/BestRareVariantPRS/${trait}Validation_BestPRS.csv
+dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/CT/${trait}_prs_validation_best.txt
+dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/LDPred2_LASSOSum2/${trait}_ldpred2_validation_prs_best.txt
+dx download UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/LDPred2_LASSOSum2/${trait}_lassosum2_validation_prs_best.txt
+
 dx download UKB_PRS:JW/UKB_Phenotypes/Results/all_phenotypes.RData
 
 # mount PWD and run bigsnpr using my_r_script.r

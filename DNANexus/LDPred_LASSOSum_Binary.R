@@ -2,7 +2,7 @@ rm(list=ls())
 
 # for array in 1 2 3 4 5;
 # do
-# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/CommonVariant_PRS/LDPred_LASSOSum_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/CommonVariant_PRS/LDPred_LASSOSum_Binary.sh -icmd="bash LDPred_LASSOSum_Binary.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/LDPred2_LASSOSum2/ --priority low --extra-args '{"executionPolicy":{"restartOn": {"SpotInstanceInterruption": 5}}}' --instance-type mem1_ssd1_v2_x36
+# dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/CommonVariant_PRS/LDPred_LASSOSum_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/CommonVariant_PRS/LDPred_LASSOSum_Binary.sh -icmd="bash LDPred_LASSOSum_Binary.sh ${array}" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/LDPred2_LASSOSum2/ --priority high --instance-type mem3_ssd1_v2_x16
 # done
 
 if(!("dplyr" %in% rownames(installed.packages()))){
@@ -96,19 +96,19 @@ trait <- as.numeric(commandArgs(TRUE)[1])
 
 if(trait == 1){
   trait <- "Asthma"
-  dat <- read.csv("regenie_step2_act_Asthma.regenie", sep="")
+  dat <- read.csv("regenie_step2_Asthma.regenie", sep="")
 }else if(trait == 2){
   trait <- "CAD"
-  dat <- read.csv("regenie_step2_act_CAD.regenie", sep="")
+  dat <- read.csv("regenie_step2_CAD.regenie", sep="")
 }else if(trait == 3){
   trait <- "T2D"
-  dat <- read.csv("regenie_step2_act_T2D.regenie", sep="")
+  dat <- read.csv("regenie_step2_T2D.regenie", sep="")
 }else if(trait == 4){
   trait <- "Breast"
-  dat <- read.csv("regenie_step2_bp_Breast.regenie", sep="")
+  dat <- read.csv("regenie_step2_Breast.regenie", sep="")
 }else{
   trait <- "Prostate"
-  dat <- read.csv("regenie_step2_bp_Prostate.regenie", sep="")
+  dat <- read.csv("regenie_step2_Prostate.regenie", sep="")
 }
 
 map <- NULL
@@ -413,15 +413,15 @@ colnames(all_betas) <- c("SNP","ALT","REF",paste0("LDPred2_SCORE",1:nrow(sets),"
 system(paste("rm ",paste0(trait,"_ldpred2.txt")))
 
 if(trait == "Asthma"){
-  dat <- read.csv("regenie_step2_act_Asthma.regenie", sep="")
+  dat <- read.csv("regenie_step2_Asthma.regenie", sep="")
 }else if(trait == "CAD"){
-  dat <- read.csv("regenie_step2_act_CAD.regenie", sep="")
+  dat <- read.csv("regenie_step2_CAD.regenie", sep="")
 }else if(trait == "T2D"){
-  dat <- read.csv("regenie_step2_act_T2D.regenie", sep="")
+  dat <- read.csv("regenie_step2_T2D.regenie", sep="")
 }else if(trait == "Breast"){
-  dat <- read.csv("regenie_step2_bp_Breast.regenie", sep="")
+  dat <- read.csv("regenie_step2_Breast.regenie", sep="")
 }else{
-  dat <- read.csv("regenie_step2_bp_Prostate.regenie", sep="")
+  dat <- read.csv("regenie_step2_Prostate.regenie", sep="")
 }
 
 colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
@@ -664,20 +664,20 @@ colnames(all_betas) <- c("SNP","ALT","REF",paste0("LASSOSum2_SCORE",1:300,"_SUM"
 system(paste("rm ",paste0(trait,"_lassosum2.txt")))
 
 if(trait == "Asthma"){
-  dat <- read.csv("regenie_step2_act_Asthma.regenie", sep="")
-  system("rm regenie_step2_act_Asthma.regenie")
+  dat <- read.csv("regenie_step2_Asthma.regenie", sep="")
+  system("rm regenie_step2_Asthma.regenie")
 }else if(trait == "CAD"){
-  dat <- read.csv("regenie_step2_act_CAD.regenie", sep="")
-  system("rm regenie_step2_act_CAD.regenie")
+  dat <- read.csv("regenie_step2_CAD.regenie", sep="")
+  system("rm regenie_step2_CAD.regenie")
 }else if(trait == "T2D"){
-  dat <- read.csv("regenie_step2_act_T2D.regenie", sep="")
-  system("rm regenie_step2_act_T2D.regenie")
+  dat <- read.csv("regenie_step2_T2D.regenie", sep="")
+  system("rm regenie_step2_T2D.regenie")
 }else if(trait == "Breast"){
-  dat <- read.csv("regenie_step2_bp_Breast.regenie", sep="")
-  system("rm regenie_step2_bp_Breast.regenie")
+  dat <- read.csv("regenie_step2_Breast.regenie", sep="")
+  system("rm regenie_step2_Breast.regenie")
 }else{
-  dat <- read.csv("regenie_step2_bp_Prostate.regenie", sep="")
-  system("rm regenie_step2_bp_Prostate.regenie")
+  dat <- read.csv("regenie_step2_Prostate.regenie", sep="")
+  system("rm regenie_step2_Prostate.regenie")
 }
 
 colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
