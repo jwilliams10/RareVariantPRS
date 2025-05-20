@@ -19,12 +19,12 @@ if(trait == 1){
 }
 
 
-dat <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/",trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")
-colnames(dat) <- c("CHROM","POS","ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","OBS_CT","BETA","SE","T_STAT","P","ERRCODE")
-dat <- dat[dat$TEST == "ADD",]
+dat <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/regenie_step2_continuous_",trait,".regenie"), sep="")
+colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
+dat$P <- 10^(-1*dat$LOG10P)
 
-dat <- dat[,c("CHROM","ID","REF","POS","A1","BETA","P")]
-colnames(dat) <- c("CHR","SNP","REF","BP","A1","BETA","P")
+dat <- dat[,c("CHROM","ID","REF","POS","ALT","BETA","P")]
+colnames(dat) <- c("CHR","SNP","REF","BP","ALT","BETA","P")
 
 write.table(dat,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/",trait,"_assoc.txt"),col.names = T,row.names = F,quote=F)
 
@@ -54,7 +54,7 @@ system(paste0("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Res
 n_pthres <- length(pthres)
 
 ## Write Coefficients of index SNPs to use later
-prs.file <- prs.all[,c("SNP","A1","BETA")]
+prs.file <- prs.all[,c("SNP","ALT","BETA")]
 write.table(prs.file,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_coeff"),col.names = T,row.names = F,quote=F)
 
 # Write p-values to file to use later
@@ -184,11 +184,11 @@ colnames(prs_vad_max) <- c("IID","FID","prs")
 write.table(prs_vad_max, file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_prs_validation_best.txt"),row.names = F)
 
 ##### Final Coefficients
-dat <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/",trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")
-colnames(dat) <- c("CHROM","POS","ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","OBS_CT","BETA","SE","T_STAT","P","ERRCODE")
-dat <- dat[dat$TEST == "ADD",]
-dat <- dat[,c("CHROM","ID","REF","POS","A1","P","BETA")]
-colnames(dat) <- c("CHR","SNP","REF","BP","A1","P","BETA")
+dat <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/regenie_step2_continuous_",trait,".regenie"), sep="")
+colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
+dat$P <- 10^(-1*dat$LOG10P)
+dat <- dat[,c("CHROM","ID","REF","POS","ALT","P","BETA")]
+colnames(dat) <- c("CHR","SNP","REF","BP","ALT","P","BETA")
 
 dat$CT_p_value_1 <- 0
 dat$CT_p_value_1[dat$P <= pthres[1]] <- dat$BETA[dat$P <= pthres[1]]
@@ -218,7 +218,7 @@ dat$CT_p_value_9 <- 0
 dat$CT_p_value_9[dat$P <= pthres[9]] <- dat$BETA[dat$P <= pthres[9]]
 dat$CT_p_value_9[!(dat$SNP %in% beta_final$SNP)] <- 0
 
-dat <- dat[,c("CHR","SNP","REF","BP","A1","P",paste0("CT_p_value_",1:9))]
+dat <- dat[,c("CHR","SNP","REF","BP","ALT","P",paste0("CT_p_value_",1:9))]
 
 write.csv(dat,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/CT/",trait,"_Final_Coefficients.csv"),row.names = FALSE)
 

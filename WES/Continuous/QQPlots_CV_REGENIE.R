@@ -49,7 +49,7 @@ library(cowplot)
 lambda_dat <- NULL
 
 for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
-  dat <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/regenie_step2_",trait,".regenie"), sep="")
+  dat <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/regenie_step2_continuous_",trait,".regenie"), sep="")
   colnames(dat) <- c("CHR","BP","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
   dat$P <- 10^(-1*dat$LOG10P)
   dat$MAF <- ifelse(dat$A1_FREQ <= 0.5, dat$A1_FREQ,1-dat$A1_FREQ)

@@ -2,7 +2,7 @@
 #SBATCH -n 1
 #SBATCH -N 1
 #SBATCH --time=24:00:00
-#SBATCH --array=1-11
+#SBATCH --array=11
 #SBATCH --mem-per-cpu=20G
 
 module load R/4.3.2

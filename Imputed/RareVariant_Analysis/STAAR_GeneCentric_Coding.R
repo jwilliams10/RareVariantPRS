@@ -4,7 +4,7 @@
 # 11/04/2021
 #####################################################################
 
-# sbatch --array=1-4000 STAAR_GeneCentric_Coding.sh 
+# sbatch --array=1-4169 STAAR_GeneCentric_Coding.sh 
 
 rm(list=ls())
 gc()

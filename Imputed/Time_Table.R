@@ -1,18 +1,18 @@
 rm(list = ls())
 
 dat <- read.table(textConnection("start.date start.time end.date end.time
-2025-03-26   09:38:56 2025-03-26   17:53:46"), header=TRUE)
-regenie_time_continuous <-  as.numeric(difftime(strptime(paste(dat[,3],dat[,4]),"%Y-%m-%d %H:%M:%S"),strptime(paste(dat[,1],dat[,2]),"%Y-%m-%d %H:%M:%S"),units = "hours"))
-
-dat <- read.table(textConnection("start.date start.time end.date end.time
-2025-03-27   21:29:52 2025-03-29   01:11:37 
-2025-03-29   01:11:38 2025-03-29   03:28:15"), header=TRUE)
-regenie_time_binary_withsex <-  sum(as.numeric(difftime(strptime(paste(dat[,3],dat[,4]),"%Y-%m-%d %H:%M:%S"),strptime(paste(dat[,1],dat[,2]),"%Y-%m-%d %H:%M:%S"),units = "hours")))
-
-dat <- read.table(textConnection("start.date start.time end.date end.time
-2025-03-27   21:29:52 2025-03-28   23:18:20
-2025-03-29   01:11:38 2025-03-29   03:23:58"), header=TRUE)
-regenie_time_binary_withoutsex <-  sum(as.numeric(difftime(strptime(paste(dat[,3],dat[,4]),"%Y-%m-%d %H:%M:%S"),strptime(paste(dat[,1],dat[,2]),"%Y-%m-%d %H:%M:%S"),units = "hours")))
+2025-04-28 07:31:02 2025-04-28 16:03:51
+2025-04-26 11:01:53 2025-04-26 18:33:09
+2025-04-26 11:01:53 2025-04-26 23:40:08
+2025-04-26 11:01:53 2025-04-26 20:53:02
+2025-04-26 11:01:53 2025-04-26 19:56:16
+2025-04-26 11:01:53 2025-04-26 18:04:33
+2025-04-26 11:09:39 2025-04-26 23:37:28
+2025-04-26 11:09:50 2025-04-26 21:56:40
+2025-04-26 11:09:39 2025-04-26 22:37:45
+2025-04-26 11:09:39 2025-04-26 22:50:14
+2025-04-26 11:09:40 2025-04-26 23:53:01"), header=TRUE)
+regenie_time <-  as.numeric(difftime(strptime(paste(dat[,3],dat[,4]),"%Y-%m-%d %H:%M:%S"),strptime(paste(dat[,1],dat[,2]),"%Y-%m-%d %H:%M:%S"),units = "hours"))
 
 count <- 1
 CT_Times <- vector()
@@ -66,7 +66,7 @@ for(i in c("BMI","Height","LDL","HDL","logTG","TC","Asthma","Breast","CAD","Pros
   count <- count + 1
 }
 
-Time_Data <- data.frame(Trait = c("BMI","Height","LDL","HDL","logTG","TC","Asthma","Breast","CAD","Prostate","T2D"),GWAS = c(rep(regenie_time_continuous,6),c(regenie_time_binary_withsex,regenie_time_binary_withoutsex,regenie_time_binary_withsex,regenie_time_binary_withoutsex,regenie_time_binary_withsex)), CT = CT_Times, LDpred2_Lassosum2 = LDpred2_Lassosum2_Times,RICE_CV = RICE_CV_Times,STAARpipeline = STAARpipeline_Times, RICE_RV = RICE_RV_Times,RICE = RICE_Times)
+Time_Data <- data.frame(Trait = c("BMI","Height","LDL","HDL","logTG","TC","Asthma","Breast","CAD","Prostate","T2D"),GWAS = regenie_time, CT = CT_Times, LDpred2_Lassosum2 = LDpred2_Lassosum2_Times,RICE_CV = RICE_CV_Times,STAARpipeline = STAARpipeline_Times, RICE_RV = RICE_RV_Times,RICE = RICE_Times)
 Time_Data$Total <- rowSums(Time_Data[,-1])
 
 for(i in colnames(Time_Data)[-c(1,ncol(Time_Data))]){

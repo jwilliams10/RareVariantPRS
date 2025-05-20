@@ -182,33 +182,47 @@ Ensemble_Function_Continuous <- function(x,y){
   x <- as.matrix(x[!is.na(y),])
   y <- y[!is.na(y)]
   
-  lasso_mod <- cv.glmnet(x,y,family = "gaussian",alpha = 1,type.measure = "mse",nfold = 10)
-  ridge_mod <- cv.glmnet(x,y,family = "gaussian",alpha = 0,type.measure = "mse",nfold = 10)
+  lasso_train <- glmnet(x,y,family = "gaussian",alpha = 1)
+  ridge_train <- glmnet(x,y,family = "gaussian",alpha = 0)
   
-  lasso_prediction_x <- predict(lasso_mod, x)
-  ridge_prediction_x <- predict(ridge_mod, x)
+  lasso_prs_tune <- predict(lasso_train,x)
+  ridge_prs_tune <- predict(ridge_train,x)
   
-  ensemble_mod <- lm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x))
+  all <- cbind(lasso_prs_tune,ridge_prs_tune)
   
-  ensemble_prediction_x <- ensemble_mod$fitted
+  R2_Vector <- vector()
+  for(i in 1:ncol(all)){
+    tmp <- data.frame(y = y, x_try = all[,i])
+    R2_Vector[i] <- summary(lm(y~x_try,data = tmp))$r.square
+  }
   
-  coefficients_x <- coef(lm(y~.,data.frame(y = ensemble_prediction_x,x)))
+  coefficients_x <- coef(lm(y~.,data.frame(y = all[,which.max(R2_Vector)],x)))
   return(list(Coefficients = coefficients_x))
 }
-Ensemble_Function_Binary<- function(x,y){
+Ensemble_Function_Binary <- function(x,y){
   x <- as.matrix(x[!is.na(y),])
   y <- y[!is.na(y)]
   
-  lasso_mod <- cv.glmnet(x,y,family = "binomial",alpha = 1,type.measure = "auc")
-  ridge_mod <- cv.glmnet(x,y,family = "binomial",alpha = 0,type.measure = "auc")
+  lasso_train <- glmnet(x,y,family = "binomial",alpha = 1)
+  ridge_train <- glmnet(x,y,family = "binomial",alpha = 0)
   
-  lasso_prediction_x <- predict(lasso_mod, x,type = "link")
-  ridge_prediction_x <- predict(ridge_mod, x,type = "link")
+  lasso_prs_tune <- predict(lasso_train,x)
+  ridge_prs_tune <- predict(ridge_train,x)
   
-  ensemble_mod <- glm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x),family = binomial())
-  ensemble_prediction_x <- predict(ensemble_mod,data.frame(lasso_prediction_x,ridge_prediction_x),type = "link")
+  all <- cbind(lasso_prs_tune,ridge_prs_tune)
   
-  coefficients_x <- coef(lm(y~.,data.frame(y = ensemble_prediction_x,x)))
+  AUC_Vector <- vector()
+  for(i in 1:ncol(all)){
+    tmp <- data.frame(y = y, x_try = all[,i])
+    roc_obj <- roc.binary(status = "y",
+                          variable = "x_try",
+                          confounders = "~1",
+                          data = tmp,
+                          precision=seq(0.05,0.95, by=0.05))
+    AUC_Vector[i] <- roc_obj$auc
+  }
+  
+  coefficients_x <- coef(lm(y~.,data.frame(y = all[,which.max(AUC_Vector)],x)))
   return(list(Coefficients = coefficients_x))
 }
 Ensemble_Function <- function(x,y,family = c("continuous","binary")){

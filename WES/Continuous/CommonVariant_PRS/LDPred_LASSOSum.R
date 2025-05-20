@@ -61,11 +61,11 @@ map <- NULL
 ldr <- 3/1000
 ncores <- 1
 
-dat <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/",trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")
-colnames(dat) <- c("CHR","POS","SNP_ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","N","BETA","SE","T_STAT","PVAL","ERRCODE")
-dat <- dat[dat$TEST == "ADD",]
+dat <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/regenie_step2_continuous_",trait,".regenie"), sep="")
+colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
+dat$P <- 10^(-1*dat$LOG10P)
 
-sumstats <- dat[,c('CHR', 'SNP_ID', 'POS', 'REF', 'ALT', 'BETA', 'SE', 'PVAL', 'N')]
+sumstats <- dat[,c('CHROM', 'ID', 'POS', 'REF', 'ALT', 'BETA', 'SE', 'P', 'N')]
 set.seed(2020)
 names(sumstats) <- c("chr", "rsid", "pos", "a0", "a1", "beta", "beta_se", "p", "n_eff")
 
@@ -263,11 +263,11 @@ all_betas <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/R
 colnames(all_betas) <- c("SNP","ALT","REF",paste0("LDPred2_SCORE",1:nrow(sets),"_SUM"))
 system(paste("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LDPred2/",trait,"_ldpred2.txt")))
 
-dat <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/",trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")
-colnames(dat) <- c("CHROM","POS","ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","OBS_CT","BETA","SE","T_STAT","P","ERRCODE")
-dat <- dat[dat$TEST == "ADD",]
-dat <- dat[,c("CHROM","ID","REF","POS","A1")]
-colnames(dat) <- c("CHR","SNP","REF","BP","A1")
+dat <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/regenie_step2_continuous_",trait,".regenie"), sep="")
+colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
+dat$P <- 10^(-1*dat$LOG10P)
+dat <- dat[,c("CHROM","ID","REF","POS","ALT")]
+colnames(dat) <- c("CHR","SNP","REF","BP","ALT")
 
 dat <- left_join(dat,all_betas)
 dat[is.na(dat)] <- 0
@@ -503,11 +503,11 @@ all_betas <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/R
 colnames(all_betas) <- c("SNP","ALT","REF",paste0("LASSOSum2_SCORE",1:300,"_SUM"))
 system(paste("rm ",paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/Results/LASSOSUM2/",trait,"_lassosum2.txt")))
 
-dat <- read.delim(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/",trait,"_sumstats.",trait,".glm.linear"), header=FALSE, comment.char="#")
-colnames(dat) <- c("CHROM","POS","ID","REF","ALT","PROVISIONAL_REF","A1","OMITTED","A1_FREQ","TEST","OBS_CT","BETA","SE","T_STAT","P","ERRCODE")
-dat <- dat[dat$TEST == "ADD",]
-dat <- dat[,c("CHROM","ID","REF","POS","A1")]
-colnames(dat) <- c("CHR","SNP","REF","BP","A1")
+dat <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Continuous/GWAS_Summary_Statistics/regenie_step2_continuous_",trait,".regenie"), sep="")
+colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
+dat$P <- 10^(-1*dat$LOG10P)
+dat <- dat[,c("CHROM","ID","REF","POS","ALT")]
+colnames(dat) <- c("CHR","SNP","REF","BP","ALT")
 
 dat <- left_join(dat,all_betas)
 dat[is.na(dat)] <- 0

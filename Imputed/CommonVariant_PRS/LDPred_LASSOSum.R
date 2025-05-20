@@ -570,14 +570,12 @@ time <- system.time({
     ## Binary
     
     if(trait %in% c("Breast","Prostate")){
-      fill <- "bp"
       confounders <- paste0("~age+age2+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")
     }else{
-      fill <- "act"
       confounders <-  paste0("~age+age2+sex+pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10")
     }
     
-    dat <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/GWAS_Summary_Statistics/regenie_step2_",fill,"_",trait,".regenie"), sep="")
+    dat <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/GWAS_Summary_Statistics/regenie_step2_binary_",trait,".regenie"), sep="")
     colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
     dat$P <- 10^(-1*dat$LOG10P)
     sumstats <- dat[,c('CHROM', 'ID', 'POS', 'REF', 'ALT', 'BETA', 'SE', 'P', 'N')]

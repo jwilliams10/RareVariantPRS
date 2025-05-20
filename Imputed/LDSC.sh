@@ -8,4 +8,4 @@
 module load ldsc
 module load R/4.3.2
 
-Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/WES/Continuous/LDSC_Imputed.R > LDSC_Imputed.Rout
+Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Imputed/LDSC.R > LDSC.Rout

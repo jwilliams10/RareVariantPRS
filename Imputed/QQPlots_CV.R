@@ -52,9 +52,9 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate","BMI","LDL","HDL","logTG
   if(trait %in% c("BMI","LDL","HDL","logTG","TC","Height")){
     fill <- "/data/williamsjacr/UKB_WES_Phenotypes/Imputed/GWAS_Summary_Statistics/regenie_step2_continuous_"
   }else if(trait %in% c("Breast","Prostate")){
-    fill <- "/data/williamsjacr/UKB_WES_Phenotypes/Imputed/GWAS_Summary_Statistics/regenie_step2_bp_"
+    fill <- "/data/williamsjacr/UKB_WES_Phenotypes/Imputed/GWAS_Summary_Statistics/regenie_step2_binary_"
   }else{
-    fill <- "/data/williamsjacr/UKB_WES_Phenotypes/Imputed/GWAS_Summary_Statistics/regenie_step2_act_"
+    fill <- "/data/williamsjacr/UKB_WES_Phenotypes/Imputed/GWAS_Summary_Statistics/regenie_step2_binary_"
   }
   dat <- read.csv(paste0(fill,trait,".regenie"), sep="")
   colnames(dat) <- c("CHR","BP","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")

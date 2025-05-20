@@ -76,7 +76,7 @@ score_full <- All[,colnames(All) %in% names(coef(lm(prs ~.,data = Best_Tune_All)
 score_full <- score_full[,match(colnames(score_full),names(coef(lm(prs ~.,data = Best_Tune_All)))[-1])]
 score_full <- as.matrix(score_full)
 
-prs.file <- data.frame(SNP = All$SNP,A1 = All$A1,BETA = score_full %*% Beta_Star)
+prs.file <- data.frame(SNP = All$SNP,ALT = All$A1,BETA = score_full %*% Beta_Star)
 write.table(prs.file,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/",trait,"_Final_Score"),col.names = T,row.names = F,quote=F)
 
 system(paste0("/data/williamsjacr/software/plink2 --score /data/williamsjacr/UKB_WES_Phenotypes/Binary/",trait,"_Final_Score cols=+scoresums,-scoreavgs header no-mean-imputation --bfile /data/williamsjacr/UKB_WES_Full_Processed_Data/all_chr --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --threads 1 --out /data/williamsjacr/UKB_WES_Phenotypes/Binary/test_validation_",trait))

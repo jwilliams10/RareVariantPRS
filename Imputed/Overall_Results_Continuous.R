@@ -9,31 +9,31 @@ full_results_Boot <- NULL
 full_results_Boot_Comparison <- NULL
 
 for(trait in c("BMI","TC","HDL","LDL","logTG","Height")){
-  CT_Results <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/CT/",trait,"Best_Betas.csv"))
+  CT_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/CT/",trait,"Best_Betas.csv"))
   CT_Results$Method <- "CT"
-  CT_Boot_Results <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/CT/",trait,"_Bootstraps.csv"))
+  CT_Boot_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/CT/",trait,"_Bootstraps.csv"))
   CT_Boot_Results$Method <- "CT"
-  LDPred2_Results <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/LDPred2_LASSOSum2/",trait,"Best_Betas_LDPred2.csv"))
+  LDPred2_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/LDpred2/",trait,"Best_Betas.csv"))
   LDPred2_Results$Method <- "LDpred2"
-  LDPred2_Boot_Results <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/LDPred2_LASSOSum2/",trait,"_Bootstraps_LDPred2.csv"))
+  LDPred2_Boot_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/LDpred2/",trait,"_Bootstraps.csv"))
   LDPred2_Boot_Results$Method <- "LDpred2"
-  LASSOSUM2_Results <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/LDPred2_LASSOSum2/",trait,"Best_Betas_LASSOSum.csv"))
+  LASSOSUM2_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/LASSOsum2/",trait,"Best_Betas.csv"))
   LASSOSUM2_Results$Method <- "Lassosum2"
-  LASSOSUM2_Boot_Results <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/LDPred2_LASSOSum2/",trait,"_Bootstraps_LASSOSum.csv"))
+  LASSOSUM2_Boot_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/LASSOsum2/",trait,"_Bootstraps.csv"))
   LASSOSUM2_Boot_Results$Method <- "Lassosum2"
-  RICE_CV_Results <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/BestPRS/CV_",trait,"Best_Betas.csv"))
+  RICE_CV_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/Common_plus_RareVariants/CV_",trait,"Best_Betas.csv"))
   RICE_CV_Results$Method <- "RICE-CV"
-  RICE_CV_Boot_Results <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/BestPRS/CV_",trait,"_Bootstraps.csv"))
+  RICE_CV_Boot_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/Common_plus_RareVariants/CV_",trait,"_Bootstraps.csv"))
   RICE_CV_Boot_Results$Method <- "RICE-CV"
   colnames(RICE_CV_Boot_Results) <- colnames(CT_Boot_Results)
-  RICE_RV_Results <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/BestPRS/RV_",trait,"Best_Betas.csv"))
+  RICE_RV_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/Common_plus_RareVariants/RV_",trait,"Best_Betas.csv"))
   RICE_RV_Results$Method <- "RICE-RV"
-  RICE_RV_Boot_Results <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/BestPRS/RV_",trait,"_Bootstraps.csv"))
+  RICE_RV_Boot_Results <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/Common_plus_RareVariants/RV_",trait,"_Bootstraps.csv"))
   RICE_RV_Boot_Results$Method <- "RICE-RV"
   colnames(RICE_RV_Boot_Results) <- colnames(CT_Boot_Results)
   full_results <- rbind(full_results,rbind(CT_Results,LDPred2_Results,LASSOSUM2_Results,RICE_CV_Results,RICE_RV_Results))
   full_results_Boot <- rbind(full_results_Boot,rbind(CT_Boot_Results,LDPred2_Boot_Results,LASSOSUM2_Boot_Results,RICE_CV_Boot_Results,RICE_RV_Boot_Results))
-  full_results_Boot_Comparison <- rbind(full_results_Boot_Comparison,read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/BestPRS/",trait,"_Comparison_Bootstraps.csv")))
+  full_results_Boot_Comparison <- rbind(full_results_Boot_Comparison,read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/Common_plus_RareVariants/",trait,"_Comparison_Bootstraps.csv")))
 }
 
 # full_results <- read.csv("~/Desktop/RareVariantPRS_Results/WES_Results_Continuous.csv")
@@ -190,7 +190,7 @@ g1 <- ggplot(data=full_results_stacked[full_results_stacked$trait %in% c("BMI","
   theme_Publication() + 
   scale_fill_Publication()
 # ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WES_Continuous_","A","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
-ggsave(paste0("UKB_WGS_Continuous_","A","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
+ggsave(paste0("UKB_Imputed_Continuous_","A","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
 
 g1 <- ggplot(data=full_results_stacked[full_results_stacked$trait %in% c("HDL","LDL"),], aes(x=method, y=beta, ymin=lower_95, ymax=upper_95,color = Standardization)) +
   geom_pointrange(position=position_dodge(width=.25),size = 0.2) + 
@@ -199,8 +199,8 @@ g1 <- ggplot(data=full_results_stacked[full_results_stacked$trait %in% c("HDL","
   xlab("Method") + ylab("Beta of PRS per SD") +
   theme_Publication() + 
   scale_fill_Publication()
-# ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_","B","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
-ggsave(paste0("UKB_WGS_Continuous_","B","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
+# ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_Imputed_Continuous_","B","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
+ggsave(paste0("UKB_Imputed_Continuous_","B","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
 
 g1 <- ggplot(data=full_results_stacked[full_results_stacked$trait %in% c("log(TG)","TC"),], aes(x=method, y=beta, ymin=lower_95, ymax=upper_95,color = Standardization)) +
   geom_pointrange(position=position_dodge(width=.25),size = 0.2) + 
@@ -209,8 +209,8 @@ g1 <- ggplot(data=full_results_stacked[full_results_stacked$trait %in% c("log(TG
   xlab("Method") + ylab("Beta of PRS per SD") +
   theme_Publication() + 
   scale_fill_Publication()
-# ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_","C","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
-ggsave(paste0("UKB_WGS_Continuous_","C","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
+# ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_Imputed_Continuous_","C","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
+ggsave(paste0("UKB_Imputed_Continuous_","C","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
 
 
 theme_Publication <- function(base_size=12) {
@@ -265,7 +265,7 @@ g2 <- ggplot(full_results) +
   geom_bar(aes(x=Method1, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("UKB WGS PRS Results for Six Continuous Traits") + 
+  ggtitle("UKB Imputed + WES PRS Results for Six Continuous Traits") + 
   ylab("Beta of PRS per SD") + 
   ylim(0,ylim) +
   stat_pvalue_manual(full_results,
@@ -275,8 +275,8 @@ g2 <- ggplot(full_results) +
   theme_Publication() + 
   scale_fill_Publication()
 
-# ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Adjusted_Beta.png"),g2,width=10, height=6.18047,dpi = 300)
-ggsave(paste0("UKB_WGS_Continuous_Adjusted_Beta.png"),g2,width=10, height=6.18047,dpi = 300)
+# ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_Imputed_Continuous_Adjusted_Beta.png"),g2,width=10, height=6.18047,dpi = 300)
+ggsave(paste0("UKB_Imputed_Continuous_Adjusted_Beta.png"),g2,width=10, height=6.18047,dpi = 300)
 
 scale_fill_Publication <- function(...){
   library(scales)
@@ -326,7 +326,7 @@ g2 <- ggplot(full_results) +
   geom_bar(aes(x=Method, y=abs(R2_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("UKB WGS PRS Results for Six Continuous Traits") + 
+  ggtitle("UKB Imputed + WES PRS Results for Six Continuous Traits") + 
   ylab("R2") + 
   ylim(0,ylim) +
   stat_pvalue_manual(full_results,
@@ -340,5 +340,5 @@ g2 <- ggplot(full_results) +
   theme_Publication() + 
   scale_fill_Publication()
 
-# ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Continuous_Adjusted_R2.png"),g2,width=10, height=6.18047,dpi = 300)
-ggsave(paste0("UKB_WGS_Continuous_Adjusted_R2.png"),g2,width=10, height=6.18047,dpi = 300)
+# ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_Imputed_Continuous_Adjusted_R2.png"),g2,width=10, height=6.18047,dpi = 300)
+ggsave(paste0("UKB_Imputed_Continuous_Adjusted_R2.png"),g2,width=10, height=6.18047,dpi = 300)

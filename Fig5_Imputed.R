@@ -55,11 +55,11 @@ scale_colour_Publication <- function(...){
 trait <- "Height"
 
 for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
-  pheno_validation <- read.delim("/data/williamsjacr/UKB_WGS_Results/LDPred2_LASSOSum2/All_Validation.txt")
-  CV_PRS_Validation <- read.delim(paste0("/data/williamsjacr/UKB_WGS_Results/Combined_Common_PRS/",trait,"_Best_Validation_All.txt"))
+  pheno_validation <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
+  CV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble/",trait,"_PRS_Validation.csv"))
   colnames(CV_PRS_Validation) <- c("IID","CV_PRS")
   pheno_validation <- inner_join(pheno_validation,CV_PRS_Validation)
-  RV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results/BestRareVariantPRS/",trait,"Validation_BestPRS.csv"))
+  RV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble_RV/",trait,"_PRS_Validation.csv"))
   colnames(RV_PRS_Validation) <- c("IID","RV_PRS")
   pheno_validation <- inner_join(pheno_validation,RV_PRS_Validation)
   
@@ -98,7 +98,7 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
     CV_RV_PRS_adjusted$Common_Bin[CV_RV_PRS_adjusted$CV_PRS < unname(Common_quants[i + 1]) & CV_RV_PRS_adjusted$CV_PRS >= unname(Common_quants[i])] <- i
   }
   
-  load("/data/williamsjacr/UKB_WGS_Results/LDPred2_LASSOSum2/all_phenotypes.RData")
+  load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
   
   CV_RV_PRS_adjusted_EUR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
   CV_RV_PRS_adjusted_AMR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
@@ -222,64 +222,12 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   
   legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
   
-  pdf(paste0(trait,"_WGS_Fig5.pdf"), width=12, height=7.416564)
+  pdf(paste0(trait,"_Imputed_Fig5.pdf"), width=12, height=7.416564)
   
   print(plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1)))
   
   dev.off()
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -355,11 +303,11 @@ scale_colour_Publication <- function(...){
 trait <- "T2D"
 
 for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
-  pheno_validation <- read.delim("/data/williamsjacr/UKB_WGS_Results_Binary/LDPred2_LASSOSum2/All_Validation.txt")
-  CV_PRS_Validation <- read.delim(paste0("/data/williamsjacr/UKB_WGS_Results_Binary/Combined_Common_PRS/",trait,"_Best_Validation_All.txt"))
+  pheno_validation <- read.delim("/data/williamsjacr/UKB_WES_Phenotypes/All_Validation.txt")
+  CV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble/",trait,"_PRS_Validation.csv"))
   colnames(CV_PRS_Validation) <- c("IID","CV_PRS")
   pheno_validation <- inner_join(pheno_validation,CV_PRS_Validation)
-  RV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WGS_Results_Binary/BestRareVariantPRS/",trait,"Validation_BestPRS.csv"))
+  RV_PRS_Validation <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble_RV/",trait,"_PRS_Validation.csv"))
   colnames(RV_PRS_Validation) <- c("IID","RV_PRS")
   pheno_validation <- inner_join(pheno_validation,RV_PRS_Validation)
   
@@ -394,7 +342,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
     CV_RV_PRS_adjusted$Common_Bin[CV_RV_PRS_adjusted$CV_PRS < unname(Common_quants[i + 1]) & CV_RV_PRS_adjusted$CV_PRS >= unname(Common_quants[i])] <- i
   }
   
-  load("/data/williamsjacr/UKB_WGS_Results_Binary/LDPred2_LASSOSum2/all_phenotypes.RData")
+  load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
   
   CV_RV_PRS_adjusted_EUR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "EUR"],]
   # CV_RV_PRS_adjusted_AMR <- CV_RV_PRS_adjusted[CV_RV_PRS_adjusted$IID %in% ukb_pheno$IID[ukb_pheno$ancestry == "AMR"],]
@@ -481,7 +429,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   #       se_odds <- 0
   #     }
   #     
-  #     tmp <- data.frame(Group = c(rep("Control",sum(CV_RV_PRS_adjusted_AFR$Common_Bin == 5 & CV_RV_PRS_adjusted_AFR$Rare_Bin == "30% - 70%")),rep("Comparison",sum(CV_RV_PRS_adjusted_AFR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_AFR$Rare_Bin == rv_bin))),Case_Control = c(CV_RV_PRS_adjusted_AFR$Y[CV_RV_PRS_adjusted_AFR$Common_Bin == 5 & CV_RV_PRS_adjusted_AFR$Rare_Bin == "30% - 70%"],CV_RV_PRS_adjusted_AFR$Y[CV_RV_PRS_adjusted_AFR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_AFR$Rare_Bin == rv_bin]))
+  #     tmp <- data.frame(Group = c(rep("Control",sum(CV_RV_PRS_adjusted_AFR$Common_Bin == 5 & CV_RV_PRS_adjusted_AFR$Rare_Bin == "30% - 70%")),rep("Comparison",sum(CV_RV_PRS_adjusted_AFR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_AFR$Rare_Bin == rv_bin))),Case_Control = c(CV_RV_PRS_adjusted_AFR$y_validation[CV_RV_PRS_adjusted_AFR$Common_Bin == 5 & CV_RV_PRS_adjusted_AFR$Rare_Bin == "30% - 70%"],CV_RV_PRS_adjusted_AFR$y_validation[CV_RV_PRS_adjusted_AFR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_AFR$Rare_Bin == rv_bin]))
   #     
   #     log_odds_ratio <- log((table(tmp)[1,2]/table(tmp)[1,1])/(table(tmp)[2,2]/table(tmp)[2,1]))
   #     se_log_odds_ratio <- sqrt(1/table(tmp)[1,2] + 1/table(tmp)[1,1] + 1/table(tmp)[2,2] + 1/table(tmp)[2,1])
@@ -499,7 +447,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   #       se_odds <- 0
   #     }
   #     
-  #     tmp <- data.frame(Group = c(rep("Control",sum(CV_RV_PRS_adjusted_SAS$Common_Bin == 5 & CV_RV_PRS_adjusted_SAS$Rare_Bin == "30% - 70%")),rep("Comparison",sum(CV_RV_PRS_adjusted_SAS$Common_Bin == cv_bin & CV_RV_PRS_adjusted_SAS$Rare_Bin == rv_bin))),Case_Control = c(CV_RV_PRS_adjusted_SAS$Y[CV_RV_PRS_adjusted_SAS$Common_Bin == 5 & CV_RV_PRS_adjusted_SAS$Rare_Bin == "30% - 70%"],CV_RV_PRS_adjusted_SAS$Y[CV_RV_PRS_adjusted_SAS$Common_Bin == cv_bin & CV_RV_PRS_adjusted_SAS$Rare_Bin == rv_bin]))
+  #     tmp <- data.frame(Group = c(rep("Control",sum(CV_RV_PRS_adjusted_SAS$Common_Bin == 5 & CV_RV_PRS_adjusted_SAS$Rare_Bin == "30% - 70%")),rep("Comparison",sum(CV_RV_PRS_adjusted_SAS$Common_Bin == cv_bin & CV_RV_PRS_adjusted_SAS$Rare_Bin == rv_bin))),Case_Control = c(CV_RV_PRS_adjusted_SAS$y_validation[CV_RV_PRS_adjusted_SAS$Common_Bin == 5 & CV_RV_PRS_adjusted_SAS$Rare_Bin == "30% - 70%"],CV_RV_PRS_adjusted_SAS$y_validation[CV_RV_PRS_adjusted_SAS$Common_Bin == cv_bin & CV_RV_PRS_adjusted_SAS$Rare_Bin == rv_bin]))
   #     
   #     log_odds_ratio <- log((table(tmp)[1,2]/table(tmp)[1,1])/(table(tmp)[2,2]/table(tmp)[2,1]))
   #     se_log_odds_ratio <- sqrt(1/table(tmp)[1,2] + 1/table(tmp)[1,1] + 1/table(tmp)[2,2] + 1/table(tmp)[2,1])
@@ -517,7 +465,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   #       se_odds <- 0
   #     }
   #     
-  #     tmp <- data.frame(Group = c(rep("Control",sum(CV_RV_PRS_adjusted_AMR$Common_Bin == 5 & CV_RV_PRS_adjusted_AMR$Rare_Bin == "30% - 70%")),rep("Comparison",sum(CV_RV_PRS_adjusted_AMR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_AMR$Rare_Bin == rv_bin))),Case_Control = c(CV_RV_PRS_adjusted_AMR$Y[CV_RV_PRS_adjusted_AMR$Common_Bin == 5 & CV_RV_PRS_adjusted_AMR$Rare_Bin == "30% - 70%"],CV_RV_PRS_adjusted_AMR$Y[CV_RV_PRS_adjusted_AMR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_AMR$Rare_Bin == rv_bin]))
+  #     tmp <- data.frame(Group = c(rep("Control",sum(CV_RV_PRS_adjusted_AMR$Common_Bin == 5 & CV_RV_PRS_adjusted_AMR$Rare_Bin == "30% - 70%")),rep("Comparison",sum(CV_RV_PRS_adjusted_AMR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_AMR$Rare_Bin == rv_bin))),Case_Control = c(CV_RV_PRS_adjusted_AMR$y_validation[CV_RV_PRS_adjusted_AMR$Common_Bin == 5 & CV_RV_PRS_adjusted_AMR$Rare_Bin == "30% - 70%"],CV_RV_PRS_adjusted_AMR$y_validation[CV_RV_PRS_adjusted_AMR$Common_Bin == cv_bin & CV_RV_PRS_adjusted_AMR$Rare_Bin == rv_bin]))
   #     
   #     print(table(tmp))
   #     
@@ -561,7 +509,7 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   
   legend_b <- ggplotGrob(plot1)$grobs[[which(sapply(ggplotGrob(plot1)$grobs, function(x) x$name) == "guide-box")]]
   
-  pdf(paste0(trait,"_WGS_Fig5.pdf"), width=12, height=7.416564)
+  pdf(paste0(trait,"_Imputed_Fig5.pdf"), width=12, height=7.416564)
   
   print(plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1)))
   

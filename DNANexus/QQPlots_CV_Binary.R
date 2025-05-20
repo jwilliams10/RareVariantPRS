@@ -2,9 +2,7 @@ rm(list = ls())
 
 # dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/QQPlots_CV_Binary.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Binary/QQPlots_CV_Binary.sh -icmd="bash QQPlots_CV_Binary.sh" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Binary/ --priority high --instance-type mem3_ssd1_v2_x8
 
-print(list.files())
-
-pheno_train <- read.delim("All_Train.txt")
+pheno_train <- read.delim("/data/williamsjacr/Clean_UKB_WGS_Sumstats/All_Train.txt")
 trait <- "Asthma"
 
 theme_Publication <- function(base_size=12) {
@@ -42,8 +40,8 @@ theme_Publication <- function(base_size=12) {
   
 }
 
-install.packages("plotrix")
-install.packages("ggthemes")
+# install.packages("plotrix")
+# install.packages("ggthemes")
 library(plotrix)
 library(data.table)
 library(RColorBrewer)
@@ -53,34 +51,14 @@ library(cowplot)
 
 lambda_dat <- NULL
 
-for(trait in 1:5){
-  
-  if(trait == 1){
-    trait <- "Asthma"
-    dat <- read.csv("regenie_step2_act_Asthma.regenie", sep="")
-  }else if(trait == 2){
-    trait <- "CAD"
-    dat <- read.csv("regenie_step2_act_CAD.regenie", sep="")
-  }else if(trait == 3){
-    trait <- "T2D"
-    dat <- read.csv("regenie_step2_act_T2D.regenie", sep="")
-  }else if(trait == 4){
-    trait <- "Breast"
-    dat <- read.csv("regenie_step2_bp_Breast.regenie", sep="")
-  }else{
-    trait <- "Prostate"
-    dat <- read.csv("regenie_step2_bp_Prostate.regenie", sep="")
-  }
-  
-  colnames(dat) <- c("CHROM","POS","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
+for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
+  dat <- fread(paste0("/data/williamsjacr/Clean_UKB_WGS_Sumstats/regenie_step2_",trait,".regenie"))
+  dat <- as.data.frame(dat)
+  colnames(dat) <- c("CHR","BP","ID","REF","ALT","A1_FREQ","N","TEST","BETA","SE","CHISQ","LOG10P","EXTRA")
   dat$P <- 10^(-1*dat$LOG10P)
   
-  dat <- dat[,c("CHROM","ID","REF","POS","ALT","BETA","P","A1_FREQ")]
-  colnames(dat) <- c("CHR","SNP","REF","BP","A1","BETA","P","A1_FREQ") 
   dat$MAF <- ifelse(dat$A1_FREQ <= 0.5, dat$A1_FREQ,1-dat$A1_FREQ)
   dat <- dat[dat$MAF > 0.01,]
-  dat <- dat[!is.na(dat$MAF),]
-  dat <- dat[!is.na(dat$P),]
   dat <- dat[dat$P != 0,]
   
   

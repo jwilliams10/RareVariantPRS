@@ -15,7 +15,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   results_coding_genome <- NULL
   for (i in 1:gene_centric_coding_jobs_num){
     results <- get(load(paste0(input_path,gene_centric_results_name,"_",i,".Rdata")))
-    system(paste0("rm ",paste0(input_path,gene_centric_results_name,"_",i,".Rdata")))
+    # system(paste0("rm ",paste0(input_path,gene_centric_results_name,"_",i,".Rdata")))
     results_coding_genome <- c(results_coding_genome, results)
   }
   
@@ -38,7 +38,7 @@ for(trait in c("Asthma","CAD","T2D","Breast","Prostate")){
   write.csv(results_coding_genome,paste0("/data/williamsjacr/UKB_WES_Phenotypes/Binary/Results/GeneCentricCoding/",trait,"_coding_sig.csv"),row.names = FALSE)
 }
 
-
+system(paste0("rm ",paste0(input_path,"*.Rdata")))
 
 
 

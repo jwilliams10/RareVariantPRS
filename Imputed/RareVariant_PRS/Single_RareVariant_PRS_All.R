@@ -123,33 +123,47 @@ time <- system.time({
     x <- as.matrix(x[!is.na(y),])
     y <- y[!is.na(y)]
     
-    lasso_mod <- cv.glmnet(x,y,family = "gaussian",alpha = 1,type.measure = "mse",nfold = 10)
-    ridge_mod <- cv.glmnet(x,y,family = "gaussian",alpha = 0,type.measure = "mse",nfold = 10)
+    lasso_train <- glmnet(x,y,family = "gaussian",alpha = 1)
+    ridge_train <- glmnet(x,y,family = "gaussian",alpha = 0)
     
-    lasso_prediction_x <- predict(lasso_mod, x)
-    ridge_prediction_x <- predict(ridge_mod, x)
+    lasso_prs_tune <- predict(lasso_train,x)
+    ridge_prs_tune <- predict(ridge_train,x)
     
-    ensemble_mod <- lm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x))
+    all <- cbind(lasso_prs_tune,ridge_prs_tune)
     
-    ensemble_prediction_x <- ensemble_mod$fitted
+    R2_Vector <- vector()
+    for(i in 1:ncol(all)){
+      tmp <- data.frame(y = y, x_try = all[,i])
+      R2_Vector[i] <- summary(lm(y~x_try,data = tmp))$r.square
+    }
     
-    coefficients_x <- coef(lm(y~.,data.frame(y = ensemble_prediction_x,x)))
+    coefficients_x <- coef(lm(y~.,data.frame(y = all[,which.max(R2_Vector)],x)))
     return(list(Coefficients = coefficients_x))
   }
-  Ensemble_Function_Binary<- function(x,y){
+  Ensemble_Function_Binary <- function(x,y){
     x <- as.matrix(x[!is.na(y),])
     y <- y[!is.na(y)]
     
-    lasso_mod <- cv.glmnet(x,y,family = "binomial",alpha = 1,type.measure = "auc")
-    ridge_mod <- cv.glmnet(x,y,family = "binomial",alpha = 0,type.measure = "auc")
+    lasso_train <- glmnet(x,y,family = "binomial",alpha = 1)
+    ridge_train <- glmnet(x,y,family = "binomial",alpha = 0)
     
-    lasso_prediction_x <- predict(lasso_mod, x,type = "link")
-    ridge_prediction_x <- predict(ridge_mod, x,type = "link")
+    lasso_prs_tune <- predict(lasso_train,x)
+    ridge_prs_tune <- predict(ridge_train,x)
     
-    ensemble_mod <- glm(y~.,data = data.frame(lasso_prediction_x,ridge_prediction_x),family = binomial())
-    ensemble_prediction_x <- predict(ensemble_mod,data.frame(lasso_prediction_x,ridge_prediction_x),type = "link")
+    all <- cbind(lasso_prs_tune,ridge_prs_tune)
     
-    coefficients_x <- coef(lm(y~.,data.frame(y = ensemble_prediction_x,x)))
+    AUC_Vector <- vector()
+    for(i in 1:ncol(all)){
+      tmp <- data.frame(y = y, x_try = all[,i])
+      roc_obj <- roc.binary(status = "y",
+                            variable = "x_try",
+                            confounders = "~1",
+                            data = tmp,
+                            precision=seq(0.05,0.95, by=0.05))
+      AUC_Vector[i] <- roc_obj$auc
+    }
+    
+    coefficients_x <- coef(lm(y~.,data.frame(y = all[,which.max(AUC_Vector)],x)))
     return(list(Coefficients = coefficients_x))
   }
   Ensemble_Function <- function(x,y,family = c("continuous","binary")){
@@ -178,21 +192,6 @@ time <- system.time({
     lasso_prs_vad <- predict(lasso_train,X_valid,type = "link")
     ridge_prs_vad <- predict(ridge_train,X_valid,type = "link")
     lm_prs_vad <- predict(lm_train,data.frame(X_valid),type = "link")
-    
-    lasso_tune_dat <- data.frame(y = pheno_tune[,trait],lasso_prs_tune)
-    colnames(lasso_tune_dat) <- c("y",paste0("lasso_prs",1:(ncol(lasso_tune_dat) - 1)))
-    lasso_valid_dat <- data.frame(y = pheno_valid[,trait],lasso_prs_vad)
-    colnames(lasso_valid_dat) <- c("y",paste0("lasso_prs",1:(ncol(lasso_valid_dat) - 1)))
-    
-    ridge_tune_dat <- data.frame(y = pheno_tune[,trait],ridge_prs_tune)
-    colnames(ridge_tune_dat) <- c("y",paste0("ridge_prs",1:(ncol(ridge_tune_dat) - 1)))
-    ridge_valid_dat <- data.frame(y = pheno_valid[,trait],ridge_prs_vad)
-    colnames(ridge_valid_dat) <- c("y",paste0("ridge_prs",1:(ncol(ridge_valid_dat) - 1)))
-    
-    lm_tune_dat <- data.frame(y = pheno_tune[,trait],lm_prs_tune)
-    colnames(lm_tune_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_tune_dat) - 1)))
-    lm_valid_dat <- data.frame(y = pheno_valid[,trait],lm_prs_vad)
-    colnames(lm_valid_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_valid_dat) - 1)))
     
     
     all_prs_tune <- as.data.frame(cbind(lasso_prs_tune,ridge_prs_tune,lm_prs_tune))
@@ -445,22 +444,6 @@ time <- system.time({
     lm_prs_vad <- as.numeric(cbind(1,X_valid)%*%matrix(lm_train$coefficients,ncol = 1))
     
     
-    lasso_tune_dat <- data.frame(y = pheno_tune$y_tune,lasso_prs_tune)
-    colnames(lasso_tune_dat) <- c("y",paste0("lasso_prs",1:(ncol(lasso_tune_dat) - 1)))
-    lasso_valid_dat <- data.frame(y = pheno_validation$y_validation,lasso_prs_vad)
-    colnames(lasso_valid_dat) <- c("y",paste0("lasso_prs",1:(ncol(lasso_valid_dat) - 1)))
-    
-    ridge_tune_dat <- data.frame(y = pheno_tune$y_tune,ridge_prs_tune)
-    colnames(ridge_tune_dat) <- c("y",paste0("ridge_prs",1:(ncol(ridge_tune_dat) - 1)))
-    ridge_valid_dat <- data.frame(y = pheno_validation$y_validation ,ridge_prs_vad)
-    colnames(ridge_valid_dat) <- c("y",paste0("ridge_prs",1:(ncol(ridge_valid_dat) - 1)))
-    
-    lm_tune_dat <- data.frame(y = pheno_tune$y_tune,lm_prs_tune)
-    colnames(lm_tune_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_tune_dat) - 1)))
-    lm_valid_dat <- data.frame(y = pheno_validation$y_validation,lm_prs_vad)
-    colnames(lm_valid_dat) <- c("y",paste0("lm_prs",1:(ncol(lm_valid_dat) - 1)))
-    
-    
     all_prs_tune <- as.data.frame(cbind(lasso_prs_tune,ridge_prs_tune,lm_prs_tune))
     colnames(all_prs_tune) <- c(paste0("lasso_prs",1:ncol(lasso_prs_tune)),paste0("ridge_prs",1:ncol(ridge_prs_tune)),"lm_prs1")
     all_prs_valid <- as.data.frame(cbind(lasso_prs_vad,ridge_prs_vad,lm_prs_vad))
@@ -680,7 +663,7 @@ time <- system.time({
                                   beta_adjusted_SAS_boot,R2_adjusted_SAS_boot,beta_adjusted_AMR_boot,R2_adjusted_AMR_boot,
                                   beta_adjusted_AFR_boot,R2_adjusted_AFR_boot,beta_adjusted_EAS_boot,R2_adjusted_EAS_boot)
   }
-  write.csv(RICE_RV,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble_RV/",trait,"Best_Betas.csv"),row.names = FALSE)
+  write.csv(RV_PRS_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble_RV/",trait,"Best_Betas.csv"),row.names = FALSE)
   write.csv(RV_Boot_Results,file = paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble_RV/",trait,"_Bootstraps.csv"),row.names = FALSE)
   
 })[3]
