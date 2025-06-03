@@ -1,0 +1,14 @@
+rm(list = ls())
+
+system("/data/williamsjacr/software/plink2 --bfile /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/ukb_hm3_mega --keep /data/williamsjacr/UKB_WES_Phenotypes/train.txt --maf 0.05 --indep-pairwise 50 5 0.8 --out /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/train_pc_dat")
+system("/data/williamsjacr/software/plink2 --bfile /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/ukb_hm3_mega --keep /data/williamsjacr/UKB_WES_Phenotypes/train.txt --extract /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/train_pc_dat.prune.in --make-bed --out /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/train_pc_dat")
+system("/data/williamsjacr/software/plink2 --bfile /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/train_pc_dat --pca 10 --out /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/train_pc_dat --threads 20")
+
+
+system("/data/williamsjacr/software/plink2 --bfile /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/ukb_hm3_mega --keep /data/williamsjacr/UKB_WES_Phenotypes/tune.txt --maf 0.05 --indep-pairwise 50 5 0.8 --out /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/tune_pc_dat")
+system("/data/williamsjacr/software/plink2 --bfile /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/ukb_hm3_mega --keep /data/williamsjacr/UKB_WES_Phenotypes/tune.txt --extract /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/tune_pc_dat.prune.in --make-bed --out /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/tune_pc_dat")
+system("/data/williamsjacr/software/plink2 --bfile /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/tune_pc_dat --pca 10 --out /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/tune_pc_dat --threads 20")
+
+system("/data/williamsjacr/software/plink2 --bfile /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/ukb_hm3_mega --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --maf 0.05 --indep-pairwise 50 5 0.8 --out /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/validation_pc_dat")
+system("/data/williamsjacr/software/plink2 --bfile /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/ukb_hm3_mega --keep /data/williamsjacr/UKB_WES_Phenotypes/validation.txt --extract /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/validation_pc_dat.prune.in --make-bed --out /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/validation_pc_dat")
+system("/data/williamsjacr/software/plink2 --bfile /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/validation_pc_dat --pca 10 --out /data/williamsjacr/UKB_WES_Phenotypes/Imputed/BEDFiles/validation_pc_dat --threads 20")

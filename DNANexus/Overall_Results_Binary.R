@@ -180,7 +180,7 @@ g1 <- ggplot(data=full_results_stacked[full_results_stacked$trait %in% c("Breast
   geom_pointrange(position=position_dodge(width=.25),size = 0.2) + 
   facet_grid(vars(trait), vars(ancestry), scales="free") + 
   coord_flip() +  # flip coordinates (puts labels on y axis)
-  xlab("Method") + ylab("Beta of PRS per SD") +
+  xlab("Method") + ylab("log(Odds Ratio) of PRS per SD") +
   theme_Publication() + 
   scale_fill_Publication()
 # ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_","A","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
@@ -190,7 +190,7 @@ g1 <- ggplot(data=full_results_stacked[full_results_stacked$trait %in% c("CAD","
   geom_pointrange(position=position_dodge(width=.25),size = 0.2) + 
   facet_grid(vars(trait), vars(ancestry), scales="free") + 
   coord_flip() +  # flip coordinates (puts labels on y axis)
-  xlab("Method") + ylab("Beta of PRS per SD") +
+  xlab("Method") + ylab("log(Odds Ratio) of PRS per SD") +
   theme_Publication() + 
   scale_fill_Publication()
 # ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_","B","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
@@ -200,7 +200,7 @@ g1 <- ggplot(data=full_results_stacked[full_results_stacked$trait %in% c("Asthma
   geom_pointrange(position=position_dodge(width=.25),size = 0.2) + 
   facet_grid(vars(trait), vars(ancestry), scales="free") + 
   coord_flip() +  # flip coordinates (puts labels on y axis)
-  xlab("Method") + ylab("Beta of PRS per SD") +
+  xlab("Method") + ylab("log(Odds Ratio) of PRS per SD") +
   theme_Publication() + 
   scale_fill_Publication()
 # ggsave(paste0("Desktop/RareVariantPRS_Results/Figures/UKB_WGS_Binary_","C","_Raw_vs_AncestryAdjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
@@ -260,7 +260,7 @@ g2 <- ggplot(full_results) +
   # geom_errorbar( aes(x=Method, ymin=AUC_low, ymax=AUC_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(trait), vars(ancestry)) + 
   ggtitle("UKB WGS PRS Results for Five Binary Traits") + 
-  ylab("Beta of PRS per SD") + 
+  ylab("log(Odds Ratio) of PRS per SD") + 
   ylim(0,ylim) +
   stat_pvalue_manual(full_results,
                      label = "p.signif_beta",

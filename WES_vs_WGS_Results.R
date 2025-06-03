@@ -109,7 +109,7 @@ theme_Publication <- function(base_size=12) {
             panel.background = element_rect(colour = NA),
             plot.background = element_rect(colour = NA),
             panel.border = element_rect(colour = NA),
-            axis.title = element_text(face = "bold",size = 16),
+            axis.title = element_text(face = "bold",size = 14),
             axis.title.y = element_text(angle=90,vjust =2),
             axis.title.x = element_blank(),
             axis.text.x = element_blank(), 
@@ -181,7 +181,7 @@ plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "EUR
 plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "EUR",]) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
   facet_grid(cols = vars(trait)) +
-  ylab("Beta of PRS per SD") +
+  ylab("Log Odds Ratio of PRS per SD") +
   ylim(0,ylim_binary) +
   theme_Publication() +
   scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
@@ -213,7 +213,7 @@ plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "AFR
 plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AFR",]) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
   facet_grid(cols = vars(trait)) +
-  ylab("Beta of PRS per SD") +
+  ylab("Log Odds Ratio of PRS per SD") +
   ylim(0,ylim_binary) +
   theme_Publication() +
   scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
@@ -245,7 +245,7 @@ plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "AMR
 plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "AMR",]) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
   facet_grid(cols = vars(trait)) +
-  ylab("Beta of PRS per SD") +
+  ylab("Log Odds Ratio of PRS per SD") +
   ylim(0,ylim_binary) +
   theme_Publication() +
   scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
@@ -277,7 +277,7 @@ plot1 <- ggplot(full_results_Continuous[full_results_Continuous$ancestry == "SAS
 plot2 <- ggplot(full_results_Binary[full_results_Binary$ancestry == "SAS",]) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method_DataSource),position = "dodge", stat="identity", alpha=0.7) +
   facet_grid(cols = vars(trait)) +
-  ylab("Beta of PRS per SD") +
+  ylab("Log Odds Ratio of PRS per SD") +
   ylim(0,ylim_binary) +
   theme_Publication() +
   scale_fill_Publication() + guides(fill=guide_legend(title="PRS Method & Dataset"))
