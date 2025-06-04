@@ -20,8 +20,8 @@ Contains all files to perform RICE on the 5 binary traits for UKB WES. Also cont
 
 ### Continuous 
 
-Contains all files to perform RICE on the 6 continuous traits for UKB WES. Also contains code to create Figure 4 and Supplementary Figures 4 and 8.
+Contains all files to perform RICE on the 6 continuous traits for UKB WES. Also contains code to create Figure 4 and Supplementary Figures 3, 4, and 7.
 
-### Remaining Scripts (SampleSizes.R/.sh and RareVariantEffectSizes.R)
+### SampleSizes.R/.sh 
 
-The remaining scripts are used to create Supplementary Table 2 and Supplementary Data tables 1-11.
+Used to create Supplementary Table 2.

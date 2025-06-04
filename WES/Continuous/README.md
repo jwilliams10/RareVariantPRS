@@ -1,14 +1,14 @@
 ## Continuous
 
-This folder contains all files to perform RICE on the 6 continuous traits for UKB WES. Also contains code to create Figure 4 and Supplementary Figures 4 and 8.
+This folder contains all files to perform RICE on the 6 continuous traits for UKB WES. Also contains code to create Supplementary Figures 3, 4, and 7.
 
-### GWAS_SumStats.R/.sh
+### GWAS_SumStats_REGENIE.sh
 
-Runs GWAS analysis with plink for the 6 traits.
+Runs GWAS analysis with regenie for the 6 traits.
 
 ### CommonVariantPRS
 
-This folder contains scripts to perform CT, LDpred2, Lassosum2, and RICE-CV (OneCommonPRS.R). Further contains a script to build the score file for RICE-CV to submit to PGS catalog.
+This folder contains scripts to perform CT, LDpred2, Lassosum2, and RICE-CV (OneCommonPRS.R). Also contains a script to build the score file for RICE-CV to submit to PGS catalog.
 
 ### RareVariant_Analysis
 
@@ -22,6 +22,14 @@ This folder contains a script to perform RICE-RV and to obtain coefficients for 
 
 Performs RICE with RICE-CV and RICE-RV.
 
-### Overall_Results.R and QQPlots_CV.R
+### Overall_Results.R and QQPlots_CV_REGENIE.R
 
-Creates Figure 4/Supplementary Figure 4 and Supplementary Figure 8, respectively.
+Creates Supplementary Figures 3/4 and Supplementary Figure 7, respectively.
+
+### LDSC.R/.sh
+
+Runs LDSC on the regenie summary statistics.
+
+### All_Train_LDSC.R, GWAS_SumStats_LDSC.R/.sh, and LDSC_Results.R
+
+Sensitivity analysis using different GWAS methods and responses.

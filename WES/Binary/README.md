@@ -22,6 +22,10 @@ This folder contains a script to perform RICE-RV and to obtain coefficients for 
 
 Performs RICE with RICE-CV and RICE-RV.
 
+### LDSC.R/.sh
+
+Runs LDSC on the regenie summary statistics.
+
 ### Overall_Results.R and QQPlots_CV.R
 
 Creates Supplementary Figure 3-4 and Supplementary Figure 7, respectively.
