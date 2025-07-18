@@ -250,6 +250,10 @@ for(k in 1:nrow(sets)){
 
 idx <- which.max(r2_tun_vec)
 
+best_prs_validation <- pheno_vad[,c("IID",paste0("SCORE",idx,"_SUM"))]
+
+write.table(best_prs_validation,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation3/Results/LDPred2/LDpred2_validation_prs_best",i,".txt"),sep = "\t",row.names = FALSE)
+
 
 load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 
@@ -476,8 +480,9 @@ for(k in 1:300){
 
 idx <- which.max(r2_tun_vec)
 
+best_prs_validation <- pheno_vad[,c("IID",paste0("SCORE",idx,"_SUM"))]
 
-
+write.table(best_prs_validation,file=paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation3/Results/LASSOSUM2/LASSOSUM2_validation_prs_best",i,".txt"),sep = "\t",row.names = FALSE)
 
 load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")
 

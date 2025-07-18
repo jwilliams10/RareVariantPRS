@@ -160,8 +160,9 @@ for(k in 1:length(pthres)){
 #find best p-value threshold
 idx <- which.max(r2_tun_vec)
 
-
-
+prs_vad_max <- pheno_vad[,c("IID",paste0("p_value_",idx))]
+colnames(prs_vad_max) <- c("IID","prs")
+write.table(prs_vad_max, file = paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation2/Results/CT/prs_validation_best",i,".txt"),row.names = F)
 
 
 load("/data/williamsjacr/UKB_WES_Phenotypes/all_phenotypes.RData")

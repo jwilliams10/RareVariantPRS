@@ -23,7 +23,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   RICE_CV_Results <- rbind(RICE_CV_Results,tmp)
   tmp <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/AoU_CrossPlatform/",trait,"_Bootstraps_RICECV.csv"))
   tmp$Method <- "RICE-CV; Train (AoU) -> Validate (UKB)"
-  tmp <- tmp[,c("trait","beta_adjusted_EUR_boot","beta_adjusted_SAS_boot","beta_adjusted_AMR_boot","beta_adjusted_AFR_boot","Method")]
+  tmp <- tmp[,c("trait","beta_CV_adjusted_EUR_boot","beta_CV_adjusted_SAS_boot","beta_CV_adjusted_AMR_boot","beta_CV_adjusted_AFR_boot","Method")]
   colnames(tmp) <- c("trait","beta_adjusted_EUR_boot","beta_adjusted_SAS_boot","beta_adjusted_AMR_boot","beta_adjusted_AFR_boot","Method")
   RICE_CV_Boot_Results <- rbind(RICE_CV_Boot_Results,tmp)
   tmp <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/AoU_CrossPlatform/",trait,"Best_Betas_RICERV.csv"))
@@ -31,7 +31,7 @@ for(trait in c("BMI","LDL","HDL","logTG","TC","Height")){
   RICE_RV_Results <- rbind(RICE_RV_Results,tmp)
   tmp <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/AoU_CrossPlatform/",trait,"_Bootstraps_RICERV.csv"))
   tmp$Method <- "RICE-RV; Train (AoU) -> Validate (UKB)"
-  tmp <- tmp[,c("trait","beta_adjusted_EUR_boot","beta_adjusted_SAS_boot","beta_adjusted_AMR_boot","beta_adjusted_AFR_boot","Method")]
+  tmp <- tmp[,c("trait","beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot","Method")]
   colnames(tmp) <- c("trait","beta_adjusted_EUR_boot","beta_adjusted_SAS_boot","beta_adjusted_AMR_boot","beta_adjusted_AFR_boot","Method")
   RICE_RV_Boot_Results <- rbind(RICE_RV_Boot_Results,tmp)
 }

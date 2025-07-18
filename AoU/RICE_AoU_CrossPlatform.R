@@ -36,10 +36,10 @@ ukb_pheno_raw <- ukb_pheno[,c("IID","y_residualized","age","sex","pc1","pc2","pc
 ukb_pheno_adjusted <- ukb_pheno_raw
 
 for(i in c("CV_PRS","RV_PRS")){
-  tmp <- data.frame(y = ukb_pheno[,i],ukb_pheno[,c("pc1","pc2","pc3","pc4","pc5")])
+  tmp <- data.frame(y = ukb_pheno_adjusted[,i],ukb_pheno_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
   mod <- lm(y~.,data = tmp)
   R <- mod$residuals
-  tmp <- data.frame(y = R^2,ukb_pheno[,c("pc1","pc2","pc3","pc4","pc5")])
+  tmp <- data.frame(y = R^2,ukb_pheno_adjusted[,c("pc1","pc2","pc3","pc4","pc5")])
   mod <- lm(y~.,data = tmp)
   y_hat <- predict(mod,tmp)
   if(sum(y_hat < 0) > 0){
@@ -47,9 +47,9 @@ for(i in c("CV_PRS","RV_PRS")){
     y_hat <- predict(mod,tmp)
   }
   if(sum(sqrt(y_hat)) == 0){
-    ukb_pheno[,i] <- 0
+    ukb_pheno_adjusted[,i] <- 0
   }else{
-    ukb_pheno[,i] <- R/sqrt(y_hat)
+    ukb_pheno_adjusted[,i] <- R/sqrt(y_hat)
   }
 }
 
