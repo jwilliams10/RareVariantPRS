@@ -114,6 +114,8 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   CV_RV_PRS_adjusted_EUR$Rare_Bin[CV_RV_PRS_adjusted_EUR$Rare_Bin %in% c("4","5","6")] <- "30% - 70%"
   CV_RV_PRS_adjusted_EUR$Rare_Bin[CV_RV_PRS_adjusted_EUR$Rare_Bin %in% c("9")] <- "Above 95%"
   
+  CV_RV_PRS_adjusted_EUR$y_validation <- scale(CV_RV_PRS_adjusted_EUR$y_validation)
+  
   CV_RV_PRS_adjusted_EUR <- CV_RV_PRS_adjusted_EUR[CV_RV_PRS_adjusted_EUR$Rare_Bin %in% c("Below 5%","30% - 70%","Above 95%"),]
   
   CV_RV_PRS_adjusted_EUR$Rare_Bin <- factor(CV_RV_PRS_adjusted_EUR$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
@@ -126,6 +128,8 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   CV_RV_PRS_adjusted_AMR$Rare_Bin[CV_RV_PRS_adjusted_AMR$Rare_Bin == 1] <- "Below 5%"
   CV_RV_PRS_adjusted_AMR$Rare_Bin[CV_RV_PRS_adjusted_AMR$Rare_Bin %in% c("4","5","6")] <- "30% - 70%"
   CV_RV_PRS_adjusted_AMR$Rare_Bin[CV_RV_PRS_adjusted_AMR$Rare_Bin %in% c("9")] <- "Above 95%"
+  
+  CV_RV_PRS_adjusted_AMR$y_validation <- scale(CV_RV_PRS_adjusted_AMR$y_validation)
   
   CV_RV_PRS_adjusted_AMR <- CV_RV_PRS_adjusted_AMR[CV_RV_PRS_adjusted_AMR$Rare_Bin %in% c("Below 5%","30% - 70%","Above 95%"),]
   
@@ -140,6 +144,8 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   CV_RV_PRS_adjusted_AFR$Rare_Bin[CV_RV_PRS_adjusted_AFR$Rare_Bin %in% c("4","5","6")] <- "30% - 70%"
   CV_RV_PRS_adjusted_AFR$Rare_Bin[CV_RV_PRS_adjusted_AFR$Rare_Bin %in% c("9")] <- "Above 95%"
   
+  CV_RV_PRS_adjusted_AFR$y_validation <- scale(CV_RV_PRS_adjusted_AFR$y_validation)
+  
   CV_RV_PRS_adjusted_AFR <- CV_RV_PRS_adjusted_AFR[CV_RV_PRS_adjusted_AFR$Rare_Bin %in% c("Below 5%","30% - 70%","Above 95%"),]
   
   CV_RV_PRS_adjusted_AFR$Rare_Bin <- factor(CV_RV_PRS_adjusted_AFR$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
@@ -153,14 +159,11 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   CV_RV_PRS_adjusted_SAS$Rare_Bin[CV_RV_PRS_adjusted_SAS$Rare_Bin %in% c("4","5","6")] <- "30% - 70%"
   CV_RV_PRS_adjusted_SAS$Rare_Bin[CV_RV_PRS_adjusted_SAS$Rare_Bin %in% c("9")] <- "Above 95%"
   
+  CV_RV_PRS_adjusted_SAS$y_validation <- scale(CV_RV_PRS_adjusted_SAS$y_validation)
+  
   CV_RV_PRS_adjusted_SAS <- CV_RV_PRS_adjusted_SAS[CV_RV_PRS_adjusted_SAS$Rare_Bin %in% c("Below 5%","30% - 70%","Above 95%"),]
   
   CV_RV_PRS_adjusted_SAS$Rare_Bin <- factor(CV_RV_PRS_adjusted_SAS$Rare_Bin,levels = c("Below 5%","30% - 70%","Above 95%"))
-  
-  CV_RV_PRS_adjusted_EUR$y_validation <- scale(CV_RV_PRS_adjusted_EUR$y_validation)
-  CV_RV_PRS_adjusted_AMR$y_validation <- scale(CV_RV_PRS_adjusted_AMR$y_validation)
-  CV_RV_PRS_adjusted_AFR$y_validation <- scale(CV_RV_PRS_adjusted_AFR$y_validation)
-  CV_RV_PRS_adjusted_SAS$y_validation <- scale(CV_RV_PRS_adjusted_SAS$y_validation)
   
   CV_RV_PRS_adjusted_EUR_se <- aggregate(y_validation ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_EUR,function(x){sd(x)/sqrt(length(x))})
   CV_RV_PRS_adjusted_EUR <- aggregate(y_validation ~ Common_Bin + Rare_Bin,data = CV_RV_PRS_adjusted_EUR,mean)
@@ -196,16 +199,25 @@ for(trait in c("BMI","HDL","LDL","logTG","TC","Height")){
   colnames(CV_RV_PRS_adjusted_AFR) <- c("Common_Bin","RICE-RV Quantiles (Rare Variants)","Mean","SE")
   colnames(CV_RV_PRS_adjusted_SAS) <- c("Common_Bin","RICE-RV Quantiles (Rare Variants)","Mean","SE")
   
-  ymin <- round(min(c(CV_RV_PRS_adjusted_EUR$Mean - CV_RV_PRS_adjusted_EUR$SE,CV_RV_PRS_adjusted_AMR$Mean - CV_RV_PRS_adjusted_AMR$SE,CV_RV_PRS_adjusted_AFR$Mean - CV_RV_PRS_adjusted_AFR$SE,CV_RV_PRS_adjusted_SAS$Mean - CV_RV_PRS_adjusted_SAS$SE)) - 0.05,2)
-  ymax <- round(max(c(CV_RV_PRS_adjusted_EUR$Mean + CV_RV_PRS_adjusted_EUR$SE,CV_RV_PRS_adjusted_AMR$Mean + CV_RV_PRS_adjusted_AMR$SE,CV_RV_PRS_adjusted_AFR$Mean + CV_RV_PRS_adjusted_AFR$SE,CV_RV_PRS_adjusted_SAS$Mean + CV_RV_PRS_adjusted_SAS$SE)) + 0.05,2)
+  ymin_EUR <- round(min(c(CV_RV_PRS_adjusted_EUR$Mean - CV_RV_PRS_adjusted_EUR$SE)) - 0.05,2)
+  ymax_EUR <- round(max(c(CV_RV_PRS_adjusted_EUR$Mean + CV_RV_PRS_adjusted_EUR$SE)) + 0.05,2)
   
-  plot1 <- ggplot(data=CV_RV_PRS_adjusted_EUR, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
+  ymin_AMR <- round(min(c(CV_RV_PRS_adjusted_AMR$Mean - CV_RV_PRS_adjusted_AMR$SE)) - 0.05,2)
+  ymax_AMR <- round(max(c(CV_RV_PRS_adjusted_AMR$Mean + CV_RV_PRS_adjusted_AMR$SE)) + 0.05,2)
+  
+  ymin_AFR <- round(min(c(CV_RV_PRS_adjusted_AFR$Mean - CV_RV_PRS_adjusted_AFR$SE)) - 0.05,2)
+  ymax_AFR <- round(max(c(CV_RV_PRS_adjusted_AFR$Mean + CV_RV_PRS_adjusted_AFR$SE)) + 0.05,2)
+  
+  ymin_SAS <- round(min(c(CV_RV_PRS_adjusted_SAS$Mean - CV_RV_PRS_adjusted_SAS$SE)) - 0.05,2)
+  ymax_SAS <- round(max(c(CV_RV_PRS_adjusted_SAS$Mean + CV_RV_PRS_adjusted_SAS$SE)) + 0.05,2)
+  
+  plot1 <- ggplot(data=CV_RV_PRS_adjusted_EUR, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin_EUR,ymax_EUR)) +
     scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV Quantiles (Common Variants)")
-  plot2 <- ggplot(data=CV_RV_PRS_adjusted_AMR, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
+  plot2 <- ggplot(data=CV_RV_PRS_adjusted_AMR, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin_AMR,ymax_AMR)) +
     scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV Quantiles (Common Variants)")
-  plot3 <- ggplot(data=CV_RV_PRS_adjusted_AFR, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
+  plot3 <- ggplot(data=CV_RV_PRS_adjusted_AFR, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin_AFR,ymax_AFR)) +
     scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV Quantiles (Common Variants)")
-  plot4 <- ggplot(data=CV_RV_PRS_adjusted_SAS, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin,ymax)) +
+  plot4 <- ggplot(data=CV_RV_PRS_adjusted_SAS, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0(ifelse(trait == "logTG","log(TG)",trait)," Standardized")) + ylim(c(ymin_SAS,ymax_SAS)) +
     scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV Quantiles (Common Variants)")
   
   
