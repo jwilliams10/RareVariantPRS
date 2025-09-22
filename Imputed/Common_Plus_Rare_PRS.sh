@@ -6,6 +6,6 @@
 #SBATCH --mem-per-cpu=5G
 
 # module purge
-module load R/4.3.2
+module load R/4.5.0
 
 Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Imputed/Common_Plus_Rare_PRS.R ${SLURM_ARRAY_TASK_ID} > out"${SLURM_ARRAY_TASK_ID}".Rout

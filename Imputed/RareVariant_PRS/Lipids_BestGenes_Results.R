@@ -2,7 +2,7 @@ rm(list = ls())
 
 full_results <- NULL
 
-for(trait in c("TC","HDL","LDL","logTG","CAD")){
+for(trait in c("TC","HDL","LDL","logTG")){
   # tmp <- read.csv(paste0("/data/williamsjacr/UKB_WES_Phenotypes/Imputed/Results/SingleTrait_Ensemble_RV/",trait,"_Lipids_Best_Best_Betas.csv"))
   # tmp$Method <- "High-Penetrance Genes (Functional Categories)"
   # tmp <- tmp[,c("trait","ancestry","Method","beta_adjusted")]
@@ -76,7 +76,7 @@ g2 <- ggplot(full_results) +
   geom_bar(aes(x=Method, y=abs(beta_adjusted),fill=Method), stat="identity", alpha=0.7) +
   # geom_errorbar( aes(x=Method, ymin=r2_low, ymax=r2_high), width=0.4, colour="black", alpha=0.9) +  
   facet_grid(vars(trait), vars(ancestry)) + 
-  ggtitle("UKB Imputed + WES RICE-RV Results for Five Traits") + 
+  ggtitle("UKB Imputed + WES RICE-RV Results for Four Traits") + 
   ylab("Beta of PRS per SD") + 
   ylim(0,ylim) +
   theme_Publication() + 

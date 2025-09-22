@@ -65,7 +65,11 @@ for(trait in c("Asthma","T2D","CAD","Breast","Prostate")){
   x <- dat$P
   z <- qnorm(x / 2)
   lambda <- round(median(z^2) / qchisq(0.5,1), 3)
-  lambda_1000 <- round(1+1000*(lambda-1)/sum(!is.na(pheno_train[,trait])) ,3)
+  if(trait %in% c("BMI","LDL","HDL","logTG","TC","Height")){
+    lambda_1000 <- round(1+1000*(lambda-1)/sum(!is.na(pheno_train[,trait])) ,3) 
+  }else{
+    lambda_1000 <- round(1+500*(lambda-1)*(1/sum(pheno_train[,trait] == 0,na.rm = TRUE) + 1/sum(pheno_train[,trait] == 1,na.rm = TRUE)) ,3)
+  }
   
   lambda_dat <- rbind(lambda_dat,data.frame(Trait = trait,Ancestry_Group = "European",lambda = lambda, lambda_1000 = lambda_1000, datasource = "UKB WGS"))
   
