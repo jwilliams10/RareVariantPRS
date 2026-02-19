@@ -1,1 +1,0 @@
-QC_UKBB_bcftools_chr*.sh -> QC_UKBB_bcftools_concat.sh
