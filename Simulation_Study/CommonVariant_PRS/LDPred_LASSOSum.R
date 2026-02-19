@@ -1,3 +1,12 @@
+# =============================================================================
+# [RICE-ANNOTATION] CommonVariant_PRS/LDPred_LASSOSum.R
+# Purpose: Constructs common-variant PRSs using LDpred2 and lassosum2 across tuning grids, selects best hyperparameters on the tuning set, and evaluates on validation.
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 rm(list=ls())
 library(data.table)
 library(dplyr)

@@ -1,3 +1,12 @@
+# =============================================================================
+# [RICE-ANNOTATION] CommonVariant_PRS/CT.R
+# Purpose: Constructs common-variant PRS using clumping+thresholding (C+T), selects the best p-value threshold on the tuning set, and evaluates on validation (with optional ancestry adjustment).
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 rm(list = ls())
 library(data.table)
 library(dplyr)

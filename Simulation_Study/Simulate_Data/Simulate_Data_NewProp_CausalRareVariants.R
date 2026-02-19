@@ -1,3 +1,12 @@
+# =============================================================================
+# [RICE-ANNOTATION] Simulate_Data/Simulate_Data_NewProp_CausalRareVariants.R
+# Purpose: Simulates phenotypes while allowing only a (random) proportion of rare variants within each causal rare-variant set to be causal, with manuscript-aligned heritability ratio (h2_rare=0.05/12).
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 rm(list = ls())
 set.seed(1340)
 gc()

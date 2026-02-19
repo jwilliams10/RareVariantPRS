@@ -1,3 +1,12 @@
+# =============================================================================
+# [RICE-ANNOTATION] RareVariant_PRS/Single_RareVariant_PRS_All.R
+# Purpose: Builds the rare-variant PRS (RICE-RV) from rare-variant set association results, tunes selection/thresholding, and outputs PRS files for tune/validation.
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 rm(list = ls())
 library(gdsfmt)
 library(SeqArray)

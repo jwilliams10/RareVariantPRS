@@ -1,3 +1,12 @@
+# =============================================================================
+# [RICE-ANNOTATION] Simulate_Data/Simulate_Data.R
+# Purpose: Simulates quantitative phenotypes from chromosome 22 using common variants and rare-variant burdens (legacy h2_rare ratio 0.05/4), assuming all rare variants within a causal set contribute to the burden.
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 rm(list = ls())
 set.seed(1340)
 gc()

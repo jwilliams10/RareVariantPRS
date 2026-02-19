@@ -5,6 +5,16 @@
 #SBATCH --array=22
 #SBATCH --mem-per-cpu=10G
 
+# =============================================================================
+# [RICE-ANNOTATION] FullData/Extract_chr22/gds_processing/all.sh
+# Purpose: Driver shell script that runs the GDS processing pipeline (VCF→GDS→annotation/QC→AGDS) for chr22.
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
+
 # module purge
 module load R/4.3.0
 

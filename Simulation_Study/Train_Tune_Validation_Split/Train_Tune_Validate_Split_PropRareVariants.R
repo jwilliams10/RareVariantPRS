@@ -1,3 +1,12 @@
+# =============================================================================
+# [RICE-ANNOTATION] Train_Tune_Validation_Split/Train_Tune_Validate_Split_PropRareVariants.R
+# Purpose: Creates train/tune/validation splits and per-split phenotype files for Simulation3/4 (within-set proportion-causal rare variants; legacy h2_rare ratio 0.05/4).
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 rm(list = ls())
 
 load("/data/williamsjacr/UKB_WES_Simulation/Simulation3/simulated_data/Y_n_140488_h2_common_0.05_h2_rare_0.0125.RData")

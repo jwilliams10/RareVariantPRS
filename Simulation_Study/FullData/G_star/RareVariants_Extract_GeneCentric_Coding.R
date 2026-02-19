@@ -1,5 +1,15 @@
 rm(list = ls())
 
+# =============================================================================
+# [RICE-ANNOTATION] FullData/G_star/RareVariants_Extract_GeneCentric_Coding.R
+# Purpose: Extracts gene-centric coding rare-variant burden matrices (G*) from the chr22 GDS/AGDS using the helper functions.
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
+
 library(gdsfmt)
 library(SeqArray)
 library(SeqVarTools)

@@ -1,3 +1,12 @@
+# =============================================================================
+# [RICE-ANNOTATION] FullData/Extract_chr22/CommonVariants_SampleIDs.R
+# Purpose: Selects unrelated UKB WES participants, builds the chromosome-22 common-variant PLINK dataset (HM3 subset) for simulations, and writes sample ID files used for common- and rare-variant extraction.
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 rm(list = ls())
 
 ukb_hm3_mega_bim <- read.delim("/data/BB_Bioinformatics/ProjectData/UKB/Genotypes/ukb_hm3_mega.bim", header=FALSE)

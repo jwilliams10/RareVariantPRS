@@ -1,3 +1,13 @@
+# =============================================================================
+# [RICE-ANNOTATION] Common_Plus_Rare_PRS.R
+# Purpose: Fits the final combined model (RICE) that integrates common- and rare-variant PRSs, applies ancestry-adjusted PRS standardization, and computes validation performance/bootstrapped uncertainty.
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
+
 rm(list = ls())
 library(readr)
 library(dplyr)

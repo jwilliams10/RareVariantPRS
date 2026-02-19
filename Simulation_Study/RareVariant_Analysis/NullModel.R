@@ -1,5 +1,15 @@
 rm(list = ls())
 
+# =============================================================================
+# [RICE-ANNOTATION] RareVariant_Analysis/NullModel.R
+# Purpose: Fits STAAR/GENESIS null models for rare-variant association testing, using the common-variant PRS as a covariate (train/tune/validation).
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
+
 library(gdsfmt)
 library(SeqArray)
 library(SeqVarTools)

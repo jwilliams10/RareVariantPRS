@@ -1,3 +1,12 @@
+# =============================================================================
+# [RICE-ANNOTATION] RareVariant_Analysis/STAAR_GeneCentric_Coding.R
+# Purpose: Runs gene-centric coding rare-variant association testing using STAARpipeline on chromosome 22 for each simulated phenotype replicate i, then summarizes gene-level results.
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 #####################################################################
 # Gene-centric analysis for coding rare variants using STAARpipeline
 # Xihao Li, Zilin Li

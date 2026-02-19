@@ -1,4 +1,13 @@
 rm(list = ls())
+# =============================================================================
+# [RICE-ANNOTATION] FullData/Extract_chr22/NullModel.R
+# Purpose: Fits a STAAR null model on a synthetic phenotype for the extracted chr22 dataset (used as a pre-step for association scans).
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 
 library(gdsfmt)
 library(SeqArray)

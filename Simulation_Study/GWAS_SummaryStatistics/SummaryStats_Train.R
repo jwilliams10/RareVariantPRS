@@ -1,4 +1,13 @@
 rm(list = ls())
+# =============================================================================
+# [RICE-ANNOTATION] GWAS_SummaryStatistics/SummaryStats_Train.R
+# Purpose: Generates GWAS summary statistics in the training set using PLINK2 (linear regression) for each simulated phenotype replicate i; outputs are used by common-variant PRS methods.
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 
 load("/data/williamsjacr/UKB_WES_Simulation/Simulation1/simulated_data/phenotypes/Y_Train.RData")
 

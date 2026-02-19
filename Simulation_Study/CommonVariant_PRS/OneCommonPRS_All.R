@@ -1,3 +1,12 @@
+# =============================================================================
+# [RICE-ANNOTATION] CommonVariant_PRS/OneCommonPRS_All.R
+# Purpose: Combines multiple common-variant PRS methods (e.g., C+T, LDpred2, lassosum2) into a single ensemble/common PRS (RICE-CV) using the tuning set, then produces best PRS files for train/tune/validation.
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 rm(list = ls())
 library(caret)
 library(ranger)

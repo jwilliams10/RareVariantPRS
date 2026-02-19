@@ -1,3 +1,12 @@
+# =============================================================================
+# [RICE-ANNOTATION] FullData/G_star/g_star_gene_centric_coding.R
+# Purpose: Defines functions to compute G* gene-centric coding burden matrices from rare variants (used as inputs for phenotype simulation and/or PRS construction).
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 Gene_Centric_Coding_G_Star <- function(chr,gene_name,category=c("plof","plof_ds","missense","disruptive_missense","synonymous"),
                                                         genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
                                                         QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),

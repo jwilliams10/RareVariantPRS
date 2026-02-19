@@ -5,6 +5,16 @@
 #SBATCH --array=1-1000
 #SBATCH --mem-per-cpu=10G
 
+# =============================================================================
+# [RICE-ANNOTATION] all.sh
+# Purpose: SLURM array driver that runs the end-to-end simulation evaluation pipeline (GWAS → common-variant PRSs → STAAR rare-variant analysis → rare-variant PRS → final combined PRS).
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
+
 # module purge
 module load R/4.3.2
 

@@ -1,3 +1,12 @@
+# =============================================================================
+# [RICE-ANNOTATION] Simulate_Data/Simulate_Data_Prop_CausalRareVariants.R
+# Purpose: Simulates phenotypes while allowing only a (random) proportion of rare variants within each causal rare-variant set to be causal (legacy h2_rare ratio 0.05/4).
+#
+# Paper linkage:
+#   - Manuscript; Methods → Simulation Study; Results → Simulation Study Results (Fig. 3).
+#   - Supplementary Data: Supplementary Data 1 (sheet “S1 Sample Sizes; Sim. Study”).
+#   - Supplementary Figures: Supp. Fig. 1–2; Supp. Note → “Ancestry Adjusted PRS”.
+# =============================================================================
 rm(list = ls())
 set.seed(1340)
 gc()
