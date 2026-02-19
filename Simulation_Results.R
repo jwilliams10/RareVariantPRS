@@ -80,34 +80,34 @@ for(i in 1:length(Y_train)){
   lower_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
   upper_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
   CI_95 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
-                         R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                         R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                         R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                         R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                         R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                         R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                         R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                         R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                         R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                         R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                         R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")],
-                         R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")])
+                      R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
   
   lower_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
   upper_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
   CI_99 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
-                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")])
+                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
   
   CIs_tmp <- inner_join(CI_95,CI_99)
   results_70_Comparison_CIs <- rbind(results_70_Comparison_CIs,CIs_tmp)
@@ -222,34 +222,34 @@ for(i in 1:length(Y_train)){
   lower_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
   upper_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
   CI_95 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
-                      R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")])
+                      R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
   
   lower_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
   upper_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
   CI_99 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
-                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")])
+                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
   
   CIs_tmp <- inner_join(CI_95,CI_99)
   results_35_Comparison_CIs <- rbind(results_35_Comparison_CIs,CIs_tmp)
@@ -362,34 +362,34 @@ for(i in 1:length(Y_train)){
   lower_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
   upper_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
   CI_95 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
-                      R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")])
+                      R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
   
   lower_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
   upper_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
   CI_99 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
-                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")])
+                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
   
   CIs_tmp <- inner_join(CI_95,CI_99)
   results_rareprop_70_Comparison_CIs <- rbind(results_rareprop_70_Comparison_CIs,CIs_tmp)
@@ -502,34 +502,34 @@ for(i in 1:length(Y_train)){
   lower_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
   upper_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
   CI_95 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
-                      R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")])
+                      R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
   
   lower_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
   upper_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
   CI_99 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
-                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT")],
-                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2")],
-                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT")],
-                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")],
-                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2")])
+                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
   
   CIs_tmp <- inner_join(CI_95,CI_99)
   results_rareprop_35_Comparison_CIs <- rbind(results_rareprop_35_Comparison_CIs,CIs_tmp)
@@ -584,6 +584,585 @@ results_rareprop_35_Comparison_CIs$Train_Size <- nrow(Y_train[[1]])
 
 
 
+load("/data/williamsjacr/UKB_WES_Simulation/Simulation5/simulated_data/phenotypes/Y_Train.RData")
+
+i <- 1
+
+results_70_NewProp <- NULL
+results_70_NewProp_CIs <- NULL
+results_70_NewProp_Comparison_CIs <- NULL
+
+for(i in 1:length(Y_train)){
+  
+  Best_Betas_CT <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation5/Results/CT/Best_Betas",i,".csv")))
+  Best_Betas_CT$Method <- "CT"
+  
+  Best_Betas_LDPred <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation5/Results/LDPred2/Best_Betas",i,".csv")))
+  Best_Betas_LDPred$Method <- "LDPred"
+  
+  Best_Betas_LASSOSum <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation5/Results/LASSOSUM2/Best_Betas",i,".csv")))
+  Best_Betas_LASSOSum$Method <- "LASSOSum"
+  
+  Best_Betas_RICECV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation5/Results/Common_plus_RareVariants/CV_Best_Betas",i,".csv")))
+  Best_Betas_RICECV$Method <- "RICE-CV"
+  
+  Best_Betas_RICERV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation5/Results/Common_plus_RareVariants/RV_Best_Betas",i,".csv")))
+  Best_Betas_RICERV$Method <- "RICE-RV"
+  
+  Bootstraps_RICERV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation5/Results/Common_plus_RareVariants/RV_",i,"_Bootstraps.csv")))
+  
+  Bootstraps_Comparison <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation5/Results/Common_plus_RareVariants/Comparison_Bootstraps",i,".csv")))
+  
+  lower_95 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
+  lower_95 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Lower_95 = lower_95[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Lower_95 = lower_95[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Lower_95 = lower_95[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Lower_95 = lower_95[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  upper_95 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
+  upper_95 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Upper_95 = upper_95[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Upper_95 = upper_95[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Upper_95 = upper_95[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Upper_95 = upper_95[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  
+  lower_99 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
+  lower_99 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Lower_99 = lower_99[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Lower_99 = lower_99[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Lower_99 = lower_99[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Lower_99 = lower_99[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  upper_99 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
+  upper_99 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Upper_99 = upper_99[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Upper_99 = upper_99[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Upper_99 = upper_99[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Upper_99 = upper_99[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  
+  CIs_tmp <- inner_join(lower_95,upper_95)
+  CIs_tmp <- inner_join(CIs_tmp,lower_99)
+  CIs_tmp <- inner_join(CIs_tmp,upper_99)
+  results_70_NewProp_CIs <- rbind(results_70_NewProp_CIs,CIs_tmp)
+  
+  lower_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
+  upper_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
+  CI_95 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
+                      R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
+  
+  lower_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
+  upper_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
+  CI_99 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
+                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
+  
+  CIs_tmp <- inner_join(CI_95,CI_99)
+  results_70_NewProp_Comparison_CIs <- rbind(results_70_NewProp_Comparison_CIs,CIs_tmp)
+  
+  Best_Betas_CT <- Best_Betas_CT[,colnames(Best_Betas_RICECV)]
+  Best_Betas_LDPred <- Best_Betas_LDPred[,colnames(Best_Betas_RICECV)]
+  Best_Betas_LASSOSum <- Best_Betas_LASSOSum[,colnames(Best_Betas_RICECV)]
+  betas_tmp <- rbind(Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RICECV,Best_Betas_RICERV)
+  
+  results_70_NewProp <- rbind(results_70_NewProp,betas_tmp)
+  
+  rm(list=setdiff(ls(), c("results_70","results_70_CIs","results_70_Comparison_CIs",
+                          "results_35","results_35_CIs","results_35_Comparison_CIs",
+                          "results_rareprop_70","results_rareprop_70_CI","results_rareprop_70_Comparison_CIs",
+                          "results_rareprop_35","results_rareprop_35_CI","results_rareprop_35_Comparison_CIs",
+                          "results_70_NewProp","results_70_NewProp_CIs","results_70_NewProp_Comparison_CIs",
+                          "i","Y_train","index_mat")))
+}
+
+results_70_NewProp <- inner_join(results_70_NewProp,index_mat)
+results_70_NewProp$Causal_Prop <- as.character(results_70_NewProp$Causal_Prop)
+results_70_NewProp$Causal_Prop[results_70_NewProp$Causal_Prop == "5e-04"] <- "0.0005"
+results_70_NewProp$Causal_Prop <- paste0("Causal Prop. ",results_70_NewProp$Causal_Prop)
+
+results_70_NewProp$Scale <- as.character(results_70_NewProp$Scale)
+results_70_NewProp$Scale[results_70_NewProp$Scale == "0"] <- "Unscaled"
+results_70_NewProp$Scale[results_70_NewProp$Scale == "1"] <- "Scaled"
+
+results_70_NewProp <- data.frame(Scale = results_70_NewProp$Scale, Causal_Prop = results_70_NewProp$Causal_Prop, Method = results_70_NewProp$Method,Ancestry = results_70_NewProp$ancestry,
+                                 Beta = results_70_NewProp$beta_adjusted,SE_Beta = results_70_NewProp$beta_se_adjusted,R2 = results_70_NewProp$R2_adjusted,SE_R2 = results_70_NewProp$R2_se_adjusted)
+results_70_NewProp$Train_Size <- nrow(Y_train[[1]])
+
+results_70_NewProp_CIs <- inner_join(results_70_NewProp_CIs,index_mat)
+results_70_NewProp_CIs$Causal_Prop <- as.character(results_70_NewProp_CIs$Causal_Prop)
+results_70_NewProp_CIs$Causal_Prop[results_70_NewProp_CIs$Causal_Prop == "5e-04"] <- "0.0005"
+results_70_NewProp_CIs$Causal_Prop <- paste0("Causal Prop. ",results_70_NewProp_CIs$Causal_Prop)
+
+results_70_NewProp_CIs$Scale <- as.character(results_70_NewProp_CIs$Scale)
+results_70_NewProp_CIs$Scale[results_70_NewProp_CIs$Scale == "0"] <- "Unscaled"
+results_70_NewProp_CIs$Scale[results_70_NewProp_CIs$Scale == "1"] <- "Scaled"
+
+results_70_NewProp_CIs$Train_Size <- nrow(Y_train[[1]])
+
+results_70_NewProp_Comparison_CIs <- inner_join(results_70_NewProp_Comparison_CIs,index_mat)
+results_70_NewProp_Comparison_CIs$Causal_Prop <- as.character(results_70_NewProp_Comparison_CIs$Causal_Prop)
+results_70_NewProp_Comparison_CIs$Causal_Prop[results_70_NewProp_Comparison_CIs$Causal_Prop == "5e-04"] <- "0.0005"
+results_70_NewProp_Comparison_CIs$Causal_Prop <- paste0("Causal Prop. ",results_70_NewProp_Comparison_CIs$Causal_Prop)
+
+results_70_NewProp_Comparison_CIs$Scale <- as.character(results_70_NewProp_Comparison_CIs$Scale)
+results_70_NewProp_Comparison_CIs$Scale[results_70_NewProp_Comparison_CIs$Scale == "0"] <- "Unscaled"
+results_70_NewProp_Comparison_CIs$Scale[results_70_NewProp_Comparison_CIs$Scale == "1"] <- "Scaled"
+
+results_70_NewProp_Comparison_CIs$Train_Size <- nrow(Y_train[[1]])
+
+
+
+load("/data/williamsjacr/UKB_WES_Simulation/Simulation6/simulated_data/phenotypes/Y_Train.RData")
+
+i <- 1
+
+results_35_NewProp <- NULL
+results_35_NewProp_CIs <- NULL
+results_35_NewProp_Comparison_CIs <- NULL
+
+for(i in 1:length(Y_train)){
+  
+  Best_Betas_CT <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation6/Results/CT/Best_Betas",i,".csv")))
+  Best_Betas_CT$Method <- "CT"
+  
+  Best_Betas_LDPred <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation6/Results/LDPred2/Best_Betas",i,".csv")))
+  Best_Betas_LDPred$Method <- "LDPred"
+  
+  Best_Betas_LASSOSum <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation6/Results/LASSOSUM2/Best_Betas",i,".csv")))
+  Best_Betas_LASSOSum$Method <- "LASSOSum"
+  
+  Best_Betas_RICECV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation6/Results/Common_plus_RareVariants/CV_Best_Betas",i,".csv")))
+  Best_Betas_RICECV$Method <- "RICE-CV"
+  
+  Best_Betas_RICERV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation6/Results/Common_plus_RareVariants/RV_Best_Betas",i,".csv")))
+  Best_Betas_RICERV$Method <- "RICE-RV"
+  
+  Bootstraps_RICERV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation6/Results/Common_plus_RareVariants/RV_",i,"_Bootstraps.csv")))
+  
+  Bootstraps_Comparison <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation6/Results/Common_plus_RareVariants/Comparison_Bootstraps",i,".csv")))
+  
+  lower_95 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
+  lower_95 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Lower_95 = lower_95[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Lower_95 = lower_95[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Lower_95 = lower_95[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Lower_95 = lower_95[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  upper_95 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
+  upper_95 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Upper_95 = upper_95[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Upper_95 = upper_95[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Upper_95 = upper_95[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Upper_95 = upper_95[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  
+  lower_99 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
+  lower_99 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Lower_99 = lower_99[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Lower_99 = lower_99[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Lower_99 = lower_99[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Lower_99 = lower_99[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  upper_99 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
+  upper_99 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Upper_99 = upper_99[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Upper_99 = upper_99[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Upper_99 = upper_99[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Upper_99 = upper_99[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  
+  CIs_tmp <- inner_join(lower_95,upper_95)
+  CIs_tmp <- inner_join(CIs_tmp,lower_99)
+  CIs_tmp <- inner_join(CIs_tmp,upper_99)
+  results_35_NewProp_CIs <- rbind(results_35_NewProp_CIs,CIs_tmp)
+  
+  lower_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
+  upper_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
+  CI_95 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
+                      R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
+  
+  lower_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
+  upper_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
+  CI_99 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
+                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
+  
+  CIs_tmp <- inner_join(CI_95,CI_99)
+  results_35_NewProp_Comparison_CIs <- rbind(results_35_NewProp_Comparison_CIs,CIs_tmp)
+  
+  Best_Betas_CT <- Best_Betas_CT[,colnames(Best_Betas_RICECV)]
+  Best_Betas_LDPred <- Best_Betas_LDPred[,colnames(Best_Betas_RICECV)]
+  Best_Betas_LASSOSum <- Best_Betas_LASSOSum[,colnames(Best_Betas_RICECV)]
+  betas_tmp <- rbind(Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RICECV,Best_Betas_RICERV)
+  
+  results_35_NewProp <- rbind(results_35_NewProp,betas_tmp)
+  
+  rm(list=setdiff(ls(), c("results_70","results_70_CIs","results_70_Comparison_CIs",
+                          "results_35","results_35_CIs","results_35_Comparison_CIs",
+                          "results_rareprop_70","results_rareprop_70_CI","results_rareprop_70_Comparison_CIs",
+                          "results_rareprop_35","results_rareprop_35_CI","results_rareprop_35_Comparison_CIs",
+                          "results_70_NewProp","results_70_NewProp_CIs","results_70_NewProp_Comparison_CIs",
+                          "results_35_NewProp","results_35_NewProp_CIs","results_35_NewProp_Comparison_CIs",
+                          "i","Y_train","index_mat")))
+}
+
+results_35_NewProp <- inner_join(results_35_NewProp,index_mat)
+results_35_NewProp$Causal_Prop <- as.character(results_35_NewProp$Causal_Prop)
+results_35_NewProp$Causal_Prop[results_35_NewProp$Causal_Prop == "5e-04"] <- "0.0005"
+results_35_NewProp$Causal_Prop <- paste0("Causal Prop. ",results_35_NewProp$Causal_Prop)
+
+results_35_NewProp$Scale <- as.character(results_35_NewProp$Scale)
+results_35_NewProp$Scale[results_35_NewProp$Scale == "0"] <- "Unscaled"
+results_35_NewProp$Scale[results_35_NewProp$Scale == "1"] <- "Scaled"
+
+results_35_NewProp <- data.frame(Scale = results_35_NewProp$Scale, Causal_Prop = results_35_NewProp$Causal_Prop, Method = results_35_NewProp$Method,Ancestry = results_35_NewProp$ancestry,
+                                 Beta = results_35_NewProp$beta_adjusted,SE_Beta = results_35_NewProp$beta_se_adjusted,R2 = results_35_NewProp$R2_adjusted,SE_R2 = results_35_NewProp$R2_se_adjusted)
+results_35_NewProp$Train_Size <- nrow(Y_train[[1]])
+
+results_35_NewProp_CIs <- inner_join(results_35_NewProp_CIs,index_mat)
+results_35_NewProp_CIs$Causal_Prop <- as.character(results_35_NewProp_CIs$Causal_Prop)
+results_35_NewProp_CIs$Causal_Prop[results_35_NewProp_CIs$Causal_Prop == "5e-04"] <- "0.0005"
+results_35_NewProp_CIs$Causal_Prop <- paste0("Causal Prop. ",results_35_NewProp_CIs$Causal_Prop)
+
+results_35_NewProp_CIs$Scale <- as.character(results_35_NewProp_CIs$Scale)
+results_35_NewProp_CIs$Scale[results_35_NewProp_CIs$Scale == "0"] <- "Unscaled"
+results_35_NewProp_CIs$Scale[results_35_NewProp_CIs$Scale == "1"] <- "Scaled"
+
+results_35_NewProp_CIs$Train_Size <- nrow(Y_train[[1]])
+
+results_35_NewProp_Comparison_CIs <- inner_join(results_35_NewProp_Comparison_CIs,index_mat)
+results_35_NewProp_Comparison_CIs$Causal_Prop <- as.character(results_35_NewProp_Comparison_CIs$Causal_Prop)
+results_35_NewProp_Comparison_CIs$Causal_Prop[results_35_NewProp_Comparison_CIs$Causal_Prop == "5e-04"] <- "0.0005"
+results_35_NewProp_Comparison_CIs$Causal_Prop <- paste0("Causal Prop. ",results_35_NewProp_Comparison_CIs$Causal_Prop)
+
+results_35_NewProp_Comparison_CIs$Scale <- as.character(results_35_NewProp_Comparison_CIs$Scale)
+results_35_NewProp_Comparison_CIs$Scale[results_35_NewProp_Comparison_CIs$Scale == "0"] <- "Unscaled"
+results_35_NewProp_Comparison_CIs$Scale[results_35_NewProp_Comparison_CIs$Scale == "1"] <- "Scaled"
+
+results_35_NewProp_Comparison_CIs$Train_Size <- nrow(Y_train[[1]])
+
+
+
+load("/data/williamsjacr/UKB_WES_Simulation/Simulation7/simulated_data/phenotypes/Y_Train.RData")
+
+i <- 1
+
+results_70_NewProp_RareProp <- NULL
+results_70_NewProp_RareProp_CIs <- NULL
+results_70_NewProp_RareProp_Comparison_CIs <- NULL
+
+for(i in 1:length(Y_train)){
+  
+  Best_Betas_CT <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation7/Results/CT/Best_Betas",i,".csv")))
+  Best_Betas_CT$Method <- "CT"
+  
+  Best_Betas_LDPred <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation7/Results/LDPred2/Best_Betas",i,".csv")))
+  Best_Betas_LDPred$Method <- "LDPred"
+  
+  Best_Betas_LASSOSum <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation7/Results/LASSOSUM2/Best_Betas",i,".csv")))
+  Best_Betas_LASSOSum$Method <- "LASSOSum"
+  
+  Best_Betas_RICECV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation7/Results/Common_plus_RareVariants/CV_Best_Betas",i,".csv")))
+  Best_Betas_RICECV$Method <- "RICE-CV"
+  
+  Best_Betas_RICERV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation7/Results/Common_plus_RareVariants/RV_Best_Betas",i,".csv")))
+  Best_Betas_RICERV$Method <- "RICE-RV"
+  
+  Bootstraps_RICERV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation7/Results/Common_plus_RareVariants/RV_",i,"_Bootstraps.csv")))
+  
+  Bootstraps_Comparison <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation7/Results/Common_plus_RareVariants/Comparison_Bootstraps",i,".csv")))
+  
+  lower_95 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
+  lower_95 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Lower_95 = lower_95[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Lower_95 = lower_95[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Lower_95 = lower_95[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Lower_95 = lower_95[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  upper_95 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
+  upper_95 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Upper_95 = upper_95[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Upper_95 = upper_95[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Upper_95 = upper_95[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Upper_95 = upper_95[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  
+  lower_99 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
+  lower_99 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Lower_99 = lower_99[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Lower_99 = lower_99[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Lower_99 = lower_99[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Lower_99 = lower_99[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  upper_99 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
+  upper_99 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Upper_99 = upper_99[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Upper_99 = upper_99[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Upper_99 = upper_99[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Upper_99 = upper_99[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  
+  CIs_tmp <- inner_join(lower_95,upper_95)
+  CIs_tmp <- inner_join(CIs_tmp,lower_99)
+  CIs_tmp <- inner_join(CIs_tmp,upper_99)
+  results_70_NewProp_RareProp_CIs <- rbind(results_70_NewProp_RareProp_CIs,CIs_tmp)
+  
+  lower_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
+  upper_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
+  CI_95 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
+                      R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
+  
+  lower_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
+  upper_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
+  CI_99 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
+                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
+  
+  CIs_tmp <- inner_join(CI_95,CI_99)
+  results_70_NewProp_RareProp_Comparison_CIs <- rbind(results_70_NewProp_RareProp_Comparison_CIs,CIs_tmp)
+  
+  Best_Betas_CT <- Best_Betas_CT[,colnames(Best_Betas_RICECV)]
+  Best_Betas_LDPred <- Best_Betas_LDPred[,colnames(Best_Betas_RICECV)]
+  Best_Betas_LASSOSum <- Best_Betas_LASSOSum[,colnames(Best_Betas_RICECV)]
+  betas_tmp <- rbind(Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RICECV,Best_Betas_RICERV)
+  
+  results_70_NewProp_RareProp <- rbind(results_70_NewProp_RareProp,betas_tmp)
+  
+  rm(list=setdiff(ls(), c("results_70","results_70_CIs","results_70_Comparison_CIs",
+                          "results_35","results_35_CIs","results_35_Comparison_CIs",
+                          "results_rareprop_70","results_rareprop_70_CI","results_rareprop_70_Comparison_CIs",
+                          "results_rareprop_35","results_rareprop_35_CI","results_rareprop_35_Comparison_CIs",
+                          "results_70_NewProp","results_70_NewProp_CIs","results_70_NewProp_Comparison_CIs",
+                          "results_35_NewProp","results_35_NewProp_CIs","results_35_NewProp_Comparison_CIs",
+                          "results_70_NewProp_RareProp","results_70_NewProp_RareProp_CIs","results_70_NewProp_RareProp_Comparison_CIs",
+                          "i","Y_train","index_mat")))
+}
+
+results_70_NewProp_RareProp <- inner_join(results_70_NewProp_RareProp,index_mat)
+results_70_NewProp_RareProp$Causal_Prop <- as.character(results_70_NewProp_RareProp$Causal_Prop)
+results_70_NewProp_RareProp$Causal_Prop[results_70_NewProp_RareProp$Causal_Prop == "5e-04"] <- "0.0005"
+results_70_NewProp_RareProp$Causal_Prop <- paste0("Causal Prop. ",results_70_NewProp_RareProp$Causal_Prop)
+
+results_70_NewProp_RareProp$Scale <- as.character(results_70_NewProp_RareProp$Scale)
+results_70_NewProp_RareProp$Scale[results_70_NewProp_RareProp$Scale == "0"] <- "Unscaled"
+results_70_NewProp_RareProp$Scale[results_70_NewProp_RareProp$Scale == "1"] <- "Scaled"
+
+results_70_NewProp_RareProp <- data.frame(Scale = results_70_NewProp_RareProp$Scale, Causal_Prop = results_70_NewProp_RareProp$Causal_Prop, Method = results_70_NewProp_RareProp$Method,Ancestry = results_70_NewProp_RareProp$ancestry,
+                                          Beta = results_70_NewProp_RareProp$beta_adjusted,SE_Beta = results_70_NewProp_RareProp$beta_se_adjusted,R2 = results_70_NewProp_RareProp$R2_adjusted,SE_R2 = results_70_NewProp_RareProp$R2_se_adjusted)
+results_70_NewProp_RareProp$Train_Size <- nrow(Y_train[[1]])
+
+results_70_NewProp_RareProp_CIs <- inner_join(results_70_NewProp_RareProp_CIs,index_mat)
+results_70_NewProp_RareProp_CIs$Causal_Prop <- as.character(results_70_NewProp_RareProp_CIs$Causal_Prop)
+results_70_NewProp_RareProp_CIs$Causal_Prop[results_70_NewProp_RareProp_CIs$Causal_Prop == "5e-04"] <- "0.0005"
+results_70_NewProp_RareProp_CIs$Causal_Prop <- paste0("Causal Prop. ",results_70_NewProp_RareProp_CIs$Causal_Prop)
+
+results_70_NewProp_RareProp_CIs$Scale <- as.character(results_70_NewProp_RareProp_CIs$Scale)
+results_70_NewProp_RareProp_CIs$Scale[results_70_NewProp_RareProp_CIs$Scale == "0"] <- "Unscaled"
+results_70_NewProp_RareProp_CIs$Scale[results_70_NewProp_RareProp_CIs$Scale == "1"] <- "Scaled"
+
+results_70_NewProp_RareProp_CIs$Train_Size <- nrow(Y_train[[1]])
+
+results_70_NewProp_RareProp_Comparison_CIs <- inner_join(results_70_NewProp_RareProp_Comparison_CIs,index_mat)
+results_70_NewProp_RareProp_Comparison_CIs$Causal_Prop <- as.character(results_70_NewProp_RareProp_Comparison_CIs$Causal_Prop)
+results_70_NewProp_RareProp_Comparison_CIs$Causal_Prop[results_70_NewProp_RareProp_Comparison_CIs$Causal_Prop == "5e-04"] <- "0.0005"
+results_70_NewProp_RareProp_Comparison_CIs$Causal_Prop <- paste0("Causal Prop. ",results_70_NewProp_RareProp_Comparison_CIs$Causal_Prop)
+
+results_70_NewProp_RareProp_Comparison_CIs$Scale <- as.character(results_70_NewProp_RareProp_Comparison_CIs$Scale)
+results_70_NewProp_RareProp_Comparison_CIs$Scale[results_70_NewProp_RareProp_Comparison_CIs$Scale == "0"] <- "Unscaled"
+results_70_NewProp_RareProp_Comparison_CIs$Scale[results_70_NewProp_RareProp_Comparison_CIs$Scale == "1"] <- "Scaled"
+
+results_70_NewProp_RareProp_Comparison_CIs$Train_Size <- nrow(Y_train[[1]])
+
+
+
+load("/data/williamsjacr/UKB_WES_Simulation/Simulation8/simulated_data/phenotypes/Y_Train.RData")
+
+i <- 1
+
+results_35_NewProp_RareProp <- NULL
+results_35_NewProp_RareProp_CIs <- NULL
+results_35_NewProp_RareProp_Comparison_CIs <- NULL
+
+for(i in 1:length(Y_train)){
+  
+  Best_Betas_CT <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation8/Results/CT/Best_Betas",i,".csv")))
+  Best_Betas_CT$Method <- "CT"
+  
+  Best_Betas_LDPred <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation8/Results/LDPred2/Best_Betas",i,".csv")))
+  Best_Betas_LDPred$Method <- "LDPred"
+  
+  Best_Betas_LASSOSum <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation8/Results/LASSOSUM2/Best_Betas",i,".csv")))
+  Best_Betas_LASSOSum$Method <- "LASSOSum"
+  
+  Best_Betas_RICECV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation8/Results/Common_plus_RareVariants/CV_Best_Betas",i,".csv")))
+  Best_Betas_RICECV$Method <- "RICE-CV"
+  
+  Best_Betas_RICERV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation8/Results/Common_plus_RareVariants/RV_Best_Betas",i,".csv")))
+  Best_Betas_RICERV$Method <- "RICE-RV"
+  
+  Bootstraps_RICERV <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation8/Results/Common_plus_RareVariants/RV_",i,"_Bootstraps.csv")))
+  
+  Bootstraps_Comparison <- as.data.frame(fread(paste0("/data/williamsjacr/UKB_WES_Simulation/Simulation8/Results/Common_plus_RareVariants/Comparison_Bootstraps",i,".csv")))
+  
+  lower_95 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
+  lower_95 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Lower_95 = lower_95[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Lower_95 = lower_95[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Lower_95 = lower_95[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Lower_95 = lower_95[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  upper_95 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
+  upper_95 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Upper_95 = upper_95[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Upper_95 = upper_95[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Upper_95 = upper_95[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Upper_95 = upper_95[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  
+  lower_99 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
+  lower_99 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Lower_99 = lower_99[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Lower_99 = lower_99[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Lower_99 = lower_99[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Lower_99 = lower_99[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  upper_99 <- apply(Bootstraps_RICERV,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
+  upper_99 <- data.frame(i = Bootstraps_RICERV$i[1],Ancestry =c("EUR","SAS","AMR","AFR"),Beta_Raw_Upper_99 = upper_99[c("beta_RV_raw_EUR_boot","beta_RV_raw_SAS_boot","beta_RV_raw_AMR_boot","beta_RV_raw_AFR_boot")],
+                         Beta_Adjusted_Upper_99 = upper_99[c("beta_RV_adjusted_EUR_boot","beta_RV_adjusted_SAS_boot","beta_RV_adjusted_AMR_boot","beta_RV_adjusted_AFR_boot")],
+                         R2_Raw_Upper_99 = upper_99[c("R2_raw_EUR_boot","R2_raw_SAS_boot","R2_raw_AMR_boot","R2_raw_AFR_boot")],
+                         R2_Adjusted_Upper_99 = upper_99[c("R2_adjusted_EUR_boot","R2_adjusted_SAS_boot","R2_adjusted_AMR_boot","R2_adjusted_AFR_boot")])
+  
+  CIs_tmp <- inner_join(lower_95,upper_95)
+  CIs_tmp <- inner_join(CIs_tmp,lower_99)
+  CIs_tmp <- inner_join(CIs_tmp,upper_99)
+  results_35_NewProp_RareProp_CIs <- rbind(results_35_NewProp_RareProp_CIs,CIs_tmp)
+  
+  lower_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.025)})
+  upper_95 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.975)})
+  CI_95 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
+                      R2_raw_RICE_vs_CT_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_95 = lower_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_95 = upper_95[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
+  
+  lower_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.005)})
+  upper_99 <- apply(Bootstraps_Comparison,2,function(x){quantile(x[!is.na(x) & x <= 1 & x >= -1],0.995)})
+  CI_99 <- data.frame(i = Bootstraps_Comparison$i[1],Ancestry = c("EUR","SAS","AMR","AFR"),
+                      R2_raw_RICE_vs_CT_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_CT_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_CT","R2_raw_SAS_RICE_vs_CT","R2_raw_AMR_RICE_vs_CT","R2_raw_AFR_RICE_vs_CT")],
+                      R2_raw_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_LDpred2","R2_raw_SAS_RICE_vs_LDpred2","R2_raw_AMR_RICE_vs_LDpred2","R2_raw_AFR_RICE_vs_LDpred2")],
+                      R2_raw_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_raw_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_raw_EUR_RICE_vs_Lassosum2","R2_raw_SAS_RICE_vs_Lassosum2","R2_raw_AMR_RICE_vs_Lassosum2","R2_raw_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_CT_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_CT_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_CT","R2_adjusted_SAS_RICE_vs_CT","R2_adjusted_AMR_RICE_vs_CT","R2_adjusted_AFR_RICE_vs_CT")],
+                      R2_adjusted_RICE_vs_LDpred2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_LDpred2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_LDpred2","R2_adjusted_SAS_RICE_vs_LDpred2","R2_adjusted_AMR_RICE_vs_LDpred2","R2_adjusted_AFR_RICE_vs_LDpred2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Lower_99 = lower_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")],
+                      R2_adjusted_RICE_vs_Lassosum2_Upper_99 = upper_99[c("R2_adjusted_EUR_RICE_vs_Lassosum2","R2_adjusted_SAS_RICE_vs_Lassosum2","R2_adjusted_AMR_RICE_vs_Lassosum2","R2_adjusted_AFR_RICE_vs_Lassosum2")])
+  
+  CIs_tmp <- inner_join(CI_95,CI_99)
+  results_35_NewProp_RareProp_Comparison_CIs <- rbind(results_35_NewProp_RareProp_Comparison_CIs,CIs_tmp)
+  
+  Best_Betas_CT <- Best_Betas_CT[,colnames(Best_Betas_RICECV)]
+  Best_Betas_LDPred <- Best_Betas_LDPred[,colnames(Best_Betas_RICECV)]
+  Best_Betas_LASSOSum <- Best_Betas_LASSOSum[,colnames(Best_Betas_RICECV)]
+  betas_tmp <- rbind(Best_Betas_CT,Best_Betas_LDPred,Best_Betas_LASSOSum,Best_Betas_RICECV,Best_Betas_RICERV)
+  
+  results_35_NewProp_RareProp <- rbind(results_35_NewProp_RareProp,betas_tmp)
+  
+  rm(list=setdiff(ls(), c("results_70","results_70_CIs","results_70_Comparison_CIs",
+                          "results_35","results_35_CIs","results_35_Comparison_CIs",
+                          "results_rareprop_70","results_rareprop_70_CI","results_rareprop_70_Comparison_CIs",
+                          "results_rareprop_35","results_rareprop_35_CI","results_rareprop_35_Comparison_CIs",
+                          "results_70_NewProp","results_70_NewProp_CIs","results_70_NewProp_Comparison_CIs",
+                          "results_35_NewProp","results_35_NewProp_CIs","results_35_NewProp_Comparison_CIs",
+                          "results_70_NewProp_RareProp","results_70_NewProp_RareProp_CIs","results_70_NewProp_RareProp_Comparison_CIs",
+                          "results_35_NewProp_RareProp","results_35_NewProp_RareProp_CIs","results_35_NewProp_RareProp_Comparison_CIs",
+                          "i","Y_train","index_mat")))
+}
+
+results_35_NewProp_RareProp <- inner_join(results_35_NewProp_RareProp,index_mat)
+results_35_NewProp_RareProp$Causal_Prop <- as.character(results_35_NewProp_RareProp$Causal_Prop)
+results_35_NewProp_RareProp$Causal_Prop[results_35_NewProp_RareProp$Causal_Prop == "5e-04"] <- "0.0005"
+results_35_NewProp_RareProp$Causal_Prop <- paste0("Causal Prop. ",results_35_NewProp_RareProp$Causal_Prop)
+
+results_35_NewProp_RareProp$Scale <- as.character(results_35_NewProp_RareProp$Scale)
+results_35_NewProp_RareProp$Scale[results_35_NewProp_RareProp$Scale == "0"] <- "Unscaled"
+results_35_NewProp_RareProp$Scale[results_35_NewProp_RareProp$Scale == "1"] <- "Scaled"
+
+results_35_NewProp_RareProp <- data.frame(Scale = results_35_NewProp_RareProp$Scale, Causal_Prop = results_35_NewProp_RareProp$Causal_Prop, Method = results_35_NewProp_RareProp$Method,Ancestry = results_35_NewProp_RareProp$ancestry,
+                                          Beta = results_35_NewProp_RareProp$beta_adjusted,SE_Beta = results_35_NewProp_RareProp$beta_se_adjusted,R2 = results_35_NewProp_RareProp$R2_adjusted,SE_R2 = results_35_NewProp_RareProp$R2_se_adjusted)
+results_35_NewProp_RareProp$Train_Size <- nrow(Y_train[[1]])
+
+results_35_NewProp_RareProp_CIs <- inner_join(results_35_NewProp_RareProp_CIs,index_mat)
+results_35_NewProp_RareProp_CIs$Causal_Prop <- as.character(results_35_NewProp_RareProp_CIs$Causal_Prop)
+results_35_NewProp_RareProp_CIs$Causal_Prop[results_35_NewProp_RareProp_CIs$Causal_Prop == "5e-04"] <- "0.0005"
+results_35_NewProp_RareProp_CIs$Causal_Prop <- paste0("Causal Prop. ",results_35_NewProp_RareProp_CIs$Causal_Prop)
+
+results_35_NewProp_RareProp_CIs$Scale <- as.character(results_35_NewProp_RareProp_CIs$Scale)
+results_35_NewProp_RareProp_CIs$Scale[results_35_NewProp_RareProp_CIs$Scale == "0"] <- "Unscaled"
+results_35_NewProp_RareProp_CIs$Scale[results_35_NewProp_RareProp_CIs$Scale == "1"] <- "Scaled"
+
+results_35_NewProp_RareProp_CIs$Train_Size <- nrow(Y_train[[1]])
+
+results_35_NewProp_RareProp_Comparison_CIs <- inner_join(results_35_NewProp_RareProp_Comparison_CIs,index_mat)
+results_35_NewProp_RareProp_Comparison_CIs$Causal_Prop <- as.character(results_35_NewProp_RareProp_Comparison_CIs$Causal_Prop)
+results_35_NewProp_RareProp_Comparison_CIs$Causal_Prop[results_35_NewProp_RareProp_Comparison_CIs$Causal_Prop == "5e-04"] <- "0.0005"
+results_35_NewProp_RareProp_Comparison_CIs$Causal_Prop <- paste0("Causal Prop. ",results_35_NewProp_RareProp_Comparison_CIs$Causal_Prop)
+
+results_35_NewProp_RareProp_Comparison_CIs$Scale <- as.character(results_35_NewProp_RareProp_Comparison_CIs$Scale)
+results_35_NewProp_RareProp_Comparison_CIs$Scale[results_35_NewProp_RareProp_Comparison_CIs$Scale == "0"] <- "Unscaled"
+results_35_NewProp_RareProp_Comparison_CIs$Scale[results_35_NewProp_RareProp_Comparison_CIs$Scale == "1"] <- "Scaled"
+
+results_35_NewProp_RareProp_Comparison_CIs$Train_Size <- nrow(Y_train[[1]])
+
+
+
+
 
 results <- rbind(results_35,results_70)
 results_CI <- rbind(results_35_CIs,results_70_CIs)
@@ -591,26 +1170,44 @@ results_Comparisons_CI <- rbind(results_35_Comparison_CIs,results_70_Comparison_
 results_rareprop <- rbind(results_rareprop_35,results_rareprop_70)
 results_rareprop_CI <- rbind(results_rareprop_35_CI,results_rareprop_70_CI)
 results_rareprop_Comparison_CI <- rbind(results_rareprop_35_Comparison_CIs,results_rareprop_70_Comparison_CIs)
+results_NewProp <- rbind(results_35_NewProp,results_70_NewProp)
+results_NewProp_CI <- rbind(results_35_NewProp_CIs,results_70_NewProp_CIs)
+results_NewProp_Comparison_CI <- rbind(results_35_NewProp_Comparison_CIs,results_70_NewProp_Comparison_CIs)
+results_NewProp_RareProp <- rbind(results_35_NewProp_RareProp,results_70_NewProp_RareProp)
+results_NewProp_RareProp_CI <- rbind(results_35_NewProp_RareProp_CIs,results_70_NewProp_RareProp_CIs)
+results_NewProp_RareProp_Comparison_CI <- rbind(results_35_NewProp_RareProp_Comparison_CIs,results_70_NewProp_RareProp_Comparison_CIs)
 
 results$Train_Size <- format(results$Train_Size,big.mark=",", trim=TRUE)
 results_rareprop$Train_Size <- format(results_rareprop$Train_Size,big.mark=",", trim=TRUE)
+results_NewProp$Train_Size <- format(results_NewProp$Train_Size,big.mark=",", trim=TRUE)
+results_NewProp_RareProp$Train_Size <- format(results_NewProp_RareProp$Train_Size,big.mark=",", trim=TRUE)
 
 results_CI$Train_Size <- format(results_CI$Train_Size,big.mark=",", trim=TRUE)
 results_rareprop_CI$Train_Size <- format(results_rareprop_CI$Train_Size,big.mark=",", trim=TRUE)
+results_NewProp_CI$Train_Size <- format(results_NewProp_CI$Train_Size,big.mark=",", trim=TRUE)
+results_NewProp_RareProp_CI$Train_Size <- format(results_NewProp_RareProp_CI$Train_Size,big.mark=",", trim=TRUE)
 
 results_Comparisons_CI$Train_Size <- format(results_Comparisons_CI$Train_Size,big.mark=",", trim=TRUE)
 results_rareprop_Comparison_CI$Train_Size <- format(results_rareprop_Comparison_CI$Train_Size,big.mark=",", trim=TRUE)
+results_NewProp_Comparison_CI$Train_Size <- format(results_NewProp_Comparison_CI$Train_Size,big.mark=",", trim=TRUE)
+results_NewProp_RareProp_Comparison_CI$Train_Size <- format(results_NewProp_RareProp_Comparison_CI$Train_Size,big.mark=",", trim=TRUE)
 
 results$Train_Size <- paste0("n = ",results$Train_Size)
 results_rareprop$Train_Size <- paste0("n = ",results_rareprop$Train_Size)
+results_NewProp$Train_Size <- paste0("n = ",results_NewProp$Train_Size)
+results_NewProp_RareProp$Train_Size <- paste0("n = ",results_NewProp_RareProp$Train_Size)
 
 results_CI$Train_Size <- paste0("n = ",results_CI$Train_Size)
 results_rareprop_CI$Train_Size <- paste0("n = ",results_rareprop_CI$Train_Size)
+results_NewProp_CI$Train_Size <- paste0("n = ",results_NewProp_CI$Train_Size)
+results_NewProp_RareProp_CI$Train_Size <- paste0("n = ",results_NewProp_RareProp_CI$Train_Size)
 
 results_Comparisons_CI$Train_Size <- paste0("n = ",results_Comparisons_CI$Train_Size)
 results_rareprop_Comparison_CI$Train_Size <- paste0("n = ",results_rareprop_Comparison_CI$Train_Size)
+results_NewProp_Comparison_CI$Train_Size <- paste0("n = ",results_NewProp_Comparison_CI$Train_Size)
+results_NewProp_RareProp_Comparison_CI$Train_Size <- paste0("n = ",results_NewProp_RareProp_Comparison_CI$Train_Size)
 
-rm(list=setdiff(ls(), c("results","results_CI","results_rareprop","results_rareprop_CI","results_Comparisons_CI","results_rareprop_Comparison_CI")))
+rm(list=setdiff(ls(), c("results","results_CI","results_rareprop","results_rareprop_CI","results_NewProp","results_NewProp_CI","results_Comparisons_CI","results_rareprop_Comparison_CI","results_NewProp_Comparison_CI","results_NewProp_RareProp","results_NewProp_RareProp_CI","results_NewProp_RareProp_Comparison_CI")))
 
 results$Beta[results$Method %in% c("LDPred","LASSOSum")] <- -1*results$Beta[results$Method %in% c("LDPred","LASSOSum")]
 results$Beta[results$Beta < 0] <- 0
@@ -620,17 +1217,33 @@ results_rareprop$Beta[results_rareprop$Method %in% c("LDPred","LASSOSum")] <- -1
 results_rareprop$Beta[results_rareprop$Beta < 0] <- 0
 results_rareprop$Beta[results_rareprop$Beta > 1] <- 0
 
+results_NewProp$Beta[results_NewProp$Method %in% c("LDPred","LASSOSum")] <- -1*results_NewProp$Beta[results_NewProp$Method %in% c("LDPred","LASSOSum")]
+results_NewProp$Beta[results_NewProp$Beta < 0] <- 0
+results_NewProp$Beta[results_NewProp$Beta > 1] <- 0
+
+results_NewProp_RareProp$Beta[results_NewProp_RareProp$Method %in% c("LDPred","LASSOSum")] <- -1*results_NewProp_RareProp$Beta[results_NewProp_RareProp$Method %in% c("LDPred","LASSOSum")]
+results_NewProp_RareProp$Beta[results_NewProp_RareProp$Beta < 0] <- 0
+results_NewProp_RareProp$Beta[results_NewProp_RareProp$Beta > 1] <- 0
+
 results <- aggregate(.~Method + Scale + Causal_Prop + Train_Size + Ancestry,data = results,mean)
 results_rareprop <- aggregate(.~Method + Scale + Causal_Prop + Train_Size + Ancestry,data = results_rareprop,mean)
+results_NewProp <- aggregate(.~Method + Scale + Causal_Prop + Train_Size + Ancestry,data = results_NewProp,mean)
+results_NewProp_RareProp <- aggregate(.~Method + Scale + Causal_Prop + Train_Size + Ancestry,data = results_NewProp_RareProp,mean)
 
 results_CI <- aggregate(.~Scale + Causal_Prop + Train_Size + Ancestry,data = subset(results_CI,select = -c(i)),mean)
 results_rareprop_CI <- aggregate(.~Scale + Causal_Prop + Train_Size + Ancestry,data = subset(results_rareprop_CI,select = -c(i)),mean)
+results_NewProp_CI <- aggregate(.~Scale + Causal_Prop + Train_Size + Ancestry,data = subset(results_NewProp_CI,select = -c(i)),mean)
+results_NewProp_RareProp_CI <- aggregate(.~Scale + Causal_Prop + Train_Size + Ancestry,data = subset(results_NewProp_RareProp_CI,select = -c(i)),mean)
 
 results_Comparisons_CI <- aggregate(.~Scale + Causal_Prop + Train_Size + Ancestry,data = subset(results_Comparisons_CI,select = -c(i)),mean)
 results_rareprop_Comparison_CI <- aggregate(.~Scale + Causal_Prop + Train_Size + Ancestry,data = subset(results_rareprop_Comparison_CI,select = -c(i)),mean)
+results_NewProp_Comparison_CI <- aggregate(.~Scale + Causal_Prop + Train_Size + Ancestry,data = subset(results_NewProp_Comparison_CI,select = -c(i)),mean)
+results_NewProp_RareProp_Comparison_CI <- aggregate(.~Scale + Causal_Prop + Train_Size + Ancestry,data = subset(results_NewProp_RareProp_Comparison_CI,select = -c(i)),mean)
 
 overall_results <- results[results$Method %in% c("CT","LASSOSum","LDPred","RICE-CV","RICE-RV"),]
 overall_results_rareprop <- results_rareprop[results_rareprop$Method %in% c("CT","LASSOSum","LDPred","RICE-CV","RICE-RV"),]
+overall_results_NewProp <- results_NewProp[results_NewProp$Method %in% c("CT","LASSOSum","LDPred","RICE-CV","RICE-RV"),]
+overall_results_NewProp_RareProp <- results_NewProp_RareProp[results_NewProp_RareProp$Method %in% c("CT","LASSOSum","LDPred","RICE-CV","RICE-RV"),]
 
 overall_results <- overall_results[overall_results$Ancestry %in% c("AFR","EUR","SAS","AMR"),]
 overall_results$Method[overall_results$Method == "RICE-CV"] <- "RICE-CV" 
@@ -656,6 +1269,30 @@ overall_results_rareprop$Method1[overall_results_rareprop$Method1 == "RICE-RV"] 
 overall_results_rareprop$Method1 <- factor(overall_results_rareprop$Method1,levels = c("CT","Lassosum2","LDpred2","RICE-CV"))
 overall_results_rareprop$Ancestry <- factor(overall_results_rareprop$Ancestry,levels = c("AFR","AMR","EUR","SAS"))
 
+overall_results_NewProp <- overall_results_NewProp[overall_results_NewProp$Ancestry %in% c("AFR","EUR","SAS","AMR"),]
+overall_results_NewProp$Method[overall_results_NewProp$Method == "RICE-CV"] <- "RICE-CV" 
+overall_results_NewProp$Method[overall_results_NewProp$Method == "RICE-RV"] <- "RICE-RV" 
+overall_results_NewProp$Method[overall_results_NewProp$Method == "LDPred"] <- "LDpred2"
+overall_results_NewProp$Method[overall_results_NewProp$Method == "LASSOSum"] <- "Lassosum2"
+
+overall_results_NewProp$Method1 <- overall_results_NewProp$Method
+overall_results_NewProp$Method <- factor(overall_results_NewProp$Method,levels = c("CT","Lassosum2","LDpred2","RICE-RV","RICE-CV"))
+overall_results_NewProp$Method1[overall_results_NewProp$Method1 == "RICE-RV"] <- "RICE-CV"
+overall_results_NewProp$Method1 <- factor(overall_results_NewProp$Method1,levels = c("CT","Lassosum2","LDpred2","RICE-CV"))
+overall_results_NewProp$Ancestry <- factor(overall_results_NewProp$Ancestry,levels = c("AFR","AMR","EUR","SAS"))
+
+overall_results_NewProp_RareProp <- overall_results_NewProp_RareProp[overall_results_NewProp_RareProp$Ancestry %in% c("AFR","EUR","SAS","AMR"),]
+overall_results_NewProp_RareProp$Method[overall_results_NewProp_RareProp$Method == "RICE-CV"] <- "RICE-CV" 
+overall_results_NewProp_RareProp$Method[overall_results_NewProp_RareProp$Method == "RICE-RV"] <- "RICE-RV" 
+overall_results_NewProp_RareProp$Method[overall_results_NewProp_RareProp$Method == "LDPred"] <- "LDpred2"
+overall_results_NewProp_RareProp$Method[overall_results_NewProp_RareProp$Method == "LASSOSum"] <- "Lassosum2"
+
+overall_results_NewProp_RareProp$Method1 <- overall_results_NewProp_RareProp$Method
+overall_results_NewProp_RareProp$Method <- factor(overall_results_NewProp_RareProp$Method,levels = c("CT","Lassosum2","LDpred2","RICE-RV","RICE-CV"))
+overall_results_NewProp_RareProp$Method1[overall_results_NewProp_RareProp$Method1 == "RICE-RV"] <- "RICE-CV"
+overall_results_NewProp_RareProp$Method1 <- factor(overall_results_NewProp_RareProp$Method1,levels = c("CT","Lassosum2","LDpred2","RICE-CV"))
+overall_results_NewProp_RareProp$Ancestry <- factor(overall_results_NewProp_RareProp$Ancestry,levels = c("AFR","AMR","EUR","SAS"))
+
 results_CI$Method <- "RICE-RV"
 overall_results <- left_join(overall_results,results_CI)
 overall_results$Method <- factor(overall_results$Method,levels = c("CT","Lassosum2","LDpred2","RICE-RV","RICE-CV"))
@@ -679,6 +1316,32 @@ overall_results_rareprop$p.signif_beta[overall_results_rareprop$Method == "RICE-
 
 overall_results_rareprop$position[overall_results_rareprop$Method == "RICE-CV"] <- overall_results_rareprop$Beta[overall_results_rareprop$Method == "RICE-CV"] + overall_results_rareprop$Beta[overall_results_rareprop$Method == "RICE-RV"] + 0.03
 ylim_rareprop <- max(c(overall_results_rareprop$Beta[overall_results_rareprop$Method == "RICE-CV"] + overall_results_rareprop$Beta[overall_results_rareprop$Method == "RICE-RV"],overall_results_rareprop$Beta)) + 0.05
+
+results_NewProp_CI$Method <- "RICE-RV"
+overall_results_NewProp <- left_join(overall_results_NewProp,results_NewProp_CI)
+overall_results_NewProp$Method <- factor(overall_results_NewProp$Method,levels = c("CT","Lassosum2","LDpred2","RICE-RV","RICE-CV"))
+
+overall_results_NewProp$group1 <- "RICE-CV"
+overall_results_NewProp$group2 <- "RICE-CV"
+overall_results_NewProp$p.signif_beta <- ""
+overall_results_NewProp$p.signif_beta[overall_results_NewProp$Method == "RICE-CV"] <- ifelse(overall_results_NewProp$Beta_Adjusted_Lower_99[overall_results_NewProp$Method == "RICE-RV"] > 0,"***",ifelse(overall_results_NewProp$Beta_Adjusted_Lower_95[overall_results_NewProp$Method == "RICE-RV"] > 0,"**",""))
+
+overall_results_NewProp$position[overall_results_NewProp$Method == "RICE-CV"] <- overall_results_NewProp$Beta[overall_results_NewProp$Method == "RICE-CV"] + overall_results_NewProp$Beta[overall_results_NewProp$Method == "RICE-RV"] + 0.03
+ylim_NewProp <- max(c(overall_results_NewProp$Beta[overall_results_NewProp$Method == "RICE-CV"] + overall_results_NewProp$Beta[overall_results_NewProp$Method == "RICE-RV"],overall_results_NewProp$Beta)) + 0.05
+
+
+results_NewProp_RareProp_CI$Method <- "RICE-RV"
+overall_results_NewProp_RareProp <- left_join(overall_results_NewProp_RareProp,results_NewProp_RareProp_CI)
+overall_results_NewProp_RareProp$Method <- factor(overall_results_NewProp_RareProp$Method,levels = c("CT","Lassosum2","LDpred2","RICE-RV","RICE-CV"))
+
+overall_results_NewProp_RareProp$group1 <- "RICE-CV"
+overall_results_NewProp_RareProp$group2 <- "RICE-CV"
+overall_results_NewProp_RareProp$p.signif_beta <- ""
+overall_results_NewProp_RareProp$p.signif_beta[overall_results_NewProp_RareProp$Method == "RICE-CV"] <- ifelse(overall_results_NewProp_RareProp$Beta_Adjusted_Lower_99[overall_results_NewProp_RareProp$Method == "RICE-RV"] > 0,"***",ifelse(overall_results_NewProp_RareProp$Beta_Adjusted_Lower_95[overall_results_NewProp_RareProp$Method == "RICE-RV"] > 0,"**",""))
+
+overall_results_NewProp_RareProp$position[overall_results_NewProp_RareProp$Method == "RICE-CV"] <- overall_results_NewProp_RareProp$Beta[overall_results_NewProp_RareProp$Method == "RICE-CV"] + overall_results_NewProp_RareProp$Beta[overall_results_NewProp_RareProp$Method == "RICE-RV"] + 0.03
+ylim_NewProp_RareProp <- max(c(overall_results_NewProp_RareProp$Beta[overall_results_NewProp_RareProp$Method == "RICE-CV"] + overall_results_NewProp_RareProp$Beta[overall_results_NewProp_RareProp$Method == "RICE-RV"],overall_results_NewProp_RareProp$Beta)) + 0.05
+
 
 ####################################################### Plots
 
@@ -844,6 +1507,124 @@ g4 <- ggplot(overall_results_rareprop[(overall_results_rareprop$Scale == "Unscal
 
 ggsave(paste0("UKB_Simulation_RareProp_Unscaled_98343_Adjusted_Beta.png"),g4,width=10, height=6.18047,dpi = 300)
 
+g1 <- ggplot(overall_results_NewProp[(overall_results_NewProp$Scale == "Scaled") & (overall_results_NewProp$Train_Size == "n = 49,173") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 49,173") + 
+  ylab("Beta of PRS per SD") + 
+  theme_Publication() + 
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Scaled") & (overall_results_NewProp$Train_Size == "n = 49,173") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta",
+                     y.position = "position",
+                     size = 2.5) +
+  ylim(0,ylim_NewProp)+
+  scale_fill_Publication()
+ggsave(paste0("UKB_Simulation_NewProp_Scaled_49173_Adjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
+
+g2 <- ggplot(overall_results_NewProp[(overall_results_NewProp$Scale == "Scaled") & (overall_results_NewProp$Train_Size == "n = 98,343") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 98,343") + 
+  ylab("Beta of PRS per SD") + 
+  theme_Publication() + 
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Scaled") & (overall_results_NewProp$Train_Size == "n = 98,343") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta",
+                     y.position = "position",
+                     size = 2.5) +
+  ylim(0,ylim_NewProp)+
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_Scaled_98343_Adjusted_Beta.png"),g2,width=10, height=6.18047,dpi = 300)
+
+g3 <- ggplot(overall_results_NewProp[(overall_results_NewProp$Scale == "Unscaled") & (overall_results_NewProp$Train_Size == "n = 49,173") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 49,173") + 
+  ylab("Beta of PRS per SD") + 
+  theme_Publication() + 
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Unscaled") & (overall_results_NewProp$Train_Size == "n = 49,173") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta",
+                     y.position = "position",
+                     size = 2.5) +
+  ylim(0,ylim_NewProp) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_Unscaled_49173_Adjusted_Beta.png"),g3,width=10, height=6.18047,dpi = 300)
+
+g4 <- ggplot(overall_results_NewProp[(overall_results_NewProp$Scale == "Unscaled") & (overall_results_NewProp$Train_Size == "n = 98,343") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 98,343") + 
+  ylab("Beta of PRS per SD") + 
+  theme_Publication() + 
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Unscaled") & (overall_results_NewProp$Train_Size == "n = 98,343") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta",
+                     y.position = "position",
+                     size = 2.5) +
+  ylim(0,ylim_NewProp) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_Unscaled_98343_Adjusted_Beta.png"),g4,width=10, height=6.18047,dpi = 300)
+
+g1 <- ggplot(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Scaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 49,173") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 49,173") + 
+  ylab("Beta of PRS per SD") + 
+  theme_Publication() + 
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Scaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 49,173") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta",
+                     y.position = "position",
+                     size = 2.5) +
+  ylim(0,ylim_NewProp_RareProp)+
+  scale_fill_Publication()
+ggsave(paste0("UKB_Simulation_NewProp_RareProp_Scaled_49173_Adjusted_Beta.png"),g1,width=10, height=6.18047,dpi = 300)
+
+g2 <- ggplot(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Scaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 98,343") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 98,343") + 
+  ylab("Beta of PRS per SD") + 
+  theme_Publication() + 
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Scaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 98,343") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta",
+                     y.position = "position",
+                     size = 2.5) +
+  ylim(0,ylim_NewProp_RareProp)+
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_RareProp_Scaled_98343_Adjusted_Beta.png"),g2,width=10, height=6.18047,dpi = 300)
+
+g3 <- ggplot(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Unscaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 49,173") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 49,173") + 
+  ylab("Beta of PRS per SD") + 
+  theme_Publication() + 
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Unscaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 49,173") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta",
+                     y.position = "position",
+                     size = 2.5) +
+  ylim(0,ylim_NewProp_RareProp) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_RareProp_Unscaled_49173_Adjusted_Beta.png"),g3,width=10, height=6.18047,dpi = 300)
+
+g4 <- ggplot(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Unscaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 98,343") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method1, y=abs(Beta),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 98,343") + 
+  ylab("Beta of PRS per SD") + 
+  theme_Publication() + 
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Unscaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 98,343") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta",
+                     y.position = "position",
+                     size = 2.5) +
+  ylim(0,ylim_NewProp_RareProp) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_RareProp_Unscaled_98343_Adjusted_Beta.png"),g4,width=10, height=6.18047,dpi = 300)
+
 scale_fill_Publication <- function(...){
   library(scales)
   discrete_scale("fill","Publication",manual_pal(values = c("#5EBD3E","#FFB900","#F78200","#973999","#009cdf")), ...)
@@ -871,6 +1652,28 @@ overall_results_rareprop <- overall_results_rareprop[overall_results_rareprop$Me
 overall_results_rareprop$Method[overall_results_rareprop$Method == "RICE-CV"] <- "RICE"
 overall_results_rareprop$Method <- factor(overall_results_rareprop$Method,levels = c("CT","Lassosum2","LDpred2","RICE"))
 
+overall_results_NewProp <- overall_results_NewProp[,c("Method","Scale","Causal_Prop","Train_Size","Ancestry","Beta","SE_Beta","R2","SE_R2")]
+
+results_NewProp_Comparison_CI$Method <- "RICE-CV"
+overall_results_NewProp <- left_join(overall_results_NewProp, results_NewProp_Comparison_CI)
+overall_results_NewProp$Method <- factor(overall_results_NewProp$Method,levels = c("CT","Lassosum2","LDpred2","RICE-RV","RICE-CV"))
+
+overall_results_NewProp$Method <- as.character(overall_results_NewProp$Method)
+overall_results_NewProp <- overall_results_NewProp[overall_results_NewProp$Method != "RICE-RV",]
+overall_results_NewProp$Method[overall_results_NewProp$Method == "RICE-CV"] <- "RICE"
+overall_results_NewProp$Method <- factor(overall_results_NewProp$Method,levels = c("CT","Lassosum2","LDpred2","RICE"))
+
+overall_results_NewProp_RareProp <- overall_results_NewProp_RareProp[,c("Method","Scale","Causal_Prop","Train_Size","Ancestry","Beta","SE_Beta","R2","SE_R2")]
+
+results_NewProp_RareProp_Comparison_CI$Method <- "RICE-CV"
+overall_results_NewProp_RareProp <- left_join(overall_results_NewProp_RareProp, results_NewProp_RareProp_Comparison_CI)
+overall_results_NewProp_RareProp$Method <- factor(overall_results_NewProp_RareProp$Method,levels = c("CT","Lassosum2","LDpred2","RICE-RV","RICE-CV"))
+
+overall_results_NewProp_RareProp$Method <- as.character(overall_results_NewProp_RareProp$Method)
+overall_results_NewProp_RareProp <- overall_results_NewProp_RareProp[overall_results_NewProp_RareProp$Method != "RICE-RV",]
+overall_results_NewProp_RareProp$Method[overall_results_NewProp_RareProp$Method == "RICE-CV"] <- "RICE"
+overall_results_NewProp_RareProp$Method <- factor(overall_results_NewProp_RareProp$Method,levels = c("CT","Lassosum2","LDpred2","RICE"))
+
 overall_results$group1 <- "RICE"
 overall_results$group2 <- "RICE"
 overall_results$p.signif_beta1 <- ""
@@ -880,6 +1683,16 @@ overall_results_rareprop$group1 <- "RICE"
 overall_results_rareprop$group2 <- "RICE"
 overall_results_rareprop$p.signif_beta1 <- ""
 overall_results_rareprop$p.signif_beta2 <- ""
+
+overall_results_NewProp$group1 <- "RICE"
+overall_results_NewProp$group2 <- "RICE"
+overall_results_NewProp$p.signif_beta1 <- ""
+overall_results_NewProp$p.signif_beta2 <- ""
+
+overall_results_NewProp_RareProp$group1 <- "RICE"
+overall_results_NewProp_RareProp$group2 <- "RICE"
+overall_results_NewProp_RareProp$p.signif_beta1 <- ""
+overall_results_NewProp_RareProp$p.signif_beta2 <- ""
 
 for(scale in c("Scaled","Unscaled")){
   for(causal_prop in c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")){
@@ -916,6 +1729,38 @@ for(scale in c("Scaled","Unscaled")){
           overall_results_rareprop$p.signif_beta1[overall_results_rareprop$Scale == scale & overall_results_rareprop$Causal_Prop == causal_prop & overall_results_rareprop$Train_Size == train_size & overall_results_rareprop$Ancestry == anc & overall_results_rareprop$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_99[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_95[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),""))
           overall_results_rareprop$p.signif_beta2[overall_results_rareprop$Scale == scale & overall_results_rareprop$Causal_Prop == causal_prop & overall_results_rareprop$Train_Size == train_size & overall_results_rareprop$Ancestry == anc & overall_results_rareprop$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_99[tmp$Method == "RICE"] > 0,paste0("***"),ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_95[tmp$Method == "RICE"] > 0,paste0("**"),""))
         }
+        
+        tmp <- overall_results_NewProp[overall_results_NewProp$Scale == scale & overall_results_NewProp$Causal_Prop == causal_prop & overall_results_NewProp$Train_Size == train_size & overall_results_NewProp$Ancestry == anc,]
+        max_R2_notRICE <- max(tmp$R2[tmp$Method != "RICE"])
+        Best_Method <- tmp$Method[tmp$R2 == max_R2_notRICE]
+        Improved_R2 <- round((tmp$R2[tmp$Method == "RICE"]/max_R2_notRICE - 1)*100,digits = 2)
+        
+        if(Best_Method == "CT"){
+          overall_results_NewProp$p.signif_beta1[overall_results_NewProp$Scale == scale & overall_results_NewProp$Causal_Prop == causal_prop & overall_results_NewProp$Train_Size == train_size & overall_results_NewProp$Ancestry == anc & overall_results_NewProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_CT_Lower_99[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),ifelse(tmp$R2_adjusted_RICE_vs_CT_Lower_95[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),""))
+          overall_results_NewProp$p.signif_beta2[overall_results_NewProp$Scale == scale & overall_results_NewProp$Causal_Prop == causal_prop & overall_results_NewProp$Train_Size == train_size & overall_results_NewProp$Ancestry == anc & overall_results_NewProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_CT_Lower_99[tmp$Method == "RICE"] > 0,paste0("(***)"),ifelse(tmp$R2_adjusted_RICE_vs_CT_Lower_95[tmp$Method == "RICE"] > 0,paste0("(**)"),""))
+        }else if(Best_Method == "LDpred2"){
+          overall_results_NewProp$p.signif_beta1[overall_results_NewProp$Scale == scale & overall_results_NewProp$Causal_Prop == causal_prop & overall_results_NewProp$Train_Size == train_size & overall_results_NewProp$Ancestry == anc & overall_results_NewProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_LDpred2_Lower_99[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),ifelse(tmp$R2_adjusted_RICE_vs_LDpred2_Lower_95[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),""))
+          overall_results_NewProp$p.signif_beta2[overall_results_NewProp$Scale == scale & overall_results_NewProp$Causal_Prop == causal_prop & overall_results_NewProp$Train_Size == train_size & overall_results_NewProp$Ancestry == anc & overall_results_NewProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_LDpred2_Lower_99[tmp$Method == "RICE"] > 0,paste0("***"),ifelse(tmp$R2_adjusted_RICE_vs_LDpred2_Lower_95[tmp$Method == "RICE"] > 0,paste0("**"),""))
+        }else{
+          overall_results_NewProp$p.signif_beta1[overall_results_NewProp$Scale == scale & overall_results_NewProp$Causal_Prop == causal_prop & overall_results_NewProp$Train_Size == train_size & overall_results_NewProp$Ancestry == anc & overall_results_NewProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_99[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_95[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),""))
+          overall_results_NewProp$p.signif_beta2[overall_results_NewProp$Scale == scale & overall_results_NewProp$Causal_Prop == causal_prop & overall_results_NewProp$Train_Size == train_size & overall_results_NewProp$Ancestry == anc & overall_results_NewProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_99[tmp$Method == "RICE"] > 0,paste0("***"),ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_95[tmp$Method == "RICE"] > 0,paste0("**"),""))
+        }
+        
+        tmp <- overall_results_NewProp_RareProp[overall_results_NewProp_RareProp$Scale == scale & overall_results_NewProp_RareProp$Causal_Prop == causal_prop & overall_results_NewProp_RareProp$Train_Size == train_size & overall_results_NewProp_RareProp$Ancestry == anc,]
+        max_R2_notRICE <- max(tmp$R2[tmp$Method != "RICE"])
+        Best_Method <- tmp$Method[tmp$R2 == max_R2_notRICE]
+        Improved_R2 <- round((tmp$R2[tmp$Method == "RICE"]/max_R2_notRICE - 1)*100,digits = 2)
+        
+        if(Best_Method == "CT"){
+          overall_results_NewProp_RareProp$p.signif_beta1[overall_results_NewProp_RareProp$Scale == scale & overall_results_NewProp_RareProp$Causal_Prop == causal_prop & overall_results_NewProp_RareProp$Train_Size == train_size & overall_results_NewProp_RareProp$Ancestry == anc & overall_results_NewProp_RareProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_CT_Lower_99[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),ifelse(tmp$R2_adjusted_RICE_vs_CT_Lower_95[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),""))
+          overall_results_NewProp_RareProp$p.signif_beta2[overall_results_NewProp_RareProp$Scale == scale & overall_results_NewProp_RareProp$Causal_Prop == causal_prop & overall_results_NewProp_RareProp$Train_Size == train_size & overall_results_NewProp_RareProp$Ancestry == anc & overall_results_NewProp_RareProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_CT_Lower_99[tmp$Method == "RICE"] > 0,paste0("(***)"),ifelse(tmp$R2_adjusted_RICE_vs_CT_Lower_95[tmp$Method == "RICE"] > 0,paste0("(**)"),""))
+        }else if(Best_Method == "LDpred2"){
+          overall_results_NewProp_RareProp$p.signif_beta1[overall_results_NewProp_RareProp$Scale == scale & overall_results_NewProp_RareProp$Causal_Prop == causal_prop & overall_results_NewProp_RareProp$Train_Size == train_size & overall_results_NewProp_RareProp$Ancestry == anc & overall_results_NewProp_RareProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_LDpred2_Lower_99[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),ifelse(tmp$R2_adjusted_RICE_vs_LDpred2_Lower_95[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),""))
+          overall_results_NewProp_RareProp$p.signif_beta2[overall_results_NewProp_RareProp$Scale == scale & overall_results_NewProp_RareProp$Causal_Prop == causal_prop & overall_results_NewProp_RareProp$Train_Size == train_size & overall_results_NewProp_RareProp$Ancestry == anc & overall_results_NewProp_RareProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_LDpred2_Lower_99[tmp$Method == "RICE"] > 0,paste0("***"),ifelse(tmp$R2_adjusted_RICE_vs_LDpred2_Lower_95[tmp$Method == "RICE"] > 0,paste0("**"),""))
+        }else{
+          overall_results_NewProp_RareProp$p.signif_beta1[overall_results_NewProp_RareProp$Scale == scale & overall_results_NewProp_RareProp$Causal_Prop == causal_prop & overall_results_NewProp_RareProp$Train_Size == train_size & overall_results_NewProp_RareProp$Ancestry == anc & overall_results_NewProp_RareProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_99[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_95[tmp$Method == "RICE"] > 0,paste0(Improved_R2,"%"),""))
+          overall_results_NewProp_RareProp$p.signif_beta2[overall_results_NewProp_RareProp$Scale == scale & overall_results_NewProp_RareProp$Causal_Prop == causal_prop & overall_results_NewProp_RareProp$Train_Size == train_size & overall_results_NewProp_RareProp$Ancestry == anc & overall_results_NewProp_RareProp$Method == "RICE"] <- ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_99[tmp$Method == "RICE"] > 0,paste0("***"),ifelse(tmp$R2_adjusted_RICE_vs_Lassosum2_Lower_95[tmp$Method == "RICE"] > 0,paste0("**"),""))
+        }
       }
     }
   }
@@ -932,6 +1777,18 @@ overall_results_rareprop$position2 <- NA
 overall_results_rareprop$position1[overall_results_rareprop$Method == "RICE"] <- overall_results_rareprop$R2[overall_results_rareprop$Method == "RICE"] + 0.005
 overall_results_rareprop$position2[overall_results_rareprop$Method == "RICE"] <- overall_results_rareprop$R2[overall_results_rareprop$Method == "RICE"] + 0.02
 ylim_rareprop <- max(c(overall_results_rareprop$R2)) + 0.03
+
+overall_results_NewProp$position1 <- NA
+overall_results_NewProp$position2 <- NA
+overall_results_NewProp$position1[overall_results_NewProp$Method == "RICE"] <- overall_results_NewProp$R2[overall_results_NewProp$Method == "RICE"] + 0.005
+overall_results_NewProp$position2[overall_results_NewProp$Method == "RICE"] <- overall_results_NewProp$R2[overall_results_NewProp$Method == "RICE"] + 0.02
+ylim_NewProp <- max(c(overall_results_NewProp$R2)) + 0.03
+
+overall_results_NewProp_RareProp$position1 <- NA
+overall_results_NewProp_RareProp$position2 <- NA
+overall_results_NewProp_RareProp$position1[overall_results_NewProp_RareProp$Method == "RICE"] <- overall_results_NewProp_RareProp$R2[overall_results_NewProp_RareProp$Method == "RICE"] + 0.005
+overall_results_NewProp_RareProp$position2[overall_results_NewProp_RareProp$Method == "RICE"] <- overall_results_NewProp_RareProp$R2[overall_results_NewProp_RareProp$Method == "RICE"] + 0.02
+ylim_NewProp_RareProp <- max(c(overall_results_NewProp_RareProp$R2)) + 0.03
 
 g1 <- ggplot(overall_results[(overall_results$Scale == "Scaled") & (overall_results$Train_Size == "n = 49,173") & (overall_results$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
   geom_bar(aes(x=Method, y=abs(R2),fill=Method), stat="identity", alpha=0.7) +
@@ -1084,3 +1941,156 @@ g4 <- ggplot(overall_results_rareprop[(overall_results_rareprop$Scale == "Unscal
   scale_fill_Publication()
 
 ggsave(paste0("UKB_Simulation_RareProp_Unscaled_98343_Adjusted_R2.png"),g4,width=10, height=6.18047,dpi = 300)
+
+
+g1 <- ggplot(overall_results_NewProp[(overall_results_NewProp$Scale == "Scaled") & (overall_results_NewProp$Train_Size == "n = 49,173") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method, y=abs(R2),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 49,173") + 
+  ylab("R2") + 
+  theme_Publication() + 
+  ylim(0,ylim_NewProp)+
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Scaled") & (overall_results_NewProp$Train_Size == "n = 49,173") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta1",
+                     y.position = "position1",
+                     size = 2.5) +
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Scaled") & (overall_results_NewProp$Train_Size == "n = 49,173") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta2",
+                     y.position = "position2",
+                     size = 2.5) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_Scaled_49173_Adjusted_R2.png"),g1,width=10, height=6.18047,dpi = 300)
+
+g2 <- ggplot(overall_results_NewProp[(overall_results_NewProp$Scale == "Scaled") & (overall_results_NewProp$Train_Size == "n = 98,343") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method, y=abs(R2),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 98,343") + 
+  ylab("R2") + 
+  theme_Publication() + 
+  ylim(0,ylim_NewProp) +
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Scaled") & (overall_results_NewProp$Train_Size == "n = 98,343") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta1",
+                     y.position = "position1",
+                     size = 2.5) +
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Scaled") & (overall_results_NewProp$Train_Size == "n = 98,343") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta2",
+                     y.position = "position2",
+                     size = 2.5) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_Scaled_98343_Adjusted_R2.png"),g2,width=10, height=6.18047,dpi = 300)
+
+g3 <- ggplot(overall_results_NewProp[(overall_results_NewProp$Scale == "Unscaled") & (overall_results_NewProp$Train_Size == "n = 49,173") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method, y=abs(R2),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 49,173") + 
+  ylab("R2") + 
+  theme_Publication() + 
+  ylim(0,ylim_NewProp) +
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Unscaled") & (overall_results_NewProp$Train_Size == "n = 49,173") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta1",
+                     y.position = "position1",
+                     size = 2.5) +
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Unscaled") & (overall_results_NewProp$Train_Size == "n = 49,173") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta2",
+                     y.position = "position2",
+                     size = 2.5) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_Unscaled_49173_Adjusted_R2.png"),g3,width=10, height=6.18047,dpi = 300)
+
+g4 <- ggplot(overall_results_NewProp[(overall_results_NewProp$Scale == "Unscaled") & (overall_results_NewProp$Train_Size == "n = 98,343") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method, y=abs(R2),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 98,343") + 
+  ylab("R2") + 
+  theme_Publication() + 
+  ylim(0,ylim_NewProp) +
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Unscaled") & (overall_results_NewProp$Train_Size == "n = 98,343") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta1",
+                     y.position = "position1",
+                     size = 2.5) +
+  stat_pvalue_manual(overall_results_NewProp[(overall_results_NewProp$Scale == "Unscaled") & (overall_results_NewProp$Train_Size == "n = 98,343") & (overall_results_NewProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta2",
+                     y.position = "position2",
+                     size = 2.5) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_Unscaled_98343_Adjusted_R2.png"),g4,width=10, height=6.18047,dpi = 300)
+
+g1 <- ggplot(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Scaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 49,173") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method, y=abs(R2),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 49,173") + 
+  ylab("R2") + 
+  theme_Publication() + 
+  ylim(0,ylim_NewProp_RareProp)+
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Scaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 49,173") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta1",
+                     y.position = "position1",
+                     size = 2.5) +
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Scaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 49,173") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta2",
+                     y.position = "position2",
+                     size = 2.5) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_RareProp_Scaled_49173_Adjusted_R2.png"),g1,width=10, height=6.18047,dpi = 300)
+
+g2 <- ggplot(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Scaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 98,343") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method, y=abs(R2),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 98,343") + 
+  ylab("R2") + 
+  theme_Publication() + 
+  ylim(0,ylim_NewProp_RareProp) +
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Scaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 98,343") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta1",
+                     y.position = "position1",
+                     size = 2.5) +
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Scaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 98,343") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta2",
+                     y.position = "position2",
+                     size = 2.5) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_RareProp_Scaled_98343_Adjusted_R2.png"),g2,width=10, height=6.18047,dpi = 300)
+
+g3 <- ggplot(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Unscaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 49,173") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method, y=abs(R2),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 49,173") + 
+  ylab("R2") + 
+  theme_Publication() + 
+  ylim(0,ylim_NewProp_RareProp) +
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Unscaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 49,173") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta1",
+                     y.position = "position1",
+                     size = 2.5) +
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Unscaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 49,173") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta2",
+                     y.position = "position2",
+                     size = 2.5) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_RareProp_Unscaled_49173_Adjusted_R2.png"),g3,width=10, height=6.18047,dpi = 300)
+
+g4 <- ggplot(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Unscaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 98,343") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),]) +
+  geom_bar(aes(x=Method, y=abs(R2),fill=Method), stat="identity", alpha=0.7) +
+  facet_grid(vars(Causal_Prop), vars(Ancestry)) + 
+  ggtitle("Simulation using UKB WES with Training Sample Size of 98,343") + 
+  ylab("R2") + 
+  theme_Publication() + 
+  ylim(0,ylim_NewProp_RareProp) +
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Unscaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 98,343") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta1",
+                     y.position = "position1",
+                     size = 2.5) +
+  stat_pvalue_manual(overall_results_NewProp_RareProp[(overall_results_NewProp_RareProp$Scale == "Unscaled") & (overall_results_NewProp_RareProp$Train_Size == "n = 98,343") & (overall_results_NewProp_RareProp$Causal_Prop %in% c("Causal Prop. 0.2","Causal Prop. 0.05","Causal Prop. 0.01")),],
+                     label = "p.signif_beta2",
+                     y.position = "position2",
+                     size = 2.5) +
+  scale_fill_Publication()
+
+ggsave(paste0("UKB_Simulation_NewProp_RareProp_Unscaled_98343_Adjusted_R2.png"),g4,width=10, height=6.18047,dpi = 300)

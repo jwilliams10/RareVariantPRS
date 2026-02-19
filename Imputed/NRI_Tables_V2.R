@@ -6,6 +6,12 @@ library(ggpubr)
 library(ggrepel)
 library(cowplot)
 
+fig5_cols <- c(
+  "Below 5%" = "#0072B2",
+  "30% - 70%" = "#666666",
+  "Above 95%" = "#CC79A7"
+)
+
 continuous_traits <- c("Height","BMI","TC","HDL","LDL","logTG")
 NRI_Data_Continuous <- NULL
 for(trait in continuous_traits){
@@ -135,8 +141,8 @@ for(trait in continuous_traits){
       + theme(plot.title = element_text(face = "bold",
                                         size = rel(1.1), hjust = 0.5),
               text = element_text(),
-              panel.background = element_rect(colour = NA),
-              plot.background = element_rect(colour = NA),
+              panel.background = element_rect(fill = "white", colour = NA),
+              plot.background  = element_rect(fill = "white", colour = NA),
               panel.border = element_rect(colour = NA),
               axis.title = element_text(face = "bold",size = 16),
               strip.text.x = element_text(face = "bold",size = 16),
@@ -177,7 +183,7 @@ for(trait in continuous_traits){
   }
   
   plot1 <- ggplot(data=CV_RV_PRS_adjusted, aes(x=Common_Bin, y=Mean, color=`RICE-RV Quantiles (Rare Variants)`)) + geom_line() + geom_pointrange(aes(ymin=Mean-SE, ymax=Mean+SE)) + theme_Publication() + ylab(paste0("Standardized ",ifelse(trait == "logTG","log(TG)",trait))) + ylim(c(ymin,ymax)) +
-    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV Quantiles (Common Variants)") + ggtitle(paste0("Standardized ",trait," Across RICE-CV Quantiles, Stratified by RICE-RV Quantiles"))
+    scale_x_continuous(breaks = c(1:9),labels = c("0-10%","10-20%","20-30%","30-40%","40-60%","60-70%","70-80%","80-90%","90-100%")) + labs(x = "RICE-CV Quantiles (Common Variants)") + ggtitle(paste0("Standardized ",trait," Across RICE-CV Quantiles, Stratified by RICE-RV Quantiles")) + scale_color_manual(values = fig5_cols)
   
   
   
@@ -196,8 +202,8 @@ for(trait in continuous_traits){
       + theme(plot.title = element_text(face = "bold",
                                         size = 16, hjust = 0.5),
               text = element_text(),
-              panel.background = element_rect(colour = NA),
-              plot.background = element_rect(colour = NA),
+              panel.background = element_rect(fill = "white", colour = NA),
+              plot.background  = element_rect(fill = "white", colour = NA),
               panel.border = element_rect(colour = NA),
               axis.title = element_blank(),
               axis.title.y = element_blank(),
@@ -271,8 +277,8 @@ for(trait in continuous_traits){
       + theme(plot.title = element_text(face = "bold",
                                         size = 16, hjust = 0.5),
               text = element_text(),
-              panel.background = element_rect(colour = NA),
-              plot.background = element_rect(colour = NA),
+              panel.background = element_rect(fill = "white", colour = NA),
+              plot.background  = element_rect(fill = "white", colour = NA),
               panel.border = element_rect(colour = NA),
               axis.title = element_text(face = "bold",size = 16),
               axis.title.y = element_text(angle=90,vjust =2),
@@ -350,7 +356,7 @@ for(trait in continuous_traits){
   
   final_plot <- plot_grid(plot1 + theme(legend.position="none"), plot2 + theme(legend.position="none"),plot3 + theme(legend.position="none"), nrow = 1, rel_widths = c(1, 1, 1))
   
-  pdf(paste0(trait,"_Risk.pdf"), width=12, height=12)
+  pdf(paste0(trait,"_Risk.pdf"), width=12, height=12, bg="white")
   
   print(plot_grid(row1,row2, ncol = 1, rel_heights = c(1.1, .9)))
   
