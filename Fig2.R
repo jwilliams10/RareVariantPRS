@@ -1,3 +1,16 @@
+# =============================================================================
+# [RICE-ANNOTATION] Fig2.R
+# Purpose: Generates the plot(s) for Manuscript Figure 2: distribution/association of RICE-CV and RICE-RV with HDL in UKB WGS.
+#
+# Paper linkage:
+#   - Manuscript: Figure/table generation and cross-platform comparisons.
+#   - Supplementary Figures/Data: see script-specific outputs and top-level README.
+#
+# Notes:
+#   - Annotations are intended to point readers to Manuscript, Supplementary Data, and Supplementary Figures.
+#   - Many scripts contain environment-specific paths (HPC/DNAnexus/AoU workbench). Update paths as needed for your setup.
+#   - See README.md in this directory for expected inputs/outputs and run order.
+# =============================================================================
 rm(list = ls())
 
 library(ggplot2)
@@ -103,10 +116,10 @@ g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="CV_PRS", y=trait)) + geom_point(al
   theme_Publication() + xlab("Standardized RICE-CV PRS") + 
   ylab(paste0("Standardized ",trait)) + geom_abline(intercept = 0, slope = beta1,col = "#973999",size = 1.5) +
   geom_vline(xintercept = as.numeric(risk_cv),color = "#306FBB",linetype = "dashed",size = 1.5) 
-  # annotate("text", x=3, y=6, label= bquote(beta[1] == .(round(beta1,3))),size = 16/.pt)
+# annotate("text", x=3, y=6, label= bquote(beta[1] == .(round(beta1,3))),size = 16/.pt)
 p3 <- ggExtra::ggMarginal(g, type = "histogram",
-                    xparams = list(color="black", fill="#973999",bins = 100),
-                    yparams = list(color="black", fill="white",bins = 100))
+                          xparams = list(color="black", fill="#973999",bins = 100),
+                          yparams = list(color="black", fill="white",bins = 100))
 p3
 
 ggsave(p3,filename="Fig2_CV.pdf",width = 10,height = 10)
@@ -115,10 +128,10 @@ g <- ggplot(CV_RV_PRS_adjusted, aes_string(x="RV_PRS", y=trait)) + geom_point(al
   theme_Publication() + xlab("Standardized RICE-RV PRS") + 
   ylab(paste0("Standardized ",trait)) + geom_abline(intercept = 0, slope = beta2,col = "#E23838",size = 1.5) +
   geom_vline(xintercept = as.numeric(risk_rv),color = "#306FBB",linetype = "dashed",size = 1.5)
-  # annotate("text", x=6, y=6, label= bquote(beta[2] == .(round(beta2,3))),size = 16/.pt)
+# annotate("text", x=6, y=6, label= bquote(beta[2] == .(round(beta2,3))),size = 16/.pt)
 p4 <- ggExtra::ggMarginal(g, type = "histogram",
-                    xparams = list(color="black", fill="#E23838",bins = 100),
-                    yparams = list(color="black", fill="white",bins = 100))
+                          xparams = list(color="black", fill="#E23838",bins = 100),
+                          yparams = list(color="black", fill="white",bins = 100))
 p4
 
 ggsave(p4,filename="Fig2_RV.pdf",width = 10,height = 10)

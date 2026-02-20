@@ -1,3 +1,16 @@
+# =============================================================================
+# [RICE-ANNOTATION] WES_vs_WGS_Results.R
+# Purpose: Compares UKB Imputed+WES vs UKB WGS PRS performance (Manuscript Figure 6; Supplementary Figures 15–16).
+#
+# Paper linkage:
+#   - Manuscript: Figure/table generation and cross-platform comparisons.
+#   - Supplementary Figures/Data: see script-specific outputs and top-level README.
+#
+# Notes:
+#   - Annotations are intended to point readers to Manuscript, Supplementary Data, and Supplementary Figures.
+#   - Many scripts contain environment-specific paths (HPC/DNAnexus/AoU workbench). Update paths as needed for your setup.
+#   - See README.md in this directory for expected inputs/outputs and run order.
+# =============================================================================
 ## ============================================================
 ## UKB PRS Plots (DROP pure WES from plots)
 ## Keeps: "Imputed + WES" vs "WGS"

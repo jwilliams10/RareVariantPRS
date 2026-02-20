@@ -1,4 +1,18 @@
 #!/bin/bash --login
+# =============================================================================
+# [RICE-ANNOTATION] Simulation_Study5/all.sh
+# Purpose: Driver shell script to run the pipeline in this directory end-to-end (often via SLURM job arrays).
+#
+# Paper linkage:
+#   - Manuscript: Methods -> Simulation Study; Results -> Simulation Study Results (Fig. 3).
+#   - Supplementary Figures: Supp. Fig. 1–2 (simulation performance and design characteristics).
+#   - Supplementary Data: simulation sample sizes and related summaries.
+#
+# Notes:
+#   - Annotations are intended to point readers to Manuscript, Supplementary Data, and Supplementary Figures.
+#   - Many scripts contain environment-specific paths (HPC/DNAnexus/AoU workbench). Update paths as needed for your setup.
+#   - See README.md in this directory for expected inputs/outputs and run order.
+# =============================================================================
 #SBATCH -n 1
 #SBATCH -N 1
 #SBATCH --time=48:00:00

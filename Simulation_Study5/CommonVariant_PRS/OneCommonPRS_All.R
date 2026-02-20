@@ -1,3 +1,17 @@
+# =============================================================================
+# [RICE-ANNOTATION] Simulation_Study5/CommonVariant_PRS/OneCommonPRS_All.R
+# Purpose: Builds the ensemble common-variant PRS (RICE-CV) by combining multiple PRS methods.
+#
+# Paper linkage:
+#   - Manuscript: Methods -> Simulation Study; Results -> Simulation Study Results (Fig. 3).
+#   - Supplementary Figures: Supp. Fig. 1–2 (simulation performance and design characteristics).
+#   - Supplementary Data: simulation sample sizes and related summaries.
+#
+# Notes:
+#   - Annotations are intended to point readers to Manuscript, Supplementary Data, and Supplementary Figures.
+#   - Many scripts contain environment-specific paths (HPC/DNAnexus/AoU workbench). Update paths as needed for your setup.
+#   - See README.md in this directory for expected inputs/outputs and run order.
+# =============================================================================
 rm(list = ls())
 library(caret)
 library(ranger)

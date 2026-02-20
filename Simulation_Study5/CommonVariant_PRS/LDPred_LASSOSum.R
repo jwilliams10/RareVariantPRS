@@ -1,3 +1,17 @@
+# =============================================================================
+# [RICE-ANNOTATION] Simulation_Study5/CommonVariant_PRS/LDPred_LASSOSum.R
+# Purpose: Runs LDpred2 and/or lassosum2 PRS construction/evaluation for common variants.
+#
+# Paper linkage:
+#   - Manuscript: Methods -> Simulation Study; Results -> Simulation Study Results (Fig. 3).
+#   - Supplementary Figures: Supp. Fig. 1–2 (simulation performance and design characteristics).
+#   - Supplementary Data: simulation sample sizes and related summaries.
+#
+# Notes:
+#   - Annotations are intended to point readers to Manuscript, Supplementary Data, and Supplementary Figures.
+#   - Many scripts contain environment-specific paths (HPC/DNAnexus/AoU workbench). Update paths as needed for your setup.
+#   - See README.md in this directory for expected inputs/outputs and run order.
+# =============================================================================
 rm(list=ls())
 library(data.table)
 library(dplyr)

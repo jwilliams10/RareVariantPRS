@@ -1,3 +1,16 @@
+# =============================================================================
+# [RICE-ANNOTATION] LDSC_Results.R
+# Purpose: Compiles LD score regression (LDSC) outputs into a single CSV (used in Supplementary Data 4).
+#
+# Paper linkage:
+#   - Manuscript: Figure/table generation and cross-platform comparisons.
+#   - Supplementary Figures/Data: see script-specific outputs and top-level README.
+#
+# Notes:
+#   - Annotations are intended to point readers to Manuscript, Supplementary Data, and Supplementary Figures.
+#   - Many scripts contain environment-specific paths (HPC/DNAnexus/AoU workbench). Update paths as needed for your setup.
+#   - See README.md in this directory for expected inputs/outputs and run order.
+# =============================================================================
 rm(list = ls())
 library(readr)
 library(stringr)

@@ -1,3 +1,12 @@
+<!--
+[RICE-ANNOTATION] Simulate_Data/FullData/Extract_chr22
+Purpose: Directory-level documentation for Simulation data generation and chr22 WES data prep (used by Simulation_Study*).
+
+Paper linkage:
+- Manuscript: Methods -> Simulation Study; Results -> Simulation Study Results (Fig. 3).
+- Supplementary Figures: Supp. Fig. 1–2 (simulation performance and design characteristics).
+- Supplementary Data: simulation sample sizes and related summaries.
+-->
 # Extract_chr22 (UK Biobank WES chr22 data prep)
 
 This folder contains the scripts used to prepare **chromosome 22** data from **UKB WES** for the simulation study described in the attached manuscript (Methods → *Simulation Study*).

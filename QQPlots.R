@@ -1,3 +1,16 @@
+# =============================================================================
+# [RICE-ANNOTATION] QQPlots.R
+# Purpose: Creates QQ plots for common/rare variant association results across platforms (referenced in Supplementary Figures).
+#
+# Paper linkage:
+#   - Manuscript: Figure/table generation and cross-platform comparisons.
+#   - Supplementary Figures/Data: see script-specific outputs and top-level README.
+#
+# Notes:
+#   - Annotations are intended to point readers to Manuscript, Supplementary Data, and Supplementary Figures.
+#   - Many scripts contain environment-specific paths (HPC/DNAnexus/AoU workbench). Update paths as needed for your setup.
+#   - See README.md in this directory for expected inputs/outputs and run order.
+# =============================================================================
 rm(list = ls())
 
 coding_qqplot_STAARB <- function(coding_sig,coding_sig_plof,coding_sig_plofds,coding_sig_missense,coding_sig_synonymous,coding_sig_disruptive_missense,trait){

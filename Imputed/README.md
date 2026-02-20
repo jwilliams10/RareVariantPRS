@@ -1,39 +1,36 @@
-## Imputed
+<!--
+[RICE-ANNOTATION] Imputed
+Purpose: Directory-level documentation for UKB imputed + WES analyses.
 
-This folder contains all files to perform RICE on the UKB imputed genotype + whole exome sequencing as well as additional sensitivity analysis.
+Paper linkage:
+- Manuscript: Results -> UKB Imputed + WES Results (Fig. 4–5).
+- Supplementary Figures: Supp. Fig. 3–4 (association diagnostics) and Supp. Fig. 7–11 (PRS performance + sensitivity).
+- Supplementary Data: key UKB cohort summaries and diagnostics (e.g., sample sizes/variant counts/GC).
+-->
+# Imputed (UK Biobank imputed + WES pipeline)
 
-### GWAS_SumStats_Continuous.sh and GWAS_SumStats_Binary.sh
+This folder contains the UK Biobank **imputed genotype + WES** pipeline used to construct common-variant PRSs, rare-variant PRSs, and the combined RICE model for the analyses reported in the **Manuscript**.
 
-Runs GWAS analysis with regenie for the 6 continuous traits and 5 binary traits respectively.
+## How this maps to the paper
+- **Manuscript**: UKB Imputed + WES results (Figures 4–5).
+- **Supplementary Figures**: association diagnostics and PRS performance / sensitivity (e.g., Supp. Fig. 3–4, 7–11).
+- **Supplementary Data**: cohort summaries and diagnostics (e.g., sample sizes, genomic control metrics, variant counts, runtime tables).
 
-### CommonVariantPRS
+## Subdirectories
+- `CommonVariant_PRS/`  
+  CT / LDpred2 / lassosum2 runs and the ensemble **RICE-CV** construction.
+- `RareVariant_Analysis/`  
+  Null models and STAARpipeline gene-centric rare variant association testing (coding masks, long masks).
+- `RareVariant_PRS/`  
+  Construction of **RICE-RV** and rare-variant sensitivity analyses.
 
-This folder contains scripts to perform CT, LDpred2, Lassosum2, and RICE-CV (OneCommonPRS_All.R). Also contains a script to build the score file for RICE-CV to submit to PGS catalog. CT_NewPCs is to a sensitivity analysis.
+## Top-level scripts in this folder
+- `Common_Plus_Rare_PRS.*` : combine common + rare components into joint RICE
+- `DataSpecific_PCs.*` : compute dataset-specific PCs used by “*_NewPCs” PRS runs
+- `LDSC.*` : LD score regression / genomic inflation diagnostics
+- `QQPlots_CV.R` : QQ plots for common-variant diagnostics
+- `Overall_Results_*` : aggregate continuous/binary trait performance results
+- `SampleSizes.R`, `Time_Table.R` : produce Supplementary Data tables
+- `NRI_Tables*.R` : net reclassification improvement summaries (used in Results / Supplementary)
 
-### RareVariant_Analysis
-
-This folder contains scripts to perform gene-centric coding analysis using the STAARpipeline conditional on RICE-CV. First null models are computed for each trait (Null_Models.R), then gene-centric coding analysis is done for regular masks and long masks, lastly the results are summarized in Modified_Summary_Script.R.
-
-### RareVariant_PRS
-
-This folder contains a script (Single_RareVariant_PRS_All.R/.sh) to perform RICE-RV and to obtain coefficients for the significant gene burdens from RICE-RV. Remaining scripts are to perform sensitivity analyses.
-
-### Common_Plus_Rare_PRS.R/.sh
-
-Performs RICE with RICE-CV and RICE-RV.
-
-### Overall_Results.R and QQPlots_CV.R
-
-Creates Supplementary Figures 9/10 and Supplementary Figure 13, respectively.
-
-### LDSC.R/.sh
-
-Runs LDSC on the regenie summary statistics.
-
-### Scripts with NewPCs in title.
-
-Sensitivity analysis using different PCs.
-
-### Time_Table.R and SampleSizes.R
-
-Used to create Supplementary Table 3 and 12.
+See per-file `[RICE-ANNOTATION]` headers for details (inputs/outputs and paper linkage).

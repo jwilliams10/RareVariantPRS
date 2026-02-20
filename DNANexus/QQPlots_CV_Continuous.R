@@ -1,3 +1,17 @@
+# =============================================================================
+# [RICE-ANNOTATION] DNANexus/QQPlots_CV_Continuous.R
+# Purpose: Generates QQ plots and related diagnostic plots for association results.
+#
+# Paper linkage:
+#   - Manuscript: Results -> UKB WGS Results (Fig. 2 context; WGS analyses) and WGS vs Imputed+WES comparison (Fig. 6).
+#   - Supplementary Figures: Supp. Fig. 5–6 (WGS association diagnostics) and Supp. Fig. 12–16 (PRS performance + coding/noncoding comparisons).
+#   - Supplementary Data: key UKB WGS cohort summaries and diagnostics (e.g., sample sizes/variant counts/GC).
+#
+# Notes:
+#   - Annotations are intended to point readers to Manuscript, Supplementary Data, and Supplementary Figures.
+#   - Many scripts contain environment-specific paths (HPC/DNAnexus/AoU workbench). Update paths as needed for your setup.
+#   - See README.md in this directory for expected inputs/outputs and run order.
+# =============================================================================
 rm(list = ls())
 
 # dx run app-swiss-army-knife -iin=UKB_PRS:JW/Software/r_with_plink.tar.gz -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/QQPlots_CV_Continuous.R -iin=UKB_PRS:JW/UKB_Phenotypes/Scripts/Continuous/QQPlots_CV_Continuous.sh -icmd="bash QQPlots_CV_Continuous.sh" -y --destination UKB_PRS:JW/UKB_Phenotypes/Results/Continuous/ --priority high --instance-type mem3_ssd1_v2_x8

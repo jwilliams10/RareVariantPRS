@@ -6,4 +6,4 @@
 
 module load R/4.3.0
 
-Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study/FullData/G_star/GSTAR_Extract_GeneCentric_Coding.R > out_genecentriccoding.Rout
+Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulate_Data/FullData/G_star/GSTAR_Extract_GeneCentric_Coding.R > out_genecentriccoding.Rout

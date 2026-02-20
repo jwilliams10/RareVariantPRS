@@ -1,3 +1,17 @@
+# =============================================================================
+# [RICE-ANNOTATION] Imputed/RareVariant_Analysis/STAAR_GeneCentric_Coding_LongMasks.R
+# Purpose: Runs gene-centric rare-variant association testing using STAAR/STAARpipeline outputs.
+#
+# Paper linkage:
+#   - Manuscript: Results -> UKB Imputed + WES Results (Fig. 4–5).
+#   - Supplementary Figures: Supp. Fig. 3–4 (association diagnostics) and Supp. Fig. 7–11 (PRS performance + sensitivity).
+#   - Supplementary Data: key UKB cohort summaries and diagnostics (e.g., sample sizes/variant counts/GC).
+#
+# Notes:
+#   - Annotations are intended to point readers to Manuscript, Supplementary Data, and Supplementary Figures.
+#   - Many scripts contain environment-specific paths (HPC/DNAnexus/AoU workbench). Update paths as needed for your setup.
+#   - See README.md in this directory for expected inputs/outputs and run order.
+# =============================================================================
 ##################################################################################
 # Gene-centric analysis for coding rare variants in long masks using STAARpipeline
 # Xihao Li, Zilin Li

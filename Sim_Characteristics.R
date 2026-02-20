@@ -1,3 +1,16 @@
+# =============================================================================
+# [RICE-ANNOTATION] Sim_Characteristics.R
+# Purpose: Summarizes simulation design characteristics and generates Supplementary Figure 2.
+#
+# Paper linkage:
+#   - Manuscript: Figure/table generation and cross-platform comparisons.
+#   - Supplementary Figures/Data: see script-specific outputs and top-level README.
+#
+# Notes:
+#   - Annotations are intended to point readers to Manuscript, Supplementary Data, and Supplementary Figures.
+#   - Many scripts contain environment-specific paths (HPC/DNAnexus/AoU workbench). Update paths as needed for your setup.
+#   - See README.md in this directory for expected inputs/outputs and run order.
+# =============================================================================
 rm(list = ls())
 
 library(ggplot2)

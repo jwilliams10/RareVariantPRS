@@ -7,4 +7,4 @@
 # module purge
 module load R/4.3.2
 
-Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulation_Study/Simulate_Data/Simulate_Data_NewProp_CausalRareVariants.R > Simulate_Data_NewProp_CausalRareVariants.Rout
+Rscript --slave --no-restore --no-save /spin1/home/linux/williamsjacr/RareVariantPRS/Simulate_Data/Simulate_Data_NewProp_CausalRareVariants.R > Simulate_Data_NewProp_CausalRareVariants.Rout
