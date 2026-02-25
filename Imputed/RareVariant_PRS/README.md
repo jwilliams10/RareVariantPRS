@@ -18,8 +18,6 @@ Paper linkage:
 
     ## Files
     - `Lipids_BestGenes_Results.R`: Aggregates results across traits/ancestries and generates summary outputs.
-- `RICE_RV_Lipids_Best.R`: Analysis/helper script supporting the pipeline in this directory (see README in this folder).
-- `RICE_RV_Lipids_Best.sh`: Shell wrapper to execute the paired R script on the target compute environment.
 - `RICE_RV_Lipids_Gene.R`: Analysis/helper script supporting the pipeline in this directory (see README in this folder).
 - `RICE_RV_Lipids_Gene.sh`: Shell wrapper to execute the paired R script on the target compute environment.
 - `Sensitivity_Analysis_RICE_RV.R`: Analysis/helper script supporting the pipeline in this directory (see README in this folder).
