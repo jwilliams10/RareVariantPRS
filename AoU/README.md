@@ -29,8 +29,8 @@ This folder contains scripts and notebooks used for the **All of Us (AoU) WGS** 
   Prepares/feeds summary statistics to JointPRS; trait-specific wrappers are provided.
 - `RICECV_AoU_CrossPlatform.*`, `RICERV_AoU_CrossPlatform.*`, `RICE_AoU_CrossPlatform.*`  
   Cross-platform evaluation utilities (AoU ↔ UKB comparisons).
-- `AoU_CV_UKB_RV.*` and `AoU_CV_UKB_RV_Results.R`  
-  Runs/collects analyses comparing common-variant AoU PRS with UKB rare-variant components.
+- `AoU_CV_UKB_RV.*`  
+  Runs analyses comparing common-variant AoU PRS with UKB rare-variant components.
 
 ## Conventions
 - Many `.R` scripts have paired `.sh` wrappers for running on a scheduler.
