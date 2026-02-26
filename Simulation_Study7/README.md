@@ -10,10 +10,10 @@ Paper linkage:
 # Simulation_Study7 (simulation pipeline)
 
 End-to-end pipeline for the “Simulation7” scenario. This scenario is typically paired with phenotypes produced by
-`Simulate_Data_NewProp_CausalRareVariants.R` (see `Simulate_Data/`), i.e., architectures where only a proportion of rare variants
+`Simulate_Data/Simulate_Data_NewProp_CausalRareVariants.R` (see `Simulate_Data/`), i.e., architectures where only a proportion of rare variants
 within a causal set are causal.
 
-The folder structure matches `Simulation_Study5/6/8`.
+The folder structure matches `Simulation_Study5/`, `Simulation_Study6/`, and `Simulation_Study8/`.
 
 ## Entry points
 - `all.sh` : main driver (SLURM array) that orchestrates the full pipeline.

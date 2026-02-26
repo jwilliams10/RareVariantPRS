@@ -42,11 +42,11 @@ Run:
 - `gds_processing/all.sh`
 
 This wrapper drives:
-- `vcf_to_gds.R` (VCF → GDS)
-- `Varinfo_gds.R` + `Association_Analysis_Prestep.R` (build job catalogs / metadata used by STAARpipeline)
-- `Annotate.R` (add functional annotation channels; used for STAAR weights)
-- `Add_QC_label.R` (variant QC label field)
-- `gds2agds.R` (split into AGDS shards for parallel analysis)
+- `gds_processing/vcf_to_gds.R` (VCF → GDS)
+- `gds_processing/Varinfo_gds.R` + `gds_processing/Association_Analysis_Prestep.R` (build job catalogs / metadata used by STAARpipeline)
+- `gds_processing/Annotate.R` (add functional annotation channels; used for STAAR weights)
+- `gds_processing/Add_QC_label.R` (variant QC label field)
+- `gds_processing/gds2agds.R` (split into AGDS shards for parallel analysis)
 
 ## Link to paper artifacts
 
